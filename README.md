@@ -1,1 +1,1 @@
-# Reddit-Front-end
+# Curio-Front-end
