@@ -32,3 +32,205 @@ body{
     border-radius: 50%;
     margin-right: 5px;
 }
+
+.create-community{
+    background-color: #0B1416;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 20px;
+}
+
+.create-community-logo{
+    width: 50px;
+    height: 50px;
+}
+
+.create-community-muted{
+    color: #b8c5c9;
+    font-size: 18px;
+    font-weight: 0;
+}
+
+.create-community-muted-secondary{
+    color: #b8c5c9;
+    font-size: 16px;
+    font-weight: 0;
+}
+
+.create-community-close-button{
+    border-radius: 50%;
+    background-color: #131F23;
+    border: none;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+}
+
+.create-community-close-button:hover{
+    background-color: #223237;
+}
+
+.create-community-name-input{
+    background-color: #1A282D;
+    border-radius: 30px;
+    border: none;
+    height: 100px;
+    color: white;
+    font-weight: 400;
+}
+
+.create-community-name-input-placeholder{
+    background-color: #1A282D;
+    color: #b8c5c9;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 30px;
+    margin-left: 10px;
+}
+
+body{
+    background-color: #0B1416;
+}
+
+.rights-reserved{
+    color: #acacac;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.rights-reserved:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.favourite-button{
+    background-color: #0B1416;
+    border-radius: 50%;
+    color: #ffffff;
+    border: none;
+    width: 35px;
+    height: 35px;
+}
+
+.favourite-button:hover{
+    background-color: #223237;
+}
+
+.community-image-sidebar{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.create-community{
+    background-color: #0F1A1C;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 20px;
+}
+
+.create-community-logo{
+    width: 50px;
+    height: 50px;
+}
+
+.create-community-muted{
+    color: #b8c5c9;
+    font-size: 18px;
+    font-weight: 0;
+}
+
+.create-community-muted-secondary{
+    color: #b8c5c9;
+    font-size: 16px;
+    font-weight: 0;
+}
+
+.create-community-close-button{
+    border-radius: 50%;
+    background-color: #131F23;
+    border: none;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+}
+
+.create-community-close-button:hover{
+    background-color: #1A282D;
+}
+
+.create-community-name-input{
+    background-color: #1A282D;
+    border-radius: 30px;
+    border: none;
+    height: 100px;
+    font-size: 18px;
+    color: #f2f4f5;
+    font-weight: 400;
+}
+
+.create-community-name-input-placeholder{
+    background-color: #1A282D;
+    color: #b8c5c9;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 30px;
+    margin-left: 10px;
+}
+
+.create-community-name-input:focus {
+    background-color: #1A282D;
+    font-size: 18px;
+    color: #f2f4f5;
+}
+
+.radio-menu-item{
+    border-radius: 20px;
+}
+
+.radio-menu-item:hover{
+    background-color: #1A282D;
+    cursor: pointer;
+}
+
+.radio-menu-item-button:hover {
+  color: #0045ac; 
+}
+
+.radio-menu-item-active-button:hover {
+  fill: #1870F4; 
+}
+
+.modal-lg {
+    max-width: 650px !important;
+}
+
+.create-community-cancel-button{
+    background-color: #131F23;
+    color: #ffffff;
+    border-radius: 30px;
+    width: 80px;
+    height: 50px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.create-community-cancel-button:hover{
+    background-color: #223237;
+}
+
+.create-community-cancel-button:disabled{
+    border: none;
+    background-color: #1B2628;
+    color: #3E4749;
+}
+
+
+

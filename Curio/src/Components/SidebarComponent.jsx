@@ -23,9 +23,17 @@ import DownArrow from '../styles/icons/DownArrow.jsx';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import  FavouriteButton  from './FavouriteButton';
 import CommunityImageSideBar from './CommunityImageSideBar.jsx';
+import CreateCommunity from './CreateCommunity.jsx';
 
 
 function SidebarComponent() {
+  const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
+
+  const handleCreateCommunityClick = () => {
+    setCreateCommunityModalOpen(true);
+  };
+
+
   return (
     <div>
       <Sidebar backgroundColor='#0B1416' rootStyles={{
@@ -70,7 +78,7 @@ function SidebarComponent() {
             paddingLeft: '10px',
           },
         }}>
-          <MenuItem rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}} icon={<Add />}>Create a community</MenuItem>
+          <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}} icon={<Add />}>Create a community</MenuItem>
           <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>r/announcements</MenuItem>
           <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>r/PS5</MenuItem>
         </SubMenu>
@@ -111,6 +119,7 @@ function SidebarComponent() {
         <a className='rights-reserved ms-4'>Reddit, Inc. © 2024. All rights reserved.</a>
       </div>
     </Sidebar>
+    {isCreateCommunityModalOpen && <CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />}
     </div>
   )
 }
