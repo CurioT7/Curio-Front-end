@@ -36,9 +36,9 @@ function SidebarComponent() {
 
   return (
     <div>
-      <Sidebar backgroundColor='#0B1416' rootStyles={{
+      <Sidebar backgroundColor='#FFFFFF' rootStyles={{
         marginTop: '70px',
-        color: '#FFFFFF',
+        color: '#000000',
         marginLeft: '90px',
         borderRadius: '0px',
         width: '300px',
@@ -49,10 +49,10 @@ function SidebarComponent() {
       menuItemStyles={{
         button: {
           [`&.active`]: {
-            backgroundColor: '#1A282D',
+            backgroundColor: '#EAEDEF',
           },
           [`&:hover`]: {
-            backgroundColor: '#131F23',
+            backgroundColor: '#F2F4F5',
           },
           borderRadius: '10px',
           padding: '20px',
@@ -63,56 +63,59 @@ function SidebarComponent() {
         <MenuItem icon={<All />}> All </MenuItem>
         <hr></hr>
         <SubMenu label="YOUR COMMUNITIES" rootStyles={{
-            color: '#82959B',
-            backgroundColor: '#0B1416',
+            color: '#576F76',
+            backgroundColor: '#FFFFFF',
             fontSize: '16px',
           }} menuItemStyles={{
           button: {
             [`&.active`]: {
-              backgroundColor: '#1A282D',
+              backgroundColor: '#EAEDEF',
             },
             [`&:hover`]: {
-              backgroundColor: '#131F23',
+              backgroundColor: '#F2F4F5',
             },
             borderRadius: '10px',
             paddingLeft: '10px',
           },
         }}>
-          <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}} icon={<Add />}>Create a community</MenuItem>
-          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>r/announcements</MenuItem>
-          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>r/PS5</MenuItem>
+          <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}} icon={<Add />}>Create a community</MenuItem>
+          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>r/announcements</MenuItem>
+          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>r/PS5</MenuItem>
         </SubMenu>
         <hr></hr>
         <SubMenu label="RESOURCES" rootStyles={{
           fontSize: '16px',
-          color: '#82959B',
-          backgroundColor: '#0B1416',
+          color: '#576F76',
+          backgroundColor: '#FFFFFF',
         }} menuItemStyles={{
         button: {
           [`&.active`]: {
-            backgroundColor: '#1A282D',
+            backgroundColor: '#EAEDEF',
           },
           [`&:hover`]: {
-            backgroundColor: '#131F23',
+            backgroundColor: '#F2F4F5',
           },
           borderRadius: '10px',
         },
       }}>
-          <MenuItem icon={<AboutReddit />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>About Reddit</MenuItem>
-          <MenuItem icon={<Advertise />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Advertise</MenuItem>
-          <MenuItem icon={<Help />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Help</MenuItem>
-          <MenuItem icon={<Blog />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Blog</MenuItem>
-          <MenuItem icon={<Careers />}rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Careers</MenuItem>
-          <MenuItem icon={<Press />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Press</MenuItem>
-          <div style={{height: '20px', backgroundColor: '#0B1416', margin: '0', display: 'flex', alignItems: 'center'}}>
-            <div style={{width: '100%', height: '1px', backgroundColor: '#4d5859', padding: '0px'}}></div>
+          <MenuItem icon={<AboutReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>About Reddit</MenuItem>
+          <MenuItem icon={<Advertise />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Advertise</MenuItem>
+          <MenuItem icon={<Help />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Help</MenuItem>
+          <MenuItem icon={<Blog />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Blog</MenuItem>
+          <MenuItem icon={<Careers />}rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Careers</MenuItem>
+          <MenuItem icon={<Press />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Press</MenuItem>
+          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
+            <div style={{width: '100%', height: '1px', backgroundColor: '#BFBFBF', padding: '0px'}}></div>
           </div>
-          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Communities</MenuItem>
-          <MenuItem icon={<BestOfReddit />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Best of Reddit</MenuItem>
-          <MenuItem icon={<Topics />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Topics</MenuItem>
-          <MenuItem icon={<ContentPolicy />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Content Policy</MenuItem>
-          <MenuItem icon={<PrivacyPolicy />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>Privacy Policy</MenuItem>
-          <MenuItem icon={<UserAgreement />} rootStyles={{backgroundColor: '#0B1416', color: '#f2f4f5', fontSize: '18px'}}>User Agreement</MenuItem>
+          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Communities</MenuItem>
+          <MenuItem icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Best of Reddit</MenuItem>
+          <MenuItem icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Topics</MenuItem>
+          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
+            <div style={{width: '100%', height: '1px', backgroundColor: '#BFBFBF', padding: '0px'}}></div>
+          </div>
+          <MenuItem icon={<ContentPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Content Policy</MenuItem>
+          <MenuItem icon={<PrivacyPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Privacy Policy</MenuItem>
+          <MenuItem icon={<UserAgreement />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>User Agreement</MenuItem>
         </SubMenu>
       </Menu>
       <div className='mt-4 mb-2'>
