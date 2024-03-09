@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import CloseButton from '../styles/icons/CloseButton';
-import PublicUnactive from '../styles/icons/PublicUnactive';
-import RestrictedUnactive from '../styles/icons/RestrictedUnactive';
-import PrivateUnactive from '../styles/icons/PrivateUnactive';
-import PublicActive from '../styles/icons/PublicActive';
-import RestrictedActive from '../styles/icons/RestrictedActive';
-import PrivateActive from '../styles/icons/PrivateActive';
-import RadioButtonUnactive from '../styles/icons/RadioButtonUnactive';
-import RadioButtonActive from '../styles/icons/RadioButtonActive';
-import Mature from '../styles/icons/Mature';
+import CloseButton from '../../styles/icons/CloseButton';
+import PublicUnactive from '../../styles/icons/PublicUnactive';
+import RestrictedUnactive from '../../styles/icons/RestrictedUnactive';
+import PrivateUnactive from '../../styles/icons/PrivateUnactive';
+import PublicActive from '../../styles/icons/PublicActive';
+import RestrictedActive from '../../styles/icons/RestrictedActive';
+import PrivateActive from '../../styles/icons/PrivateActive';
+import RadioButtonUnactive from '../../styles/icons/RadioButtonUnactive';
+import RadioButtonActive from '../../styles/icons/RadioButtonActive';
+import Mature from '../../styles/icons/Mature';
 
 function CreateCommunity(props) {
   const [selectedType, setSelectedType] = useState('public');
