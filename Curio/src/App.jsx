@@ -13,8 +13,6 @@ function App() {
 
   return (
     <div>
-      <Navbar/>
-      <Profile_Setting/>
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path='*' element={<Error/>} />
