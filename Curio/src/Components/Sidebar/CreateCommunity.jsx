@@ -67,7 +67,7 @@ function CreateCommunity(props) {
         <form>
           <div className="mb-0">
             <div className='input-group rounded-5'>
-              <input type="text" onChange={handleChar} minLength={3} maxLength={21} style={{border: isNameValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} onBlur={handleNameValid} className="form-control create-community-name-input" id="floatingInput" placeholder="Name*" />
+              <input type="text" onChange={handleChar} minLength={3} maxLength={21} style={{border: isNameValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} onBlur={handleNameValid} className="form-control create-community-name-input asterisk" id="floatingInput" placeholder="Name*" />
               {isNameValid == 2 && (
                 <span className="tick-icon position-absolute top-50 end-0 translate-middle-y px-3">
                   <svg rpl="" class="trailing-icon valid" fill="#0e8a00" height="20" icon-name="checkmark-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 15.958a1.102 1.102 0 0 1-.778-.322l-5.429-5.429 1.414-1.414L7.5 13.586 17.793 3.293l1.414 1.414L8.278 15.636a1.101 1.101 0 0 1-.778.322Z"></path>

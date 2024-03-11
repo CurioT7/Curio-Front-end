@@ -12,10 +12,14 @@ import Profile_Setting from "./Components/Profile_Setting/Profile_Setting.jsx"
 function App() {
   return (
     <div>
-      <div className='d-flex justify-content-between'>
-        <SidebarComponent />
+      <div className='d-flex'>
+        <div style={{position: 'fixed'}}>
+          <SidebarComponent />
+        </div>
         <Navbar/>
-        <Profile_Setting/>
+        <div style={{ marginLeft: '400px', padding: '15px' }}>
+          <Profile_Setting/>
+        </div>
       </div>
       <Routes>
         <Route path="/" element={<Home/>} />

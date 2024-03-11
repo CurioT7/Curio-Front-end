@@ -79,7 +79,7 @@ body{
     height: 60px;
     color: #000000;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 18px!important;
     padding-left: 20px;
 }
 
@@ -87,24 +87,11 @@ body{
     background-color: #EAEDEF;
 }
 
-.create-community-name-input:focus{
-    background-color: #EAEDEF;
-}
-
-
-.create-community-name-input-placeholder{
-    color: #677D84;
+.create-community-name-input::placeholder{
     font-size: 18px;
-    padding: 10px;
-    border-radius: 30px;
-    margin-left: 10px;
 }
 
-.create-community-name-input-placeholder:hover{
-    background-color: #EAEDEF;
-}
-
-.create-community-name-input:focus + .create-community-name-input-placeholder::after {
+.create-community-name-input:focus{
     background-color: #EAEDEF;
 }
 
@@ -157,6 +144,7 @@ body{
     height: 50px;
     font-weight: 600;
     font-size: 18px;
+    border: none;
 }
 
 .create-community-cancel-button:hover{
