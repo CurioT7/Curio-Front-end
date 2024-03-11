@@ -1,0 +1,26 @@
+:root{
+    --firstclr:#7c7c7c;
+    --secclr:#1c1c1c;
+    --thirdclr: #edeff1;
+    --fourcle: #0079d3;
+}
+.special{
+    color: var(--secclr);
+    border-bottom: 3px solid var(--fourcle);
+}
+#user_settings{
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    padding: 16px 20px 20px;
+}
+.user-settings-links{
+    padding: 0 20px;
+}
+.user-settings-links .setting-link{
+    color: var(--firstclr);
+    font-size: 14px;
+}
+.user-settings-links .setting-link:hover{
+    color: black;
+}

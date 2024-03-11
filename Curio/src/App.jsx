@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import Home from "./Pages/Home/Home.jsx"
-import Navbar from './Components/Navbar/Navbar.jsx'
-import Error from './Components/Error/Error.jsx'
-import { Link } from 'react-router-dom';
+/**
+ * This file renders the React app and attaches it to the DOM.
+ * @author @omar-adel1 
+ * @global 
+ */
+import React, { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Home from "./Pages/Home/Home.jsx";
+import ProfSetting from './Pages/ProfileSetting/ProfileSetting.jsx';
+import SecurityPrivacy from './Pages/SafetyPrivacySetting/SafetyPrivacy.jsx'; 
+import Navbar from './Components/Navbar/Navbar.jsx';
+import ErrorPage from './Components/Error/Error.jsx';
 import SidebarComponent from './Components/Sidebar/SidebarComponent.jsx';
-import Profile_Setting from "./Components/Profile_Setting/Profile_Setting.jsx"
-
-
 
 function App() {
   return (
@@ -16,17 +19,16 @@ function App() {
         <div style={{position: 'fixed'}}>
           <SidebarComponent />
         </div>
-        <Navbar/>
-        <div style={{ marginLeft: '400px', padding: '15px' }}>
-          <Profile_Setting/>
-        </div>
       </div>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />
-        <Route path='*' element={<Error/>} />
+        <Route path="/settings/profile" element={<ProfSetting/>} /> 
+        <Route path="/settings/privacy" element={<SecurityPrivacy/>} /> 
+        <Route path='*' element={<ErrorPage/>} />
       </Routes>
     </div>
   )
 }
 
-export default App
+export default App;
