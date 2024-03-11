@@ -90,7 +90,7 @@ function SidebarComponent() {
   return (
     <div>
       <Sidebar backgroundColor='#FFFFFF' rootStyles={{
-        marginTop: '70px',
+        marginTop: '60px',
         color: '#000000',
         marginLeft: '90px',
         borderRadius: '0px',
