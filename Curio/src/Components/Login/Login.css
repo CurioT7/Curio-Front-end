@@ -1,4 +1,31 @@
-.login-input {
+.loginModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+/* body {
+  background-image: url('./back.webp');
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%; /* This will make the body take up the full width of the viewport 
+  min-height: 100vh; /* This will make the body take up at least the full height of the viewport 
+} */
+.login-page {
+  background-image: url('./back.webp');
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%; /* This will make the div take up the full width of the viewport */
+  min-height: 100vh; /* This will make the div take up at least the full height of the viewport */
+}
+
+.loginInput {
   width: 100%;
   padding: 5px;
   margin: 5px 0;
@@ -7,7 +34,7 @@
   box-sizing: border-box;
 }
  
-.login-box {
+.loginBox {
     display: flex;
     justify-content: center;
     min-height: 100vh; 
@@ -22,7 +49,7 @@
     padding-top: 15px;
   }
 
-  .login-box h2 {
+  .loginBox h2 {
     color: #000;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     text-align: center;
@@ -31,15 +58,15 @@
 
  
 
-  .login-input input {
+  .loginInput input {
    padding: 20px 45px 20px 20px;
   }
 
-  .login-input input::placeholder {
+  .loginInput input::placeholder {
     color: #454343;
   }
 
-  .login-box input[type="password"] {
+  .loginBox input[type="password"] {
     width: 100%;
     background-color: rgba(240, 240, 240, 0.4);
     height: 35px; 
@@ -48,7 +75,7 @@
   }
 
 
-  .login-box input[type='text']{
+  .loginBox input[type='text']{
     width: 100%;
     background-color: rgba(240, 240, 240, 0.4);
     height: 35px; 
@@ -56,12 +83,13 @@
     font-size: 16px;
 }
 
-.login-box button{
+.loginBox button{
     margin: 5px 0;
     padding: auto;
     border-radius: 20px;
     width: 100%;
     height: 35px;
+    
 }
 
 .forgot{
@@ -72,3 +100,4 @@
     padding: 5px 0; 
     text-align: center;
 }
+
