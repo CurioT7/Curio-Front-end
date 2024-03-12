@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import Home from "./Pages/Home/Home.jsx"
+import React, { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Home from "./Pages/Home/Home.jsx";
+import ProfSetting from './Pages/ProfileSetting/ProfileSetting.jsx';
+import SecurityPrivacy from './Pages/SafetyPrivacySetting/SafetyPrivacy.jsx'; 
+import ErrorPage from './Components/Error/Error.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx'
 import Error from './Components/Error/Error.jsx'
 import Login from './Components/Login/Login.jsx'
-import Profile_Setting from "./Components/Profile_Setting/Profile_Setting.jsx"
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx'
 import ForgotPass from './Components/ForgotPass/ForgotPass.jsx'
 import LoginPage from './Components/Login/Loginpage.jsx'  
 
 
 
+
+
 function App() {
-
-
   return (
     <div>
       <Routes>
@@ -21,9 +23,14 @@ function App() {
         <Route path='*' element={<Error/>} />
         <Route path="/login" element={<LoginPage/>} />
       < Route path="/forgotuser" element={<ForgotUser/>} />
+        <Route path="/" element={<Home/>} />
+        <Route path="/settings/profile" element={<ProfSetting/>} /> 
+        <Route path="/settings/privacy" element={<SecurityPrivacy/>} /> 
+        <Route path='*' element={<ErrorPage/>} />
+        {/* <Navbar/> */}
       </Routes>
     </div>
   )
 }
 
-export default App
+export default App;

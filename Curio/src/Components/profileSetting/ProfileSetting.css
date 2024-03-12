@@ -4,23 +4,6 @@
     --thirdclr: #edeff1;
     --fourcle: #0079d3;
 }
-#user_settings{
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 22px;
-    padding: 16px 20px 20px;
-}
-.user-settings-links{
-    padding: 0 20px;
-}
-.user-settings-links .setting-link{
-    /* margin-right: 40px;  */
-    color: var(--firstclr);
-    font-size: 14px;
-}
-.user-settings-links .setting-link:hover{
-    color: black;
-}
 .customize-profile-heading{
     font-size: 20px;
     font-weight: 500;
