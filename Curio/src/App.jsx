@@ -4,13 +4,10 @@ import Home from "./Pages/Home/Home.jsx";
 import ProfSetting from './Pages/ProfileSetting/ProfileSetting.jsx';
 import SecurityPrivacy from './Pages/SafetyPrivacySetting/SafetyPrivacy.jsx'; 
 import NotificationSetting from './Pages/NotificationSetting/NotificationSetting.jsx';
-import Navbar from './Components/Navbar/Navbar.jsx';
 import ErrorPage from './Components/Error/Error.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx'
 import Error from './Components/Error/Error.jsx'
-import Login from './Components/Login/Login.jsx'
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx'
-import ForgotPass from './Components/ForgotPass/ForgotPass.jsx'
 import LoginPage from './Components/Login/Loginpage.jsx'  
 
 
@@ -30,7 +27,6 @@ function App() {
         <Route path="/settings/privacy" element={<SecurityPrivacy/>} /> 
         <Route path='/settings/notifications' element={<NotificationSetting/>} />
         <Route path='*' element={<ErrorPage/>} />
-        {/* <Navbar/> */}
       </Routes>
     </div>
   )
