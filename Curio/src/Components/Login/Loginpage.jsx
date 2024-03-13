@@ -9,7 +9,6 @@ function LoginPage(){
         <div className="login-page">
             
       {Login()}
-      <Navbar />
     </div>
    );
 }

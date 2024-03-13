@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import './Login.css';
+import '../ForgotUser/ForgotUser.jsx';
+import ForgotUser from '../ForgotUser/ForgotUser.jsx';
+import ForgotPass from '../ForgotPass/ForgotPass.jsx';
 
 Modal.setAppElement('#root'); 
 
 function Login() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [forgotUser, setForgotUser] = useState(false);
+  const [forgotPass, setForgotPass] = useState(false);
+ 
+
 
   return (
     <div>
-      <button onClick={() => setModalIsOpen(true)}>Login</button>
 
       <Modal 
         className="loginModal"
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
+        isOpen={true}
         contentLabel="Login Modal"
       >
+        { !forgotUser && !forgotPass &&
         <div className="loginBox">
-          <form action=" ">
-            <h2>Login</h2>
+          <form action="">
+            <h1>Log In</h1>
+            <p>By continuing, you agree to our <a href="https://www.redditinc.com/policies/user-agreement">User Agreement</a> and <br />acknowledge that you understand the <a href='https://www.reddit.com/policies/privacy-policy'> Privacy Policy </a></p>           
             <div className='loginInput'> 
               <input type="text" placeholder='Username *' required />
             </div>
@@ -27,7 +33,7 @@ function Login() {
               <input type="password" placeholder='Password *' required />
             </div>
             <div className='forgot'>
-              <b>Forgot your </b><a href="/forgotuser">username</a> <b>or</b> <a href="#">password</a>
+            <b>Forgot your </b><a href="#" onClick={() => setForgotUser(true)}>username</a> <b>or</b> <a href="#" onClick={() => setForgotPass(true)}>password</a><b>?</b>
             </div>
 
             <div className='sign-up'>
@@ -37,6 +43,11 @@ function Login() {
             <button type="submit">Login</button>
           </form>
         </div>
+        }
+          
+          { forgotUser && <ForgotUser/> }
+          { forgotPass && <ForgotPass/> }
+
       </Modal>
     </div>
   );
