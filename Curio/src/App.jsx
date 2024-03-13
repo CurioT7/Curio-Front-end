@@ -12,6 +12,7 @@ import NotificationSetting from './Pages/NotificationSetting/NotificationSetting
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ErrorPage from './Components/Error/Error.jsx';
 import SidebarComponent from './Components/Sidebar/SidebarComponent.jsx';
+import ShowFriendInformation from './Components/FriendInformation/ShowFriendInformation.jsx';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/settings/profile" element={<ProfSetting/>} /> 
         <Route path="/settings/privacy" element={<SecurityPrivacy/>} /> 
         <Route path='/settings/notifications' element={<NotificationSetting/>} />
+        <Route path='/user' element={<ShowFriendInformation/>} />
         <Route path='*' element={<ErrorPage/>} />
       </Routes>
     </div>

@@ -90,7 +90,7 @@ function SidebarComponent() {
   return (
     <div>
       <Sidebar backgroundColor='#FFFFFF' rootStyles={{
-        marginTop: '60px',
+        paddingTop: '80px',
         color: '#000000',
         marginLeft: '90px',
         borderRadius: '0px',
@@ -99,7 +99,8 @@ function SidebarComponent() {
         fontSize: '18px',
         height: '100vh',
         overflowY: 'auto',
-        borderRight: '1px solid #BFBFBF',
+        paddingRight: '10px',
+        borderRight: '1px solid #0000001a',
         ":hover": {
           overflowY: 'auto',
           width: '300px',
@@ -166,13 +167,13 @@ function SidebarComponent() {
           <MenuItem icon={<Careers />}rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Careers</MenuItem>
           <MenuItem icon={<Press />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Press</MenuItem>
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
-            <div style={{width: '100%', height: '1px', backgroundColor: '#BFBFBF', padding: '0px'}}></div>
+            <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
           <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Communities</MenuItem>
           <MenuItem icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Best of Reddit</MenuItem>
           <MenuItem icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Topics</MenuItem>
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
-            <div style={{width: '100%', height: '1px', backgroundColor: '#BFBFBF', padding: '0px'}}></div>
+            <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
           <MenuItem icon={<ContentPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Content Policy</MenuItem>
           <MenuItem icon={<PrivacyPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Privacy Policy</MenuItem>

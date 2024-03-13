@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import CloseButton from '../../styles/icons/CloseButton';
+import CloseButton from '../../styles/icons/CloseButton.jsx';
 import './Signup.css';
-import Google from '../../styles/icons/Google';
+import Google from '../../styles/icons/Google.jsx';
 import UsernameInfo from './UsernameInfo.jsx';
 import { useEffect } from 'react';
 
