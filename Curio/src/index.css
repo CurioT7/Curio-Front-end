@@ -158,5 +158,18 @@ body{
     color: #000000;
 }
 
+.my-floating{
+    transition: 300ms ease;
+    color: #576f76;
+    font-size: 18px;
+}
+
+.my-input:focus + label,
+input:not(:placeholder-shown) + label
+{
+    transform: translateY(-15px);
+    font-size: 14px;
+}
+
 
 

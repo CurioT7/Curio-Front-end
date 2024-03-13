@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import BackButton from '../../styles/icons/BackButton';
@@ -61,7 +62,7 @@ function UsernameInfo(props) {
   }
 
   const handleContinue = () => {
-    if(username === '' || password === ''){
+    if(username === '' || password === '' || username.length < 3 || password.length < 8){
       return;
     }
     props.onEnteredUsername(username);
@@ -94,7 +95,10 @@ function UsernameInfo(props) {
         </div>
         <div style={{paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
           <div className='d-flex flex-column align-items-start mt-4' style={{position: 'relative'}}>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} onBlur={handleUsername} className='form-control signup-email-input w-100' type='text' placeholder='Username' />
+            <div className='d-flex flex-column position-relative w-100'>
+              <input value={username} onChange={(e) => setUsername(e.target.value)} onBlur={handleUsername} id="floatingInput" className='form-control signup-email-input w-100' type='text' placeholder=' ' />
+              <label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Username<span style={{color: '#a50016'}}>*</span></label>
+            </div>
               {isUsernameValid == 2 && (
                 <span className="tick-icon position-absolute top-50 end-0 custom-translate-username-field">
                   <svg rpl="" className="trailing-icon valid" fill="#0e8a00" height="25" icon-name="checkmark-fill" viewBox="0 0 20 20" width="25" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 15.958a1.102 1.102 0 0 1-.778-.322l-5.429-5.429 1.414-1.414L7.5 13.586 17.793 3.293l1.414 1.414L8.278 15.636a1.101 1.101 0 0 1-.778.322Z"></path>
@@ -119,8 +123,11 @@ function UsernameInfo(props) {
             <span className='p-2 py-2' style={{color: isUsernameValid===1 ? "#a50016" : "#0e8a00"}}>{usernameErrorMsg}</span>
           </div>
           <div className='d-flex flex-column align-items-start mt-4' style={{position: 'relative'}}>
-            <input className='form-control signup-email-input w-100' value={password} onChange={(e) => setPassword(e.target.value)} onBlur={handlePassword} type='password' placeholder='Password' style={{border: isPasswordValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} />
-            {isPasswordValid == 2 && (
+            <div className='d-flex flex-column position-relative w-100'>
+              <input className='form-control signup-email-input w-100 my-input' value={password} onChange={(e) => setPassword(e.target.value)} onBlur={handlePassword} type='password' placeholder=' ' style={{border: isPasswordValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} />
+              <label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Password<span style={{color: '#a50016'}}>*</span></label>
+            </div>
+              {isPasswordValid == 2 && (
                 <span className="tick-icon position-absolute top-50 end-0 custom-translate-username-modal">
                   <svg rpl="" className="trailing-icon valid" fill="#0e8a00" height="25" icon-name="checkmark-fill" viewBox="0 0 20 20" width="25" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 15.958a1.102 1.102 0 0 1-.778-.322l-5.429-5.429 1.414-1.414L7.5 13.586 17.793 3.293l1.414 1.414L8.278 15.636a1.101 1.101 0 0 1-.778.322Z"></path>
                   </svg>

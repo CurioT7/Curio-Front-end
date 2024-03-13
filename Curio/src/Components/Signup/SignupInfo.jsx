@@ -86,7 +86,10 @@ function SignupInfo(props) {
             <hr className='w-50'></hr>
         </div>
         <div style={{borderRadius: '30px', paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
-            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={handleEmail} style={{border: isEmailValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} className="form-control signup-email-input w-100" id="floatingInput" placeholder="Email*" />
+              <div className='d-flex flex-column position-relative w-100'>
+                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={handleEmail} style={{border: isEmailValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} className="form-control signup-email-input w-100 my-input" id="floatingInput" placeholder=" " />
+                <label htmlFor="floatingInput" className="create-community-name-label position-absolute h-100 d-flex align-items-center ms-4 my-floating">Email<span style={{color: '#a50016'}}>*</span></label>
+              </div>
               {isEmailValid == 2 && (
                 <span className="tick-icon position-absolute top-50 end-0 custom-translate">
                   <svg rpl="" className="trailing-icon valid" fill="#0e8a00" height="25" icon-name="checkmark-fill" viewBox="0 0 20 20" width="25" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 15.958a1.102 1.102 0 0 1-.778-.322l-5.429-5.429 1.414-1.414L7.5 13.586 17.793 3.293l1.414 1.414L8.278 15.636a1.101 1.101 0 0 1-.778.322Z"></path>

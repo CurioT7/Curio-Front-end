@@ -185,3 +185,17 @@
 .preferences-disabled{
     font-size: 18px!important;
 }
+
+.my-floating{
+    transition: 300ms ease;
+    color: #576f76;
+    font-size: 18px;
+}
+
+.my-input:focus + label,
+input:not(:placeholder-shown) + label
+{
+    padding-bottom: 10px;
+    transform: translateY(-15px);
+    font-size: 14px;
+}
