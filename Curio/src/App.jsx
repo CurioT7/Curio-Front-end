@@ -1,18 +1,20 @@
-/**
- * This file renders the React app and attaches it to the DOM.
- * @author @omar-adel1 
- * @global 
- */
 import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from "./Pages/Home/Home.jsx";
 import ProfSetting from './Pages/ProfileSetting/ProfileSetting.jsx';
 import SecurityPrivacy from './Pages/SafetyPrivacySetting/SafetyPrivacy.jsx'; 
 import NotificationSetting from './Pages/NotificationSetting/NotificationSetting.jsx';
-import Navbar from './Components/Navbar/Navbar.jsx';
 import ErrorPage from './Components/Error/Error.jsx';
 import SidebarComponent from './Components/Sidebar/SidebarComponent.jsx';
 import ShowFriendInformation from './Components/FriendInformation/ShowFriendInformation.jsx';
+import Navbar from './Components/Navbar/Navbar.jsx'
+import Error from './Components/Error/Error.jsx'
+import ForgotUser from './Components/ForgotUser/ForgotUser.jsx'
+import LoginPage from './Components/Login/Loginpage.jsx'  
+
+
+
+
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
