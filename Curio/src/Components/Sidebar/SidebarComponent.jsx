@@ -30,7 +30,7 @@ import Gender from '../Signup/Gender.jsx';
 import Preferences from '../Signup/Preferences.jsx';
 
 
-function SidebarComponent() {
+function SidebarComponent(props) {
   const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
   const [isSignupInfoModalOpen, setSignupInfoModalOpen] = useState(false);
   const [isUsernameInfoModalOpen, setUsernameInfoModalOpen] = useState(false);
@@ -100,6 +100,7 @@ function SidebarComponent() {
         height: '100vh',
         overflowY: 'auto',
         paddingRight: '10px',
+        visibility: props.sidebarVisibility ? 'visible' : 'hidden',
         borderRight: '1px solid #0000001a',
         ":hover": {
           overflowY: 'auto',

@@ -15,19 +15,25 @@ import SidebarComponent from './Components/Sidebar/SidebarComponent.jsx';
 import ShowFriendInformation from './Components/FriendInformation/ShowFriendInformation.jsx';
 
 function App() {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+  const handleHideSidebar = () => {
+    setIsSidebarVisible(false);
+  }
+
   return (
     <div>
       <div className='d-flex'>
         <div style={{position: 'fixed'}}>
-          <SidebarComponent />
+          <SidebarComponent sidebarVisibility={isSidebarVisible} />
         </div>
       </div>
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />
-        <Route path="/settings/profile" element={<ProfSetting/>} /> 
-        <Route path="/settings/privacy" element={<SecurityPrivacy/>} /> 
-        <Route path='/settings/notifications' element={<NotificationSetting/>} />
+        <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar}/>} /> 
+        <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar}/>} /> 
+        <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar}/>} />
         <Route path='/user' element={<ShowFriendInformation/>} />
         <Route path='*' element={<ErrorPage/>} />
       </Routes>
