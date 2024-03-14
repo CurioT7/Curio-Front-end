@@ -99,7 +99,6 @@ function SidebarComponent(props) {
         fontSize: '18px',
         height: '100vh',
         overflowY: 'auto',
-        paddingRight: '10px',
         visibility: props.sidebarVisibility ? 'visible' : 'hidden',
         borderRight: '1px solid #0000001a',
         ":hover": {

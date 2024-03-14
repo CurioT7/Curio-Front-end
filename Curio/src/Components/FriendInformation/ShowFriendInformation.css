@@ -136,3 +136,40 @@
 .secondary-subheader{
     color: #576f76;
 }
+
+.sorting-buttons{
+    background-color: #ffffff;
+    color: #576f76;
+    border: none;
+    height: 40px;
+    width: 80px;
+    box-shadow: none!important;
+}
+
+.sorting-buttons:hover{
+    color: #576f76;
+    background-color: #E2E7E9;
+}
+
+.show>.btn-success.dropdown-toggle{
+    background-color: #D2DADD;
+    color: #576f76;
+    border: none;
+}
+
+.dropdown-menu{
+    width: 70px;
+}
+
+.btn-success:focus{
+    background-color: #E2E7E9;
+    color: #576f76;
+    border: none;
+}
+
+.list-header{
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0f1a1c;
+    padding: 10px;
+}

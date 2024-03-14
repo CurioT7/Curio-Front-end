@@ -3,6 +3,7 @@ import { useState } from "react";
 import './ShowFriendInformation.css';
 import Minus from "../../styles/icons/Minus";
 import Chat from "../../styles/icons/Chat";
+import { Dropdown } from "react-bootstrap";
 
 
 function ShowFriendInformation(props) {
@@ -69,6 +70,31 @@ function ShowFriendInformation(props) {
                     <button className="btn control-button me-2">Overview</button>
                     <button className="btn control-button me-2">Posts</button>
                     <button className="btn control-button me-2">Comments</button>
+                </div>
+                <div className="p-4">
+                    <div className="p-4 pt-0 d-flex justify-content-start">
+                        <Dropdown>
+                            <Dropdown.Toggle variant="success" id="dropdown-basic" className="sorting-buttons">
+                                New
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="dropdown-menu">
+                                <h4 className="d-flex justify-content-center list-header">Sort By</h4>
+                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="success" id="dropdown-basic" className="sorting-buttons">
+                                New
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="dropdown-menu">
+                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
                 </div>
             </div>
         </>

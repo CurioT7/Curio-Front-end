@@ -34,6 +34,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar}/>} /> 
+        <Route path="/login" element={<LoginPage/>} />
+        <Route path="/forgotuser" element={<ForgotUser/>} />
+        <Route path="/" element={<Home/>} />
         <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar}/>} /> 
         <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar}/>} />
         <Route path='/user' element={<ShowFriendInformation/>} />
