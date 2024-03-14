@@ -32,15 +32,15 @@ function ShowFriendInformation(props) {
                         <div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
                             <div className="d-flex flex-column">
                                 <p className="mb-0 stats">3</p>
-                                <p>Post Karma</p>
+                                <p className="secondary-subheader">Post Karma</p>
                             </div>
                             <div className="d-flex flex-column">
                                 <p className="mb-0 stats">0</p>
-                                <p>Comment Karma</p>
+                                <p className="secondary-subheader">Comment Karma</p>
                             </div>
                             <div className="d-flex flex-column">
                                 <p className="mb-0 stats">Aug 29, 2023</p>
-                                <p>Cake day</p>
+                                <p className="secondary-subheader">Cake day</p>
                             </div>
                         </div>
                         <div className="pe-4 ps-4 me-4 ms-4 mt-0 mb-4" style={{border: '1px solid #0000001a'}}></div>
@@ -50,7 +50,7 @@ function ShowFriendInformation(props) {
                                 <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3"/>
                                 <div className="d-flex flex-column me-auto">
                                     <p className="mod-community-name mb-0">r/AskReddit</p>
-                                    <p className="mod-community-subscribers">27,000,000 members</p>
+                                    <p className="mod-community-subscribers secondary-subheader">27,000,000 members</p>
                                 </div>
                                 <button className="join-button">Join</button>
                             </div>
@@ -58,7 +58,7 @@ function ShowFriendInformation(props) {
                                 <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image mt-2 me-3"/>
                                 <div className="d-flex flex-column me-auto">
                                     <p className="mod-community-name mb-0">r/AskReddit</p>
-                                    <p className="mod-community-subscribers">27,000,000 members</p>
+                                    <p className="mod-community-subscribers secondary-subheader">27,000,000 members</p>
                                 </div>
                                 <button className="join-button">Join</button>
                             </div>

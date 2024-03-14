@@ -92,6 +92,7 @@
 
 .chat:hover{
     background-color: #E2E7E9;
+    text-decoration: underline;
 }
 
 .stats{
@@ -130,4 +131,8 @@
 
 .join-button:hover{
     background-color: #003584;
+}
+
+.secondary-subheader{
+    color: #576f76;
 }
