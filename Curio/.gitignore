@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+Curio/package-lock.json
+node_modules
+/node_modules
