@@ -11,18 +11,23 @@ import SecurityPrivacy from './Pages/SafetyPrivacySetting/SafetyPrivacy.jsx';
 import NotificationSetting from './Pages/NotificationSetting/NotificationSetting.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ErrorPage from './Components/Error/Error.jsx';
+import AccSettings from './Pages/accountSettings/AccountSettings.jsx';
+import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
   return (
     <div>
+      <ChakraProvider>
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/settings/profile" element={<ProfSetting/>} /> 
         <Route path="/settings/privacy" element={<SecurityPrivacy/>} /> 
         <Route path='/settings/notifications' element={<NotificationSetting/>} />
+        <Route path='/settings/account' element={<AccSettings/>} />
         <Route path='*' element={<ErrorPage/>} />
       </Routes>
+      </ChakraProvider>
     </div>
   )
 }
