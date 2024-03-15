@@ -6,7 +6,13 @@
 }
 
 .center-div{
-    margin-left: 400px;
+    margin-left: 25rem;
+}
+
+@media (max-width: 1200px) {
+    .center-div{
+        margin-left: 10rem;
+    }
 }
 
 .user-profile-image{
@@ -45,11 +51,12 @@
 
 .friend-info{
     background-color: #F9FAFA;
-    margin-left: 250px;
     border-radius: 20px;
-    width:21%;
+    width: 21%;
     height: auto;
 }
+
+
 
 .friend-info-subhead{
     color: #0f1a1c;
@@ -74,6 +81,37 @@
 
 .position-card{
     transform: translate(250%, 0%);
+}
+
+@media (max-width: 1700px) {
+    .position-card{
+        transform: translate(225%, 0%);
+    }
+}
+
+@media (max-width: 1400px) {
+    .position-card{
+        transform: translate(200%, 0%);
+    }
+}
+
+
+@media (max-width: 1200px) {
+    .position-card{
+        transform: translate(175%, 0%);
+    }
+    .friend-info{
+        width: 30%;
+    }
+}
+
+@media (max-width: 1000px) {
+    .position-card{
+        transform: translate(150%, 0%);
+    }
+    .friend-info{
+        visibility: hidden;
+    }
 }
 
 .minus{

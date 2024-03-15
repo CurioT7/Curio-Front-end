@@ -8,7 +8,8 @@ import inbox from "../../assets/Inbox_navbar.png";
 import profile from "../../assets/Profile_navbar.png";
 import setting from "../../assets/Setting_navbar.png";
 import search_icon from "../../assets/search_icon.png"
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import SignupHandler from './SignupHandler';
 
 function Navbar() {
   return (
@@ -50,6 +51,7 @@ function Navbar() {
                     <li><Link to={'settings/profile'}class="dropdown-item"> <img src={setting} alt="setting" className="d-inline-block align-text-middle mx-2"/>Settings</Link></li>
                 </ul>
                 </li>
+                <SignupHandler/>
             </ul>
             </div>
         </div>
