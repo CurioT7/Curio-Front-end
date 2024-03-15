@@ -7,6 +7,7 @@ import { Select } from '@chakra-ui/react'
 import AccountPreferences from "./AccountPreferences"
 import React from "react"
 import ConnectedAccounts from "./ConnectedAccounts"
+import { FaRegTrashAlt } from "react-icons/fa";
 const AccountSettings = () =>{
 
     const [email, setEmail] = React.useState("example@gamil.com");
@@ -29,6 +30,10 @@ const AccountSettings = () =>{
                     <AccountPreferences></AccountPreferences>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">CONNECTED ACCOUNTS</h3>
                     <ConnectedAccounts></ConnectedAccounts>
+                    <h3 className="headings-titles text-uppercase fw-bold mb-3">CONNECTED ACCOUNTS</h3>
+                    <Flex justifyContent='flex-end' className="mb-5">
+                    <Button color='red' variant='unstyled' leftIcon={<FaRegTrashAlt/>} > Delete Account</Button>
+                    </Flex>
                 </div>
 
             </div>

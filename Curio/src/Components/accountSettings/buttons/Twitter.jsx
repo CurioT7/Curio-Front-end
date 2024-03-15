@@ -8,7 +8,7 @@ const Twitter = (props) =>{
 
     return(
         <Box>
-                <Button onClick={onOpen} style={props.buttonStyle} colorScheme='twitter' leftIcon={<FaTwitter />} size='sm'> Connect to Twitter</Button>
+                <Button className='fs-6' onClick={onOpen} style={props.buttonStyle} colorScheme='twitter' leftIcon={<FaTwitter />} size='sm'> Connect to Twitter</Button>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />

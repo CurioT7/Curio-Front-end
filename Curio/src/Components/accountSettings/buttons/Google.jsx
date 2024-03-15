@@ -7,7 +7,7 @@ const Google = (props) =>{
 
     return(
         <>
-                <Button onClick={onOpen} style={props.buttonStyle} colorScheme='blue' leftIcon={<FcGoogle />} size='sm'>Connect to Google</Button>
+                <Button className='fs-6'  onClick={onOpen} style={props.buttonStyle} colorScheme='blue' leftIcon={<FcGoogle />} size='sm'>Connect to Google</Button>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />

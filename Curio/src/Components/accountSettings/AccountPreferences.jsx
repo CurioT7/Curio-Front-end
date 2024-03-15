@@ -13,7 +13,7 @@ const AccountPreferences = () => {
     const [ip, setIP] = React.useState("Use approximate location (based on IP)")
     
     const buttonStyle ={
-        borderRadius: "30px", padding: "10px 20px",
+        borderRadius: "30px", padding: "10px 20px", 
     }
     
     const handleGender = (event) => {

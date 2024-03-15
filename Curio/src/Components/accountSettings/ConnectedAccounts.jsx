@@ -5,7 +5,7 @@ import Google from './buttons/Google'
 import Apple from './buttons/Apple'
 const ConnectedAccounts =() =>{
     const buttonStyle ={
-        borderRadius: "30px", padding: "10px 20px",
+        borderRadius: "30px", padding: "10px 20px",width:"180px", height:"35px",
     }
     return(
         <Box>
