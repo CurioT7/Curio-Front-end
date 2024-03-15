@@ -48,6 +48,10 @@ function SidebarComponent(props) {
     setCreateCommunityModalOpen(true);
   };
 
+  if (!props.sidebarVisibility) {
+    return null; // If sidebarVisibility is false, don't render anything
+  }
+
 
   return (
     <div>
