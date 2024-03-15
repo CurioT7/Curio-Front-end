@@ -48,47 +48,6 @@ function SidebarComponent(props) {
     setCreateCommunityModalOpen(true);
   };
 
-  const handleSignupInfoClick = () => {
-    setSignupInfoModalOpen(true);
-  }
-
-  const handleOpenUsernameInfo = () => {
-    setSignupInfoModalOpen(false); 
-    setUsernameInfoModalOpen(true); 
-  }
-
-  const handleBackToSignupInfo = () => {
-    setSignupInfoModalOpen(true);
-    setUsernameInfoModalOpen(false);
-  }
-
-  const handleEnteredEmail = (email) => {
-    setEnteredEmail(email);
-  }
-
-  const handleContinueToGender = () => {
-    setUsernameInfoModalOpen(false);
-    setGenderModalOpen(true);
-  }
-
-  const handleEnteredUsername = (username) => {
-    setEnteredUsername(username);
-  }
-
-  const handleEnteredPassword = (password) => {
-    setEnteredPassword(password);
-  }
-
-  const handleBackToGender = () => {
-    setGenderModalOpen(true);
-    setPreferencesModalOpen(false);
-  }
-
-  const handleContinueToPreferences = () => {
-    setGenderModalOpen(false);
-    setPreferencesModalOpen(true);
-  }
-
 
   return (
     <div>
@@ -145,7 +104,6 @@ function SidebarComponent(props) {
           },
         }}>
           <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}} icon={<Add />}>Create a community</MenuItem>
-          <MenuItem onClick={handleSignupInfoClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>SignUp</MenuItem>
           <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>r/announcements</MenuItem>
           <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>r/PS5</MenuItem>
         </SubMenu>
@@ -191,10 +149,6 @@ function SidebarComponent(props) {
     </Sidebar>
     <SignupWrapper />
     {isCreateCommunityModalOpen && <CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />}
-    {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
-    {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
-    {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}
-    {isPreferencesModalOpen && <Preferences show={isPreferencesModalOpen} onHide={() => setPreferencesModalOpen(false)} onBackToGender={handleBackToGender} />}
     </div>
 
   )
