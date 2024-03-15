@@ -1,13 +1,13 @@
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import React from "react"
 import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
-
+import { FaApple } from "react-icons/fa";
 const Apple = (props) =>{
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return(
         <>
-                <Button onClick={onOpen} style={props.buttonStyle} variant='outline'>Change</Button>
+                <Button onClick={onOpen} style={props.buttonStyle} color='white' bg='black' leftIcon={<FaApple />} size='sm'> Connect to Apple</Button>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />

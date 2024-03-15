@@ -3,10 +3,10 @@ import { Flex, Spacer,Box, Center } from '@chakra-ui/react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Select } from '@chakra-ui/react'
 import React from "react"
-import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
+
 import ChangePass from "./buttons/ChangePass"
 import EmailButton from "./buttons/EmailButton"
-import { px } from "framer-motion"
+
 const AccountPreferences = () => {
     const [email, setEmail] = React.useState("example@gamil.com");
     const [gender, setGender] = React.useState("MAN")
@@ -26,8 +26,8 @@ const AccountPreferences = () => {
 
 
       return(
-        <Box>
-            <Flex mb={5}>
+        <Box mb={10}>
+            <Flex mb={5} wrap='wrap'>
                 <div>
                     <h3 className="headings-settings d-flex fw-500 mb-1">Email Address</h3> {/* Form to be done  */}
                     <p className="headings-description fw-normal text-muted">{email}</p>

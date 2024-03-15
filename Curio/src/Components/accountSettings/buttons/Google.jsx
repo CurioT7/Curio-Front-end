@@ -1,13 +1,13 @@
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import React from "react"
 import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
-
+import { FcGoogle } from "react-icons/fc";
 const Google = (props) =>{
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return(
         <>
-                <Button onClick={onOpen} style={props.buttonStyle} variant='outline'>Change</Button>
+                <Button onClick={onOpen} style={props.buttonStyle} colorScheme='blue' leftIcon={<FcGoogle />} size='sm'>Connect to Google</Button>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
