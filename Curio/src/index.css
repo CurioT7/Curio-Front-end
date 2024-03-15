@@ -1,0 +1,175 @@
+body{
+    background-color: #FFFFFF;
+}
+
+.rights-reserved{
+    color: #acacac;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.rights-reserved:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.favourite-button{
+    background-color: transparent;
+    border-radius: 50%;
+    color: #121212;
+    border: none;
+    width: 35px;
+    height: 35px;
+}
+
+.favourite-button:hover{
+    background-color: #E2E7E9;
+}
+
+.community-image-sidebar{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.create-community{
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 20px;
+}
+
+.create-community-logo{
+    width: 50px;
+    height: 50px;
+}
+
+.create-community-muted{
+    color: #445459;
+    font-size: 18px;
+    font-weight: 0;
+}
+
+.create-community-muted-secondary{
+    color: #7E9096;
+    font-size: 16px;
+    font-weight: 0;
+}
+
+.create-community-close-button{
+    border-radius: 50%;
+    background-color: #F2F4F5;
+    border: none;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+}
+
+.create-community-close-button:hover{
+    background-color: #EAEDEF;
+}
+
+.create-community-name-input{
+    background-color: #F2F4F5;
+    border-radius: 30px;
+    border: none;
+    height: 60px;
+    color: #000000;
+    font-weight: 400;
+    font-size: 18px!important;
+    padding-left: 20px;
+}
+
+.create-community-name-input:hover{
+    background-color: #EAEDEF;
+}
+
+.create-community-name-input::placeholder{
+    font-size: 18px;
+}
+
+.create-community-name-input:focus{
+    background-color: #EAEDEF;
+}
+
+.rights-reserved{
+    color: #acacac;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.rights-reserved:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+.community-image-sidebar{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+
+.radio-menu-item{
+    border-radius: 20px;
+}
+
+.radio-menu-item:hover{
+    background-color: #EAEDEF;
+    cursor: pointer;
+}
+
+.radio-menu-item-button:hover {
+  color: #0045ac; 
+}
+
+.radio-menu-item-active-button:hover {
+  fill: #1870F4; 
+}
+
+.modal-lg {
+    max-width: 650px !important;
+}
+
+.create-community-cancel-button{
+    background-color: #EAEDEF;
+    color: #000000;
+    border-radius: 30px;
+    width: 80px;
+    height: 50px;
+    font-weight: 600;
+    font-size: 18px;
+    border: none;
+}
+
+.create-community-cancel-button:hover{
+    color: #000000;
+    background-color: #E2E7E9;
+}
+
+.create-community-cancel-button:disabled{
+    border: none;
+    background-color: #F2F2F2;
+    color: #000000;
+}
+
+.my-floating{
+    transition: 300ms ease;
+    color: #576f76;
+    font-size: 18px;
+}
+
+.my-input:focus + label,
+input:not(:placeholder-shown) + label
+{
+    transform: translateY(-15px);
+    font-size: 14px;
+}
+
+
+
