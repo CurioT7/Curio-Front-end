@@ -28,6 +28,8 @@ import UsernameInfo from '../Signup/UsernameInfo.jsx';
 import SignupWrapper from '../Signup/SignupWrapper.jsx';
 import Gender from '../Signup/Gender.jsx';
 import Preferences from '../Signup/Preferences.jsx';
+import './Sidebar.css';
+
 
 
 function SidebarComponent(props) {
@@ -39,6 +41,7 @@ function SidebarComponent(props) {
   const [username, setEnteredUsername] = useState('');
   const [password, setEnteredPassword] = useState('');
   const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
+
 
 
   const handleCreateCommunityClick = () => {
@@ -89,8 +92,8 @@ function SidebarComponent(props) {
 
   return (
     <div>
-      <Sidebar backgroundColor='#FFFFFF' rootStyles={{
-        paddingTop: '80px',
+      <Sidebar backgroundColor='#FFFFFF' customBreakPoint='1200px' collapsedWidth='20px' rootStyles={{
+        paddingTop: '60px',
         color: '#000000',
         marginLeft: '90px',
         borderRadius: '0px',
@@ -101,10 +104,6 @@ function SidebarComponent(props) {
         overflowY: 'auto',
         visibility: props.sidebarVisibility ? 'visible' : 'hidden',
         borderRight: '1px solid #0000001a',
-        ":hover": {
-          overflowY: 'auto',
-          width: '300px',
-        }
       }}>
       <Menu renderExpandIcon={({ open }) => <span>{open ? <KeyboardArrowUpIcon /> : <DownArrow />}</span>}
       menuItemStyles={{
@@ -115,18 +114,24 @@ function SidebarComponent(props) {
           [`&:hover`]: {
             backgroundColor: '#F2F4F5',
           },
+          [`&:focus`]: {
+            backgroundColor: '#EAEDEF',
+          },
           borderRadius: '10px',
           padding: '20px',
         },
       }}>
-        <MenuItem icon={<Home />}> Home </MenuItem>
-        <MenuItem icon={<Popular />}> Popular </MenuItem>
-        <MenuItem icon={<All />}> All </MenuItem>
+        <MenuItem component={<Link to="/" />} rootStyles={{paddingTop: '20px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}} icon={<Home />}> Home </MenuItem>
+        <MenuItem rootStyles={{'@media (max-width: 1200px)': {paddingLeft: '150px'}}} icon={<Popular />}> Popular </MenuItem>
+        <MenuItem rootStyles={{'@media (max-width: 1200px)': {paddingLeft: '150px'}}} icon={<All />}> All </MenuItem>
         <hr className='mt-3'></hr>
         <SubMenu label="YOUR COMMUNITIES" rootStyles={{
             color: '#576F76',
             backgroundColor: '#FFFFFF',
             fontSize: '16px',
+            '@media (max-width: 1200px)': {
+              paddingLeft: '150px',
+            },
           }} menuItemStyles={{
           button: {
             [`&.active`]: {
@@ -160,24 +165,24 @@ function SidebarComponent(props) {
           borderRadius: '10px',
         },
       }}>
-          <MenuItem icon={<AboutReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>About Reddit</MenuItem>
-          <MenuItem icon={<Advertise />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Advertise</MenuItem>
-          <MenuItem icon={<Help />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Help</MenuItem>
-          <MenuItem icon={<Blog />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Blog</MenuItem>
-          <MenuItem icon={<Careers />}rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Careers</MenuItem>
-          <MenuItem icon={<Press />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Press</MenuItem>
-          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
+          <MenuItem icon={<AboutReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>About Reddit</MenuItem>
+          <MenuItem icon={<Advertise />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Advertise</MenuItem>
+          <MenuItem icon={<Help />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Help</MenuItem>
+          <MenuItem icon={<Blog />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Blog</MenuItem>
+          <MenuItem icon={<Careers />}rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Careers</MenuItem>
+          <MenuItem icon={<Press />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Press</MenuItem>
+          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Communities</MenuItem>
-          <MenuItem icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Best of Reddit</MenuItem>
-          <MenuItem icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Topics</MenuItem>
-          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
+          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Communities</MenuItem>
+          <MenuItem icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Best of Reddit</MenuItem>
+          <MenuItem icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Topics</MenuItem>
+          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <MenuItem icon={<ContentPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Content Policy</MenuItem>
-          <MenuItem icon={<PrivacyPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>Privacy Policy</MenuItem>
-          <MenuItem icon={<UserAgreement />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>User Agreement</MenuItem>
+          <MenuItem icon={<ContentPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Content Policy</MenuItem>
+          <MenuItem icon={<PrivacyPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Privacy Policy</MenuItem>
+          <MenuItem icon={<UserAgreement />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>User Agreement</MenuItem>
         </SubMenu>
       </Menu>
       <div className='mt-4 mb-2'>

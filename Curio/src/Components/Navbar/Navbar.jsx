@@ -44,6 +44,7 @@ function Navbar() {
                 <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src={profile} alt="profile" className='user-icon' />
                 </a>
+                
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                     <li><a class="dropdown-item" href="#">View Profile</a></li>
                     <li><hr class="dropdown-divider"/></li>
