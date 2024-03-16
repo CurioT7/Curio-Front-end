@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import './ShowFriendInformation.css';
 import Minus from "../../styles/icons/Minus";
+import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
 import Ellipsis from "../../styles/icons/Elippsis";
 import { Dropdown } from "react-bootstrap";
@@ -9,65 +10,85 @@ import ShareIcon from "../../styles/icons/Share";
 import ReportIcon from "../../styles/icons/Report";
 import MessageIcon from "../../styles/icons/SendMessage";
 import BlockIcon from "../../styles/icons/Block";
-
+import ReportPopup from "../ReportPopup/ReportPopup";
 
 function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [showReportMenu, setShowReportMenu] = useState(false);
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
-      };
+    };
 
-        return (
-            <>
-                <div className="d-flex flex-column justify-content-center mt-5 center-div">
-                    <div className="d-flex justify-content-start ms-5 position-relative">
-                        <div className="light-border me-4">
-                            <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="user-profile-image"/>
-                        </div>
-                        <div className="d-flex flex-column align-items-center">
-                            <h1 className="show-friend-header d-flex align-items-center mb-0">Yehia</h1>
-                            <p className="show-friend-username d-flex align-items-center">u/Yehia</p>
-                        </div>
-                        <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
-                            <div className="w-50 p-4">
-                                <div className="d-flex align-items-center items-container">
-                                    <div className="left-section">
-                                        <h3 className="friend-info-subhead me-2">Yehia</h3>
-                                    </div>
-                                    <div className="right-section">
-                                        <button className="ellipsis-btn" onClick={handleEllipsisClick}>
-                                            <Ellipsis className="ellipsis-img" />
-                                        </button>
-                                        <div className="dropdown-menu" style={{ 
-                                            display: showDropdown ? 'flex' : 'none',
-                                            flexDirection: 'column',
-                                            alignItems: 'flex-start',
-                                            position: 'absolute',
-                                            top: '0',
-                                            right: '0',
-                                            backgroundColor: '#FFFFFF',
-                                            borderRadius: '10px',
-                                            boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
-                                            marginTop: '4rem',
-                                            marginRight: '1rem',
-                                            padding: '10px',
-                                            width: '188px',
-                                            zIndex: '1'
-                                        }}>
-                                            <ul className='drop-down-list'>
-                                                <li className="drop-down-item"><BlockIcon alt="share" className="interaction-icons" />Share</li>
-                                                <li className="drop-down-item"><MessageIcon alt="message" className="interaction-icons" />Send a message</li>
-                                                <li className="drop-down-item"><BlockIcon alt="block" className="interaction-icons" />Block account</li>
-                                                <li className="last-item"><ReportIcon alt="report" className="interaction-icons" />Report</li>
-                                            </ul>   
-                                        </div>
+    const handleFollowToggle = () => {
+        setIsFollowing(!isFollowing);
+    };
+
+    const handleReportClick = () => {
+        setShowReportMenu(true);
+    };
+
+    const handleReportPopupClose = () => {
+        setShowReportMenu(false);
+    };
+
+    return (
+        <>
+            <div className="d-flex flex-column justify-content-center mt-5 center-div">
+                <div className="d-flex justify-content-start ms-5 position-relative">
+                    <div className="light-border me-4">
+                        <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="user-profile-image"/>
+                    </div>
+                    <div className="d-flex flex-column align-items-center">
+                        <h1 className="show-friend-header d-flex align-items-center mb-0">Yehia</h1>
+                        <p className="show-friend-username d-flex align-items-center">u/Yehia</p>
+                    </div>
+                    <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
+                        <div className="w-50 p-4">
+                            <div className="d-flex align-items-center items-container">
+                                <div className="left-section">
+                                    <h3 className="friend-info-subhead me-2">Yehia</h3>
+                                </div>
+                                <div className="right-section">
+                                    <button className="ellipsis-btn" onClick={handleEllipsisClick}>
+                                        <Ellipsis className="ellipsis-img" />
+                                    </button>
+                                    <div className="dropdown-menu" style={{ 
+                                        display: showDropdown ? 'flex' : 'none',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-start',
+                                        position: 'absolute',
+                                        top: '0',
+                                        right: '0',
+                                        backgroundColor: '#FFFFFF',
+                                        borderRadius: '10px',
+                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
+                                        marginTop: '4rem',
+                                        marginRight: '1rem',
+                                        padding: '10px',
+                                        width: '188px',
+                                        zIndex: '1'
+                                    }}>
+                                        <ul className='drop-down-list'>
+                                            <li className="drop-down-item"><ShareIcon alt="share" className="interaction-icons" />Share</li>
+                                            <li className="drop-down-item"><MessageIcon alt="message" className="interaction-icons" />Send a message</li>
+                                            <li className="drop-down-item"><BlockIcon alt="block" className="interaction-icons" />Block account</li>
+                                            <li className="last-item" onClick={handleReportClick}><ReportIcon alt="report" className="interaction-icons" />Report</li>
+                                        </ul>   
                                     </div>
                                 </div>
                             </div>
-                            <div className="d-flex">
-                                <button className="d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3"><span className="d-flex align-items-center me-1 mt-3 minus"><Minus /></span><span className="d-flex align-items-center">Unfollow</span></button>
-                                <button className="chat d-flex justify-content-center align-items-center flex-row mb-3"><span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span></button>
+                        </div>
+                        <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} />
+                        <div className="d-flex">
+                        <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={handleFollowToggle}>
+                                <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
+                                <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
+                            </button>
+                            <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
+                                <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
+                            </button>
                             </div>
                             <div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
                                 <div className="d-flex flex-column">

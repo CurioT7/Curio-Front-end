@@ -218,3 +218,17 @@
     color: rgb(15, 26, 28);
     font-size: 14px;
 }
+
+.following {
+    background-color: white;
+    color: black;
+}
+
+.not-following:hover{
+    background-color: #003584;
+}
+
+.not-following {
+    background-color: #0045AC;
+    color: white;
+}
