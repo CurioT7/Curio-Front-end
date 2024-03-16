@@ -1,4 +1,4 @@
-import "./AccountSettings.css"
+import 'G:/university/Senior 1/Spring/Software/Project/Code/Front End/Curio-Front-end/Curio/src/Components/style/userSettingsStyle.css'
 import { Switch } from '@chakra-ui/react'
 import { Flex, Spacer } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/react'

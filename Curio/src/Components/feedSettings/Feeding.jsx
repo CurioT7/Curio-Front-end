@@ -1,4 +1,4 @@
-import './Feeding.css'
+import 'G:/university/Senior 1/Spring/Software/Project/Code/Front End/Curio-Front-end/Curio/src/Components/style/userSettingsStyle.css'
 import { Switch, Flex, Spacer, Box } from '@chakra-ui/react'
 import Titles from './childs/Titles';
 import React from 'react';
@@ -53,48 +53,48 @@ function Feeding () {
         <div className='container'>
             <div className='customize-account'>
                 <div className='settings-section col'>
-                <h2 className="settings-heading ">Feeding settings</h2>
-                <h3 className="headings-titles text-uppercase fw-bold mb-3">content preferences</h3>
-                <Box>
-                    <Flex mb={5}  alignItems='center'>
-                        <Titles title="Show mature(18+) content"
-                                description="See NSFW (Not Safe for Work) mature and adult images, videos, written content, and other media in your Reddit feeds and search results."/> 
-                        <Spacer/>
-                        <Switch size='lg' isChecked={adultContent} onChange={handleIsMature}></Switch>
-                        
-                    </Flex>
-                </Box>
-                
-                {/* Blur mature TODO */}
-                <Box>
-                    <Flex className='col'  mb={5}  alignItems='center'>
-                        <Titles title="Autoplay media"
-                                description="Play videos and gifs automatically when in the viewport."/> 
-                        <Spacer/>
-                        <Switch size='lg' isChecked={autoplayMedia} onChange={handleIsAuto}></Switch>
-                        
-                    </Flex>
-                </Box>
-                <Box>
-                    <Flex mb={5}  alignItems='center'>
-                        <Titles title="Community themes"
-                                description="Use custom themes for all communities. You can also turn this off on a per community basis."/> 
-                        <Spacer/>
-                        <Switch size='lg' isChecked={communityThemes} onChange={handleCommunityThemes}></Switch>
-                        
-                    </Flex>
-                </Box>
-                <DropDown isSort={true} isGlobal={false}  isChecked={rememberContentSort} value={communityContentSort} onChangeSort={handleCommSort} onChangeRemember={handleCommRemember}/>
-                <DropDown isSort={false} isGlobal={true}  isChecked={rememberContentView} value={globalContentView} onChangeSort={handleGlobalContentView} onChangeRemember={handleRememberContentView}/>
-                <Box>
-                    <Flex mb={5}  alignItems='center'>
-                        <Titles title="Open posts in new tab"
-                                description="Enable to always open posts in a new tab."/> 
-                        <Spacer/>
-                        <Switch size='lg' isChecked={openPostsInNewTab} onChange={handleOpenPostsInNewTab}></Switch>
-                        
-                    </Flex>
-                </Box>
+                    <h2 className="settings-heading ">Feeding settings</h2>
+                    <h3 className="headings-titles text-uppercase fw-bold mb-3">content preferences</h3>
+                    <Box>
+                        <Flex mb={5}  alignItems='center'>
+                            <Titles title="Show mature(18+) content"
+                                    description="See NSFW (Not Safe for Work) mature and adult images, videos, written content, and other media in your Reddit feeds and search results."/> 
+                            <Spacer/>
+                            <Switch size='lg' isChecked={adultContent} onChange={handleIsMature}></Switch>
+                            
+                        </Flex>
+                    </Box>
+                    
+                    {/* Blur mature TODO */}
+                    <Box>
+                        <Flex className='col'  mb={5}  alignItems='center'>
+                            <Titles title="Autoplay media"
+                                    description="Play videos and gifs automatically when in the viewport."/> 
+                            <Spacer/>
+                            <Switch size='lg' isChecked={autoplayMedia} onChange={handleIsAuto}></Switch>
+                            
+                        </Flex>
+                    </Box>
+                    <Box>
+                        <Flex mb={5}  alignItems='center'>
+                            <Titles title="Community themes"
+                                    description="Use custom themes for all communities. You can also turn this off on a per community basis."/> 
+                            <Spacer/>
+                            <Switch size='lg' isChecked={communityThemes} onChange={handleCommunityThemes}></Switch>
+                            
+                        </Flex>
+                    </Box>
+                    <DropDown isSort={true} isGlobal={false}  isChecked={rememberContentSort} value={communityContentSort} onChangeSort={handleCommSort} onChangeRemember={handleCommRemember}/>
+                    <DropDown isSort={false} isGlobal={true}  isChecked={rememberContentView} value={globalContentView} onChangeSort={handleGlobalContentView} onChangeRemember={handleRememberContentView}/>
+                    <Box>
+                        <Flex mb={5}  alignItems='center'>
+                            <Titles title="Open posts in new tab"
+                                    description="Enable to always open posts in a new tab."/> 
+                            <Spacer/>
+                            <Switch size='lg' isChecked={openPostsInNewTab} onChange={handleOpenPostsInNewTab}></Switch>
+                            
+                        </Flex>
+                    </Box>
 
                 </div>
             </div>

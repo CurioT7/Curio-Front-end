@@ -16,7 +16,7 @@ function UserSetting() {
             <Link to={'/settings/privacy'} className="setting-link navbar-brand" id="safety-privacy-link">Safety & Privacy</Link>
             <Link to={'/settings/feeding'} className="setting-link navbar-brand" id="feed-settings-link">Feed Settings</Link>
             <Link to={'/settings/notifications'} className="setting-link navbar-brand" id="notifications-link">Notifications</Link>
-            <a href="#" className="setting-link navbar-brand" id="emails-link">Emails</a>
+            <Link to={'/settings/email'} className="setting-link navbar-brand" id="emails-link">Emails</Link>
             <a href="#" className="setting-link navbar-brand" id="chat-messaging-link">Chat & Messaging</a>
           </div>
         </div><hr/>

@@ -1,5 +1,5 @@
 import {Box, Flex, Spacer} from '@chakra-ui/react'
-import "./AccountSettings.css" 
+import 'G:/university/Senior 1/Spring/Software/Project/Code/Front End/Curio-Front-end/Curio/src/Components/style/userSettingsStyle.css'
 import Twitter from './buttons/Twitter'
 import Google from './buttons/Google'
 import Apple from './buttons/Apple'
