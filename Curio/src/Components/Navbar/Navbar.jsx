@@ -22,33 +22,33 @@ function Navbar() {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <form class="d-flex ms-auto">
-                <button class="btn btn-outline-success" type="submit"><img src={search_icon} alt="search_icon" /></button>
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                <button className="btn btn-outline-success" type="submit"><img src={search_icon} alt="search_icon" /></button>
+                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
             </form>
             </ul>
 
             <ul className='navbar-nav ms-auto mb-2 mb-lg-0'>
                 
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#"><img src={advertise} alt="advertise_icon" /></a>
+                <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="#"><img src={advertise} alt="advertise_icon" /></a>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link active" href="#"><img src={openchat} alt="openchat_icon" /></a>
+                <li className="nav-item">
+                <a className="nav-link active" href="#"><img src={openchat} alt="openchat_icon" /></a>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link active" href="#"><img src={plus} alt="profile" height="auto" className="d-inline-block align-text-middle"/> Create</a>
+                <li className="nav-item">
+                <a className="nav-link active" href="#"><img src={plus} alt="profile" height="auto" className="d-inline-block align-text-middle"/> Create</a>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link active" href="#"><img src={inbox} alt="profile" className='inbox-icon' /></a>
+                <li className="nav-item">
+                <a className="nav-link active" href="#"><img src={inbox} alt="profile" className='inbox-icon' /></a>
                 </li>
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src={profile} alt="profile" className='user-icon' />
+                <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src={profile} alt="profile" classNameName='user-icon' />
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">View Profile</a></li>
-                    <li><hr class="dropdown-divider"/></li>
-                    <li><Link to={'settings/profile'}class="dropdown-item"> <img src={setting} alt="setting" className="d-inline-block align-text-middle mx-2"/>Settings</Link></li>
+                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a className="dropdown-item" href="#">View Profile</a></li>
+                    <li><hr className="dropdown-divider"/></li>
+                    <li><Link to={'settings/profile'} className="dropdown-item"> <img src={setting} alt="setting" className="d-inline-block align-text-middle mx-2"/>Settings</Link></li>
                 </ul>
                 </li>
                 <SignupHandler/>
