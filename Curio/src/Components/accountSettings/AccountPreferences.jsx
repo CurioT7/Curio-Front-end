@@ -55,7 +55,7 @@ const AccountPreferences = () => {
                     <p className="headings-description fw-normal text-muted">This information may be used to improve your recommendations and ads.</p>
                 </div>
                 <Spacer />
-                <Select className="fw-bold "  variant='unstyled' onChange={handleGender} value={gender} size='xs' width="fit-content" justifyItems='center'                       
+                <Select textAlign={[ 'left', 'center' ]} className="fw-bold "  variant='unstyled' onChange={handleGender} value={gender} size='xs' width="fit-content" justifyItems='center'                       
                 >
                     <option value='MAN' >MAN</option>
                     <option value='WOMAN'  >WOMAN</option>
@@ -67,7 +67,7 @@ const AccountPreferences = () => {
                     <p className="headings-description fw-normal text-muted">Specify a location to customize your recommendations and feed. Reddit does not track your precise geolocation data.</p>
                 </div>
                 <Box display='flex' ms={10}>
-                    <Select  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={ip} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
+                    <Select textAlign={[ 'left', 'center' ]}  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={ip} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
                         <option value='Egypt' >Egypt</option>
                         <option value='Germany' >Germany</option>
                     </Select>
