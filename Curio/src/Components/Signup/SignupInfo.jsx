@@ -87,7 +87,7 @@ function SignupInfo(props) {
         </div>
         <div style={{borderRadius: '30px', paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
               <div className='d-flex flex-column position-relative w-100'>
-                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={handleEmail} style={{border: isEmailValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} className="form-control signup-email-input w-100 my-input" id="floatingInput" placeholder=" " />
+                <input data-testid="email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={handleEmail} style={{border: isEmailValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} className="form-control signup-email-input w-100 my-input" id="floatingInput" placeholder=" " />
                 <label htmlFor="floatingInput" className="create-community-name-label position-absolute h-100 d-flex align-items-center ms-4 my-floating">Email<span style={{color: '#a50016'}}>*</span></label>
               </div>
               {isEmailValid == 2 && (

@@ -23,24 +23,12 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import  FavouriteButton  from './FavouriteButton.jsx';
 import CommunityImageSideBar from './CommunityImageSideBar.jsx';
 import CreateCommunity from './CreateCommunity.jsx';
-import SignupInfo from '../Signup/SignupInfo.jsx';
-import UsernameInfo from '../Signup/UsernameInfo.jsx';
-import SignupWrapper from '../Signup/SignupWrapper.jsx';
-import Gender from '../Signup/Gender.jsx';
-import Preferences from '../Signup/Preferences.jsx';
 import './Sidebar.css';
 
 
 
 function SidebarComponent(props) {
   const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
-  const [isSignupInfoModalOpen, setSignupInfoModalOpen] = useState(false);
-  const [isUsernameInfoModalOpen, setUsernameInfoModalOpen] = useState(false);
-  const [isGenderModal, setGenderModalOpen] = useState(false);
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [username, setEnteredUsername] = useState('');
-  const [password, setEnteredPassword] = useState('');
-  const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
 
 
 
@@ -49,7 +37,7 @@ function SidebarComponent(props) {
   };
 
   if (!props.sidebarVisibility) {
-    return null; // If sidebarVisibility is false, don't render anything
+    return null;
   }
 
 
@@ -151,7 +139,6 @@ function SidebarComponent(props) {
         <a className='rights-reserved ms-4'>Reddit, Inc. © 2024. All rights reserved.</a>
       </div>
     </Sidebar>
-    <SignupWrapper />
     {isCreateCommunityModalOpen && <CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />}
     </div>
 
