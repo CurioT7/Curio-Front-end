@@ -12,6 +12,7 @@ import NotificationSetting from './Pages/NotificationSetting/NotificationSetting
 import Navbar from './Components/Navbar/Navbar.jsx';
 import ErrorPage from './Components/Error/Error.jsx';
 import AccSettings from './Pages/accountSettings/AccountSettings.jsx';
+import FeedingSettings from './Pages/feedSettings/FeedingSettings.jsx';
 import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/settings/privacy" element={<SecurityPrivacy/>} /> 
         <Route path='/settings/notifications' element={<NotificationSetting/>} />
         <Route path='/settings/account' element={<AccSettings/>} />
+        <Route path='/settings/feeding' element={<FeedingSettings/>}/>
         <Route path='*' element={<ErrorPage/>} />
       </Routes>
       </ChakraProvider>

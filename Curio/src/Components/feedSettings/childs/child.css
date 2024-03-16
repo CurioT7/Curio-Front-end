@@ -1,0 +1,14 @@
+.headings-titles{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    border-bottom: 1px solid var(--thirdclr);
+    text-transform: uppercase;
+    color: var(--firstclr);
+}
+
+.headings-description{
+    font-size: 12px;
+    line-height: 16px;
+}
