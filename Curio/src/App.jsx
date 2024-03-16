@@ -14,8 +14,6 @@ import LoginPage from './Components/Login/Loginpage.jsx'
 
 
 
-
-
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 

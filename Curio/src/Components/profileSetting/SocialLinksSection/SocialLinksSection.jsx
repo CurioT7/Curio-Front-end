@@ -1,6 +1,10 @@
-import { Box, Heading, Text, Link } from '@chakra-ui/react';
+import { Box, Heading, Text, Flex, Spacer, Link } from '@chakra-ui/react';
+import Socialmodal from '../Socialmodal/Socialmodal';
 
 function SocialLinksSection() {
+  const buttonStyle ={
+    borderRadius: "30px", padding: "10px 20px", 
+}
   return (
     <Box className="social-links-section">
       <Box className="social-links">
@@ -11,9 +15,8 @@ function SocialLinksSection() {
         <nav aria-label="Social Links">
           <ul className='list-unstyled d-flex flex-wrap gap-2'>
             <li className='social-link d-flex align-items-center bg-light rounded-pill px-3 py-2'>
-              <Link>
-                <i className="fa-solid fa-plus me-2"></i>Add social link
-              </Link>
+              <Spacer />
+              <Socialmodal buttonStyle={buttonStyle}/>
             </li>
           </ul>
         </nav>
