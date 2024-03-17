@@ -50,3 +50,6 @@
 .form-switch .form-check-input:checked + .form-check-label::before {
     background-color: white;
 }
+.btn{
+    z-index: 0;
+}
