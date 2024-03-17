@@ -14,6 +14,7 @@ import ErrorPage from './Components/Error/Error.jsx';
 import AccSettings from './Pages/accountSettings/AccountSettings.jsx';
 import FeedingSettings from './Pages/feedSettings/FeedingSettings.jsx';
 import EmailSettings from './Pages/emailSettings/EmailSettings.jsx';
+import ChatAndMessagingSettings from './Pages/ChatAndMassegingSettings/ChatAndMassegingSettings.jsx';
 import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path='/settings/account' element={<AccSettings/>} />
         <Route path='/settings/feeding' element={<FeedingSettings/>}/>
         <Route path='/settings/email' element={<EmailSettings/>}/>
+        <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings/>}/>
         <Route path='*' element={<ErrorPage/>} />
       </Routes>
       </ChakraProvider>
