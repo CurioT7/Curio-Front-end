@@ -219,6 +219,21 @@
   background-color: var(--color-brand-background-hover);
 }
 
+.loginGoogle{
+  align-self: right;
+}
+.continue-with-google{
+  background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #BFBFBF;
+    border-radius: 30px;
+    width: 100%;
+    font-size: 18px;
+    box-sizing: border-box;
+    align-content: center;
+  
+}
+
 .forgot {
   padding: 5px 0;
   text-align: left;

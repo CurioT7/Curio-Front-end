@@ -4,16 +4,32 @@ import './Login.css';
 import '../ForgotUser/ForgotUser.jsx';
 import ForgotUser from '../ForgotUser/ForgotUser.jsx';
 import ForgotPass from '../ForgotPass/ForgotPass.jsx';
+import Google from '../../styles/icons/Google.jsx';
+import CloseButton from '../../styles/icons/CloseButton.jsx';
+import ModalBody from 'react-bootstrap/esm/ModalBody.js';
+
+
 
 Modal.setAppElement('#root');
 
 function Login() {
   const [forgotUser, setForgotUser] = useState(false);
   const [forgotPass, setForgotPass] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+
+  const handleClose = () => {
+    setIsOpen= false;
+  };
 
   return (
     <div>
-      <Modal className="loginModal" isOpen={true} contentLabel="Login Modal">
+      <Modal className="loginModal" isOpen={true} contentLabel="Login Modal"  >
+      {/* <Modal.Header className='border-0'>
+      <div>
+        <button onClick={handleClose}>  <CloseButton /> </button>  
+      </div>     
+        </Modal.Header> */}
+
         <div className="modalParent">
           {!forgotUser && !forgotPass && (
             <div className="modalParent">
@@ -32,6 +48,16 @@ function Login() {
                       Privacy Policy{' '}
                     </a>
                   </p>
+
+                  <div >
+            <button className='continue-with-google p-3 d-flex justify-content-between align-items-center align-content-center' >
+                Continue with Google
+                <div className="loginGoogle">
+                <Google />
+                </div>
+            </button>
+        </div>
+
                   <div className="loginInput">
                     <input type="text" placeholder="Username *" required />
                   </div>
