@@ -33,6 +33,7 @@
     border: 1px solid #BFBFBF;
     border-radius: 30px;
     width: 100%;
+    height: 50px;
     font-size: 0.875rem;
 }
 
@@ -49,6 +50,10 @@
 
 .signup-email-input:hover{
     background-color: #EAEDEF;
+}
+
+.signup-info{
+    font-size: 0.875rem;
 }
 
 .signup-email-input::placeholder{
