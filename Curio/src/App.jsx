@@ -10,7 +10,7 @@ import ShowFriendInformation from './Components/FriendInformation/ShowFriendInfo
 import Navbar from './Components/Navbar/Navbar.jsx'
 import Error from './Components/Error/Error.jsx'
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx'
-import LoginPage from './Components/Login/Loginpage.jsx'  
+import LoginPage from './Components/Login/LoginPage.jsx'
 import { ChakraProvider } from '@chakra-ui/react';
 
 
