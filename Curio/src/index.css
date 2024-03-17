@@ -18,8 +18,8 @@ body{
     border-radius: 50%;
     color: #121212;
     border: none;
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
 }
 
 .favourite-button:hover{
@@ -27,8 +27,8 @@ body{
 }
 
 .community-image-sidebar{
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin-right: 5px;
 }
@@ -43,19 +43,19 @@ body{
 }
 
 .create-community-logo{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 }
 
 .create-community-muted{
     color: #445459;
-    font-size: 18px;
+    font-size: 0.875rem;
     font-weight: 0;
 }
 
 .create-community-muted-secondary{
     color: #7E9096;
-    font-size: 16px;
+    font-size: 0.875rem;
     font-weight: 0;
 }
 
@@ -64,8 +64,8 @@ body{
     background-color: #F2F4F5;
     border: none;
     color: #ffffff;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
 }
 
 .create-community-close-button:hover{
@@ -74,12 +74,12 @@ body{
 
 .create-community-name-input{
     background-color: #F2F4F5;
-    border-radius: 30px;
+    border-radius: 10px;
     border: none;
     height: 60px;
     color: #000000;
     font-weight: 400;
-    font-size: 18px!important;
+    font-size: 0.9rem!important;
     padding-left: 20px;
 }
 
@@ -88,7 +88,7 @@ body{
 }
 
 .create-community-name-input::placeholder{
-    font-size: 18px;
+    font-size: 0.875rem;
 }
 
 .create-community-name-input:focus{
@@ -133,7 +133,7 @@ body{
 }
 
 .modal-lg {
-    max-width: 650px !important;
+    max-width: 35rem !important;
 }
 
 .create-community-cancel-button{
@@ -141,9 +141,9 @@ body{
     color: #000000;
     border-radius: 30px;
     width: 80px;
-    height: 50px;
+    height: 2.5rem;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 0.875rem;
     border: none;
 }
 
@@ -161,14 +161,14 @@ body{
 .my-floating{
     transition: 300ms ease;
     color: #576f76;
-    font-size: 18px;
+    font-size: 0.875rem;
 }
 
 .my-input:focus + label,
 input:not(:placeholder-shown) + label
 {
-    transform: translateY(-15px);
-    font-size: 14px;
+    transform: translateY(-10px);
+    font-size: 0.8rem;
 }
 
 

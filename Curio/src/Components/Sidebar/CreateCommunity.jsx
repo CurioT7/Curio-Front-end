@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import CloseButton from '../../styles/icons/CloseButton';
 import PublicUnactive from '../../styles/icons/PublicUnactive';
 import RestrictedUnactive from '../../styles/icons/RestrictedUnactive';
@@ -49,13 +48,13 @@ function CreateCommunity(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       contentClassName='create-community'
-        size='lg'
+      size='lg'
     >
       <Modal.Header className='create-community mb-0 p-0'>
         <Modal.Title id="contained-modal-title-vcenter" className='w-100'>
           <div className='d-flex'>
             <img className='create-community-logo me-3' src='https://www.redditstatic.com/shreddit/assets/snoomojis/care.png' />
-            <h2 className='font-weight-heavy text-dark mt-2'>Create a community</h2>
+            <h4 className='font-weight-heavy text-dark mt-2'>Create a community</h4>
             <button className='create-community-close-button ms-auto d-flex justify-content-center align-items-center' onClick={props.onHide}><CloseButton /></button>
           </div>
         </Modal.Title>
@@ -68,7 +67,7 @@ function CreateCommunity(props) {
           <div className="mb-0">
             <div className='input-group rounded-5'>
               <div className='d-flex flex-column position-relative w-100'>
-                <input type="text" onChange={handleChar} minLength={3} maxLength={21} style={{border: isNameValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} onBlur={handleNameValid} className="form-control create-community-name-input asterisk w-100 my-input" id="floatingInput" placeholder=" " />
+                <input type="text" onChange={handleChar} minLength={3} maxLength={21} style={{border: isNameValid===1 ? "3px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} onBlur={handleNameValid} className="form-control create-community-name-input asterisk w-100 my-input" id="floatingInput" placeholder=" " />
                 <label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Name<span style={{color: '#a50016'}}>*</span></label>
               </div>
               {isNameValid == 2 && (
@@ -93,7 +92,7 @@ function CreateCommunity(props) {
             <p className='create-community-muted-secondary ms-auto' style={{color: isNameValid===1 ? "#a50016" : ""}}>{charNum}</p>
           </div>
         <div>
-            <h5 className='font-weight-heavy mb-4'>Type</h5>
+            <h6 className='font-weight-heavy mb-4'>Type</h6>
             <div>
               {['public', 'restricted', 'private'].map((type) => (
                 <div
@@ -105,7 +104,7 @@ function CreateCommunity(props) {
                   {type === 'restricted' && (selectedType === type ? <RestrictedActive /> : <RestrictedUnactive />)}
                   {type === 'private' && (selectedType === type ? <PrivateActive /> : <PrivateUnactive />)}
                   <div className="mx-3 d-flex flex-column">
-                    <h6 style={{ color: '#000000', fontSize: '18px', fontWeight: '0' }} className='mb-0'>{type.charAt(0).toUpperCase() + type.slice(1)}</h6>
+                    <p style={{ color: '#000000', fontSize: '0.875rem', fontWeight: '0!important' }} className='mb-0 mt-0'>{type.charAt(0).toUpperCase() + type.slice(1)}</p>
                     <p className='create-community-muted-secondary m-0'>Anyone can view, post, and comment to this community.</p>
                   </div>
                   <div className='ms-auto'>
@@ -121,16 +120,16 @@ function CreateCommunity(props) {
         <div className="d-flex p-3 px-4 radio-menu-item" onClick={handleMatureChange}>
             <Mature />
             <div className="mx-3 d-flex flex-column">
-              <h6 style={{ color: '#000000', fontSize: '18px' }} className='mb-0'>Mature (18+)</h6>
+              <h6 style={{ color: '#000000', fontSize: '0.875rem' }} className='mb-0'>Mature (18+)</h6>
               <p className='create-community-muted-secondary m-0'>Must be over 18 to view and contribute</p>
             </div>
             <div className='form-check form-switch ms-auto d-flex align-items-center'>
-                <input style={{ transform: 'scale(2)' }} className='form-check-input ms-auto' checked={isMature} type="checkbox" id="mature" role="switch" name="mature" value="mature" />
+                <input style={{ transform: 'scale(1.5)' }} className='form-check-input ms-auto' checked={isMature} type="checkbox" id="mature" role="switch" name="mature" value="mature" />
             </div>
         </div>
         </form>
       </Modal.Body>
-      <Modal.Footer className='create-community'>
+      <Modal.Footer className='create-community mb-0 pb-0'>
         <button className="btn py-3 px-5 pb-3 create-community-cancel-button d-flex align-items-center justify-content-center" onClick={props.onHide}>Cancel</button>
         <button style={{width: 'auto', color: communityName!=="" ? "#FFFFFF" : "#000000", backgroundColor: communityName!=="" ? "#0045ac" : ""}} onMouseOver={{backgroundColor: communityName!=="" ? "#003584" : ""}} className="btn btn-lg create-community-cancel-button d-flex align-items-center justify-content-center" onClick={props.onHide} disabled={isCreateButtonDisabled}>{isCreateButtonDisabled ? 'Create your community' : `Create r/${communityName}`}</button>
       </Modal.Footer>

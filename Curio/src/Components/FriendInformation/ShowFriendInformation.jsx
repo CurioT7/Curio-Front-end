@@ -28,7 +28,7 @@ function ShowFriendInformation(props) {
                         </div>
                         <div className="d-flex">
                             <button className="d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3"><span className="d-flex align-items-center me-1 mt-3 minus"><Minus /></span><span className="d-flex align-items-center">Unfollow</span></button>
-                            <button className="chat d-flex justify-content-center align-items-center flex-row mb-3"><span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span></button>
+                            <button className="chat d-flex justify-content-center align-items-center flex-row mb-3 px-3"><span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span></button>
                         </div>
                         <div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
                             <div className="d-flex flex-column">
@@ -48,7 +48,7 @@ function ShowFriendInformation(props) {
                         <h3 className="muted-header p-4 pt-0 mb-1">MODERATOR OF THESE COMMUNITIES</h3>
                         <div className="d-flex flex-column">
                             <div className="d-flex justify-content-between p-4 pt-0 pb-0">
-                                <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3"/>
+                                <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image d-flex align-items-center justify-content-center mt-1 me-3"/>
                                 <div className="d-flex flex-column me-auto">
                                     <p className="mod-community-name mb-0">r/AskReddit</p>
                                     <p className="mod-community-subscribers secondary-subheader">27,000,000 members</p>
@@ -56,7 +56,7 @@ function ShowFriendInformation(props) {
                                 <button className="join-button">Join</button>
                             </div>
                             <div className="d-flex justify-content-between p-4 pb-0">
-                                <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image mt-2 me-3"/>
+                                <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image mt-1 me-3"/>
                                 <div className="d-flex flex-column me-auto">
                                     <p className="mod-community-name mb-0">r/AskReddit</p>
                                     <p className="mod-community-subscribers secondary-subheader">27,000,000 members</p>
