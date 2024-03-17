@@ -7,7 +7,7 @@ import './formstyle.css'
 import PasswordErrorMessage from './PasswordErrorMessage';
 function ChangePass(props){
     const { isOpen, onOpen, onClose } = useDisclosure();
-    
+    const currentPass="12345678"
     function PasswordErrorMessage1 () {
         
             return (
@@ -65,7 +65,7 @@ function ChangePass(props){
     }
     function handleSubmit(e){
         e.preventDefault();
-        if(newPass.value !== confirmPass.value || newPass.length<8){
+        if(newPass.value !== confirmPass.value || newPass.length<8 ||oldPass.value != currentPass || !newPass){
             alert('please enter again')
             return
         }
