@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
+import "./Advanced.css"
 
 function Advanced() {
   const [followChecked, setFollowChecked] = useState(true);
@@ -22,9 +23,9 @@ function Advanced() {
       <Box className="advanced d-flex flex-wrap mb-3">
         <Box className="follow">
             <label htmlFor="follow-checkbox">
-              <Heading as="h3" className="headings-settings" fontWeight="500" mb="1">
+              <h3 className="headings-settings" fontWeight="500" mb="1">
                 Allow people to follow you
-              </Heading>
+              </h3>
             </label>
             <Text className="headings-description" fontWeight="normal" color="gray.500">
                 Followers will be notified about posts you make to your profile and see them in their home feed.
@@ -45,9 +46,9 @@ function Advanced() {
       <Box className="content-visibility d-flex flex-wrap mb-3">
         <Box className="content-visibility-label">
           <label htmlFor="content-visibility-checkbox">
-            <Heading as="h3" className="headings-settings" fontWeight="500" mb="1">
+            <h3 className="headings-settings" fontWeight="500" mb="1">
               Content visibility
-            </Heading>
+            </h3>
           </label>
           <Text className="headings-description" fontWeight="normal" color="gray.500">
             Posts to this profile can appear in <a href="#">r/all</a> and your profile can be discovered in <a href="#">/users</a>
@@ -68,9 +69,9 @@ function Advanced() {
       <Box className="communities-visibility d-flex flex-wrap mb-3">
         <Box className="communities-visibility-label">
           <label htmlFor="communities-visibility-checkbox">
-            <Heading as="h3" className="headings-settings" fontWeight="500" mb="1">
+            <h3 className="headings-settings" fontWeight="500" mb="1">
               Active in communities visibility
-            </Heading>
+            </h3>
           </label>
           <Text className="headings-description" fontWeight="normal" color="gray.500">
             Show which communities I am active in on my profile.
@@ -90,9 +91,9 @@ function Advanced() {
       </Box>
       <Box className="clear-history d-flex flex-wrap mb-3">
         <Box className="clear-history-label">
-          <Heading as="h3" className="headings-settings" fontWeight="500" mb="1">
+          <h3 className="headings-settings" fontWeight="500" mb="1">
             Clear history
-          </Heading>
+          </h3>
           <Text className="headings-description" fontWeight="normal" color="gray.500">
             Delete your post views history.
           </Text>

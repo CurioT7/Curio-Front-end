@@ -19,7 +19,7 @@ function ProfileInformation() {
   return (
     <Box className="profile-information">
       <Box className="display-name">
-        <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">Display name (optional)</Heading>
+        <h3 className="headings-settings d-flex fw-500 mb-1">Display name (optional)</h3>
         <Text className="headings-description fw-normal text-muted">Set a display name. This does not change your username.</Text>
       </Box>
       <Box className="display-name-input-container">
@@ -37,7 +37,7 @@ function ProfileInformation() {
       </Box>
       <Box className="about-section">
         <Box className="about">
-          <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">About (optional)</Heading>
+          <h3 className="headings-settings d-flex fw-500 mb-1">About (optional)</h3>
           <Text className="headings-description fw-normal text-muted">A brief description of yourself shown on your profile.</Text>
         </Box>
         <Box className="about-textarea-container">

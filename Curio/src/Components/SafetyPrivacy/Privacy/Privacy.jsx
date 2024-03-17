@@ -1,5 +1,6 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
 import { useState } from "react";
+import "./Privacy.css"
 
 function Privacy() {
   const [searchResultsChecked, setSearchResultsChecked] = useState(true);
@@ -18,9 +19,9 @@ function Privacy() {
       <Box className="privacy d-flex flex-wrap mb-3">
         <Box className="search-results">
           <label htmlFor="search-results-checkbox">
-            <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+            <h3 className="headings-settings d-flex fw-500 mb-1">
               Show up in search results
-            </Heading>
+            </h3>
           </label>
           <Text className="headings-description fw-normal text-muted">
             Allow search engines like Google to link to your profile in their search results.
@@ -42,9 +43,9 @@ function Privacy() {
       <Box className="reddit-personalization d-flex flex-wrap mb-3">
         <Box className="reddit-personalization">
           <label htmlFor="reddit-personalization-checkbox">
-            <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+            <h3 className="headings-settings d-flex fw-500 mb-1">
               Personalize ads on Reddit based on information and activity from our partners.
-            </Heading>
+            </h3>
           </label>
           <Text className="headings-description fw-normal text-muted">
             Allow us to use information from our partners to show you better ads on Reddit.

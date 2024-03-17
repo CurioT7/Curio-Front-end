@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import "./Activity.css"
 
 function Activity(){
     const [mentionChecked, setMentionChecked] = useState(true);
@@ -10,7 +11,7 @@ function Activity(){
     const [newFollowersChecked, setNewFollowersChecked] = useState(true);
 
     const handleMentionChange = () => {
-        setMentionChecked(!!isChecked)
+        setMentionChecked(!mentionChecked)
     };
 
     const handleCommentsChange = () => {
@@ -38,9 +39,9 @@ function Activity(){
             <Box className="mention_username d-flex flex-wrap mb-3">
                 <Box className="mention_username">
                     <label htmlFor="mention_username-checkbox">
-                        <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+                        <h3 as="h3" className="headings-settings d-flex fw-500 mb-1">
                             Mentions of u/username
-                        </Heading>
+                        </h3>
                     </label>
                 </Box>
                 <Box className="mention_username-checkbox">
@@ -57,9 +58,9 @@ function Activity(){
             <Box className="comments-posts d-flex flex-wrap mb-3">
                 <Box className="comments-posts">
                     <label htmlFor="comments-posts-checkbox">
-                        <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+                        <h3 className="headings-settings d-flex fw-500 mb-1">
                             Comments on your posts
-                        </Heading>
+                        </h3>
                     </label>
                 </Box>
                 <Box className="comments-posts-checkbox">
@@ -76,9 +77,9 @@ function Activity(){
             <Box className="upvotes-posts d-flex flex-wrap mb-3">
                 <Box className="upvotes-posts">
                     <label htmlFor="upvotes-posts-checkbox">
-                        <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+                        <h3 className="headings-settings d-flex fw-500 mb-1">
                             Upvotes on your posts
-                        </Heading>
+                        </h3>
                     </label>
                 </Box>
                 <Box className="upvotes-posts-checkbox">
@@ -95,9 +96,9 @@ function Activity(){
             <Box className="upvotes-comments d-flex flex-wrap mb-3">
                 <Box className="upvotes-comments">
                     <label htmlFor="upvotes-comments-checkbox">
-                        <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+                        <h3 className="headings-settings d-flex fw-500 mb-1">
                             Upvotes on your comments
-                        </Heading>
+                        </h3>
                     </label>
                 </Box>
                 <Box className="upvotes-comments-checkbox">
@@ -114,9 +115,9 @@ function Activity(){
             <Box className="replies-comments d-flex flex-wrap mb-3">
                 <Box className="replies-comments">
                     <label htmlFor="replies-comments-checkbox">
-                        <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+                        <h3 className="headings-settings d-flex fw-500 mb-1">
                             Replies to your comments
-                        </Heading>
+                        </h3>
                     </label>
                 </Box>
                 <Box className="replies-comments-checkbox">
@@ -133,9 +134,9 @@ function Activity(){
             <Box className="new-followers d-flex flex-wrap mb-3">
                 <Box className="new-followers">
                     <label htmlFor="new-followers-checkbox">
-                        <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+                        <h3 className="headings-settings d-flex fw-500 mb-1">
                             New followers
-                        </Heading>
+                        </h3>
                     </label>
                 </Box>
                 <Box className="new-followers-checkbox">
