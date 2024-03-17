@@ -82,7 +82,7 @@ function SignupInfo(props) {
         </div>
         <div className="d-flex justify-content-between align-items-center align-content-center mb-3 mt-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <hr className='w-50'></hr>
-            <p className='px-3'>OR</p>
+            <p style={{fontSize: '0.7rem'}} className='px-3'>OR</p>
             <hr className='w-50'></hr>
         </div>
         <div style={{borderRadius: '30px', paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
@@ -106,9 +106,9 @@ function SignupInfo(props) {
               )}
         </div>
         <div className='mb-3' style={{paddingLeft: '80px', paddingRight: '80px'}}>
-          <span className='p-2 py-2' style={{color: isEmailValid===1 ? "#a50016" : "#0e8a00"}}>{emailErrorMsg}</span>
+          <span className='p-2 py-2' style={{color: isEmailValid===1 ? "#a50016" : "#0e8a00", fontSize: '0.875rem'}}>{emailErrorMsg}</span>
         </div>
-        <div className='pb-5 mb-5' style={{paddingLeft: '80px', paddingRight: '80px', fontSize: '18px'}}>
+        <div className='pb-5 mb-2' style={{paddingLeft: '80px', paddingRight: '80px', fontSize: '0.875rem'}}>
             <p>Already a redditor? Log In</p>
         </div>
       </Modal.Body>

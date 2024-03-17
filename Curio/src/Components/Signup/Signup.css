@@ -3,8 +3,8 @@
     background-color: #F2F4F5;
     border: none;
     color: #ffffff;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
 }
 
 .signup-close-button:hover{
@@ -12,20 +12,19 @@
 }
 
 .signup-header{
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
     font-weight: 700;
     color: #0f1a1c;
 }
 
 .signup-policy{
-    font-size: 0.8rem;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }
 
 .signup-modal{
     border-radius: 20px;
-    height: 800px;
+    height: 650px;
 }
 
 .continue-with-google{
@@ -34,18 +33,18 @@
     border: 1px solid #BFBFBF;
     border-radius: 30px;
     width: 100%;
-    font-size: 18px;
+    font-size: 0.875rem;
 }
 
 .signup-email-input{
     background-color: #F2F4F5;
     border-radius: 20px!important;
     border: none;
-    height: 60px;
+    height: 50px;
     color: #000000;
     font-weight: 400;
-    font-size: 18px!important;
-    padding-left: 20px;
+    font-size: 0.9rem!important;
+    padding-left: 20px!important;
 }
 
 .signup-email-input:hover{
@@ -53,7 +52,7 @@
 }
 
 .signup-email-input::placeholder{
-    font-size: 18px;
+    font-size: 0.875rem;
 }
 
 .signup-email-input:focus{
@@ -65,9 +64,9 @@
     border-radius: 30px;
     border: none!important;
     color: #ffffff!important;
-    font-size: 18px;
+    font-size: 0.875rem;
     font-weight: 700;
-    height: 60px;
+    height: 50px;
 }
 
 .continue-button:hover{
@@ -87,7 +86,7 @@
 }
 
 .continue-button-disabled{
-    font-size: 16px;
+    font-size: 0.875rem;
     font-weight: 700;
     height: 60px;
     border-radius: 30px;
@@ -109,8 +108,8 @@
 }
 
 .username-alert{
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-    font-size: 18px;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    font-size: 0.875rem;
 }
 
 .shuffle-button{
@@ -127,7 +126,7 @@
 }
 
 .skip-button{
-    font-size: 18px;
+    font-size: 0.875rem;
     font-weight: 600;   
     border-radius: 50px;
     color: #576f76!important;
@@ -138,7 +137,7 @@
 }
 
 .identify-text{
-    font-size: 18px;
+    font-size: 0.875rem;
     font-weight: 600;
     color: #576f76;
 }
@@ -149,7 +148,7 @@
     border: none!important;
     width: 100%!important;
     color: #000000 !important;
-    font-size: 18px!important;
+    font-size: 0.875rem!important;
     font-weight: 600!important;
 }
 
@@ -170,7 +169,7 @@
     border: none;
     width: auto;
     color: #000000;
-    font-size: 16px;
+    font-size: 0.875rem;
 }
 
 .preferences-button:hover{
@@ -183,19 +182,19 @@
 }
 
 .preferences-disabled{
-    font-size: 18px!important;
+    font-size: 0.875rem!important;
 }
 
 .my-floating{
     transition: 300ms ease;
     color: #576f76;
-    font-size: 18px;
+    font-size: 0.875rem;
 }
 
 .my-input:focus + label,
 input:not(:placeholder-shown) + label
 {
     padding-bottom: 10px;
-    transform: translateY(-15px);
-    font-size: 14px;
+    transform: translateY(-10px);
+    font-size: 0.7rem;
 }
