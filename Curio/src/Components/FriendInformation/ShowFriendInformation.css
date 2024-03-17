@@ -113,6 +113,9 @@
     .friend-info{
         visibility: hidden;
     }
+    .center-div{
+        margin-left: 8rem!important;
+    }
 }
 
 .minus{
