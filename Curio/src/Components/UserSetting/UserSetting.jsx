@@ -1,6 +1,7 @@
 import React from 'react'
 import "./UserSetting.css"
 import { Link } from 'react-router-dom'
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
 
 function UserSetting() {

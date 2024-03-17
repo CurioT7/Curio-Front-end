@@ -96,7 +96,7 @@ function UsernameInfo(props) {
         <div style={{paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
           <div className='d-flex flex-column align-items-start mt-4' style={{position: 'relative'}}>
             <div className='d-flex flex-column position-relative w-100'>
-              <input value={username} onChange={(e) => setUsername(e.target.value)} onBlur={handleUsername} id="floatingInput" className='form-control signup-email-input w-100' type='text' placeholder=' ' />
+              <input data-testid="username" value={username} onChange={(e) => setUsername(e.target.value)} onBlur={handleUsername} id="floatingInput" className='form-control signup-email-input w-100' type='text' placeholder=' ' />
               <label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Username<span style={{color: '#a50016'}}>*</span></label>
             </div>
               {isUsernameValid == 2 && (
@@ -124,7 +124,7 @@ function UsernameInfo(props) {
           </div>
           <div className='d-flex flex-column align-items-start mt-4' style={{position: 'relative'}}>
             <div className='d-flex flex-column position-relative w-100'>
-              <input className='form-control signup-email-input w-100 my-input' value={password} onChange={(e) => setPassword(e.target.value)} onBlur={handlePassword} type='password' placeholder=' ' style={{border: isPasswordValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} />
+              <input data-testid="password" className='form-control signup-email-input w-100 my-input' value={password} onChange={(e) => setPassword(e.target.value)} onBlur={handlePassword} type='password' placeholder=' ' style={{border: isPasswordValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} />
               <label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Password<span style={{color: '#a50016'}}>*</span></label>
             </div>
               {isPasswordValid == 2 && (

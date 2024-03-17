@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
@@ -23,25 +24,25 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import  FavouriteButton  from './FavouriteButton.jsx';
 import CommunityImageSideBar from './CommunityImageSideBar.jsx';
 import CreateCommunity from './CreateCommunity.jsx';
-import SignupInfo from '../Signup/SignupInfo.jsx';
-import UsernameInfo from '../Signup/UsernameInfo.jsx';
-import SignupWrapper from '../Signup/SignupWrapper.jsx';
-import Gender from '../Signup/Gender.jsx';
-import Preferences from '../Signup/Preferences.jsx';
 import './Sidebar.css';
 
 
 
 function SidebarComponent(props) {
   const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
-  const [isSignupInfoModalOpen, setSignupInfoModalOpen] = useState(false);
-  const [isUsernameInfoModalOpen, setUsernameInfoModalOpen] = useState(false);
-  const [isGenderModal, setGenderModalOpen] = useState(false);
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [username, setEnteredUsername] = useState('');
-  const [password, setEnteredPassword] = useState('');
-  const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(window.innerWidth < 1200);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setCollapsed(window.innerWidth < 1200);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
 
   const handleCreateCommunityClick = () => {
@@ -49,24 +50,26 @@ function SidebarComponent(props) {
   };
 
   if (!props.sidebarVisibility) {
-    return null; // If sidebarVisibility is false, don't render anything
+    return null;
   }
 
 
   return (
     <div>
-      <Sidebar backgroundColor='#FFFFFF' customBreakPoint='1200px' collapsedWidth='20px' rootStyles={{
+      <Sidebar backgroundColor='#FFFFFF' collapsed={collapsed} rootStyles={{
         paddingTop: '60px',
         color: '#000000',
-        marginLeft: '90px',
+        marginLeft: '20px',
         borderRadius: '0px',
-        width: '300px',
         border: 'none',
-        fontSize: '18px',
+        fontSize: '0.875rem',
         height: '100vh',
         overflowY: 'auto',
         visibility: props.sidebarVisibility ? 'visible' : 'hidden',
         borderRight: '1px solid #0000001a',
+        '@media (max-width: 1200px)': {
+          width: '30px',
+        },
       }}>
       <Menu renderExpandIcon={({ open }) => <span>{open ? <KeyboardArrowUpIcon /> : <DownArrow />}</span>}
       menuItemStyles={{
@@ -84,17 +87,14 @@ function SidebarComponent(props) {
           padding: '20px',
         },
       }}>
-        <MenuItem component={<Link to="/" />} rootStyles={{paddingTop: '20px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}} icon={<Home />}> Home </MenuItem>
-        <MenuItem rootStyles={{'@media (max-width: 1200px)': {paddingLeft: '150px'}}} icon={<Popular />}> Popular </MenuItem>
-        <MenuItem rootStyles={{'@media (max-width: 1200px)': {paddingLeft: '150px'}}} icon={<All />}> All </MenuItem>
+        <MenuItem component={<Link to="/" />} rootStyles={{paddingTop: '20px'}} icon={<Home />}> Home </MenuItem>
+        <MenuItem icon={<Popular />}> Popular </MenuItem>
+        <MenuItem icon={<All />}> All </MenuItem>
         <hr className='mt-3'></hr>
         <SubMenu label="YOUR COMMUNITIES" rootStyles={{
             color: '#576F76',
             backgroundColor: '#FFFFFF',
-            fontSize: '16px',
-            '@media (max-width: 1200px)': {
-              paddingLeft: '150px',
-            },
+            fontSize: '0.875rem',
           }} menuItemStyles={{
           button: {
             [`&.active`]: {
@@ -107,13 +107,13 @@ function SidebarComponent(props) {
             paddingLeft: '10px',
           },
         }}>
-          <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}} icon={<Add />}>Create a community</MenuItem>
-          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>r/announcements</MenuItem>
-          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px'}}>r/PS5</MenuItem>
+          <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}} icon={<Add />}>Create a community</MenuItem>
+          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/announcements</MenuItem>
+          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/PS5</MenuItem>
         </SubMenu>
         <hr className='mt-3'></hr>
         <SubMenu label="RESOURCES" rootStyles={{
-          fontSize: '16px',
+          fontSize: '0.875rem',
           color: '#576F76',
           backgroundColor: '#FFFFFF',
         }} menuItemStyles={{
@@ -127,31 +127,30 @@ function SidebarComponent(props) {
           borderRadius: '10px',
         },
       }}>
-          <MenuItem icon={<AboutReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>About Reddit</MenuItem>
-          <MenuItem icon={<Advertise />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Advertise</MenuItem>
-          <MenuItem icon={<Help />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Help</MenuItem>
-          <MenuItem icon={<Blog />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Blog</MenuItem>
-          <MenuItem icon={<Careers />}rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Careers</MenuItem>
-          <MenuItem icon={<Press />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Press</MenuItem>
-          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>
+          <MenuItem icon={<AboutReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>About Reddit</MenuItem>
+          <MenuItem icon={<Advertise />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Advertise</MenuItem>
+          <MenuItem icon={<Help />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Help</MenuItem>
+          <MenuItem icon={<Blog />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Blog</MenuItem>
+          <MenuItem icon={<Careers />}rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Careers</MenuItem>
+          <MenuItem icon={<Press />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Press</MenuItem>
+          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Communities</MenuItem>
-          <MenuItem icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Best of Reddit</MenuItem>
-          <MenuItem icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Topics</MenuItem>
-          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>
+          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities</MenuItem>
+          <MenuItem icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Best of Reddit</MenuItem>
+          <MenuItem icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Topics</MenuItem>
+          <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <MenuItem icon={<ContentPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Content Policy</MenuItem>
-          <MenuItem icon={<PrivacyPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>Privacy Policy</MenuItem>
-          <MenuItem icon={<UserAgreement />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '18px', '@media (max-width: 1200px)': {paddingLeft: '150px'}}}>User Agreement</MenuItem>
+          <MenuItem icon={<ContentPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Content Policy</MenuItem>
+          <MenuItem icon={<PrivacyPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Privacy Policy</MenuItem>
+          <MenuItem icon={<UserAgreement />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>User Agreement</MenuItem>
         </SubMenu>
       </Menu>
       <div className='mt-4 mb-2'>
         <a className='rights-reserved ms-4'>Reddit, Inc. © 2024. All rights reserved.</a>
       </div>
     </Sidebar>
-    <SignupWrapper />
     {isCreateCommunityModalOpen && <CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />}
     </div>
 

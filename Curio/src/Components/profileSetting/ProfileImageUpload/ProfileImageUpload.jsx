@@ -29,9 +29,9 @@ function ProfileImageUpload() {
 
   return (
     <Box className="profile-banner-images mb-3">
-      <Heading as="h3" className="headings-settings" fontWeight="500" mb="1">
+      <h3 className="headings-settings" fontWeight="500" mb="1">
         Profile and banner image
-      </Heading>
+      </h3>
       <Text className="headings-description" fontWeight="normal" color="gray.500">
         Images must be .png or .jpg format
       </Text>

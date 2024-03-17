@@ -1,0 +1,29 @@
+:root{
+    --thirdclr: #edeff1;
+}
+.container-social{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 18px;
+    margin: 6px 2px;
+}
+.social-icon-modal{
+    display: flex;
+    align-items: center;
+    background-color: var(--thirdclr);
+    border-radius: 30px;
+    cursor: pointer;
+    height: 20px;
+}
+i{
+    margin-right: 2px;
+}
+.add-social-button{
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: var(--secclr);
+    cursor: pointer;
+    white-space: nowrap;
+    background-color: var(--thirdclr);
+}

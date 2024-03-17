@@ -82,12 +82,12 @@ function SignupInfo(props) {
         </div>
         <div className="d-flex justify-content-between align-items-center align-content-center mb-3 mt-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <hr className='w-50'></hr>
-            <p className='px-3'>OR</p>
+            <p style={{fontSize: '0.7rem'}} className='px-3'>OR</p>
             <hr className='w-50'></hr>
         </div>
         <div style={{borderRadius: '30px', paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
               <div className='d-flex flex-column position-relative w-100'>
-                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={handleEmail} style={{border: isEmailValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} className="form-control signup-email-input w-100 my-input" id="floatingInput" placeholder=" " />
+                <input data-testid="email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={handleEmail} style={{border: isEmailValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} className="form-control signup-email-input w-100 my-input" id="floatingInput" placeholder=" " />
                 <label htmlFor="floatingInput" className="create-community-name-label position-absolute h-100 d-flex align-items-center ms-4 my-floating">Email<span style={{color: '#a50016'}}>*</span></label>
               </div>
               {isEmailValid == 2 && (
@@ -106,9 +106,9 @@ function SignupInfo(props) {
               )}
         </div>
         <div className='mb-3' style={{paddingLeft: '80px', paddingRight: '80px'}}>
-          <span className='p-2 py-2' style={{color: isEmailValid===1 ? "#a50016" : "#0e8a00"}}>{emailErrorMsg}</span>
+          <span className='p-2 py-2' style={{color: isEmailValid===1 ? "#a50016" : "#0e8a00", fontSize: '0.875rem'}}>{emailErrorMsg}</span>
         </div>
-        <div className='pb-5 mb-5' style={{paddingLeft: '80px', paddingRight: '80px', fontSize: '18px'}}>
+        <div className='pb-5 mb-2' style={{paddingLeft: '80px', paddingRight: '80px', fontSize: '0.875rem'}}>
             <p>Already a redditor? Log In</p>
         </div>
       </Modal.Body>

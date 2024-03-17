@@ -1,59 +1,67 @@
 import React, { useState } from 'react';
-import { Box, Heading, Text, Input, Button } from '@chakra-ui/react';
+import { Box, Text, Input, Button, Flex } from '@chakra-ui/react';
+import "./Safety.css"
 
 function Safety() {
-  // State variables for blocked users and muted communities
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [mutedCommunities, setMutedCommunities] = useState([]);
+  const [blockedUserInput, setBlockedUserInput] = useState('');
+  const [mutedCommunityInput, setMutedCommunityInput] = useState('');
 
-  // Function to handle adding a new blocked user
   const handleAddBlockedUser = () => {
-    // Get the input value for the blocked user
-    const blockedUserInput = document.getElementById('blockedUserInput').value;
-
-    // Update the blocked users list with the new user
-    setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, blockedUserInput]);
-
-    // Clear the input field
-    document.getElementById('blockedUserInput').value = '';
+    if (blockedUserInput.trim() !== '') {
+      setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, blockedUserInput]);
+      setBlockedUserInput('');
+    }
   };
 
-  // Function to handle adding a new muted community
   const handleAddMutedCommunity = () => {
-    // Get the input value for the muted community
-    const mutedCommunityInput = document.getElementById('mutedCommunityInput').value;
+    if (mutedCommunityInput.trim() !== '') {
+      setMutedCommunities(prevMutedCommunities => [...prevMutedCommunities, mutedCommunityInput]);
+      setMutedCommunityInput('');
+    }
+  };
 
-    // Update the muted communities list with the new community
-    setMutedCommunities(prevMutedCommunities => [...prevMutedCommunities, mutedCommunityInput]);
+  const handleRemoveBlockedUser = index => {
+    const updatedBlockedUsers = [...blockedUsers];
+    updatedBlockedUsers.splice(index, 1);
+    setBlockedUsers(updatedBlockedUsers);
+  };
 
-    // Clear the input field
-    document.getElementById('mutedCommunityInput').value = '';
+  const handleRemoveMutedCommunity = index => {
+    const updatedMutedCommunities = [...mutedCommunities];
+    updatedMutedCommunities.splice(index, 1);
+    setMutedCommunities(updatedMutedCommunities);
   };
 
   return (
     <>
       <Box>
-        <Heading as="h4" className="headings-settings" fontWeight="500" mb="1">People You’ve Blocked</Heading>
+        <h4 className="headings-settings" fontWeight="500" mb="1">People You’ve Blocked</h4>
         <Text className="headings-description" fontWeight="normal" color="gray.500">Blocked people can’t send you chat requests or private messages.</Text>
         <Box className="input-group mb-3">
-          <Input id="blockedUserInput" type="text" placeholder="Block new user" className="form-control mr-sm-2" required />
-          <Button className="btn btn-primary" onClick={handleAddBlockedUser}>ADD</Button>
+          <Input id="blockedUserInput" type="text" placeholder="Block new user" className="form-control mr-sm-2" value={blockedUserInput} onChange={(e) => setBlockedUserInput(e.target.value)} required />
+          <Button className="btn btn-primary" onClick={handleAddBlockedUser} disabled={blockedUserInput.trim() === ''}>ADD</Button>
         </Box>
-        {/* Display blocked users */}
         {blockedUsers.map((user, index) => (
-          <Text key={index}>{user}</Text>
+          <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
+            <Text>{user}</Text>
+            <Button className="btn btn-primary" onClick={() => handleRemoveBlockedUser(index)} bg="transparent" border="none">Remove</Button>
+          </Flex>
         ))}
       </Box>
       <Box>
-        <Heading as="h4" className="headings-settings" fontWeight="500" mb="1">Communities You've Muted</Heading>
+        <h4 className="headings-settings" fontWeight="500" mb="1">Communities You've Muted</h4>
         <Text className="headings-description" fontWeight="normal" color="gray.500">Posts from muted communities won't show up in your feeds or recommendations.</Text>
         <Box className="input-group mb-3">
-          <Input id="mutedCommunityInput" type="text" placeholder="Mute new community" className="form-control" required />
-          <Button className="btn btn-primary" onClick={handleAddMutedCommunity}>ADD</Button>
+          <Input id="mutedCommunityInput" type="text" placeholder="Mute new community" className="form-control" value={mutedCommunityInput} onChange={(e) => setMutedCommunityInput(e.target.value)} required />
+          <Button className="btn btn-primary" onClick={handleAddMutedCommunity} disabled={mutedCommunityInput.trim() === ''}>ADD</Button>
         </Box>
-        {/* Display muted communities */}
         {mutedCommunities.map((community, index) => (
-          <Text key={index}>{community}</Text>
+          <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
+            <Text>{community}</Text>
+            <Button onClick={() => handleRemoveMutedCommunity(index)} bg="transparent" border="none">Remove</Button>
+          </Flex>
         ))}
       </Box>
     </>
