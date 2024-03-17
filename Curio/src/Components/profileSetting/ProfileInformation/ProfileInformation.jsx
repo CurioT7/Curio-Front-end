@@ -16,10 +16,13 @@ function ProfileInformation() {
   const remainingDisplayNameCharacters = 30 - displayName.length;
   const remainingAboutCharacters = 200 - about.length;
 
+  const displayNameClass = remainingDisplayNameCharacters <= 0 ? 'text-danger' : '';
+  const aboutClass = remainingAboutCharacters <= 0 ? 'text-danger' : '';
+
   return (
     <Box className="profile-information">
       <Box className="display-name">
-        <h3 className="headings-settings d-flex fw-500 mb-1">Display name (optional)</h3>
+        <h3 className={`headings-settings d-flex fw-500 mb-1`}>Display name (optional)</h3>
         <Text className="headings-description fw-normal text-muted">Set a display name. This does not change your username.</Text>
       </Box>
       <Box className="display-name-input-container">
@@ -33,11 +36,11 @@ function ProfileInformation() {
           value={displayName}
           onChange={handleDisplayNameChange}
         />
-        <Box className='word-remaining p-1 b-80 mb-4'>{remainingDisplayNameCharacters} Characters remaining</Box>
+        <Box className={`word-remaining p-1 b-80 mb-4 ${displayNameClass}`}>{remainingDisplayNameCharacters} Characters remaining</Box>
       </Box>
       <Box className="about-section">
         <Box className="about">
-          <h3 className="headings-settings d-flex fw-500 mb-1">About (optional)</h3>
+          <h3 className={`headings-settings d-flex fw-500 mb-1`}>About (optional)</h3>
           <Text className="headings-description fw-normal text-muted">A brief description of yourself shown on your profile.</Text>
         </Box>
         <Box className="about-textarea-container">
@@ -52,7 +55,7 @@ function ProfileInformation() {
             value={about}
             onChange={handleAboutChange}
           />
-          <Box className='word-remaining p-1 b-80 mb-4'>{remainingAboutCharacters} Characters remaining</Box>
+          <Box className={`word-remaining p-1 b-80 mb-4 ${aboutClass}`}>{remainingAboutCharacters} Characters remaining</Box>
         </Box>
       </Box>
     </Box>
