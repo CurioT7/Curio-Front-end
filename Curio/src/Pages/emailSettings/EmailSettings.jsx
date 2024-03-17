@@ -1,7 +1,10 @@
 import Email from "../../Components/emailSettings/Email";
 import UserSetting from "../../Components/UserSetting/UserSetting";
-
-function EmailSettings (){
+import { useEffect } from "react";
+function EmailSettings (props){
+    useEffect(() => {
+        props.hideSidebar();
+      }, []);
     return(
         <div>
             <UserSetting/>

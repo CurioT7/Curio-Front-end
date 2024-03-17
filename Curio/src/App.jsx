@@ -43,10 +43,10 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar}/>} /> 
           <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar}/>} />
-          <Route path='/settings/account' element={<AccSettings/>} />
-          <Route path='/settings/feeding' element={<FeedingSettings/>}/>
-          <Route path='/settings/email' element={<EmailSettings/>}/>
-          <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings/>}/>
+          <Route path='/settings/account' element={<AccSettings hideSidebar={handleHideSidebar}/>} />
+          <Route path='/settings/feeding' element={<FeedingSettings hideSidebar={handleHideSidebar}/>}/>
+          <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar}/>}/>
+          <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar}/>}/>
           <Route path='/user' element={<ShowFriendInformation/>} />
           <Route path='*' element={<ErrorPage/>} />
         </Routes>

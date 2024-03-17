@@ -1,7 +1,10 @@
 import Account from "../../Components/accountSettings/AccountSettings";
 import UserSetting from "../../Components/UserSetting/UserSetting";
-
-const AccountSettings = () =>{
+import { useEffect } from "react";
+const AccountSettings = (props) =>{
+    useEffect(() => {
+        props.hideSidebar();
+      }, []);
     return(
      <div>  
         <UserSetting/>
