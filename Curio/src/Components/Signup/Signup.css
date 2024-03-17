@@ -1,0 +1,205 @@
+.signup-close-button{
+    border-radius: 50%;
+    background-color: #F2F4F5;
+    border: none;
+    color: #ffffff;
+    width: 35px;
+    height: 35px;
+}
+
+.signup-close-button:hover{
+    background-color: #EAEDEF;
+}
+
+.signup-header{
+    font-size: 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    font-weight: 700;
+    color: #0f1a1c;
+}
+
+.signup-policy{
+    font-size: 0.7rem;
+}
+
+.signup-modal{
+    border-radius: 20px;
+    height: 650px;
+}
+
+.continue-with-google{
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #BFBFBF;
+    border-radius: 30px;
+    width: 100%;
+    height: 50px;
+    font-size: 0.875rem;
+}
+
+.signup-email-input{
+    background-color: #F2F4F5;
+    border-radius: 20px!important;
+    border: none;
+    height: 50px;
+    color: #000000;
+    font-weight: 400;
+    font-size: 0.9rem!important;
+    padding-left: 20px!important;
+}
+
+.signup-email-input:hover{
+    background-color: #EAEDEF;
+}
+
+.signup-info{
+    font-size: 0.875rem;
+}
+
+.signup-email-input::placeholder{
+    font-size: 0.875rem;
+}
+
+.signup-email-input:focus{
+    background-color: #EAEDEF;
+}
+
+.continue-button{
+    background-color: #cc361d!important;
+    border-radius: 30px;
+    border: none!important;
+    color: #ffffff!important;
+    font-size: 0.875rem;
+    font-weight: 700;
+    height: 50px;
+}
+
+.continue-button:hover{
+    background-color: #962900!important;
+}
+
+.custom-translate{
+    transform: translate(-400%, -50%);
+}
+
+.custom-translate-username-modal{
+    transform: translate(-100%, -50%);
+}
+
+.custom-translate-username-modal-error{
+    transform: translate(-100%, -50%);
+}
+
+.continue-button-disabled{
+    font-size: 0.875rem;
+    font-weight: 700;
+    height: 60px;
+    border-radius: 30px;
+    border: none!important;
+    background-color: rgba(0, 0, 0, 0.05)!important;
+    color: rgba(0, 0, 0, 0.25)!important;
+}
+
+.signup-back-button{
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: none;
+    width: 50px;
+    height: 50px;
+}
+
+.signup-back-button:hover{
+    background-color: #EAEDEF;
+}
+
+.username-alert{
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    font-size: 0.875rem;
+}
+
+.shuffle-button{
+    transform: translate(-80%, -50%);
+    cursor: pointer;
+}
+
+.custom-translate-username-field{
+    transform: translate(-240%, -50%);
+}
+
+.custom-translate-username-field-error{
+    transform: translate(-250%, -50%);
+}
+
+.skip-button{
+    font-size: 0.875rem;
+    font-weight: 600;   
+    border-radius: 50px;
+    color: #576f76!important;
+}
+
+.skip-button:hover{
+    background-color: #EAEDEF;
+}
+
+.identify-text{
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #576f76;
+}
+
+.gender-button{
+    border-radius: 30px!important;
+    background-color: #eaedef!important;
+    border: none!important;
+    width: 100%!important;
+    color: #000000 !important;
+    font-size: 0.875rem!important;
+    font-weight: 600!important;
+}
+
+.gender-button:hover{
+    background-color: #e2e7e9!important;
+}
+
+.interests{
+    font-size: 1.2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    font-weight: 700;
+    color: #0f1a1c;
+}
+
+.preferences-button{
+    border-radius: 20px;
+    background-color: #eaedef;
+    border: none;
+    width: auto;
+    color: #000000;
+    font-size: 0.875rem;
+}
+
+.preferences-button:hover{
+    background-color: #e2e7e9;
+}
+
+.clicked{
+    background-color: rgb(255, 237, 229)!important;
+    border: 1px solid #ff4500!important;
+}
+
+.preferences-disabled{
+    font-size: 0.875rem!important;
+}
+
+.my-floating{
+    transition: 300ms ease;
+    color: #576f76;
+    font-size: 0.875rem;
+}
+
+.my-input:focus + label,
+input:not(:placeholder-shown) + label
+{
+    padding-bottom: 10px;
+    transform: translateY(-10px);
+    font-size: 0.7rem;
+}

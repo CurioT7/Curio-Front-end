@@ -1,0 +1,21 @@
+:root{
+    --secclr:#1c1c1c;
+}
+.headings-settings{
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--secclr);
+}
+.btn{
+    background-color: white;
+    color: var(--fourcle);
+    border: 1px solid var(--fourcle);
+    border-radius: 30px;
+    min-height: 32px;
+    min-width: 32px;
+    padding: 4px 16px;
+}
+.btn:hover{
+    background-color: var(--thirdclr);
+    color: var(--fourcle);
+}

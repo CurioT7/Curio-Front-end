@@ -3,3 +3,4 @@ Curio/package-lock.json
 Curio/package.json
 *.json
 *.json
+/node_modules
