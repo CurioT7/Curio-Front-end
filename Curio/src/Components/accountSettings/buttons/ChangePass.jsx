@@ -4,10 +4,11 @@ import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalClo
 import { Input, FormControl, FormLabel, Image,Avatar } from "@chakra-ui/react";
 import Titles from '../../feedSettings/childs/Titles';
 import './formstyle.css'
+import PasswordErrorMessage from './PasswordErrorMessage';
 function ChangePass(props){
     const { isOpen, onOpen, onClose } = useDisclosure();
     
-    function PasswordErrorMessage1 (num) {
+    function PasswordErrorMessage1 () {
         
             return (
               <Text fontSize='xs'color='red'fontWeight='bold'>This field is required</Text>
@@ -64,6 +65,10 @@ function ChangePass(props){
     }
     function handleSubmit(e){
         e.preventDefault();
+        if(newPass.value !== confirmPass.value || newPass.length<8){
+            alert('please enter again')
+            return
+        }
         clearForm();
         console.log('oleaas work')
     }
@@ -103,13 +108,13 @@ function ChangePass(props){
                                         <h3 className="headings-settings fs-5 d-flex fw-500 mb-3">Update your password</h3> 
 
                                         <Input type='password' onBlur={handleOldPassBlur} value={oldPass.value} onChange={handleOldPass} placeholder='OLD PASSWORD' mb={5} />
-                                        {newPass.isTouched&&oldPass.value<1 ?(<PasswordErrorMessage1/>): null }
+                                        {oldPass.isTouched&&oldPass.value<1 ?(<PasswordErrorMessage text="This field is required"/>): null }
 
                                         <Input type='password' onBlur={handleNewPassBlur} value={newPass.value} onChange={handleNewPass} placeholder='NEW PASSWORD' mb={5} />
-                                        {newPass.isTouched&&newPass.value.length<8 ?(<PasswordErrorMessage2/>): null }
+                                        {newPass.isTouched&&newPass.value.length<8 ?(<PasswordErrorMessage text="Password should have at least 8 characters"/>): null }
 
                                         <Input type='password' onBlur={handleConfirmPassBlur}  value={confirmPass.value} onChange={handleConfirmPass} placeholder='CONFRIM NEW PASSWORD' mb={5} />
-                                        {newPass.isTouched&&newPass.value!=confirmPass.value ?(<PasswordErrorMessage3/>): null }
+                                        {confirmPass.isTouched&&newPass.value!=confirmPass.value ?(<PasswordErrorMessage text="Password must match"/>): null }
 
                                         <Flex justifyContent='space-between' alignItems='center'>
                                             <Titles title='Log me out everywhere'
