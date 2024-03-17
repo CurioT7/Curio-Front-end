@@ -1,8 +1,9 @@
-import {Box, Flex, Spacer} from '@chakra-ui/react'
+import {Box, Flex, Spacer, Switch} from '@chakra-ui/react'
 import 'G:/university/Senior 1/Spring/Software/Project/Code/Front End/Curio-Front-end/Curio/src/Components/style/userSettingsStyle.css'
 import Twitter from './buttons/Twitter'
 import Google from './buttons/Google'
 import Apple from './buttons/Apple'
+import Titles from '../feedSettings/childs/Titles'
 const ConnectedAccounts =() =>{
     const buttonStyle ={
         borderRadius: "30px", padding: "10px 20px",width:"180px", height:"35px",
@@ -10,19 +11,25 @@ const ConnectedAccounts =() =>{
     return(
         <Box>
             <Flex flexDirection='column' mb={5}>
-                <Box>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Connect to Twitter</h3>
-                    <p className="headings-description fw-normal text-muted">Connect a Twitter account to enable the choice to tweet your new posts and display a link on your profile. We will never post to Twitter without your permission.</p>
+                <Titles title='Connect to Twitter' description='Connect a Twitter account to enable the choice to tweet your new posts and display a link on your profile. We will never post to Twitter without your permission.'/>
+                
+                <Box display='flex' justifyContent='flex-end' mb={10}>
+                    <Twitter buttonStyle={buttonStyle} ></Twitter>
                 </Box>
-                <Box display='flex' justifyContent='flex-end'>
-                <Twitter buttonStyle={buttonStyle} ></Twitter>
+                <Box >
+                    <Flex ms={10}>
+                        <Titles title='Show link on profile' description='You can show a link to your Twitter account on your profile'/>
+                        <Spacer/>
+                        <Switch disabled={true} size='lg'/>
+            
+                    </Flex>
                 </Box>
 
             </Flex>
             <Flex display='flex' alignItems='center'  mb={5}>
+                
                 <Box>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Connect to Apple</h3>
-                    <p className="headings-description fw-normal text-muted">Connect account to log in to Reddit with Apple</p>
+                 <Titles title='Connect to Apple' description='Connect account to log in to Reddit with Apple'/>
                 </Box>
                 <Spacer/>
                 <Box >
@@ -32,8 +39,8 @@ const ConnectedAccounts =() =>{
             </Flex>
             <Flex display='flex' alignItems='center'  mb={5}>
                 <Box>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Connect to Google</h3>
-                    <p className="headings-description fw-normal text-muted">Connect account to log in to Reddit with Google</p>
+                    <Titles title='Connect to Google' description='Connect account to log in to Reddit with Google'/>
+                    
                 </Box>
                 <Spacer/>
                 <Box >

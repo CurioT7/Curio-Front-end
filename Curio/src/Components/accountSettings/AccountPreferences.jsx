@@ -3,7 +3,7 @@ import { Flex, Spacer,Box, Center } from '@chakra-ui/react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Select } from '@chakra-ui/react'
 import React from "react"
-
+import Titles from "../feedSettings/childs/Titles"
 import ChangePass from "./buttons/ChangePass"
 import EmailButton from "./buttons/EmailButton"
 
@@ -28,10 +28,8 @@ const AccountPreferences = () => {
       return(
         <Box mb={10}>
             <Flex mb={5} wrap='wrap'>
-                <div>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Email Address</h3> {/* Form to be done  */}
-                    <p className="headings-description fw-normal text-muted">{email}</p>
-                </div>
+                <Titles title='Email Address' description={email}/>
+              
                 <Spacer />
                 <>
                 <EmailButton buttonStyle={buttonStyle}/>
@@ -39,10 +37,11 @@ const AccountPreferences = () => {
             </Flex>
 
             <Flex mb={5}>
-                <div>
+                <Titles title='Change password' description='Password must be at least 8 characters long'/>
+                {/* <div>
                     <h3 className="headings-settings d-flex fw-500 mb-1">Change password</h3> 
                     <p className="headings-description fw-normal text-muted">Password must be at least 8 characters long</p>
-                </div>
+                </div> */}
                 <Spacer />
                 <>
                 <ChangePass buttonStyle={buttonStyle}/>
@@ -50,10 +49,8 @@ const AccountPreferences = () => {
             </Flex>
 
             <Flex mb={5}>
-                <div>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Gender</h3>
-                    <p className="headings-description fw-normal text-muted">This information may be used to improve your recommendations and ads.</p>
-                </div>
+                <Titles title='Gender' description='This information may be used to improve your recommendations and ads.'/>
+                
                 <Spacer />
                 <Select textAlign={[ 'left', 'center' ]} className="fw-bold "  variant='unstyled' onChange={handleGender} value={gender} size='xs' width="fit-content" justifyItems='center'                       
                 >
@@ -62,10 +59,8 @@ const AccountPreferences = () => {
                 </Select>
             </Flex>
             <Flex flexDirection='column' mb={5} >
-                <div>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Location customization</h3>
-                    <p className="headings-description fw-normal text-muted">Specify a location to customize your recommendations and feed. Reddit does not track your precise geolocation data.</p>
-                </div>
+                <Titles title='Location customization' description='Specify a location to customize your recommendations and feed. Reddit does not track your precise geolocation data.'/>
+                
                 <Box display='flex' ms={10}>
                     <Select textAlign={[ 'left', 'center' ]}  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={ip} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
                         <option value='Egypt' >Egypt</option>
