@@ -114,7 +114,7 @@
 }
 
 .loginBox p {
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.25rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -231,7 +231,21 @@
     font-size: 18px;
     box-sizing: border-box;
     align-content: center;
-  
+    padding: 0;
+    text-align: center;
+}
+
+.logintext{
+  padding-left: 10px;
+}
+
+.backButton{
+  align-self: left;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: white;
+  border: none;
 }
 
 .forgot {
@@ -243,3 +257,38 @@
   padding: 5px 0;
   text-align: left;
 }
+
+.loginInput p{
+  font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+ a{
+  text-decoration-line: none;
+}
+
+.or{
+  align-content: center;
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 10px 0;
+  font-weight: 100;
+  flex-wrap: unset;
+  color: #D6D6D6;
+}
+
+hr{
+ color: #D6D6D6;
+ width: 40%;
+ height: 1px;
+ display: inline-flex;
+ opacity: 0.25;
+ margin-top: 10px;
+ border-style: none;
+ flex-grow: 1;
+ margin: 0px;
+ border-width: 5px;
+ margin-left: 5px;
+ margin-right: 5px;
+   
+ }
