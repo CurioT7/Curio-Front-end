@@ -1,0 +1,8 @@
+.FieldError {
+    
+    color: red;
+    font-size: 12px;
+   
+    transition: 0.5s;
+    font-weight: bold;
+  }
