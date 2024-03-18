@@ -90,7 +90,7 @@ function SidebarComponent(props) {
         <MenuItem component={<Link to="/" />} rootStyles={{paddingTop: '20px'}} icon={<Home />}> Home </MenuItem>
         <MenuItem icon={<Popular />}> Popular </MenuItem>
         <MenuItem icon={<All />}> All </MenuItem>
-        <hr className='mt-3'></hr>
+        <hr className='mt-3 w-100'></hr>
         <SubMenu label="YOUR COMMUNITIES" rootStyles={{
             color: '#576F76',
             backgroundColor: '#FFFFFF',
@@ -111,7 +111,7 @@ function SidebarComponent(props) {
           <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/announcements</MenuItem>
           <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/PS5</MenuItem>
         </SubMenu>
-        <hr className='mt-3'></hr>
+        <hr className='mt-3 ps-5 w-100'></hr>
         <SubMenu label="RESOURCES" rootStyles={{
           fontSize: '0.875rem',
           color: '#576F76',
