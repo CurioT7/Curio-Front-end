@@ -6,7 +6,7 @@
     background-color: white;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 3;
 }
 .navbar .navbar-brand img{
     height: auto;
@@ -50,4 +50,34 @@
 }
 .navbar .navbar-nav a:hover{
     background-color: #edeff1;
+    border-radius: 999px;
+}
+
+.signup-button{
+    background-color: #f8f9fa!important;
+    border: none;
+}
+
+.signup-button:hover{
+    border-radius: 999px!important;
+}
+
+::after{
+    content: none!important;
+}
+
+.signup-button-item{
+    width: 200px!important;
+    font-size: 0.875rem!important;
+    color: #0F1A1C!important;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;;
+}
+
+.signup-button-item:hover{
+    background-color: #f2f4f5!important;
+    border-radius: 0!important;
+}
+
+.dropdown-menu{
+    width: 200px!important;
 }
