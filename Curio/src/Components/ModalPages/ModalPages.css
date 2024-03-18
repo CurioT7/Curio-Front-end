@@ -1,0 +1,206 @@
+.modal-content {
+  padding-top: 20px;
+  border: none; 
+  height: 585px;
+  width: 560px;
+  border-radius: 15px;
+}
+
+.modal-header {
+  border-bottom: none; 
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.modal-header {
+  padding-top: 0px; 
+  padding-bottom: 0px;
+}
+
+.modal-body {
+  padding-top: 0px; 
+  padding-bottom: 0px; 
+}
+
+.header-text, .header-text1{
+  font-weight: bold;
+  font-size: 18px;
+  display: inline-block;
+}
+
+.header-text1{
+  margin-left: 1rem;
+}
+
+.body-text, .report-thank, .rule-break-text{
+  font-weight:600;
+  font-size: 18px;
+  margin-bottom: 0px;
+}
+
+.closeButton{
+  color: red;
+  background-color: #00255D;
+}
+
+.back-btn{
+  background-color: white;
+  border: none;
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+
+}
+
+.back-btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.back-btn:hover{
+  background-color: #EAEDEF;
+}
+
+.back-btn:active{
+  background-color: #D2DADD;
+}
+
+.back-btn-container{
+  display: inline-block;
+}
+
+.radio-container, .radio-container1 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.radio-container1{
+  margin-bottom: 1rem;
+}
+
+.radio-container label {
+  margin-right: 20px;
+}
+
+.input{
+  margin-right: 10px;
+}
+
+.option-button {
+  background-color: #EAEDEF;
+  color: #333;
+  padding: 10px 10px 10px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-top: 15px;
+  border: 0;
+  font-size : 14px;
+  box-shadow: none;
+
+}
+
+.option-button.selected {
+  background-color: #D2DADD;
+}
+
+.option-button:hover {
+  background-color: #E2E7E9;
+}
+
+.flex-container{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0px;
+}
+
+.flex-foot-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%; /* Ensure the container takes full height */
+}
+.description-text{
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 0;
+}
+
+.description{
+  margin-bottom: 0;
+}
+
+
+.explanation-container{
+  width: 28rem;
+  margin-top: 0;
+  margin-right: 5rem;
+}
+
+.submit-btn-container {
+  position: absolute;
+  bottom: 8px;
+  right: 0px;
+}
+
+.content-policy{
+  background-color: rgb(242, 244, 245);
+  margin-top: 2rem;
+  font-size: 13px;
+  border-radius: 10px;
+  color: rgb(87, 111, 118);
+  display: flex;
+  align-items: center;
+}
+
+.exclamation-container{
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+
+.content-parag{
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+
+
+.policy-link{
+  text-decoration: none;
+}
+
+.policy-link:hover{
+  text-decoration: underline;
+}
+
+.report-thank{
+  margin-bottom: 2rem;
+}
+
+.body-text{
+  margin-bottom: 1.5rem;
+}
+
+.main-button{
+  background-color: #0045AC;
+  border-radius: 999px;
+  color: white;
+  border: none;
+  padding: 10px 15px 10px 15px;
+}
+
+.main-button:hover{
+  background-color: #003584;
+}
+
+.main-button:active{
+  background-color: #00255D;
+}
