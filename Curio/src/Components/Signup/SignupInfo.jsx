@@ -70,7 +70,7 @@ function SignupInfo(props) {
       <Modal.Body className='pt-0 d-flex flex-column'>
         <div className="pt-0" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <h1 className='signup-header'>Sign Up</h1>
-            <p className='signup-info'>By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy.</p>
+            <p className='signup-info'>By continuing, you agree to our <a href="https://www.redditinc.com/policies/user-agreement">User Agreement</a> and acknowledge that you understand the <a href="https://www.reddit.com/policies/privacy-policy">Privacy Policy</a>.</p>
         </div>
         <div className="d-flex justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <button className='continue-with-google p-3 d-flex justify-content-between align-items-center align-content-center' onClick={props.onHide}>
