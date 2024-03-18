@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure, Avatar } from '@chakra-ui/react';
 import "./Socialmodal.css";
 import {
     Modal,
@@ -9,9 +9,12 @@ import {
     ModalBody,
     ModalCloseButton,
 } from '@chakra-ui/react';
+import logo from "../../../assets/Curio_logo.png";
+
 
 import SocialMediaModal from "./SocialMediaModal";
 import SocialUsernameModal from "./SocialUsernameModal";
+import CurioInput from "./CurioInput";
 
 function Socialmodal(props){
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,7 +55,7 @@ function Socialmodal(props){
                             <SocialMediaModal name="Custom URL" icon="fa-solid fa-link" handleSocialLinkClick={handleSocialLinkClick}/>
                         </li>
                         <li className="social-icon-modal list-inline-item mb-2 mx-1">
-                            <SocialMediaModal name="Curio" icon="fa-brands fa-facebook" handleSocialLinkClick={handleSocialLinkClick} />
+                            <CurioInput name="Curio" avatar={logo} handleSocialLinkClick={handleSocialLinkClick} />
                         </li>
                         <li className="social-icon-modal list-inline-item mb-2 mx-1">
                             <SocialUsernameModal name="Instagram" icon="fa-brands fa-instagram" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.instagram.com/" />

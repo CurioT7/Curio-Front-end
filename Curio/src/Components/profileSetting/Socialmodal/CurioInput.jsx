@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure, Avatar } from '@chakra-ui/react';
 import {
     Modal,
     ModalOverlay,
@@ -9,22 +9,14 @@ import {
 } from '@chakra-ui/react';
 import "./SocialinputModal.css";
 
-function SocialUsernameModal(props) {
+function CurioInput(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [displayText, setDisplayText] = useState(""); 
     const [isSaveEnabled, setIsSaveEnabled] = useState(false);
-    const [warningMessage, setWarningMessage] = useState("");
 
     const handleSave = () => {
-        if (displayText === "@") {
-            setWarningMessage("Handle attribute must be provided for " + props.name.toUpperCase()  + " link type.");
-            return;
-        }
-
         if (displayText) {
-            const usernameUrl = `${props.urlPrefix}${displayText}`;
-            console.log("Username URL:", usernameUrl);
-            props.handleSocialLinkClick(displayText, props.icon);
+            props.handleSocialLinkClick(displayText, props.avatar);
             setDisplayText(""); 
             setIsSaveEnabled(false);
             setWarningMessage("");
@@ -35,24 +27,10 @@ function SocialUsernameModal(props) {
 
     const handleInputChange = (e) => {
         let { value } = e.target;
-        
-        if (value.length === 0) {
-            value = "@";
-        }
-
-        if (!value.startsWith("@")) {
-            value = "@" + value.substring(1);
-        }
-
         setDisplayText(value);
-        setIsSaveEnabled(value.length > 1); 
-        setWarningMessage(""); 
     };
 
     const handleClose = () => {
-        if (!displayText || displayText === "@") { 
-            return;
-        }
         onClose();
     };
 
@@ -64,7 +42,7 @@ function SocialUsernameModal(props) {
         <>
             <div className="custom-url-link-container">
                 <li onClick={onOpen} variant='outline' className="custom-url-button list-inline-item">
-                    <i className={props.icon}/> {props.name}
+                    <Avatar size='sm' name={props.name} src={props.avatar} /> {props.name} 
                 </li>
             </div>
             <Modal isOpen={isOpen} onClose={handleClose}>
@@ -85,9 +63,8 @@ function SocialUsernameModal(props) {
                     </ModalHeader>
                     <ModalBody>
                         <div className="custom-container">
-                            <li className="custom-url-li list-inline-item mb-2 mx-1"><i className={props.icon}/> {props.name} </li>
-                            <input type="text" placeholder="@username" className="display_text" value={displayText} onChange={handleInputChange} required/>
-                            {warningMessage && <p style={{ color: 'red', fontSize: '12px' }}>{warningMessage}</p>}
+                            <li className="custom-url-li list-inline-item mb-2 mx-1"><Avatar size='sm' name={props.name} src={props.avatar} /> {props.name} </li> 
+                            <input type="text" placeholder="r/community, u/user" className="display_text" value={displayText} onChange={handleInputChange} required/>
                         </div>
                     </ModalBody>
                 </ModalContent>
@@ -96,4 +73,4 @@ function SocialUsernameModal(props) {
     );
 };
 
-export default SocialUsernameModal;
+export default CurioInput;
