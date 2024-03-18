@@ -10,7 +10,8 @@ import ShareIcon from "../../styles/icons/Share";
 import ReportIcon from "../../styles/icons/Report";
 import MessageIcon from "../../styles/icons/SendMessage";
 import BlockIcon from "../../styles/icons/Block";
-import ReportPopup from "../ReportPopup/ReportPopup";
+import ReportPopup from "../ModalPages/ModalPages";
+
 
 function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);

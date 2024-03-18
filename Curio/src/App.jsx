@@ -10,10 +10,8 @@ import ShowFriendInformation from './Components/FriendInformation/ShowFriendInfo
 import Navbar from './Components/Navbar/Navbar.jsx'
 import Error from './Components/Error/Error.jsx'
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx'
-import LoginPage from './Components/Login/Loginpage.jsx'  
-import UserPage from './Pages/UserProfile/UserProfile.jsx'
-
-
+import LoginPage from './Components/Login/Loginpage.jsx'
+import ModalPage from './Components/ModalPages/ModalPages.jsx'
 
 
 
@@ -26,23 +24,25 @@ function App() {
 
   return (
     <div>
-      <div className='d-flex'>
+       {/* <div className='d-flex'>
         <div style={{position: 'fixed'}}>
           <SidebarComponent sidebarVisibility={isSidebarVisible} />
         </div>
-      </div>
-      <Navbar/>
-      <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar}/>} /> 
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/forgotuser" element={<ForgotUser/>} />
-        <Route path="/" element={<Home/>} />
-        <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar}/>} /> 
-        <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar}/>} />
-        <Route path='/user' element={<UserPage/>} />
-        <Route path='*' element={<ErrorPage/>} />
-      </Routes>
+      </div>  */}
+        {/* <Navbar/> */}
+        <ModalPage />
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar}/>} /> 
+          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/forgotuser" element={<ForgotUser/>} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar}/>} /> 
+          <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar}/>} />
+          <Route path='/user' element={<ShowFriendInformation/>} />
+          <Route path='*' element={<ErrorPage/>} />
+          <Route path='/modal' element={<ModalPage/>} />
+        </Routes>
     </div>
   )
 }
