@@ -1,6 +1,6 @@
-// JSX file 2: Socialmodal.jsx
 import React, { useState } from "react";
 import { Button, useDisclosure } from '@chakra-ui/react';
+import "./Socialmodal.css";
 import {
     Modal,
     ModalOverlay,
@@ -9,20 +9,20 @@ import {
     ModalBody,
     ModalCloseButton,
 } from '@chakra-ui/react';
-import "./Socialmodal.css";
+
+import SocialMediaModal from "./SocialMediaModal";
+import SocialUsernameModal from "./SocialUsernameModal";
 
 function Socialmodal(props){
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedSocialLinks, setSelectedSocialLinks] = useState([]);
 
     const handleSocialLinkClick = (socialLink, iconClass) => {
-        // Add the clicked social link to the selectedSocialLinks array
+        event.stopPropagation();
         setSelectedSocialLinks([...selectedSocialLinks, { link: socialLink, icon: iconClass }]);
-        onClose();
     };
 
     const handleRemoveSocialLink = (index) => {
-        // Remove the selected social link from the array
         const updatedLinks = [...selectedSocialLinks];
         updatedLinks.splice(index, 1);
         setSelectedSocialLinks(updatedLinks);
@@ -30,11 +30,9 @@ function Socialmodal(props){
 
     return(
         <>
-        {/* Display all selected social links */}
         {selectedSocialLinks.map((link, index) => (
             <div key={index} className="selected-social-link">
                 <i className={link.icon}/> {link.link}
-                {/* Add a cancel icon to remove the link */}
                 <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
             </div>
         ))}
@@ -49,47 +47,43 @@ function Socialmodal(props){
                 <ModalHeader className="text-center">Add Social Link</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <div className="container-social mb-6 mx-2">
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Custom URL', 'fa-solid fa-link')}>
-                            <i className="fa-solid fa-link"/> Custom URL
+                    <div className="container-social container mb-6 mx-2">
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialMediaModal name="Custom URL" icon="fa-solid fa-link" handleSocialLinkClick={handleSocialLinkClick}/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Curio', 'fa-solid fa-link')}>
-                            <i className="fa-solid fa-link"/> Curio
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialMediaModal name="Curio" icon="fa-brands fa-facebook" handleSocialLinkClick={handleSocialLinkClick} />
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Instagram', 'fa-brands fa-instagram')}>
-                            <i className="fa-brands fa-instagram"/> Instagram
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="Instagram" icon="fa-brands fa-instagram" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.instagram.com/" />
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Twitter', 'fa-brands fa-twitter')}>
-                            <i className="fa-brands fa-twitter"/> Twitter
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="Twitter" icon="fa-brands fa-twitter" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://twitter.com/"/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('TikTok', 'fa-brands fa-tiktok')}>
-                            <i className="fa-brands fa-tiktok"/>  TikTok
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="TikTok" icon="fa-brands fa-tiktok" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.tiktok.com/"/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Twitch', 'fa-brands fa-twitch')}>
-                            <i className="fa-brands fa-twitch"/> Twitch
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="Twitch" icon="fa-brands fa-twitch" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.twitch.tv/"/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Facebook', 'fa-brands fa-facebook')}>
-                            <i className="fa-brands fa-facebook"/> Facebook
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialMediaModal name="Facebook" icon="fa-brands fa-facebook" handleSocialLinkClick={handleSocialLinkClick} />
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Facebook', 'fa-brands fa-facebook')}>
-                            <i className="fa-brands fa-youtube"/> Youtube
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialMediaModal name="Youtube" icon="fa-brands fa-youtube" handleSocialLinkClick={handleSocialLinkClick} />
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Facebook', 'fa-brands fa-facebook')}>
-                            <i className="fa-brands fa-tumblr"/> Tumblr
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="Tumblr" icon="fa-brands fa-tumblr" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.tumblr.com/"/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Facebook', 'fa-brands fa-facebook')}>
-                            <i className="fa-brands fa-spotify"/> Spotify
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="Spotify" icon="fa-brands fa-spotify" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://open.spotify.com/"/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Facebook', 'fa-brands fa-facebook')}>
-                            <i className="fa-brands fa-soundcloud"/> SoundCloud
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="SoundCloud" icon="fa-brands fa-soundcloud" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://soundcloud.com/"/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Facebook', 'fa-brands fa-facebook')}>
-                            <i className="fa-brands fa-paypal"/> PayPal
+                        <li className="social-icon-modal list-inline-item mb-2 mx-1">
+                            <SocialUsernameModal name="PayPal" icon="fa-brands fa-paypal" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.paypal.com/"/>
                         </li>
-                        <li className="social-icon-modal list-inline-item mb-2 mx-1" onClick={() => handleSocialLinkClick('Facebook', 'fa-brands fa-facebook')}>
-                            <i className="fa-brands fa-facebook"/> Facebook
-                        </li>
-                        {/* Other social links... */}
                     </div>
                 </ModalBody>
             </ModalContent>

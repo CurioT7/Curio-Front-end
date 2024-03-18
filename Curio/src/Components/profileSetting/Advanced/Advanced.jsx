@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
-import "./Advanced.css"
+import "./Advanced.css";
 
 function Advanced() {
   const [followChecked, setFollowChecked] = useState(true);
