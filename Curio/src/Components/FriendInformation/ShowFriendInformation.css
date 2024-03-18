@@ -63,6 +63,9 @@
     font-weight: 700;
     font-size: 1.2rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .follow-button{
@@ -217,4 +220,60 @@
     font-weight: 600;
     color: #0f1a1c;
     padding: 10px;
+}
+
+.ellipsis-btn{
+    border-radius: 20px;
+    width: 34px;
+    height: 32px;
+    border: none;
+    margin-left: 16rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ellipsis-img{
+    margin-bottom: 50px;
+  }
+  
+.items-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.interaction-icons {
+    margin-right: 10px;
+    margin-left: 3rem;
+}
+
+.drop-down-list{
+    list-style-type :none;
+    margin: 0;
+    padding: 5px 10px 5px 10px;
+}
+
+.drop-down-item{
+    margin-bottom: 25px;
+    color: rgb(15, 26, 28);
+    font-size: 14px;
+}
+
+.last-item{
+    color: rgb(15, 26, 28);
+    font-size: 14px;
+}
+
+.following {
+    background-color: white;
+    color: black;
+}
+
+.not-following:hover{
+    background-color: #003584;
+}
+
+.not-following {
+    background-color: #0045AC;
+    color: white;
 }
