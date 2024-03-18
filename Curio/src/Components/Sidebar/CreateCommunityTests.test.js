@@ -18,7 +18,7 @@ test('validates community name length with 3 characters', () => {
   const inputField = screen.getByPlaceholderText('');
   fireEvent.change(inputField, { target: { value: 'ab' } });
   fireEvent.blur(inputField);
-  expect(inputField.style.border).toBe('2px solid #a50016');
+  expect(inputField.style.border).toBe('3px solid #a50016');
 });
 
 test('validates community name length with 3 characters', () => {
@@ -26,7 +26,7 @@ test('validates community name length with 3 characters', () => {
   const inputField = screen.getByPlaceholderText('');
   fireEvent.change(inputField, { target: { value: '' } });
   fireEvent.blur(inputField);
-  expect(inputField.style.border).toBe('2px solid #a50016');
+  expect(inputField.style.border).toBe('3px solid #a50016');
 });
 
 
