@@ -6,6 +6,7 @@ import './Signup.css';
 import Google from '../../styles/icons/Google.jsx';
 import UsernameInfo from './UsernameInfo.jsx';
 import { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 function SignupInfo(props) {

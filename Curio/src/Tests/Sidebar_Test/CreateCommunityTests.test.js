@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import CreateCommunity from './CreateCommunity';
+import CreateCommunity from '../../Components/Sidebar/CreateCommunity';
 import '@testing-library/jest-dom';
 
 

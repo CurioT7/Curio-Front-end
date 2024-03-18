@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import SignupInfo from './SignupInfo.jsx';
+import SignupInfo from '../../Components/Signup/SignupInfo.jsx';
 import '@testing-library/jest-dom';
-import UsernameInfo from './UsernameInfo.jsx';
-import Preferences from './Preferences.jsx';
+import UsernameInfo from '../../Components/Signup/UsernameInfo.jsx';
+import Preferences from '../../Components/Signup/Preferences.jsx';
+import { BrowserRouter } from 'react-router-dom';
 
 test('should disable Continue button when email input is invalid', () => {
       // Arrange
@@ -15,7 +16,7 @@ test('should disable Continue button when email input is invalid', () => {
       };
 
       // Act
-      render(<SignupInfo show onHide={() => {}} {...props} />);
+      render(<BrowserRouter><SignupInfo show onHide={() => {}} {...props} /></BrowserRouter>);
       const input = screen.getByTestId("email");
       fireEvent.change(input, { target: { value: "invalidEmail" } });
       fireEvent.blur(input);
