@@ -1,13 +1,14 @@
-import 'G:/university/Senior 1/Spring/Software/Project/Code/Front End/Curio-Front-end/Curio/src/Components/style/userSettingsStyle.css'
-import { Switch } from '@chakra-ui/react'
+import'./AccountSettings'
+
 import { Flex, Spacer } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
-import { Select } from '@chakra-ui/react'
+
 import AccountPreferences from "./AccountPreferences"
 import React from "react"
 import ConnectedAccounts from "./ConnectedAccounts"
-import { FaRegTrashAlt } from "react-icons/fa";
+import DeleteButton from './buttons/DeleteButton'
+
 import { FaTrashAlt } from "react-icons/fa";
 const AccountSettings = () =>{
 
@@ -22,9 +23,9 @@ const AccountSettings = () =>{
                     <AccountPreferences></AccountPreferences>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">CONNECTED ACCOUNTS</h3>
                     <ConnectedAccounts></ConnectedAccounts>
-                    <h3 className="headings-titles text-uppercase fw-bold mb-3">CONNECTED ACCOUNTS</h3>
+                    <h3 className="headings-titles text-uppercase fw-bold mb-3">delete ACCOUNTS</h3>
                     <Flex justifyContent='flex-end' className="mb-5">
-                    <Button color='red' variant='unstyled' leftIcon={<FaTrashAlt />} > Delete Account</Button>
+                    <DeleteButton/>
                     </Flex>
                 </div>
 

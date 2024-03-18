@@ -1,3 +1,10 @@
+:root{
+  --firstclr:#7c7c7c;
+  --secclr:#1c1c1c;
+  --thirdclr: #edeff1;
+  --fourclr: #0079d3;
+  --fifthclr: #1a1a1b;
+}
 .FieldError {
     
     color: red;
@@ -6,3 +13,20 @@
     transition: 0.5s;
     font-weight: bold;
   }
+  .heading-titles{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    
+    text-transform: uppercase;
+    color: var(--firstclr);
+}
+
+.text-space{
+  letter-spacing: 0.1;
+  line-height: 2.7vh;
+}
+small{
+  font-weight: 600;
+}
