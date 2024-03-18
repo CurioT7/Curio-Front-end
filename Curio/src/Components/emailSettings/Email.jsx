@@ -1,19 +1,24 @@
 import { Switch, Flex, Spacer, Box } from '@chakra-ui/react'
 import Titles from '../feedSettings/childs/Titles';
 import React from 'react';
-import 'G:/university/Senior 1/Spring/Software/Project/Code/Front End/Curio-Front-end/Curio/src/Components/style/userSettingsStyle.css'
+import './Email.css'
+import { useToast } from '@chakra-ui/react'
 function Email (){
+    const toast = useToast()
     const [newFollowerEmail,setNewFollowerEmail]=React.useState(true)
     const [chatRequestEmail,setChatRequestEmail]=React.useState(true)
     const [unsubscribeFromAllEmails,setUnsubscribeFromAllEmails] = React.useState(false)
     function handleNewFollowerEmail(){
         setNewFollowerEmail(!newFollowerEmail)
+       
     }
     function handleChatRequestEmail(){
         setChatRequestEmail(!chatRequestEmail)
+      
     }
     function handleUnsubscribeFromAllEmails(){
         setUnsubscribeFromAllEmails(!unsubscribeFromAllEmails)
+       
     }
     // console test
     console.log(` New user: ${newFollowerEmail}`)
@@ -29,7 +34,15 @@ function Email (){
                     <Flex mb={5} alignItems='center'>
                         <Titles title='Chat requests'/>
                         <Spacer/>
-                        <Switch size='lg' isChecked={chatRequestEmail} onChange={handleChatRequestEmail}/>
+                        <Switch  onClick={() =>
+        toast({
+          title: 'Account created.',
+          description: "We've created your account for you.",
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+        })
+      } size='lg' isChecked={chatRequestEmail} onChange={handleChatRequestEmail}/>
                     </Flex>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">Activity</h3>
                     <Flex mb={5} alignItems='center'>

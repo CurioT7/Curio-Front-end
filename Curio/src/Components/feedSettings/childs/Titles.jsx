@@ -1,4 +1,4 @@
-import 'G:/university/Senior 1/Spring/Software/Project/Code/Front End/Curio-Front-end/Curio/src/Components/style/userSettingsStyle.css'
+import './child.css'
 import {Box} from '@chakra-ui/react'
 
 function Titles(props){
