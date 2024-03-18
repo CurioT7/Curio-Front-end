@@ -12,9 +12,9 @@ function Recommendations() {
         <Box className="new-followers d-flex flex-wrap mb-3">
             <Box className="trending-posts">
                 <label htmlFor="trending-posts-checkbox">
-                    <Heading as="h3" className="headings-settings d-flex fw-500 mb-1">
+                    <h3 className="headings-settings d-flex fw-500 mb-1">
                         Trending posts
-                    </Heading>
+                    </h3>
                 </label>
             </Box>
             <Box className="trending-posts-checkbox">

@@ -11,6 +11,7 @@ import Navbar from './Components/Navbar/Navbar.jsx'
 import Error from './Components/Error/Error.jsx'
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx'
 import LoginPage from './Components/Login/Loginpage.jsx'  
+import { ChakraProvider } from '@chakra-ui/react';
 
 
 
@@ -28,18 +29,20 @@ function App() {
           <SidebarComponent sidebarVisibility={isSidebarVisible} />
         </div>
       </div>
-      <Navbar/>
-      <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar}/>} /> 
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/forgotuser" element={<ForgotUser/>} />
-        <Route path="/" element={<Home/>} />
-        <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar}/>} /> 
-        <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar}/>} />
-        <Route path='/user' element={<ShowFriendInformation/>} />
-        <Route path='*' element={<ErrorPage/>} />
-      </Routes>
+      <ChakraProvider>
+        <Navbar/>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar}/>} /> 
+          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/forgotuser" element={<ForgotUser/>} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar}/>} /> 
+          <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar}/>} />
+          <Route path='/user' element={<ShowFriendInformation/>} />
+          <Route path='*' element={<ErrorPage/>} />
+        </Routes>
+      </ChakraProvider>
     </div>
   )
 }
