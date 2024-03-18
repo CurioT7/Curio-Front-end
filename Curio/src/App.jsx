@@ -12,10 +12,13 @@ import ChatAndMessagingSettings from './Pages/ChatAndMassegingSettings/ChatAndMa
 import { ChakraProvider } from '@chakra-ui/react'
 import SidebarComponent from './Components/Sidebar/SidebarComponent.jsx';
 import ShowFriendInformation from './Components/FriendInformation/ShowFriendInformation.jsx';
-import Navbar from './Components/Navbar/Navbar.jsx'
+import Navbar from './Components/Navbar/Navbar.jsx';
 import Error from './Components/Error/Error.jsx'
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx'
 import LoginPage from './Components/Login/Loginpage.jsx'  
+import ForgotUser from './Components/ForgotUser/ForgotUser.jsx';
+import LoginPage from './Components/Login/Loginpage.jsx';
+import { ChakraProvider } from '@chakra-ui/react';
 
 
 

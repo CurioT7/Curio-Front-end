@@ -45,14 +45,6 @@ input[type=text], textarea{
     line-height: 16px;
     font-weight: 400; 
 }
-.social-link{
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 16px;
-    color: var(--secclr);
-    cursor: pointer;
-    white-space: nowrap;
-}
 .image-upload-container span{
     color: var(--fourcle);
 }
@@ -90,8 +82,7 @@ cursor: pointer;
 .nsfw-checkbox,
 .follow-checkbox,
 .content-visibility-switch,
-.communities-visibility-switch,
-.clear-history-button{
+.communities-visibility-switch{
 align-items: center;
 display: flex;
 flex-grow: 1;

@@ -1,0 +1,44 @@
+:root{
+    --thirdclr: #edeff1;
+    --sixclr: #e2e8f0;
+}
+.container-social{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 18px;
+    margin: 6px 2px;
+}
+.social-icon-modal{
+    display: flex;
+    align-items: center;
+    background-color: var(--thirdclr);
+    border-radius: 30px;
+    cursor: pointer;
+    height: 20px;
+    padding: 15px;
+}
+i{
+    margin-right: 2px;
+}
+.add-social-button{
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: var(--secclr);
+    cursor: pointer;
+    white-space: nowrap;
+    background-color: var(--thirdclr);
+}
+.social-media-modal{
+    cursor: pointer;
+}
+.selected-social-link {
+    font-size: 1rem;
+    margin-right: 10px;
+    border: 1px solid var(--sixclr);
+    background-color: var(--sixclr);
+    border-radius: 30px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  

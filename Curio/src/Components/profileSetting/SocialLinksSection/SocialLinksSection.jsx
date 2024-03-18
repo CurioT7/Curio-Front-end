@@ -3,7 +3,7 @@ import Socialmodal from '../Socialmodal/Socialmodal';
 
 function SocialLinksSection() {
   const buttonStyle ={
-    borderRadius: "30px", padding: "10px 20px", 
+    borderRadius: "30px", padding: "10px 15px", 
 }
   return (
     <Box className="social-links-section">
@@ -14,7 +14,7 @@ function SocialLinksSection() {
       <Box className="social-links-nav">
         <nav aria-label="Social Links">
           <ul className='list-unstyled d-flex flex-wrap gap-2'>
-            <li className='social-link d-flex align-items-center bg-light rounded-pill px-3 py-2'>
+            <li className='social-link d-flex align-items-center rounded-pill px-3 py-2'>
               <Spacer />
               <Socialmodal buttonStyle={buttonStyle}/>
             </li>
