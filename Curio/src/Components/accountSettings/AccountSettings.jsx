@@ -11,16 +11,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 const AccountSettings = () =>{
 
-    const [email, setEmail] = React.useState("example@gamil.com");
-    const [gender, setGender] = React.useState("MAN")
-    const buttonStyle ={
-        borderRadius: "30px", padding: "10px 20px",
-    }
-    
-    const handleChange = (event) => {
-        setGender(event.target.value);
-      };
-
+  
     return (
         <div className="container" >
             <div className="customize-account   ">
