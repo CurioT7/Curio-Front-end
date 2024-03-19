@@ -46,7 +46,7 @@ function Safety() {
         {blockedUsers.map((user, index) => (
           <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
             <Text>{user}</Text>
-            <Button className="btn btn-primary" data-testid="remove-block-user" onClick={() => handleRemoveBlockedUser(index)} bg="transparent" border="none">Remove</Button>
+            <Button className="btn btn-primary" onClick={() => handleRemoveBlockedUser(index)} bg="transparent" border="none">Remove</Button>
           </Flex>
         ))}
       </Box>
