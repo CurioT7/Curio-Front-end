@@ -22,7 +22,8 @@ function SocialUsernameModal(props) {
         }
 
         if (displayText) {
-            const usernameUrl = `${props.urlPrefix}${displayText}`;
+            let username = displayText.startsWith("@") ?displayText.substring(1):displayText;
+            const usernameUrl = `${props.urlPrefix}${username}`;
             console.log("Username URL:", usernameUrl);
             props.handleSocialLinkClick(displayText, props.icon);
             setDisplayText(""); 

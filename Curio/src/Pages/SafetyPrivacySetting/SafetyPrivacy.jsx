@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import "./SafetyPrivacy.css";
 import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
 import Safety from "../../Components/SafetyPrivacy/Safety/Safety";
-import Privacy from "../../Components/SafetyPrivacy/Privacy/Privacy";
 
 
 function SafetyPrivacy(props) {
@@ -29,8 +28,6 @@ useEffect(() => {
         </p>
         <h3 className='headings-titles text-uppercase fw-bold mb-4'>Safety</h3>
         <Safety/>
-        <h3 className='headings-titles text-uppercase fw-bold mb-4'>Privacy</h3>
-        <Privacy/>
         </div>
       </div>
     </div> 

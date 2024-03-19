@@ -19,8 +19,7 @@ function CurioInput(props) {
             props.handleSocialLinkClick(displayText, props.avatar);
             setDisplayText(""); 
             setIsSaveEnabled(false);
-            setWarningMessage("");
-
+            // There's no function setWarningMessage defined, remove this line to prevent errors.
             onClose();
         }
     };
@@ -28,9 +27,14 @@ function CurioInput(props) {
     const handleInputChange = (e) => {
         let { value } = e.target;
         setDisplayText(value);
+        // Enable save button only if input has content.
+        setIsSaveEnabled(value !== "");
     };
 
     const handleClose = () => {
+        if (!displayText) { 
+            return;
+        }
         onClose();
     };
 
@@ -57,6 +61,7 @@ function CurioInput(props) {
                                 Add Social Link
                             </div>
                             <div className="flex justify-end items-center">
+                                {/* Disable button if save is not enabled */}
                                 <Button onClick={handleSave} disabled={!isSaveEnabled} bg={isSaveEnabled ? "blue.500" : "gray.400"}>Save</Button>
                             </div>
                         </div>
@@ -64,6 +69,7 @@ function CurioInput(props) {
                     <ModalBody>
                         <div className="custom-container">
                             <li className="custom-url-li list-inline-item mb-2 mx-1"><Avatar size='sm' name={props.name} src={props.avatar} /> {props.name} </li> 
+                            {/* Added onChange event handler to monitor input changes */}
                             <input type="text" placeholder="r/community, u/user" className="display_text" value={displayText} onChange={handleInputChange} required/>
                         </div>
                     </ModalBody>
