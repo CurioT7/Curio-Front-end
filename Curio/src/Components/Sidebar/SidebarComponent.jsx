@@ -56,7 +56,7 @@ function SidebarComponent(props) {
 
   return (
     <div>
-      <Sidebar backgroundColor='#FFFFFF' collapsed={collapsed} rootStyles={{
+      <Sidebar backgroundColor='#FFFFFF' collapsed={collapsed} collapsedWidth='60px' rootStyles={{
         paddingTop: '60px',
         color: '#000000',
         marginLeft: '20px',
