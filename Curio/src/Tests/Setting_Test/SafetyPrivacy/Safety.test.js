@@ -16,15 +16,6 @@ describe('Safety component', () => {
         expect(getByText('BlockedUser1')).toBeInTheDocument();
       });
 
-      // test('Removes blocked user correctly', () => {
-      //   const { getByText } = render(<Safety />);
-      //   const removeButton = getByText('Remove'); 
-      
-      //   fireEvent.click(removeButton);
-      
-      //   expect(getByText('BlockedUser1')).not.toBeInTheDocument();
-      // });
-
   test('Adds muted community correctly', () => {
     const { getByPlaceholderText, getByText, getByTestId } = render(<Safety />);
     const input = getByPlaceholderText('Mute new community');
@@ -37,12 +28,4 @@ describe('Safety component', () => {
     expect(getByText('MutedCommunity1')).toBeInTheDocument();
   });
 
-//   test('Removes muted community correctly', () => {
-//     const { getByText, getByTestId } = render(<Safety />);
-//     const removeButton = getByTestId('remove-mute-community');
-
-//     fireEvent.click(removeButton);
-
-//     expect(getByText('MutedCommunity1')).not.toBeInTheDocument();
-//   });
 });

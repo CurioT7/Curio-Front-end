@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import "./Activity.css"
+import axios from "axios";
 
 function Activity(){
     const [mentionChecked, setMentionChecked] = useState(true);
