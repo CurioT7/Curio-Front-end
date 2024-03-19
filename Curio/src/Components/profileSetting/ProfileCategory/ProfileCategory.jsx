@@ -10,7 +10,7 @@ function ProfileCategory() {
   };
 
   return (
-    <Box className="profile-category d-flex flex-wrap mb-3">
+    <Box className="profile-category d-flex flex-wrap mb-3" data-testid="profile-category">
       <Box className="nsfw">
         <label htmlFor="nsfw-checkbox">
           <h3 className="headings-settings" fontWeight="500" mb="1">

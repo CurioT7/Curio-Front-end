@@ -105,7 +105,7 @@ function SocialMediaModal(props) {
                     <ModalBody>
                         <div className="custom-container">
                             <li className="custom-url-li list-inline-item mb-2 mx-1"><i className={props.icon}/> {props.name} </li>
-                            <input type="text" name="display_text" placeholder="Display text" className="display_text" value={displayText} onChange={handleInputChange} required/>
+                            <input type="text" name="display_text" id="display_text" placeholder="Display text" className="display_text" value={displayText} onChange={handleInputChange} required/>
                             <input type="url" name="url" placeholder="https://www.webite.com/" className="url_website" value={url} onChange={handleInputChange} required/>
                             {!isUrlValid && <p style={{ color: 'red', fontSize: '12px' }}>Invalid URL</p>} 
                             {!isUrlDomain && <p style={{ color: 'red', fontSize: '12px' }}>Domain is not allowed</p>} 

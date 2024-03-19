@@ -6,12 +6,15 @@ import './Signup.css';
 import Google from '../../styles/icons/Google.jsx';
 import UsernameInfo from './UsernameInfo.jsx';
 import { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function SignupInfo(props) {
 
   const [email, setEmail] = useState(props.enteredEmail || '');
   const [isEmailValid, setIsEmailValid] = useState(0);
   const [emailErrorMsg, setEmailErrorMsg] = useState('');
+  const navigate = useNavigate();
 
   const handleEmail = async (e) => {
     const email = e.target.value;
@@ -45,6 +48,11 @@ function SignupInfo(props) {
     props.onContinue();
   }
 
+  const handleNavigateToLogin = () => {
+    navigate('/login');
+    props.onHide();
+  }
+
 
 
   return (
@@ -63,7 +71,7 @@ function SignupInfo(props) {
       <Modal.Body className='pt-0 d-flex flex-column'>
         <div className="pt-0" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <h1 className='signup-header'>Sign Up</h1>
-            <p className='signup-info'>By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy.</p>
+            <p className='signup-info'>By continuing, you agree to our <a href="https://www.redditinc.com/policies/user-agreement">User Agreement</a> and acknowledge that you understand the <a href="https://www.reddit.com/policies/privacy-policy">Privacy Policy</a>.</p>
         </div>
         <div className="d-flex justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <button className='continue-with-google p-3 d-flex justify-content-between align-items-center align-content-center' onClick={props.onHide}>
@@ -108,8 +116,8 @@ function SignupInfo(props) {
         <div className='mb-3' style={{paddingLeft: '80px', paddingRight: '80px'}}>
           <span className='p-2 py-2' style={{color: isEmailValid===1 ? "#a50016" : "#0e8a00", fontSize: '0.875rem'}}>{emailErrorMsg}</span>
         </div>
-        <div className='pb-5 mb-2' style={{paddingLeft: '80px', paddingRight: '80px', fontSize: '0.875rem'}}>
-            <p>Already a redditor? Log In</p>
+        <div className='d-flex pb-5 mb-2' style={{paddingLeft: '80px', paddingRight: '80px', fontSize: '0.875rem'}}>
+            <p className='me-2'>Already a redditor?</p> <a style={{color: "#0d6efd", cursor: "pointer"}} onClick={handleNavigateToLogin}>Log In</a>
         </div>
       </Modal.Body>
       <Modal.Footer className='border-0 pb-4 d-flex justify-content-center' style={{paddingLeft: '80px', paddingRight: '80px'}}>

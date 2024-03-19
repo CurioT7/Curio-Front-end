@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import "./NotificationSetting.css";
 import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
 import Activity from "../../Components/NotificationsSetting/Activity/Activity"; 
-import Recommendations from "../../Components/NotificationsSetting/Recommendations/Recommendations"; 
 
 function NotificationSetting(props) {
 
@@ -21,10 +20,6 @@ function NotificationSetting(props) {
             <div className='activity-section'>
                 <h3 className='headings-titles text-uppercase fw-bold mb-4'>Activity</h3>    
                     <Activity/> 
-            </div>
-            <div className="recommendations-sections">
-                <h3 className='headings-titles text-uppercase fw-bold mb-4'>Recommendations</h3>
-                <Recommendations/>
             </div>
             </div>
         </div>
