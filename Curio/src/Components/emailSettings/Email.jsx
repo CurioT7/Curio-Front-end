@@ -1,24 +1,35 @@
-import { Switch, Flex, Spacer, Box } from '@chakra-ui/react'
+import { Switch, Flex, Spacer, Box,Button,Text } from '@chakra-ui/react'
 import Titles from '../feedSettings/childs/Titles';
 import React from 'react';
 import './Email.css'
-import { useToast } from '@chakra-ui/react'
+import { useToast, } from '@chakra-ui/react';
+
 function Email (){
     const toast = useToast()
     const [newFollowerEmail,setNewFollowerEmail]=React.useState(true)
     const [chatRequestEmail,setChatRequestEmail]=React.useState(true)
     const [unsubscribeFromAllEmails,setUnsubscribeFromAllEmails] = React.useState(false)
+    function Toast(){
+        toast({
+            
+            description: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     function handleNewFollowerEmail(){
         setNewFollowerEmail(!newFollowerEmail)
-       
+        Toast()
     }
     function handleChatRequestEmail(){
         setChatRequestEmail(!chatRequestEmail)
-      
+        Toast()
     }
+
     function handleUnsubscribeFromAllEmails(){
         setUnsubscribeFromAllEmails(!unsubscribeFromAllEmails)
-       
+       Toast()
     }
     // console test
     console.log(` New user: ${newFollowerEmail}`)
@@ -34,15 +45,7 @@ function Email (){
                     <Flex mb={5} alignItems='center'>
                         <Titles title='Chat requests'/>
                         <Spacer/>
-                        <Switch  onClick={() =>
-        toast({
-          title: 'Account created.',
-          description: "We've created your account for you.",
-          status: 'success',
-          duration: 9000,
-          isClosable: true,
-        })
-      } size='lg' isChecked={chatRequestEmail} onChange={handleChatRequestEmail}/>
+                        <Switch  size='lg' isChecked={chatRequestEmail} onChange={handleChatRequestEmail}/>
                     </Flex>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">Activity</h3>
                     <Flex mb={5} alignItems='center'>
@@ -60,6 +63,7 @@ function Email (){
                         <Switch size='lg' isChecked={unsubscribeFromAllEmails} onChange={handleUnsubscribeFromAllEmails}/>
 
                     </Flex>
+                   
                 </Box>
             </Box>
         </Box>
