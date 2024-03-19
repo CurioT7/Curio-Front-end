@@ -22,8 +22,9 @@ function Preferences(props){
         }
    }
 
-    const handlePreferences = () => {
-        props.onHide();
+    const handlePreferences = async () => {
+      props.onSignup();
+      props.onHide();
     }
 
 

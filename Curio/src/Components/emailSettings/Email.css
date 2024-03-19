@@ -1,0 +1,32 @@
+:root{
+    --firstclr:#7c7c7c;
+    --secclr:#1c1c1c;
+    --thirdclr: #edeff1;
+    --fourclr: #0079d3;
+    --fifthclr: #1a1a1b;
+}
+.settings-section{
+    width: 65%;
+}
+
+.settings-heading{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--secclr);
+    padding: 40px 0;
+}
+.headings-titles{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    border-bottom: 1px solid var(--thirdclr);
+    text-transform: uppercase;
+    color: var(--firstclr);
+}
+
+.headings-description{
+    font-size: 12px;
+    line-height: 16px;
+}

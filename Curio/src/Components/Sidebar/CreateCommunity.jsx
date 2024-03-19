@@ -116,7 +116,7 @@ function CreateCommunity(props) {
               ))}
             </div>
         </div>
-        <hr></hr>
+        <hr className='w-100'></hr>
         <div className="d-flex p-3 px-4 radio-menu-item" onClick={handleMatureChange}>
             <Mature />
             <div className="mx-3 d-flex flex-column">

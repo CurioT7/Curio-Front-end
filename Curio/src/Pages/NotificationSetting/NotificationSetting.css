@@ -30,7 +30,8 @@
 .upvotes-comments-checkbox,
 .replies-comments-checkbox,
 .new-followers-checkbox,
-.trending-posts-checkbox{
+.trending-posts-checkbox,
+.post-follows-checkbox{
     align-items: center;
     display: flex;
     flex-grow: 1;

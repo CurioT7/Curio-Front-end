@@ -11,7 +11,7 @@
 
 @media (max-width: 1200px) {
     .center-div{
-        margin-left: 10rem;
+        margin-left: 5rem!important;
     }
 }
 
@@ -117,7 +117,7 @@
         visibility: hidden;
     }
     .center-div{
-        margin-left: 8rem!important;
+        margin-left: 6rem!important;
     }
 }
 
@@ -216,11 +216,12 @@
 }
 
 .list-header{
-    font-size: 1.2rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: #0f1a1c;
     padding: 10px;
 }
+
 
 .ellipsis-btn{
     border-radius: 20px;
@@ -289,4 +290,9 @@
 .not-following {
     background-color: #0045AC;
     color: white;
+}
+
+.sorting-dropdown-menu{
+    width: 10rem!important;
+    border-radius: 10px;
 }

@@ -51,13 +51,15 @@ function ShowFriendInformation(props) {
     return (
         <>
             <div className="d-flex flex-column justify-content-center mt-5 center-div">
-                <div className="d-flex justify-content-start ms-5 position-relative">
-                    <div className="light-border me-4">
-                        <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="user-profile-image"/>
-                    </div>
-                    <div className="d-flex flex-column align-items-center">
-                        <h1 className="show-friend-header d-flex align-items-center mb-0">Yehia</h1>
-                        <p className="show-friend-username d-flex align-items-center">u/Yehia</p>
+                <div className="d-flex justify-content-start ms-0 ms-lg-5 position-relative">
+                    <div className="d-flex flex-column flex-sm-row">
+                        <div className="light-border me-4 mb-3">
+                            <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="user-profile-image"/>
+                        </div>
+                        <div className="d-flex flex-column align-items-md-center align-items-sm-start">
+                            <h1 className="show-friend-header d-flex align-items-center mb-0">Yehia</h1>
+                            <p className="show-friend-username d-flex align-items-center">u/Yehia</p>
+                        </div>
                     </div>
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
                         <div className="w-50 p-4">
@@ -153,32 +155,22 @@ function ShowFriendInformation(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-4 ms-5">
-                        <button className="btn control-button me-2">Overview</button>
-                        <button className="btn control-button me-2">Posts</button>
-                        <button className="btn control-button me-2">Comments</button>
+                    <div className="mt-4 ms-lg-5 d-flex flex-column flex-lg-row ms-0 align-items-start">
+                        <button className="btn control-button me-2 p-1 p-sm-3">Overview</button>
+                        <button className="btn control-button me-2 p-1 p-sm-3">Posts</button>
+                        <button className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
-                    <div className="p-4">
-                        <div className="p-4 pt-0 d-flex justify-content-start">
+                    <div className="d-flex justify-content-start p-0 p-lg-4 mt-2">
+                        <div className="pt-0 d-flex justify-content-start">
                             <Dropdown>
                                 <Dropdown.Toggle variant="success" id="dropdown-basic" className="sorting-buttons">
                                     New
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu className="dropdown-menu">
+                                <Dropdown.Menu className="dropdown-menu sorting-dropdown-menu">
                                     <h4 className="d-flex justify-content-center list-header">Sort By</h4>
-                                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            <Dropdown>
-                                <Dropdown.Toggle variant="success" id="dropdown-basic" className="sorting-buttons">
-                                    New
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="dropdown-menu">
-                                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-1">Hot</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-2">New</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-3">Top</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>

@@ -28,7 +28,7 @@ function ProfileImageUpload() {
   };
 
   return (
-    <Box className="profile-banner-images mb-3">
+    <Box className="profile-banner-images mb-3" data-testid="profile-banner-images">
       <h3 className="headings-settings" fontWeight="500" mb="1">
         Profile and banner image
       </h3>
@@ -39,16 +39,16 @@ function ProfileImageUpload() {
       <Box className="image-upload-container" display="flex" flexDirection="column" alignItems="start" mt="3" mb="4">
         <Box className="row">
           <Box className="col">
-            <Box className="upload-profile-image h-100 ms-3 me-0 card text-center" style={{ backgroundImage: `url(${profileImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+            <Box className="upload-profile-image h-100 ms-3 me-0 card text-center" data-testid="profile-image" style={{ backgroundImage: `url(${profileImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
               <label htmlFor="profile-upload">
                 <Box className='upload-icon-profile'>
                   <i className="fa-solid fa-upload"></i>
                 </Box>
                 <Box>
-                  <span>Drag and Drop or Upload <span>Profile</span> Image</span>
+                  <span>Drag and Drop or Upload <span aria-label="Profile Image">Profile</span> Image</span>
                 </Box>
                 <Box className='upload-file-profile'>
-                  <input type="file" name="profileIcon" id="profile-upload" accept="image/x-png,image/jpeg" onChange={handleProfileImageChange} style={{ display: 'none' }} />
+                  <input type="file" role='img' name="profileIcon" id="profile-upload" accept="image/x-png,image/jpg" onChange={handleProfileImageChange} style={{ display: 'none' }} />
                 </Box>
               </label>
             </Box>
@@ -63,7 +63,7 @@ function ProfileImageUpload() {
                   <span>Drag and Drop or Upload <span>Banner</span> Image</span>
                 </Box>
                 <Box className='upload-file-profile'>
-                  <input type="file" name="profileBanner" id="banner-upload" accept="image/x-png,image/jpeg" onChange={handleBannerImageChange} style={{ display: 'none' }} />
+                  <input type="file" name="profileBanner" id="banner-upload" accept="image/x-png,image/jpg" onChange={handleBannerImageChange} style={{ display: 'none' }} />
                 </Box>
               </label>
             </Box>
