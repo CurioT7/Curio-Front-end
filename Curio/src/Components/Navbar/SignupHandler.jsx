@@ -7,12 +7,11 @@ import SignupInfo from "../Signup/SignupInfo";
 import UsernameInfo from "../Signup/UsernameInfo";
 import Gender from "../Signup/Gender";
 import Preferences from "../Signup/Preferences";
-
+import signup from "../Signup/SignupEndpoints";
 
 function SignupHandler() {
 
 
-  const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
   const [isSignupInfoModalOpen, setSignupInfoModalOpen] = useState(false);
   const [isUsernameInfoModalOpen, setUsernameInfoModalOpen] = useState(false);
   const [isGenderModal, setGenderModalOpen] = useState(false);
@@ -64,15 +63,30 @@ function SignupHandler() {
     setPreferencesModalOpen(true);
   }
 
+  const handleSignup = async () => {
+    try{
+      const response = await signup({username, email: enteredEmail, password});
+      if(response.ok){
+        console.log('signup successful');
+      }
+      else{
+        console.log('signup failed');
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
     return (
         <>
-            <NavDropdown style={{borderRadius: '999px!important'}} className="signup-button mt-0 d-flex justify-content-center" title={<Dots />}>
-                <NavDropdown.Item onClick={handleSignupInfoClick} className="signup-button-item px-3" href="#action/3.1"><Signup /><span className="ms-3">Login / Register</span></NavDropdown.Item>  
+            <NavDropdown style={{borderRadius: '999px!important'}} className="signup-button mt-0 d-flex justify-content-center col-md-1 col-xs-1" title={<Dots />}>
+                <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3" href="#action/3.1"><Signup /><span className="ms-3">Login / Register</span></NavDropdown.Item>  
             </NavDropdown>
             {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
             {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
             {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}
-            {isPreferencesModalOpen && <Preferences show={isPreferencesModalOpen} onHide={() => setPreferencesModalOpen(false)} onBackToGender={handleBackToGender} />}
+            {isPreferencesModalOpen && <Preferences show={isPreferencesModalOpen} onHide={() => setPreferencesModalOpen(false)} onBackToGender={handleBackToGender} onSignup={handleSignup} />}
         </>
     );
 }
