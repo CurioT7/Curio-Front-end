@@ -9,6 +9,7 @@ function Activity(){
     const [upvotesCommentsChecked, setUpvotesCommentsChecked] = useState(true);
     const [repliesChecked, setRepliesChecked] = useState(true);
     const [newFollowersChecked, setNewFollowersChecked] = useState(true);
+    const [postsFollowChecked, setPostsFollowChecked] = useState(true);
 
     const handleMentionChange = () => {
         setMentionChecked(!mentionChecked)
@@ -34,9 +35,13 @@ function Activity(){
         setNewFollowersChecked(!newFollowersChecked);
     };
 
+    const handlePostsFollowChange = () => {
+        setPostsFollowChecked(!postsFollowChecked);
+    };
+
     return(
         <>
-            <Box className="mention_username d-flex flex-wrap mb-3">
+            <Box className="mention_username d-flex flex-wrap mb-3" data-testid="activity">
                 <Box className="mention_username">
                     <label htmlFor="mention_username-checkbox">
                         <h3 as="h3" className="headings-settings d-flex fw-500 mb-1">
@@ -146,6 +151,25 @@ function Activity(){
                         id="flexSwitchCheckDefault"
                         checked={newFollowersChecked}
                         onClick={handleNewFollowersChange}
+                        />
+                    </div>
+                </Box>
+            </Box>
+            <Box className="post-follows d-flex flex-wrap mb-3">
+                <Box className="post-follows">
+                    <label htmlFor="post-follows-checkbox">
+                        <h3 className="headings-settings d-flex fw-500 mb-1">
+                            Posts you follow
+                        </h3>
+                    </label>
+                </Box>
+                <Box className="post-follows-checkbox">
+                    <div className="form-check form-switch">
+                        <input className="form-check-input" 
+                        type="checkbox" 
+                        id="flexSwitchCheckDefault"
+                        checked={postsFollowChecked}
+                        onClick={handlePostsFollowChange}
                         />
                     </div>
                 </Box>

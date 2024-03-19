@@ -37,6 +37,7 @@ function Advanced() {
                 className="form-check-input"
                 type="checkbox"
                 id="flexSwitchCheckDefault"
+                data-testid="follow-checkbox"
                 checked={followChecked}
                 onClick={handleFollowChange}
               />
@@ -50,7 +51,7 @@ function Advanced() {
               Content visibility
             </h3>
           </label>
-          <Text className="headings-description" fontWeight="normal" color="gray.500">
+          <Text className="headings-description" data-testid="heading-descrip" fontWeight="normal" color="gray.500">
             Posts to this profile can appear in <a href="#">r/all</a> and your profile can be discovered in <a href="#">/users</a>
           </Text>
         </Box>
@@ -60,6 +61,7 @@ function Advanced() {
               className="form-check-input"
               type="checkbox"
               id="flexSwitchCheckDefault"
+              data-testid="content-visibility-checkbox"
               checked={contentVisibilityChecked}
               onClick={handleContentVisibilityChange}
             />
@@ -83,6 +85,7 @@ function Advanced() {
               className="form-check-input"
               type="checkbox"
               id="flexSwitchCheckDefault"
+              data-testid="communities-visibility-checkbox"
               checked={communitiesVisibilityChecked}
               onClick={handleCommunitiesVisibilityChange}
             />
