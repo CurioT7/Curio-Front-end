@@ -41,12 +41,12 @@ function Safety() {
         <Text className="headings-description" fontWeight="normal" color="gray.500">Blocked people can’t send you chat requests or private messages.</Text>
         <Box className="input-group mb-3">
           <Input id="blockedUserInput" type="text" placeholder="Block new user" className="form-control mr-sm-2" value={blockedUserInput} onChange={(e) => setBlockedUserInput(e.target.value)} required />
-          <Button className="btn btn-primary" onClick={handleAddBlockedUser} disabled={blockedUserInput.trim() === ''}>ADD</Button>
+          <Button className="btn btn-primary" data-testid="add-block-user" onClick={handleAddBlockedUser} disabled={blockedUserInput.trim() === ''}>ADD</Button>
         </Box>
         {blockedUsers.map((user, index) => (
           <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
             <Text>{user}</Text>
-            <Button className="btn btn-primary" onClick={() => handleRemoveBlockedUser(index)} bg="transparent" border="none">Remove</Button>
+            <Button className="btn btn-primary" data-testid="remove-block-user" onClick={() => handleRemoveBlockedUser(index)} bg="transparent" border="none">Remove</Button>
           </Flex>
         ))}
       </Box>
@@ -55,12 +55,12 @@ function Safety() {
         <Text className="headings-description" fontWeight="normal" color="gray.500">Posts from muted communities won't show up in your feeds or recommendations.</Text>
         <Box className="input-group mb-3">
           <Input id="mutedCommunityInput" type="text" placeholder="Mute new community" className="form-control" value={mutedCommunityInput} onChange={(e) => setMutedCommunityInput(e.target.value)} required />
-          <Button className="btn btn-primary" onClick={handleAddMutedCommunity} disabled={mutedCommunityInput.trim() === ''}>ADD</Button>
+          <Button className="btn btn-primary" data-testid="add-mute-community" onClick={handleAddMutedCommunity} disabled={mutedCommunityInput.trim() === ''}>ADD</Button>
         </Box>
         {mutedCommunities.map((community, index) => (
           <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
             <Text>{community}</Text>
-            <Button onClick={() => handleRemoveMutedCommunity(index)} bg="transparent" border="none">Remove</Button>
+            <Button data-testid="remove-mute-community" onClick={() => handleRemoveMutedCommunity(index)} bg="transparent" border="none">Remove</Button>
           </Flex>
         ))}
       </Box>
