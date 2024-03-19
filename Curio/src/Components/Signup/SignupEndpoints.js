@@ -1,33 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-
+import axios from 'axios';
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
-async function signup({username, email, password}){
-    try{
-        const response = await fetch(`${hostUrl}/api/auth/signup`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password
-            })
+
+async function signup({username, email, password}) {
+    try {
+        const response = await axios.post(`${hostUrl}/api/auth/signup`, {
+            username: username,
+            email: email,
+            password: password
         });
-        if(response.ok){
-            const data = await response.json();
-            console.log(data);
-            return response;
-        }
-        else{
-            console.log('error');
-        }
-    }
-    catch(err){
-        console.log(err);
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
     }
 }
+
 export default signup;

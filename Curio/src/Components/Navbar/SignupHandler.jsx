@@ -66,11 +66,12 @@ function SignupHandler() {
   const handleSignup = async () => {
     try{
       const response = await signup({username, email: enteredEmail, password});
-      if(response.ok){
-        console.log('signup successful');
+      console.log(response);
+      if(response.status === 200){
+        console.log('Signup successful');
       }
       else{
-        console.log('signup failed');
+        console.log('Signup failed');
       }
     }
     catch(err){

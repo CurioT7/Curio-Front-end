@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.15.12",
     "@mui/material": "^5.15.12",
     "@testing-library/react": "^14.2.1",
+    "axios": "^1.6.8",
     "bootstrap-icons": "^1.11.3",
     "enzyme": "^3.11.0",
     "framer-motion": "^11.0.14",
