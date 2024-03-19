@@ -1,0 +1,81 @@
+.modal-content {
+  padding-top: 20px;
+  border: none; 
+  height: 600px;
+  border-radius: 15px;
+}
+
+.modal-header {
+  border-bottom: none; 
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.modal-header {
+  padding-top: 0px; 
+  padding-bottom: 0px;
+}
+
+.modal-body {
+  padding-top: 0px; 
+  padding-bottom: 0px; 
+}
+
+.header-text{
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.body-text{
+  font-weight:600;
+  font-size: 18px;
+}
+
+.radio-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.radio-container label {
+  margin-right: 20px;
+}
+
+.input{
+  margin-right: 10px;
+}
+
+.option-button {
+  background-color: #EAEDEF;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 10px 10px 10px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.option-button.selected {
+  background-color: #D2DADD;
+}
+
+.flex-container{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-foot-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100rem;
+}
+
+.description-text{
+  font-weight: bold;
+  font-size: 17px;
+}
