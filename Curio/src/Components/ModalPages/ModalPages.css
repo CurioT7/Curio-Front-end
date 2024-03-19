@@ -1,25 +1,18 @@
-.modal-content {
-  padding-top: 20px;
-  border: none; 
-  height: 585px;
-  width: 560px;
-  border-radius: 15px;
-}
 
-.modal-header {
-  border-bottom: none; 
-}
 
-.modal-footer {
+.Header{
+    border-bottom: none; 
+    padding-top: 10px; 
+    padding-bottom: 0px;
+  }
+
+.footer{
   border-top: none;
 }
 
-.modal-header {
-  padding-top: 0px; 
-  padding-bottom: 0px;
-}
-
-.modal-body {
+.body-content{
+  border: none; 
+  height: 29rem;
   padding-top: 0px; 
   padding-bottom: 0px; 
 }

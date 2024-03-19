@@ -227,10 +227,11 @@
     width: 34px;
     height: 32px;
     border: none;
-    margin-left: 16rem;
+    margin-left: 19rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #EAEDEF;
   }
 
   .ellipsis-img{
@@ -242,11 +243,6 @@
     justify-content: space-between;
 }
 
-.interaction-icons {
-    margin-right: 10px;
-    margin-left: 3rem;
-}
-
 .drop-down-list{
     list-style-type :none;
     margin: 0;
@@ -254,16 +250,33 @@
 }
 
 .drop-down-item{
-    margin-bottom: 25px;
+    margin-bottom: 0.5rem;
     color: rgb(15, 26, 28);
     font-size: 14px;
+    display: flex;
+    
+}
+
+.text-text{
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.image-container{
+    display: inline-block;
 }
 
 .last-item{
     color: rgb(15, 26, 28);
     font-size: 14px;
+    display: flex;
 }
 
+.item-text {
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 5px;
+}
 .following {
     background-color: white;
     color: black;

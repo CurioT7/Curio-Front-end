@@ -17,6 +17,12 @@ function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [showReportMenu, setShowReportMenu] = useState(false);
+    const [isBlocked, setIsBlocked] = useState(false);
+
+    const handleBlockClick = () => {
+        setIsBlocked(true);
+        props.onBlock();
+    };
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
@@ -33,6 +39,14 @@ function ShowFriendInformation(props) {
     const handleReportPopupClose = () => {
         setShowReportMenu(false);
     };
+
+    if (isBlocked) {
+        return (
+            <div>
+                <h1>Hello</h1>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -72,10 +86,22 @@ function ShowFriendInformation(props) {
                                         zIndex: '1'
                                     }}>
                                         <ul className='drop-down-list'>
-                                            <li className="drop-down-item"><ShareIcon alt="share" className="interaction-icons" />Share</li>
-                                            <li className="drop-down-item"><MessageIcon alt="message" className="interaction-icons" />Send a message</li>
-                                            <li className="drop-down-item"><BlockIcon alt="block" className="interaction-icons" />Block account</li>
-                                            <li className="last-item" onClick={handleReportClick}><ReportIcon alt="report" className="interaction-icons" />Report</li>
+                                            <li className="drop-down-item">
+                                                    <div><ShareIcon alt="share" className="interaction-icons" /></div>
+                                                    <div><p className='text-text'>Share</p></div>
+                                            </li>
+                                            <li className="drop-down-item">
+                                                    <div><MessageIcon alt="message" className="interaction-icons" /></div>
+                                                    <div><p className='text-text'>Send a message</p></div>
+                                            </li>
+                                            <li className="drop-down-item" onClick={handleBlockClick}>
+                                                    <div><BlockIcon alt="block" className="interaction-icons" /></div>
+                                                    <div><p className='text-text'>Block account</p></div>
+                                            </li>
+                                            <li className="last-item" onClick={handleReportClick}>
+                                                <div><ReportIcon alt="report" className="interaction-icons" /></div> 
+                                                    <div><p className='text-text'>Report</p></div>
+                                            </li>
                                         </ul>   
                                     </div>
                                 </div>
