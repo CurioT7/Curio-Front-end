@@ -3,7 +3,9 @@ import Titles from '../feedSettings/childs/Titles';
 import React from 'react';
 import './Email.css'
 import { useToast, } from '@chakra-ui/react';
+import axios from 'axios';
 
+const serverHost = import.meta.env.VITE_SERVER_HOST;// Accessing the environment variable
 function Email (){
     const toast = useToast()
     const [newFollowerEmail,setNewFollowerEmail]=React.useState(true)
@@ -20,17 +22,60 @@ function Email (){
     }
     function handleNewFollowerEmail(){
         setNewFollowerEmail(!newFollowerEmail)
+        sendDataToBackend({ newFollowerEmail: !newFollowerEmail });
         Toast()
     }
     function handleChatRequestEmail(){
         setChatRequestEmail(!chatRequestEmail)
+        sendDataToBackend({ chatRequestEmail: !chatRequestEmail });
         Toast()
     }
 
     function handleUnsubscribeFromAllEmails(){
         setUnsubscribeFromAllEmails(!unsubscribeFromAllEmails)
+        sendDataToBackend({ unsubscribeFromAllEmails: !unsubscribeFromAllEmails });
        Toast()
     }
+    async function sendDataToBackend(data) {
+        // Validate data
+        console.log(serverHost)
+        if (!data || typeof data !== 'object') {
+            console.error('Invalid data:', data);
+            return;
+        }
+        try {
+            console.log(serverHost)
+            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
+            console.log(response)
+            // Handle response if needed
+            return response;
+        } catch (error) {
+            console.error('Error sending data to backend:', error);
+            // Handle error if needed
+        }
+    }
+
+    async function fetchDataFromBackend() {
+        try {
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data from backend:', error);
+        }
+    }
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchDataFromBackend();
+            if (data) {
+                setNewFollowerEmail(data.newFollowerEmail);
+                setChatRequestEmail(data.chatRequestEmail);
+                setUnsubscribeFromAllEmails(data.unsubscribeFromAllEmails);
+            }
+        }
+
+        fetchAndSetData();
+    }, []);
+    
     // console test
     console.log(` New user: ${newFollowerEmail}`)
     console.log(`Chat: ${chatRequestEmail}`)
