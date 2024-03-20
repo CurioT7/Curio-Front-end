@@ -6,17 +6,49 @@ function Advanced() {
   const [followChecked, setFollowChecked] = useState(true);
   const [contentVisibilityChecked, setContentVisibilityChecked] = useState(true);
   const [communitiesVisibilityChecked, setCommunitiesVisibilityChecked] = useState(true);
+  const [clearHistorychecked, setclearHistorychecked] = useState(false)
 
   const handleFollowChange = () => {
     setFollowChecked(!followChecked); 
+    updateUserPreferences();
   };
 
   const handleContentVisibilityChange = () => {
     setContentVisibilityChecked(!contentVisibilityChecked); 
+    updateUserPreferences();
   };
 
   const handleCommunitiesVisibilityChange = () => {
     setCommunitiesVisibilityChecked(!communitiesVisibilityChecked); 
+    updateUserPreferences();
+  };
+
+  const handleClearHistoryChange = () => {
+    setclearHistorychecked(!clearHistorychecked); 
+    updateUserPreferences();
+  };
+
+  // Define a function to update user preferences via API
+  const updateUserPreferences = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/settings/v1/me/prefs', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          displayName: '',
+          allowFollow: followChecked,
+          contentVisibility: contentVisibilityChecked,
+          activeInCommunityVisibility: communitiesVisibilityChecked,
+          clearHistory: clearHistorychecked
+        })
+      });
+      const data = await response.json();
+      console.log("User preferences updated successfully:", data);
+    } catch (error) {
+      console.error("Error updating user preferences:", error);
+    }
   };
   return (
     <>
@@ -102,7 +134,11 @@ function Advanced() {
           </Text>
         </Box>
         <Box className="clear-history-button">
-          <Button role="button" tabIndex="0" className='btn btn-primary'>
+          <Button role="button" 
+          tabIndex="0" 
+          className='btn btn-primary'
+          checked={clearHistorychecked}
+          onClick={handleClearHistoryChange}>
             Clear history
           </Button>
         </Box>
