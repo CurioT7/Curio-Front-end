@@ -9,11 +9,12 @@ import EmailButton from "./buttons/EmailButton"
 import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
+
 const AccountPreferences = () => {
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
     const [email, setEmail] = React.useState("example@gamil.com");
     const [gender, setGender] = React.useState("MAN")
-    const [ip, setIP] = React.useState("Use approximate location (based on IP)")
+    const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
 
     const toast = useToast()
     function Toast(){
@@ -113,7 +114,7 @@ const AccountPreferences = () => {
                 <Titles title='Location customization' description='Specify a location to customize your recommendations and feed. Reddit does not track your precise geolocation data.'/>
                 
                 <Box display='flex' ms={10}>
-                    <Select textAlign={[ 'left', 'center' ]}  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={ip} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
+                    <Select textAlign={[ 'left', 'center' ]}  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={locationCustomization} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
                         <option value='Egypt' >Egypt</option>
                         <option value='Germany' >Germany</option>
                     </Select>

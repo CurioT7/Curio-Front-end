@@ -3,7 +3,13 @@ import { Switch, Flex, Spacer, Box } from '@chakra-ui/react'
 import Titles from './childs/Titles';
 import React from 'react';
 import DropDown from './childs/DropDown';
+import axios from 'axios';
+import { useToast, } from '@chakra-ui/react';
+
+
 function Feeding () {
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
+    const toast = useToast()
     const [adultContent, setIsMature] = React.useState(false);
     const [autoplayMedia, setIsAuto] = React.useState(false)
     const [communityThemes, setCommunityThemes] =React.useState(false)
@@ -12,42 +18,114 @@ function Feeding () {
     const [globalContentView,setGlobalContentView] = React.useState('card')
     const [rememberContentView,setRememberContentView] = React.useState(false)
     const [openPostsInNewTab, setOpenPostsInNewTab] = React.useState(false)
+    function Toast(){
+        toast({
+            
+            description: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     function handleIsMature (){
         setIsMature(!adultContent)
+        sendDataToBackend({adultContent: !adultContent})
+        Toast()
         // console.log(isMature)
     }
     // console.log(isMature)
     function handleIsAuto(){
         setIsAuto(!autoplayMedia)
+        sendDataToBackend({autoplayMedia: !autoplayMedia})
+        Toast()
     }
 
     function handleCommSort(e){
         setCommunityContentSort(e.target.value)
+        sendDataToBackend({communityContentSort: e.target.value})
+        Toast()
     }
     function handleCommRemember(){
         setCommRemember(!rememberContentSort)
+        sendDataToBackend({rememberContentSort: !rememberContentSort})
+        Toast()
     }
     function handleCommunityThemes(){
         setCommunityThemes(!communityThemes)
+        sendDataToBackend({communityThemes: !communityThemes})
+        Toast()
     }
     function handleGlobalContentView(e){
         setGlobalContentView(e.target.value)
+        sendDataToBackend({globalContentView: e.target.value})
+        Toast()
     }
     function handleRememberContentView(){
         setRememberContentView(!rememberContentView)
+        sendDataToBackend({rememberContentView: !rememberContentView})
+        Toast()
     }
     function handleOpenPostsInNewTab(){
         setOpenPostsInNewTab(!openPostsInNewTab)
+        sendDataToBackend({openPostsInNewTab: !openPostsInNewTab})
+        Toast()
     }
+    //send and get data from backend//
+    async function sendDataToBackend(data) {
+        // Validate data
+        if (!data || typeof data !== 'object') {
+            console.error('Invalid data:', data);
+            return;
+        }
+
+        try {
+            
+            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
+            console.log(response)
+            // Handle response if needed
+            return response;
+        } catch (error) {
+            console.error('Error sending data to backend:', error);
+            // Handle error if needed
+        }
+    }
+    async function fetchDataFromBackend() {
+        try {
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data from backend:', error);
+        }
+    }
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchDataFromBackend();
+            if (data) {
+                
+                setIsMature(data.adultContent);
+                setIsAuto(data.autoplayMedia);
+                setCommunityThemes(data.communityThemes);
+                setCommunityContentSort(data.communityContentSort);
+                setCommRemember(data.rememberContentSort);
+                setGlobalContentView(data.globalContentView);
+                setRememberContentView(data.rememberContentView);
+                setOpenPostsInNewTab(data.openPostsInNewTab);
+                //
+
+            }
+        }
+
+        fetchAndSetData();
+    }, []);
     // Test Section
-    console.log(adultContent)
-    console.log(autoplayMedia)
-    console.log(communityContentSort)
-    console.log(rememberContentSort)
-    console.log(globalContentView)
-    console.log(rememberContentView)
-    console.log(communityThemes)
-    console.log(openPostsInNewTab)
+    // console.log(adultContent)
+    // console.log(autoplayMedia)
+    // console.log(communityContentSort)
+    // console.log(rememberContentSort)
+    // console.log(globalContentView)
+    // console.log(rememberContentView)
+    // console.log(communityThemes)
+    // console.log(openPostsInNewTab)
     //----------------------------------//
     return(
         <div className='container'>
