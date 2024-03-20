@@ -4,38 +4,42 @@ import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalClo
 import { MdMarkEmailUnread } from "react-icons/md";
 import PasswordErrorMessage from './PasswordErrorMessage';
 import validateEmail from '../checker/EmailChecker';
+import { useToast, } from '@chakra-ui/react';
+import axios from 'axios';
 const EmailButton = (props) =>{
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
     const pass ="12345678"
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [yourPass,setYourPass] = React.useState("")
-    const [newEmail,setNewEmail] = React.useState({
-        email:"",
+    const [password,setYourPass] = React.useState("")
+    const [email,setNewEmail] = React.useState({
+        value:"",
         isTouched:false,
     })
     function handleYourPass(e){
         setYourPass(e.target.value)
     }
     function handleNewEmail(e){
-        setNewEmail({...newEmail,email:e.target.value})
+        setNewEmail({...email,value:e.target.value})
     }
     function handleNewEmailBlur(e){
-        setNewEmail({...newEmail,isTouched:true})
+        setNewEmail({...email,isTouched:true})
     }
     function isValid(){
         return(
-            yourPass===pass&&
-            validateEmail(newEmail.email)
+            password&&
+            validateEmail(email.value)
         )
     }
     function clearForm(){
         setYourPass("")
         setNewEmail({
-            email:"",
+            value:"",
             isTouched:false,
         })
     }
     function handleSubmit(e){
         e.preventDefault();
+
         clearForm();
 
     }
@@ -53,10 +57,10 @@ const EmailButton = (props) =>{
                            
                                 <Box display='flex'  flexDirection='column'>
                                     <Text className='fs-6' fontWeight='600'>Update your email below. There will be a new verification email sent that you will need to use to verify this new email.</Text>
-                                    <Input placeholder='CURRENT PASSWORD' type='password' value={yourPass} onChange={handleYourPass} size='lg' mb={5}></Input>
+                                    <Input placeholder='CURRENT PASSWORD' type='password' value={password} onChange={handleYourPass} size='lg' mb={5}></Input>
 
-                                    <Input placeholder='NEW EMAIL' type='email' onBlur={handleNewEmailBlur} value={newEmail.email} onChange={handleNewEmail} size='lg'></Input>
-                                    {newEmail.isTouched&&!validateEmail(newEmail.email) ? (<PasswordErrorMessage text="Please enter a valid email"/>):null}
+                                    <Input placeholder='NEW EMAIL' type='email' onBlur={handleNewEmailBlur} value={email.value} onChange={handleNewEmail} size='lg'></Input>
+                                    {email.isTouched&&!validateEmail(email.value) ? (<PasswordErrorMessage text="Please enter a valid email"/>):null}
                                 </Box>
                             
                         </ModalBody>
