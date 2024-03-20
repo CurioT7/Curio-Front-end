@@ -1,18 +1,39 @@
-import React from "react";
+import React, { useState , useRef } from 'react';
 import './Login.css';
-import './Login.jsx';
 import Google from '../../styles/icons/Google.jsx';
+import  './LoginEndpoints';
+
 
 function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
   
 
-  const handleClose = () => {
-    setIsOpen= false;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const formRef = useRef();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const responseData = await loginUser(username, password);
+      console.log('Correct Credentials');
+    } catch (error) {
+      console.error('Failed to login:', error);
+      console.log('Hana');
+
+    }
   };
+  
+  
+  const handleButtonClick = () => {
+    formRef.current.submit();
+  };
+
+
     return (
       <div className="modalParent">
       <div className="loginBox">
-        <form action="">
+        <form action="" onSubmit={handleSubmit} ref={formRef}>
           <h1>Log In</h1>
           <p>
             By continuing, you agree to our{' '}
@@ -45,10 +66,10 @@ function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
     <hr />
 </h6>            
           <div className="loginInput">
-            <input type="text" placeholder="Username *" required />
+            <input type="text" placeholder="Username *" required  onChange={(e) => setUsername(e.target.value)}/>
           </div>
           <div className="loginInput">
-            <input type="password" placeholder="Password *" required />
+            <input type="password" placeholder="Password *" required  onChange={(e) => setPassword(e.target.value)}/>
           </div>
           <div className="forgot">
             <b>Forgot your </b>
@@ -69,7 +90,7 @@ function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
         </form>
       </div>
       <div className="submit">
-        <button type="submit" className="login_buttons">
+        <button type="submit" className="login_buttons" onClick={handleButtonClick} >
           Login
         </button>
       </div>
