@@ -7,6 +7,32 @@ function ProfileCategory() {
 
   const handleSwitchChange = () => {
     setIsChecked(!isChecked); 
+    handleNSFWChange();
+  };
+
+  const handleNSFWChange = () => {
+    setIsNSFW(!isNSFW); 
+    fetch('http://localhost:3000/api/settings/v1/me/prefs', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        NSFW: isNSFW,
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to update NSFW preference');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('NSFW preference updated successfully:', data);
+    })
+    .catch(error => {
+      console.error('Error updating NSFW preference:', error);
+    });
   };
 
   return (

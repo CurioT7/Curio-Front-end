@@ -18,4 +18,15 @@ async function signup({username, email, password}) {
     }
 }
 
-export default signup;
+
+async function checkUsernameAvailability(username) {
+    try {
+        const response = await axios.get(`${hostUrl}/api/auth/username_available/example_user`);
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+export {signup, checkUsernameAvailability};

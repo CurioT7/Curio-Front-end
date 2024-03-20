@@ -7,10 +7,12 @@ function ProfileInformation() {
 
   const handleDisplayNameChange = (event) => {
     setDisplayName(event.target.value);
+    updateUserPreferences();
   };
 
   const handleAboutChange = (event) => {
     setAbout(event.target.value);
+    updateUserPreferences();
   };
 
   const remainingDisplayNameCharacters = 30 - displayName.length;
@@ -18,6 +20,25 @@ function ProfileInformation() {
 
   const displayNameClass = remainingDisplayNameCharacters <= 0 ? 'text-danger' : '';
   const aboutClass = remainingAboutCharacters <= 0 ? 'text-danger' : '';
+
+  const updateUserPreferences = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/settings/v1/me/prefs', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          displayName: displayName,
+          about: about,
+        }),
+      });
+      const data = await response.json();
+      console.log('Updated user preferences:', data);
+    } catch (error) {
+      console.error('Error updating user preferences:', error);
+    }
+  };
 
   return (
     <Box className="profile-information">

@@ -34,22 +34,5 @@ describe('SocialMediaModal component', () => {
     expect(displayTextInput.value).toBe('Test Display Text');
   });
 
-  // test('URL input field updates correctly', () => {
-  //   const urlInput = screen.getByPlaceholderText('https://www.webite.com/');
-  //   fireEvent.change(urlInput, { target: { value: 'https://www.example.com' } });
-  //   expect(urlInput.value).toBe('https://www.example.com');
-  // });
-
-  // test('displays "Invalid URL" error message if invalid URL is entered', () => {
-  //   const urlInput = screen.getByPlaceholderText('https://www.webite.com/');
-  //   fireEvent.change(urlInput, { target: { value: 'invalidurl' } });
-  //   expect(screen.getByText('Invalid URL')).toBeInTheDocument();
-  // });
-
-  // test('displays "Domain is not allowed" error message if URL domain is not allowed', () => {
-  //   const urlInput = screen.getByPlaceholderText('https://www.webite.com/');
-  //   fireEvent.change(urlInput, { target: { value: 'https://www.anotherdomain.com' } });
-  //   expect(screen.getByText('Domain is not allowed')).toBeInTheDocument();
-  // });
 });
 

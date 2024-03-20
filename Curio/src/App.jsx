@@ -16,6 +16,8 @@ import Navbar from './Components/Navbar/Navbar.jsx';
 import Error from './Components/Error/Error.jsx';
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx';
 import LoginPage from './Components/Login/Loginpage.jsx';
+import { ChakraProvider } from '@chakra-ui/react';
+import UserPage from './Pages/UserProfile/UserProfile.jsx'
 
 
 
@@ -48,7 +50,6 @@ function App() {
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar}/>}/>
           <Route path='/user' element={<ShowFriendInformation/>} />
-          <Route path='*' element={<ErrorPage/>} />
         </Routes>
       </ChakraProvider>
     </div>
