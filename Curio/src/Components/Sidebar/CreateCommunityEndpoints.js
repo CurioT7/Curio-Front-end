@@ -12,6 +12,10 @@ async function createCommunity({data}) {
             description: data.description,
             over18: data.over18,
             privacyMode: data.privacyMode,
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         });
         return response;
     } catch (error) {
