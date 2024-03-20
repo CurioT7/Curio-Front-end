@@ -6,24 +6,75 @@ import React from "react"
 import Titles from "../feedSettings/childs/Titles"
 import ChangePass from "./buttons/ChangePass"
 import EmailButton from "./buttons/EmailButton"
+import { useToast, } from '@chakra-ui/react';
+import axios from 'axios';
 
+const serverHost = import.meta.env.VITE_SERVER_HOST;
 const AccountPreferences = () => {
     const [email, setEmail] = React.useState("example@gamil.com");
     const [gender, setGender] = React.useState("MAN")
     const [ip, setIP] = React.useState("Use approximate location (based on IP)")
-    
+
+    const toast = useToast()
+    function Toast(){
+        toast({
+            
+            description: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+        })
+}
     const buttonStyle ={
         borderRadius: "30px", padding: "10px 20px", 
     }
     
     const handleGender = (event) => {
         setGender(event.target.value);
+        sendDataToBackend({gender: gender})
+        Toast()
       };
     
     const handleIP = (event) => {
         setIP(event.target.value);
+        
+        Toast()
     };
+    
+    async function fetchDataFromBackend() {
+        try {
+            const response = await axios.get(`${serverHost}/api/settings/v1/me`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data from backend:', error);
+        }
+    }
 
+    async function sendDataToBackend(data) {
+        try {
+            console.log(serverHost)
+            const response = await axios.post(`${serverHost}/api/settings/v1/me`, data);
+            console.log(response)
+            return response;
+        } catch (error) {
+            console.error('Error sending data to backend:', error);
+        }
+    }
+
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchDataFromBackend();
+            if (data) {
+                setGender(data.gender);
+                setIP(data.ip);
+            }
+        }
+
+        fetchAndSetData();
+    }, []);
+
+    // Update data when gender or ip changes
+    
 
       return(
         <Box mb={10}>
