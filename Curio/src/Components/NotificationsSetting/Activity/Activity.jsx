@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import "./Activity.css"
-import axios from "axios";
+import update from "../update-pref";
 
 function Activity(){
     const [mentionChecked, setMentionChecked] = useState(true);
@@ -13,32 +13,55 @@ function Activity(){
     const [postsFollowChecked, setPostsFollowChecked] = useState(true);
 
     const handleMentionChange = () => {
-        setMentionChecked(!mentionChecked)
+        setMentionChecked(!mentionChecked);
+        handletogglesactivity();
     };
 
     const handleCommentsChange = () => {
         setCommentsChecked(!commentsChecked);
+        handletogglesactivity();
     };
     
     const handleUpvotesPostsChange = () => {
         setUpvotesPostsChecked(!upvotesPostsChecked);
+        handletogglesactivity();
     };
     
     const handleUpvotesCommentsChange = () => {
         setUpvotesCommentsChecked(!upvotesCommentsChecked);
+        handletogglesactivity();
     };
     
     const handleRepliesChange = () => {
         setRepliesChecked(!repliesChecked);
+        handletogglesactivity();
     };
     
     const handleNewFollowersChange = () => {
         setNewFollowersChecked(!newFollowersChecked);
+        handletogglesactivity();
     };
 
     const handlePostsFollowChange = () => {
         setPostsFollowChecked(!postsFollowChecked);
+        handletogglesactivity();
     };
+
+    const handletogglesactivity = async () => {
+        try{
+          const response = await update({mentionChecked, commentsChecked, upvotesPostsChecked, upvotesCommentsChecked, repliesChecked, newFollowersChecked, postsFollowChecked});
+          console.log(response);
+          if(response.status === 200){
+            console.log('Operation successful');
+          }
+          else{
+            console.log('Operation failed');
+          }
+        }
+        catch(error){
+          console.log(error);
+        }
+      }
 
     return(
         <>
