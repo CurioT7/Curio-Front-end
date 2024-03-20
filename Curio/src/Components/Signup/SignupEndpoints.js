@@ -21,11 +21,12 @@ async function signup({username, email, password}) {
 
 async function checkUsernameAvailability(username) {
     try {
-        const response = await axios.get(`${hostUrl}/api/auth/username_available/example_user`);
+        const response = await axios.get(`${hostUrl}/api/auth/username_available/${username}`);
         console.log(response);
         return response;
     } catch (error) {
         console.error('Error:', error);
+        return error.response;
     }
 }
 
