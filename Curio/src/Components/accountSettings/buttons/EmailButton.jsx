@@ -24,6 +24,8 @@ const EmailButton = (props) =>{
     function handleNewEmailBlur(e){
         setNewEmail({...email,isTouched:true})
     }
+
+   
     function isValid(){
         return(
             password&&
@@ -43,6 +45,59 @@ const EmailButton = (props) =>{
         clearForm();
 
     }
+    // send data to backend fetch data from backend--------------------------------
+    async function sendDataToBackend(data) {
+        try {
+            const response = await axios.patch(`${serverHost}/api/auth/change_email`, {
+              email: email.value, // assuming 'username' state holds the new email
+              password: password
+            }, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}` // replace with your token retrieval method
+              }
+            });
+        
+            if (response.status === 200) {
+              console.log('Email changed successfully');
+            } else {
+              console.log('Failed to change email');
+            }
+          } catch (error) {
+            console.error('Failed to change email:', error);
+          }
+    }
+
+    async function fetchDataFromBackend() {
+        try {
+            const response = await axios.get(`${serverHost}/api/auth/change_email`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            if (error.response) {
+                console.error('Server Error:', error.response.data);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error', error.message);
+            }
+            console.error('Error config:', error.config);
+        }
+    }
+
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchDataFromBackend();
+            if (data) {
+                setYourPass(data.password);
+                setEmail({ ...email, value: data.email.value });
+            }
+        }
+
+        fetchAndSetData();
+    }, []);
     return(
         <Box>
                 <Button onClick={onOpen} style={props.buttonStyle} variant='outline'>Change</Button>
