@@ -7,7 +7,7 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 async function showFriendInformation({username}) {
     try {
-        const response = await axios.get(`${hostUrl}/user/userTwo/about`);
+        const response = await axios.get(`${hostUrl}/user/${username}/about`);
         console.log(response);
         return response;
     } catch (error) {
