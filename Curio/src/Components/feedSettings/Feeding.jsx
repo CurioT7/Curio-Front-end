@@ -80,7 +80,11 @@ function Feeding () {
 
         try {
             
-            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
+            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             console.log(response)
             // Handle response if needed
             return response;
@@ -89,9 +93,15 @@ function Feeding () {
             // Handle error if needed
         }
     }
+
     async function fetchDataFromBackend() {
         try {
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`);
+            
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             return response.data;
         } catch (error) {
             console.error('Error fetching data from backend:', error);

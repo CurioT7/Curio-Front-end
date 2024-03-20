@@ -54,7 +54,7 @@ function UsernameInfo(props) {
       return;
     }
     const usernameAvailability = await checkUsernameAvailability(username);
-    if (usernameAvailability.data.success === false){
+    if (usernameAvailability.status === 409){
       setUsernameErrorMsg("That username is already taken");
       setIsUsernameValid(1);
       return;

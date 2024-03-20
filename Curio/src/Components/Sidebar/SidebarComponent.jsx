@@ -106,8 +106,8 @@ function SidebarComponent(props) {
           padding: '20px',
         },
       }}>
-        <MenuItem component={<Link to="/" />} rootStyles={{paddingTop: '20px'}} icon={<Home />}> Home </MenuItem>
-        <MenuItem icon={<Popular />}> Popular </MenuItem>
+        {isAuthenticated && <MenuItem component={<Link to="/" />} rootStyles={{paddingTop: '20px'}} icon={<Home />}> Home </MenuItem>}
+        <MenuItem rootStyles={{marginTop: !isAuthenticated ? "20px" : ""}} icon={<Popular />}> Popular </MenuItem>
         <MenuItem icon={<All />}> All </MenuItem>
         <hr className='mt-3 w-100'></hr>
         {isAuthenticated &&
