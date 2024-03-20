@@ -28,10 +28,6 @@ function ShowFriendInformation(props) {
         setShowDropdown(!showDropdown);
     };
 
-    const handleFollowToggle = () => {
-        setIsFollowing(!isFollowing);
-    };
-
     const handleReportClick = () => {
         setShowReportMenu(true);
     };
@@ -40,13 +36,41 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
-    if (isBlocked) {
-        return (
-            <div>
-                <h1>Hello</h1>
-            </div>
-        );
+    async function senDatatoBackend(data) {
+        try {
+            const response = await axios.post(`${serverHost}/api/me/friends`, data);
+            console.log(response);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data from backend', error);
+            throw error; // Re-throw the error to handle it in the component
+        }
     }
+    
+    function handleFollowToggle() {
+        setIsFollowing(!isFollowing);
+        const data = {
+            username: 'your_username_here',
+            friendUsername: 'username_of_the_friend_to_follow'
+        };
+    
+        senDatatoBackend(data)
+            .then((response) => {
+                if (response.status === 'success') {
+                    console.log('Friend followed successfully');
+                    // Handle success
+                } else {
+                    console.log('Failed to follow friend:', response.message);
+                    // Handle failure
+                }
+            })
+            .catch((error) => {
+                console.error('Error following friend:', error);
+                // Handle error
+            });
+    }
+
+
 
     return (
         <>
@@ -62,8 +86,8 @@ function ShowFriendInformation(props) {
                         </div>
                     </div>
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
-                        <div className="w-50 p-4">
-                            <div className="d-flex align-items-center items-container">
+                        <div className="w-100 p-4">
+                            <div className="d-flex align-items-center items-container justify-content-between">
                                 <div className="left-section">
                                     <h3 className="friend-info-subhead me-2">Yehia</h3>
                                 </div>
@@ -71,21 +95,8 @@ function ShowFriendInformation(props) {
                                     <button className="ellipsis-btn" onClick={handleEllipsisClick}>
                                         <Ellipsis className="ellipsis-img" />
                                     </button>
-                                    <div className="dropdown-menu" style={{ 
-                                        display: showDropdown ? 'flex' : 'none',
-                                        flexDirection: 'column',
-                                        alignItems: 'flex-start',
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '0',
-                                        backgroundColor: '#FFFFFF',
-                                        borderRadius: '10px',
-                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
-                                        marginTop: '4rem',
-                                        marginRight: '1rem',
-                                        padding: '10px',
-                                        width: '188px',
-                                        zIndex: '1'
+                                    <div className="dropdown-menus" style={{ 
+                                        display: showDropdown ? 'flex' : 'none'
                                     }}>
                                         <ul className='drop-down-list'>
                                             <li className="drop-down-item">
@@ -111,14 +122,19 @@ function ShowFriendInformation(props) {
                         </div>
                         <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} />
                         <div className="d-flex">
-                        <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={handleFollowToggle}>
+                        {isBlocked ?                      <>       <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
+                                <span className="d-flex align-items-center me-1 mt-3 minus"><BlockIcon /></span><span className="d-flex align-items-center">Blocked</span>
+                            </button> </>: (
+                        <>
+                            <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={() => {handleFollowToggle(); senDatatoBackend()}}>
                                 <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
                                 <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
                             </button>
                             <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
                                 <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
                             </button>
-                            </div>
+                        </> )}
+                          </div>
                             <div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
                                 <div className="d-flex flex-column">
                                     <p className="mb-0 stats">3</p>

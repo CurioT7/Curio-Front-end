@@ -9,7 +9,6 @@ import AccSettings from './Pages/accountSettings/AccountSettings.jsx';
 import FeedingSettings from './Pages/feedSettings/FeedingSettings.jsx';
 import EmailSettings from './Pages/emailSettings/EmailSettings.jsx';
 import ChatAndMessagingSettings from './Pages/ChatAndMassegingSettings/ChatAndMassegingSettings.jsx';
-import { ChakraProvider } from '@chakra-ui/react'
 import SidebarComponent from './Components/Sidebar/SidebarComponent.jsx';
 import ShowFriendInformation from './Components/FriendInformation/ShowFriendInformation.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx';
@@ -49,7 +48,7 @@ function App() {
           <Route path='/settings/feeding' element={<FeedingSettings hideSidebar={handleHideSidebar}/>}/>
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar}/>}/>
-          <Route path='/user' element={<ShowFriendInformation/>} />
+          <Route path='/user' element={<UserPage/>} />
           <Route path='*' element={<ErrorPage/>} />
         </Routes>
       </ChakraProvider>
