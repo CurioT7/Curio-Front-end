@@ -37,30 +37,44 @@ function Email (){
        Toast()
     }
     async function sendDataToBackend(data) {
-        // Validate data
-        console.log(serverHost)
-        if (!data || typeof data !== 'object') {
-            console.error('Invalid data:', data);
-            return;
-        }
         try {
-            console.log(serverHost)
-            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
-            console.log(response)
-            // Handle response if needed
+            
+            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             return response;
         } catch (error) {
-            console.error('Error sending data to backend:', error);
-            // Handle error if needed
+            if (error.response) {
+                console.error('Server Error:', error.response.data);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error', error.message);
+            }
+            console.error('Error config:', error.config);
         }
     }
 
     async function fetchDataFromBackend() {
         try {
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`);
+            
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             return response.data;
         } catch (error) {
-            console.error('Error fetching data from backend:', error);
+            if (error.response) {
+                console.error('Server Error:', error.response.data);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error', error.message);
+            }
+            console.error('Error config:', error.config);
         }
     }
     React.useEffect(() => {
