@@ -31,6 +31,16 @@ import './Sidebar.css';
 function SidebarComponent(props) {
   const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1200);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const checkAuthentication = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,6 +53,15 @@ function SidebarComponent(props) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    checkAuthentication();
+    window.addEventListener("loginOrSignup", checkAuthentication);
+    return () => {
+      window.removeEventListener("loginOrSignup", checkAuthentication);
+    };
+  }, []);
+
 
 
   const handleCreateCommunityClick = () => {
@@ -91,27 +110,29 @@ function SidebarComponent(props) {
         <MenuItem icon={<Popular />}> Popular </MenuItem>
         <MenuItem icon={<All />}> All </MenuItem>
         <hr className='mt-3 w-100'></hr>
-        <SubMenu label="YOUR COMMUNITIES" rootStyles={{
-            color: '#576F76',
-            backgroundColor: '#FFFFFF',
-            fontSize: '0.875rem',
-          }} menuItemStyles={{
-          button: {
-            [`&.active`]: {
-              backgroundColor: '#EAEDEF',
+        {isAuthenticated &&
+          <SubMenu label="YOUR COMMUNITIES" rootStyles={{
+              color: '#576F76',
+              backgroundColor: '#FFFFFF',
+              fontSize: '0.875rem',
+            }} menuItemStyles={{
+            button: {
+              [`&.active`]: {
+                backgroundColor: '#EAEDEF',
+              },
+              [`&:hover`]: {
+                backgroundColor: '#F2F4F5',
+              },
+              borderRadius: '10px',
+              paddingLeft: '10px',
             },
-            [`&:hover`]: {
-              backgroundColor: '#F2F4F5',
-            },
-            borderRadius: '10px',
-            paddingLeft: '10px',
-          },
-        }}>
-          <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}} icon={<Add />}>Create a community</MenuItem>
-          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/announcements</MenuItem>
-          <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/PS5</MenuItem>
-        </SubMenu>
-        <hr className='mt-3 ps-5 w-100'></hr>
+          }}>
+            <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}} icon={<Add />}>Create a community</MenuItem>
+            <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/announcements</MenuItem>
+            <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/PS5</MenuItem>
+          </SubMenu>
+        }
+        {isAuthenticated && <hr className='mt-3 ps-5 w-100'></hr>}
         <SubMenu label="RESOURCES" rootStyles={{
           fontSize: '0.875rem',
           color: '#576F76',

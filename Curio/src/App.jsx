@@ -48,7 +48,6 @@ function App() {
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar}/>}/>
           <Route path='/user' element={<ShowFriendInformation/>} />
-          <Route path='*' element={<ErrorPage/>} />
         </Routes>
       </ChakraProvider>
     </div>
