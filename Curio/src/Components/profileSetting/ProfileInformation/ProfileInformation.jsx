@@ -1,16 +1,34 @@
 import { useState } from 'react';
 import { Box, Heading, Text, Input, Textarea } from '@chakra-ui/react';
-
+import axios from 'axios';
+import { useToast, } from '@chakra-ui/react';
+import React from 'react';
+const serverHost = import.meta.env.VITE_SERVER_HOST;
 function ProfileInformation() {
+  
+    const toast = useToast()
   const [displayName, setDisplayName] = useState('');
   const [about, setAbout] = useState('');
 
+  function Toast(){
+    toast({
+        
+        description: "Changes Saved",
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      })
+}
   const handleDisplayNameChange = (event) => {
     setDisplayName(event.target.value);
+    sendDataToBackend({displayName: displayName})
+    Toast()
   };
 
   const handleAboutChange = (event) => {
     setAbout(event.target.value);
+    sendDataToBackend({about: about})
+    Toast()
   };
 
   const remainingDisplayNameCharacters = 30 - displayName.length;
@@ -19,6 +37,48 @@ function ProfileInformation() {
   const displayNameClass = remainingDisplayNameCharacters <= 0 ? 'text-danger' : '';
   const aboutClass = remainingAboutCharacters <= 0 ? 'text-danger' : '';
 
+  async function sendDataToBackend(data) {
+    // Validate data
+    if (!data || typeof data !== 'object') {
+        console.error('Invalid data:', data);
+        return;
+    }
+
+    try {
+        
+        const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
+        console.log(response)
+        // Handle response if needed
+        return response;
+    } catch (error) {
+        console.error('Error sending data to backend:', error);
+        // Handle error if needed
+    }
+}
+  async function fetchDataFromBackend() {
+    try {
+      const response = axios.get(`${serverHost}/api/settings/v1/me/prefs`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data from backend:', error);
+    }
+  }
+  React.useEffect(() => {
+    async function fetchAndSetData() {
+        const data = await fetchDataFromBackend();
+        if (data) {
+            
+          setDisplayName(data.displayName);
+          setAbout(data.about);
+            //
+
+        }
+    }
+
+    fetchAndSetData();
+}, []);
+  
+  
   return (
     <Box className="profile-information">
       <Box className="display-name">

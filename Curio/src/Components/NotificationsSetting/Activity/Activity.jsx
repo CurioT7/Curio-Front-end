@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import "./Activity.css"
-import axios from "axios";
+import update from "../update-pref";
+import axios from 'axios';
+import { useToast, } from '@chakra-ui/react';
 
 function Activity(){
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
+    const toast = useToast()
     const [mentionChecked, setMentionChecked] = useState(true);
     const [commentsChecked, setCommentsChecked] = useState(true);
     const [upvotesPostsChecked, setUpvotesPostsChecked] = useState(true);
@@ -11,34 +15,113 @@ function Activity(){
     const [repliesChecked, setRepliesChecked] = useState(true);
     const [newFollowersChecked, setNewFollowersChecked] = useState(true);
     const [postsFollowChecked, setPostsFollowChecked] = useState(true);
-
+    function Toast(){
+        toast({
+            
+            description: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     const handleMentionChange = () => {
-        setMentionChecked(!mentionChecked)
+        setMentionChecked(!mentionChecked);
+       sendDataToBackend({mentionChecked: !mentionChecked});
+         Toast()
     };
 
     const handleCommentsChange = () => {
         setCommentsChecked(!commentsChecked);
+       sendDataToBackend({commentsChecked: !commentsChecked});
+        Toast()
     };
     
     const handleUpvotesPostsChange = () => {
         setUpvotesPostsChecked(!upvotesPostsChecked);
+         sendDataToBackend({upvotesPostsChecked: !upvotesPostsChecked});
+        Toast()
     };
     
     const handleUpvotesCommentsChange = () => {
         setUpvotesCommentsChecked(!upvotesCommentsChecked);
+        sendDataToBackend({upvotesCommentsChecked: !upvotesCommentsChecked});
+        Toast()
     };
     
     const handleRepliesChange = () => {
         setRepliesChecked(!repliesChecked);
+        sendDataToBackend({repliesChecked: !repliesChecked});
+        Toast()
+        
     };
     
     const handleNewFollowersChange = () => {
         setNewFollowersChecked(!newFollowersChecked);
+        sendDataToBackend({newFollowersChecked: !newFollowersChecked});
+        Toast()
+        
     };
 
     const handlePostsFollowChange = () => {
         setPostsFollowChecked(!postsFollowChecked);
+        sendDataToBackend({postsFollowChecked: !postsFollowChecked});
+        Toast()
+        
     };
+
+    async function sendDataToBackend(data) {
+        // Validate data
+        if (!data || typeof data !== 'object') {
+            console.error('Invalid data:', data);
+            return;
+        }
+
+        try {
+            const token = 'your_token_here'; // replace with your actual token
+            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            console.log(response)
+            // Handle response if needed
+            return response;
+        } catch (error) {
+            console.error('Error sending data to backend:', error);
+            // Handle error if needed
+        }
+    }
+
+    async function fetchDataFromBackend() {
+        try {
+            const token = 'your_token_here'; // replace with your actual token
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data from backend:', error);
+        }
+    }
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchDataFromBackend();
+            if (data) {
+                
+                setMentionChecked(data.mentionChecked);
+                setCommentsChecked(data.commentsChecked);
+                setUpvotesPostsChecked(data.upvotesPostsChecked);
+                setUpvotesCommentsChecked(data.upvotesCommentsChecked);
+                setRepliesChecked(data.repliesChecked);
+                setNewFollowersChecked(data.newFollowersChecked);
+                setPostsFollowChecked(data.postsFollowChecked);
+            }
+        }
+
+        fetchAndSetData();
+    }, []);
 
     return(
         <>

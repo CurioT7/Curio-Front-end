@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import BackButton from '../../styles/icons/BackButton';
 import generateRandomUsername from './GenerateUsername';
 import Shuffle from '../../styles/icons/Shuffle';
+import {checkUsernameAvailability} from './SignupEndpoints.js';
 
 function UsernameInfo(props) {
 
@@ -40,7 +41,7 @@ function UsernameInfo(props) {
     setIsPasswordValid(2);
   }
 
-  const handleUsername = (e) => {
+  const handleUsername = async (e) => {
     const username = e.target.value;
     if (username === ""){
       setUsernameErrorMsg("Please fill out this field.");
@@ -49,6 +50,12 @@ function UsernameInfo(props) {
     }
     if (username.length < 3){
       setUsernameErrorMsg(`Please lengthen this text to 3 characters or more (you are currently using ${username.length} characters).`);
+      setIsUsernameValid(1);
+      return;
+    }
+    const usernameAvailability = await checkUsernameAvailability(username);
+    if (usernameAvailability.status === 409){
+      setUsernameErrorMsg("That username is already taken");
       setIsUsernameValid(1);
       return;
     }

@@ -18,4 +18,25 @@ async function signup({username, email, password}) {
     }
 }
 
-export default signup;
+
+async function checkUsernameAvailability(username) {
+    try {
+        const response = await axios.get(`${hostUrl}/api/auth/username_available/${username}`);
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+        return error.response;
+    }
+}
+
+async function googleSignup() {
+    try {
+        const response = await axios.get(`${hostUrl}/api/auth/google`);
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+export {signup, checkUsernameAvailability, googleSignup};
