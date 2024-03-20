@@ -1,3 +1,22 @@
+
+
+.Header{
+    border-bottom: none; 
+    padding-top: 10px; 
+    padding-bottom: 0px;
+  }
+
+.footer{
+  border-top: none;
+}
+
+.body-content{
+  border: none; 
+  height: 29rem;
+  padding-top: 0px; 
+  padding-bottom: 0px; 
+}
+
 .header-text, .header-text1{
   font-weight: bold;
   font-size: 18px;
