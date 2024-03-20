@@ -10,6 +10,8 @@ import PrivateActive from '../../styles/icons/PrivateActive';
 import RadioButtonUnactive from '../../styles/icons/RadioButtonUnactive';
 import RadioButtonActive from '../../styles/icons/RadioButtonActive';
 import Mature from '../../styles/icons/Mature';
+import createCommunity from './CreateCommunityEndpoints.js';
+import { useNavigate } from 'react-router-dom';
 
 function CreateCommunity(props) {
   const [selectedType, setSelectedType] = useState('public');
@@ -17,6 +19,7 @@ function CreateCommunity(props) {
   const [communityName, setCommunityName] = useState('');
   const [isMature, setIsMature] = useState(false);
   const [isNameValid, setIsNameValid] = useState(0);
+  const navigate = useNavigate();
 
   const handleTypeChange = (type) => {
     setSelectedType(type);
@@ -39,6 +42,25 @@ function CreateCommunity(props) {
       setIsNameValid(2);
     }
   };
+
+  const handleCreateCommunity = async () => {
+    const data = {
+      name: communityName,
+      description: 'testing',
+      over18: isMature,
+      privacyMode: selectedType
+    }
+    console.log(data);
+    try{
+      const response = await createCommunity({data});
+      if (response.status === 200) {
+        props.onHide();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
 
   const isCreateButtonDisabled = communityName.trim() === '';
 
@@ -131,7 +153,7 @@ function CreateCommunity(props) {
       </Modal.Body>
       <Modal.Footer className='create-community mb-0 pb-0'>
         <button className="btn py-3 px-5 pb-3 create-community-cancel-button d-flex align-items-center justify-content-center" onClick={props.onHide}>Cancel</button>
-        <button style={{width: 'auto', color: communityName!=="" ? "#FFFFFF" : "#000000", backgroundColor: communityName!=="" ? "#0045ac" : ""}} onMouseOver={{backgroundColor: communityName!=="" ? "#003584" : ""}} className="btn btn-lg create-community-cancel-button d-flex align-items-center justify-content-center" onClick={props.onHide} disabled={isCreateButtonDisabled}>{isCreateButtonDisabled ? 'Create your community' : `Create r/${communityName}`}</button>
+        <button onClick={handleCreateCommunity} style={{width: 'auto', color: communityName!=="" ? "#FFFFFF" : "#000000", backgroundColor: communityName!=="" ? "#0045ac" : ""}} className="btn btn-lg create-community-cancel-button d-flex align-items-center justify-content-center" disabled={isCreateButtonDisabled}>{isCreateButtonDisabled ? 'Create your community' : `Create r/${communityName}`}</button>
       </Modal.Footer>
     </Modal>
   );
