@@ -8,6 +8,7 @@ import UsernameInfo from "../Signup/UsernameInfo";
 import Gender from "../Signup/Gender";
 import Preferences from "../Signup/Preferences";
 import {signup} from "../Signup/SignupEndpoints";
+import { useNavigate } from "react-router-dom";
 
 function SignupHandler() {
 
@@ -20,7 +21,7 @@ function SignupHandler() {
   const [password, setEnteredPassword] = useState('');
   const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const navigate = useNavigate();
 
 
 
@@ -87,6 +88,7 @@ function SignupHandler() {
         console.log('Signup successful');
         localStorage.setItem('token', response.data.accessToken);
         localStorage.setItem('username', username);
+        console.log('Token:', response.data.accessToken);
         setIsAuthenticated(true);
         window.dispatchEvent(new Event("loginOrSignup"));
       }
@@ -106,6 +108,7 @@ function SignupHandler() {
     localStorage.removeItem('username');
     setIsAuthenticated(false);
     window.dispatchEvent(new Event("loginOrSignup"));
+    navigate("/");
   }
 
     return (
