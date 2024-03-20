@@ -123,24 +123,16 @@ const changePassword = async (oldPassword, newPassword) => {
     return responseData;
 };
 
-const getGoogleToken = async () => {
-    const url = `${VITE_SERVER_HOST}/api/auth/google`; 
 
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-
-    const responseData = await response.json();
-    return responseData;
-};
  
+async function getGoogleToken() {
+    try {
+        const response = await axios.get(`${VITE_SERVER_HOST}/api/auth/google`);
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
 
 export {  loginUser, resetPassword , getGoogleToken, verifyUsername , checkCredentials, changePassword};
