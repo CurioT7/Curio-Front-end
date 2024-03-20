@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import "./Activity.css"
 import update from "../update-pref";
+import axios from 'axios';
+import { useToast, } from '@chakra-ui/react';
 
 function Activity(){
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
+    const toast = useToast()
     const [mentionChecked, setMentionChecked] = useState(true);
     const [commentsChecked, setCommentsChecked] = useState(true);
     const [upvotesPostsChecked, setUpvotesPostsChecked] = useState(true);
@@ -11,57 +15,103 @@ function Activity(){
     const [repliesChecked, setRepliesChecked] = useState(true);
     const [newFollowersChecked, setNewFollowersChecked] = useState(true);
     const [postsFollowChecked, setPostsFollowChecked] = useState(true);
-
+    function Toast(){
+        toast({
+            
+            description: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     const handleMentionChange = () => {
         setMentionChecked(!mentionChecked);
-        handletogglesactivity();
+       sendDataToBackend({mentionChecked: !mentionChecked});
+         Toast()
     };
 
     const handleCommentsChange = () => {
         setCommentsChecked(!commentsChecked);
-        handletogglesactivity();
+       sendDataToBackend({commentsChecked: !commentsChecked});
+        Toast()
     };
     
     const handleUpvotesPostsChange = () => {
         setUpvotesPostsChecked(!upvotesPostsChecked);
-        handletogglesactivity();
+         sendDataToBackend({upvotesPostsChecked: !upvotesPostsChecked});
+        Toast()
     };
     
     const handleUpvotesCommentsChange = () => {
         setUpvotesCommentsChecked(!upvotesCommentsChecked);
-        handletogglesactivity();
+        sendDataToBackend({upvotesCommentsChecked: !upvotesCommentsChecked});
+        Toast()
     };
     
     const handleRepliesChange = () => {
         setRepliesChecked(!repliesChecked);
-        handletogglesactivity();
+        sendDataToBackend({repliesChecked: !repliesChecked});
+        Toast()
+        
     };
     
     const handleNewFollowersChange = () => {
         setNewFollowersChecked(!newFollowersChecked);
-        handletogglesactivity();
+        sendDataToBackend({newFollowersChecked: !newFollowersChecked});
+        Toast()
+        
     };
 
     const handlePostsFollowChange = () => {
         setPostsFollowChecked(!postsFollowChecked);
-        handletogglesactivity();
+        sendDataToBackend({postsFollowChecked: !postsFollowChecked});
+        Toast()
+        
     };
 
-    const handletogglesactivity = async () => {
-        try{
-          const response = await update({mentionChecked, commentsChecked, upvotesPostsChecked, upvotesCommentsChecked, repliesChecked, newFollowersChecked, postsFollowChecked});
-          console.log(response);
-          if(response.status === 200){
-            console.log('Operation successful');
-          }
-          else{
-            console.log('Operation failed');
-          }
+    async function sendDataToBackend(data) {
+        // Validate data
+        if (!data || typeof data !== 'object') {
+            console.error('Invalid data:', data);
+            return;
         }
-        catch(error){
-          console.log(error);
+
+        try {
+            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
+            console.log(response)
+            // Handle response if needed
+            return response;
+        } catch (error) {
+            console.error('Error sending data to backend:', error);
+            // Handle error if needed
         }
-      }
+    }
+
+    async function fetchDataFromBackend() {
+        try {
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data from backend:', error);
+        }
+    }
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchDataFromBackend();
+            if (data) {
+                
+                setMentionChecked(data.mentionChecked);
+                setCommentsChecked(data.commentsChecked);
+                setUpvotesPostsChecked(data.upvotesPostsChecked);
+                setUpvotesCommentsChecked(data.upvotesCommentsChecked);
+                setRepliesChecked(data.repliesChecked);
+                setNewFollowersChecked(data.newFollowersChecked);
+                setPostsFollowChecked(data.postsFollowChecked);
+            }
+        }
+
+        fetchAndSetData();
+    }, []);
 
     return(
         <>

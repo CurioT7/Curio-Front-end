@@ -44,7 +44,7 @@ const AccountPreferences = () => {
     
     async function fetchDataFromBackend() {
         try {
-            const response = await axios.get(`${serverHost}/api/settings/v1/me`);
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`);
             return response.data;
         } catch (error) {
             console.error('Error fetching data from backend:', error);
@@ -54,7 +54,7 @@ const AccountPreferences = () => {
     async function sendDataToBackend(data) {
         try {
             console.log(serverHost)
-            const response = await axios.post(`${serverHost}/api/settings/v1/me`, data);
+            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
             console.log(response)
             return response;
         } catch (error) {
@@ -67,7 +67,7 @@ const AccountPreferences = () => {
             const data = await fetchDataFromBackend();
             if (data) {
                 setGender(data.gender);
-                setIP(data.ip);
+                setIP(data.locationCustomization);
             }
         }
 
