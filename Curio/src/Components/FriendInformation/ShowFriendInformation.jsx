@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './ShowFriendInformation.css';
 import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
@@ -11,12 +11,19 @@ import ReportIcon from "../../styles/icons/Report";
 import MessageIcon from "../../styles/icons/SendMessage";
 import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
+import showFriendInformation from "./ShowFriendInformationEndpoints.js";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 
 function ShowFriendInformation(props) {
+    const { username } = useParams();
     const [showDropdown, setShowDropdown] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [showReportMenu, setShowReportMenu] = useState(false);
+    const [friendInfo, setFriendInfo] = useState({});
     const [isBlocked, setIsBlocked] = useState(false);
 
     const handleBlockClick = () => {
@@ -40,6 +47,21 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
+    useEffect(() => {
+        async function showFriendInformation({username}) {
+            try {
+                const response = await axios.get(`${hostUrl}/user/userTwo/about`);
+                console.log(response);
+                setFriendInfo(response.data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        showFriendInformation({username});
+        
+    }, [username]);
+
+
     if (isBlocked) {
         return (
             <div>
@@ -57,15 +79,15 @@ function ShowFriendInformation(props) {
                             <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="user-profile-image"/>
                         </div>
                         <div className="d-flex flex-column align-items-md-center align-items-sm-start">
-                            <h1 className="show-friend-header d-flex align-items-center mb-0">Yehia</h1>
-                            <p className="show-friend-username d-flex align-items-center">u/Yehia</p>
+                            <h1 className="show-friend-header d-flex align-items-center mb-0">{friendInfo.displayName}</h1>
+                            <p className="show-friend-username d-flex align-items-center">u/{username}</p>
                         </div>
                     </div>
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
                         <div className="w-50 p-4">
                             <div className="d-flex align-items-center items-container">
                                 <div className="left-section">
-                                    <h3 className="friend-info-subhead me-2">Yehia</h3>
+                                    <h3 className="friend-info-subhead me-2">{friendInfo.displayName}</h3>
                                 </div>
                                 <div className="right-section">
                                     <button className="ellipsis-btn" onClick={handleEllipsisClick}>
@@ -121,37 +143,31 @@ function ShowFriendInformation(props) {
                             </div>
                             <div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
                                 <div className="d-flex flex-column">
-                                    <p className="mb-0 stats">3</p>
+                                    <p className="mb-0 stats">{friendInfo.postKarma}</p>
                                     <p className="secondary-subheader">Post Karma</p>
                                 </div>
                                 <div className="d-flex flex-column">
-                                    <p className="mb-0 stats">0</p>
+                                    <p className="mb-0 stats">{friendInfo.commentKarma}</p>
                                     <p className="secondary-subheader">Comment Karma</p>
                                 </div>
                                 <div className="d-flex flex-column">
-                                    <p className="mb-0 stats">Aug 29, 2023</p>
+                                    <p className="mb-0 stats">{friendInfo.cakeDay}</p>
                                     <p className="secondary-subheader">Cake day</p>
                                 </div>
                             </div>
                             <div className="pe-4 ps-4 me-4 ms-4 mt-0 mb-4" style={{border: '1px solid #0000001a'}}></div>
                             <h3 className="muted-header p-4 pt-0 mb-1">MODERATOR OF THESE COMMUNITIES</h3>
                             <div className="d-flex flex-column">
-                                <div className="d-flex justify-content-between p-4 pt-0 pb-0">
-                                    <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3"/>
+                                {friendInfo.moderatedSubreddits && friendInfo.moderatedSubreddits.map((community, index) => (
+                                    <div key={index} className="d-flex justify-content-between p-4 pt-0 pb-0">
+                                    <img src={community.icon} alt="community icon" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3" />
                                     <div className="d-flex flex-column me-auto">
-                                        <p className="mod-community-name mb-0">r/AskReddit</p>
-                                        <p className="mod-community-subscribers secondary-subheader">27,000,000 members</p>
+                                        <p className="mod-community-name mb-0">{community.name}</p>
+                                        <p className="mod-community-subscribers secondary-subheader">{community.members.length} members</p>
                                     </div>
                                     <button className="join-button">Join</button>
-                                </div>
-                                <div className="d-flex justify-content-between p-4 pb-0">
-                                    <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="mod-community-image mt-2 me-3"/>
-                                    <div className="d-flex flex-column me-auto">
-                                        <p className="mod-community-name mb-0">r/AskReddit</p>
-                                        <p className="mod-community-subscribers secondary-subheader">27,000,000 members</p>
                                     </div>
-                                    <button className="join-button">Join</button>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>

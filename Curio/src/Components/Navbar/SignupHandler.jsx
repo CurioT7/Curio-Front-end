@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./Navbar.css";
 import Signup from "../../styles/icons/Signup";
 import { NavDropdown } from "react-bootstrap";
@@ -32,6 +32,10 @@ function SignupHandler() {
       setIsAuthenticated(false);
     }
   };
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
 
 
   const handleSignupInfoClick = () => {
