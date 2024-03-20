@@ -30,7 +30,7 @@ function App() {
   return (
     <div>
        <div className='d-flex'>
-        <div style={{position: 'fixed'}}>
+        <div style={{position: 'fixed', zIndex: '99'}}>
           <SidebarComponent sidebarVisibility={isSidebarVisible} />
         </div>
       </div>

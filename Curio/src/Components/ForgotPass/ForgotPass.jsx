@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
 import '../Login/Login.css';
+import { resetPassword } from '../Login/LoginEndpoints';
 
 function ForgotPass({setForgotPass, forgotPass, setChangePass}) {
+ 
+    const [password, setPassword] = useState('');
+    const handleReset = async (event) => {
+      event.preventDefault();
+
+      try {
+          const response = await resetPassword(password);
+          console.log('Success:', response);
+      } catch (error) {
+          console.error('Error:', error);
+      }
+  };
+  
   return (
     <>
 
@@ -35,7 +49,8 @@ function ForgotPass({setForgotPass, forgotPass, setChangePass}) {
         </form>
       </div>
       <div className="submit">
-        <button type="submit" className="login_buttons" onClick={() => {
+        <button type="submit" className="login_buttons" onClick={(event) => {
+          handleReset(event);
           setChangePass(true);
           setForgotPass(false);
         }}>

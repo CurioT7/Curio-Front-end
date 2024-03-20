@@ -119,6 +119,9 @@
     .center-div{
         margin-left: 6rem!important;
     }
+    .light-border{
+        border: none;
+    }
 }
 
 .minus{
