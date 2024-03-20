@@ -31,7 +31,7 @@ function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
       console.error('Error:', error);
     }
   };
-  
+
   const handleClose = () => {
     setIsOpen= false;
   };
@@ -71,7 +71,7 @@ function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
     <hr />
 </h6>            
           <div className="loginInput">
-            <input type="text" placeholder="Username *" required  onChange={(e) => setUsername(e.target.value)}/>
+            <input type="text" placeholder="Username *" required  onChange={(e) => setEmail(e.target.value)}/>
           </div>
           <div className="loginInput">
             <input type="password" placeholder="Password *" required  onChange={(e) => setPassword(e.target.value)}/>
