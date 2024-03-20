@@ -4,23 +4,7 @@ import axios from 'axios';
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
-async function fetchLoginPage() {
-    const url = `${VITE_SERVER_HOST}./api/auth/login`;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-
-    const responseData = await response.json();
-    return responseData;
-}
 
 const loginUser = async (username, password) => {
     const url =  `${VITE_SERVER_HOST}./api/auth/login`; 
@@ -159,4 +143,4 @@ const getGoogleToken = async () => {
  
 
 
-export { fetchLoginPage, loginUser, resetPassword , getGoogleToken, verifyUsername , checkCredentials, changePassword};
+export {  loginUser, resetPassword , getGoogleToken, verifyUsername , checkCredentials, changePassword};

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState , useRef } from 'react';
 import './Login.css';
-import './Login.jsx';
 import Google from '../../styles/icons/Google.jsx';
 import  './LoginEndpoints';
 
@@ -8,9 +7,9 @@ import  './LoginEndpoints';
 function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
   
 
-  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const formRef = useRef();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,25 +19,21 @@ function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
       console.log('Correct Credentials');
     } catch (error) {
       console.error('Failed to login:', error);
+      console.log('Hana');
+
     }
   };
-
-  const handleLogin = async () => {
-    try {
-      const response = await verifyUsername(email);
-      console.log('Success:', response);
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  
+  
+  const handleButtonClick = () => {
+    formRef.current.submit();
   };
 
-  const handleClose = () => {
-    setIsOpen= false;
-  };
+
     return (
       <div className="modalParent">
       <div className="loginBox">
-        <form action=""  form onSubmit={handleSubmit}>
+        <form action="" onSubmit={handleSubmit} ref={formRef}>
           <h1>Log In</h1>
           <p>
             By continuing, you agree to our{' '}
@@ -71,7 +66,7 @@ function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
     <hr />
 </h6>            
           <div className="loginInput">
-            <input type="text" placeholder="Username *" required  onChange={(e) => setEmail(e.target.value)}/>
+            <input type="text" placeholder="Username *" required  onChange={(e) => setUsername(e.target.value)}/>
           </div>
           <div className="loginInput">
             <input type="password" placeholder="Password *" required  onChange={(e) => setPassword(e.target.value)}/>
@@ -95,7 +90,7 @@ function Login({ forgotUser, setForgotUser, forgotPass, setForgotPass }){
         </form>
       </div>
       <div className="submit">
-        <button type="submit" className="login_buttons" onClick={handleLogin} >
+        <button type="submit" className="login_buttons" onClick={handleButtonClick} >
           Login
         </button>
       </div>
