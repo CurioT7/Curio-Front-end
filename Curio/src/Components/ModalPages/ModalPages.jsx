@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ExclamationMark from '../../styles/icons/ExclamationIcon';
@@ -11,6 +11,12 @@ const MultiPageFormModal = (props) => {
     const [reportReason, setReportReason] = useState('');
     const [description, setDescription] = useState('');
     const [explanation, setExplanation] = useState('');
+
+    useEffect(() => {
+        if (!props.show) {
+            setStep(1);
+        }
+    }, [props.show]);
 
     const handleDescriptionChange = (desc) => {
         setDescription(desc);
@@ -48,7 +54,8 @@ const MultiPageFormModal = (props) => {
 
 
     const handleModalClose = () => {
-        setShowModal(false);
+        setStep(1);
+        props.onHide();
     };
 
     const handleModalOpen = () => {
@@ -61,8 +68,11 @@ const MultiPageFormModal = (props) => {
             <Modal {...props}
               size="lg"
               aria-labelledby="contained-modal-title-vcenter"
-              centered>
-                <Modal.Header closeButton>
+              centered
+              className='general-content'
+              onHide={handleModalClose}
+              animation={false}>
+                <Modal.Header closeButton className='Header'>
                     {step === 1 && (
                         <Modal.Title>
                             <h6 className='header-text'>Submit a report</h6>
@@ -92,7 +102,7 @@ const MultiPageFormModal = (props) => {
                         <Modal.Title><h6 className='header-text'>Report Submitted</h6></Modal.Title>
                     )}
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='body-content'>
                     <div>
                         {step === 1 && (
                             <>
@@ -398,7 +408,7 @@ const MultiPageFormModal = (props) => {
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='footer'>
                     {step === 1 && (
                         <button className='main-button' onClick={nextStep}>Next</button>
                     )}
@@ -423,7 +433,7 @@ const MultiPageFormModal = (props) => {
                         <button className='main-button' onClick={nextStep}>Next</button>
                     )}
                     {step === 4 && (
-                        <button className='main-button' onClick={handleModalClose}>Done</button>
+                        <button className='main-button' onClick={props.onHide}>Done</button>
                     )}
                 </Modal.Footer>
             </Modal>
