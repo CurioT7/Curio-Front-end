@@ -50,7 +50,7 @@ function ShowFriendInformation(props) {
     useEffect(() => {
         async function showFriendInformation({username}) {
             try {
-                const response = await axios.get(`${hostUrl}/user/userTwo/about`);
+                const response = await axios.get(`${hostUrl}/user/${username}/about`);
                 console.log(response);
                 setFriendInfo(response.data);
             } catch (error) {

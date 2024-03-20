@@ -30,4 +30,13 @@ async function checkUsernameAvailability(username) {
     }
 }
 
-export {signup, checkUsernameAvailability};
+async function googleSignup() {
+    try {
+        const response = await axios.get(`${hostUrl}/api/auth/google`);
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+export {signup, checkUsernameAvailability, googleSignup};

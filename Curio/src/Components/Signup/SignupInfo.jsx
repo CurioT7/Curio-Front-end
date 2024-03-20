@@ -8,6 +8,7 @@ import UsernameInfo from './UsernameInfo.jsx';
 import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { googleSignup } from './SignupEndpoints.js';
 
 function SignupInfo(props) {
 
@@ -53,6 +54,18 @@ function SignupInfo(props) {
     props.onHide();
   }
 
+  const handleGoogleSignup = async () => {
+    const response = await googleSignup();
+    if(response.status === 200 || response.status === 201){
+      localStorage.setItem('token', response.data.accessToken);
+      props.onHide();
+    }
+    else{ 
+      props.onHide();
+    }
+      
+  }
+
 
 
   return (
@@ -74,7 +87,7 @@ function SignupInfo(props) {
             <p className='signup-info'>By continuing, you agree to our <a href="https://www.redditinc.com/policies/user-agreement">User Agreement</a> and acknowledge that you understand the <a href="https://www.reddit.com/policies/privacy-policy">Privacy Policy</a>.</p>
         </div>
         <div className="d-flex justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
-            <button className='continue-with-google p-3 d-flex justify-content-between align-items-center align-content-center' onClick={props.onHide}>
+            <button className='continue-with-google p-3 d-flex justify-content-between align-items-center align-content-center' onClick={handleGoogleSignup}>
                 <svg version="1.1" height="25" width="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" class="LgbsSe-Bz112c"><g>
                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z">
                     </path>
