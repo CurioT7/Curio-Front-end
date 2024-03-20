@@ -4,6 +4,7 @@ import './Login.css';
 import '../ForgotUser/ForgotUser.jsx';
 import ForgotUser from '../ForgotUser/ForgotUser.jsx';
 import ForgotPass from '../ForgotPass/ForgotPass.jsx';
+import ChangePass from '../ForgotPass/ChangePass.jsx';
 
 import Login from './Login.jsx';
 
@@ -15,6 +16,7 @@ function LoginPage() {
 
   const [forgotUser, setForgotUser] = useState(false);
   const [forgotPass, setForgotPass] = useState(false);
+  const[changePass, setChangePass] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
 
@@ -24,15 +26,19 @@ function LoginPage() {
       
 
         <div className="modalParent">
-          {!forgotUser && !forgotPass && 
+          {!forgotUser && !forgotPass &&  !changePass &&
           <Login  forgotUser={forgotUser} 
           setForgotUser={setForgotUser} 
           forgotPass={forgotPass} 
-          setForgotPass={setForgotPass}/>
+          setForgotPass={setForgotPass}
+          changePass={changePass}
+          setChangePass={setChangePass} />
           }
 
-          {forgotUser && !forgotPass && <ForgotUser forgotUser={forgotUser} setForgotUser={setForgotUser} />}
-          {forgotPass && !forgotUser && <ForgotPass forgotPass={forgotPass} setForgotPass={setForgotPass} />}
+          {forgotUser && !forgotPass && !changePass && <ForgotUser forgotUser={forgotUser} setForgotUser={setForgotUser} />}
+          {forgotPass && !forgotUser && !changePass && <ForgotPass setForgotPass={setForgotPass} forgotPass={forgotPass} setChangePass={setChangePass} />}
+          {changePass && !forgotUser && !forgotPass && <ChangePass changePass={changePass} setChangePass={setChangePass} />}
+
         </div>
       </Modal>
     </div>

@@ -9,7 +9,7 @@ import SidebarComponent from './Components/Sidebar/SidebarComponent.jsx';
 import ShowFriendInformation from './Components/FriendInformation/ShowFriendInformation.jsx';
 import Navbar from './Components/Navbar/Navbar.jsx'
 import ForgotUser from './Components/ForgotUser/ForgotUser.jsx';
-import LoginPage from './Components/Login/Loginpage.jsx';
+import LoginPage from './Components/Login/LoginPage.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 
 
