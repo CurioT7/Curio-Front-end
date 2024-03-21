@@ -3,11 +3,18 @@ import { useEffect } from 'react';
 import "./SafetyPrivacy.css";
 import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
 import Safety from "../../Components/SafetyPrivacy/Safety/Safety";
+import { useNavigate } from 'react-router-dom';
+
 
 
 function SafetyPrivacy(props) {
+  const navigate = useNavigate();
 
 useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
     props.hideSidebar();
     return () => {
       props.showSidebar();
