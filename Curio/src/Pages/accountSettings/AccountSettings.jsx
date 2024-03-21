@@ -4,6 +4,9 @@ import { useEffect } from "react";
 const AccountSettings = (props) =>{
     useEffect(() => {
         props.hideSidebar();
+        return () => {
+          props.showSidebar();
+        }
       }, []);
     return(
      <div>  

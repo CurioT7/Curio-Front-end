@@ -8,6 +8,9 @@ function NotificationSetting(props) {
 
   useEffect(() => {
     props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    }
   }, []);
 
   return (

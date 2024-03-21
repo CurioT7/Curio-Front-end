@@ -54,8 +54,12 @@
 }
 
 .signup-button{
-    background-color: #f8f9fa!important;
+    background-color: #ffffff!important;
+    border-radius: 999px!important;
+    display: flex;
+    align-items: center;
     border: none;
+    padding: 0px;
 }
 
 .signup-button:hover{
@@ -80,4 +84,31 @@
 
 .dropdown-menu{
     width: 200px!important;
+}
+
+.settings:hover{
+    color: #000000!important;
+    background-color: #f2f4f5!important;
+}
+
+@media (max-width: 1000px){
+    .offcanvas-image{
+        width: 20px;
+        height: 20px;
+        border: none;
+    }
+    .search-offcanvas{
+        display: flex;
+        justify-content: start!important;
+    }
+    .link-offcanvas{
+        margin-left: auto;
+        margin-right: 0!important;
+        color: #000000!important;
+    }
+    .settings-image{
+        width: 10px!important;
+        height: 10px!important;
+        border: none;
+    }
 }

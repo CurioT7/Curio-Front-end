@@ -4,6 +4,9 @@ import { useEffect } from "react";
 function FeedingSettings(props){
     useEffect(() => {
         props.hideSidebar();
+        return () => {
+          props.showSidebar();
+        }
       }, []);
     return(
         <div>
