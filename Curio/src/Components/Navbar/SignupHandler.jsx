@@ -7,7 +7,7 @@ import SignupInfo from "../Signup/SignupInfo";
 import UsernameInfo from "../Signup/UsernameInfo";
 import Gender from "../Signup/Gender";
 import Preferences from "../Signup/Preferences";
-import {signup} from "../Signup/SignupEndpoints";
+import { signup } from "../Signup/SignupEndpoints";
 import { useNavigate } from "react-router-dom";
 
 function SignupHandler() {
@@ -23,7 +23,13 @@ function SignupHandler() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
-
+  useEffect(() => {
+    checkAuthentication();
+    window.addEventListener("loginOrSignup", checkAuthentication);
+    return () => {
+      window.removeEventListener("loginOrSignup", checkAuthentication);
+    };
+  }, []); 
 
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");

@@ -25,6 +25,7 @@ function UsernameInfo(props) {
   }
 
   const handlePassword = (e) => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     const password = e.target.value;
     if (password === ""){
       setPasswordErrorMsg("Please fill out this field.");
@@ -33,6 +34,11 @@ function UsernameInfo(props) {
     }
     if (password.length < 8){
       setPasswordErrorMsg(`Please lengthen this text to 8 characters or more (you are currently using ${password.length} characters).`);
+      setIsPasswordValid(1);
+      return;
+    }
+    if (!passwordRegex.test(password)){
+      setPasswordErrorMsg("Password must contain at least one letter and one number.");
       setIsPasswordValid(1);
       return;
     }
