@@ -7,7 +7,7 @@ import SignupInfo from "../Signup/SignupInfo";
 import UsernameInfo from "../Signup/UsernameInfo";
 import Gender from "../Signup/Gender";
 import Preferences from "../Signup/Preferences";
-import {signup} from "../Signup/SignupEndpoints";
+import { signup } from "../Signup/SignupEndpoints";
 import { useNavigate } from "react-router-dom";
 
 function SignupHandler() {
@@ -23,7 +23,13 @@ function SignupHandler() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
-
+  useEffect(() => {
+    checkAuthentication();
+    window.addEventListener("loginOrSignup", checkAuthentication);
+    return () => {
+      window.removeEventListener("loginOrSignup", checkAuthentication);
+    };
+  }, []); 
 
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -113,7 +119,7 @@ function SignupHandler() {
 
     return (
         <>
-            <NavDropdown style={{borderRadius: '999px!important'}} className="signup-button mt-0 d-flex justify-content-center col-md-1 col-xs-1" title={<Dots />}>
+            <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', width:"20px!important"}} className="link-offcanvas signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
                 {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Login / Register</span></NavDropdown.Item>}
                 {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Logout</span></NavDropdown.Item>}
             </NavDropdown>

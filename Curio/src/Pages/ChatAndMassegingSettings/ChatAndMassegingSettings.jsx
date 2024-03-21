@@ -4,6 +4,9 @@ import { useEffect } from "react";
 function ChatAndMessagingSettings(props){
     useEffect(() => {
         props.hideSidebar();
+        return () => {
+          props.showSidebar();
+        }
       }, []);
     return(
         <div>

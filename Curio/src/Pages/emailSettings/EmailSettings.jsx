@@ -4,6 +4,9 @@ import { useEffect } from "react";
 function EmailSettings (props){
     useEffect(() => {
         props.hideSidebar();
+        return () => {
+          props.showSidebar();
+        }
       }, []);
     return(
         <div>

@@ -9,6 +9,9 @@ function SafetyPrivacy(props) {
 
 useEffect(() => {
     props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    }
   }, []);
   return (
     <div>

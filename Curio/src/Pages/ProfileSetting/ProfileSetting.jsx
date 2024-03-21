@@ -11,6 +11,9 @@ function ProfileSetting(props) {
 
   useEffect(() => {
     props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    }
   }, []);
 
   return (
