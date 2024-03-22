@@ -15,4 +15,5 @@ async function showFriendInformation({username}) {
     }
 }
 
+
 export default showFriendInformation;
