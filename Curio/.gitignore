@@ -27,3 +27,5 @@ dist-ssr
 Curio/package-lock.json
 node_modules
 /node_modules
+
+Curio/.env

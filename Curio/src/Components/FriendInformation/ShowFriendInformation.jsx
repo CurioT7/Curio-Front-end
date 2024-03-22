@@ -25,6 +25,7 @@ function ShowFriendInformation(props) {
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
     const [isBlocked, setIsBlocked] = useState(false);
+    const [friendusername , setFriendusername] = useState('');
 
     const handleBlockClick = () => {
         setIsBlocked(true);
@@ -43,6 +44,10 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
+    const handleFollowToggle = () => {
+        setIsFollowing(!isFollowing);
+    }
+
     useEffect(() => {
         async function showFriendInformation({username}) {
             try {
@@ -57,15 +62,17 @@ function ShowFriendInformation(props) {
         
     }, [username]);
 
-
-    if (isBlocked) {
-        return (
-            <div>
-                <h1>Hello</h1>
-            </div>
-        );
+    async function userFollow() {
+        try {
+            const response = await axios.post(`${hostUrl}/api/v1/me/friends/${username}`, {
+                username: 'Mostafa',
+                friendusername: username
+            });
+            console.log(response);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
-
 
 
     return (
@@ -122,7 +129,7 @@ function ShowFriendInformation(props) {
                                 <span className="d-flex align-items-center me-1 mt-3 minus"><BlockIcon /></span><span className="d-flex align-items-center">Blocked</span>
                             </button> </>: (
                         <>
-                            <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={() => {handleFollowToggle(); senDatatoBackend()}}>
+                            <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={() => {handleFollowToggle(); userFollow(username)}}>
                                 <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
                                 <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
                             </button>
