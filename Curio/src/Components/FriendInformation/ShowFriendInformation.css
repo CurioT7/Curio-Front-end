@@ -61,7 +61,7 @@
 .friend-info-subhead{
     color: #0f1a1c;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;;
     display: flex;
     align-items: center;
@@ -109,6 +109,12 @@
     }
 }
 
+.follow-buttons{
+    visibility: hidden;
+    margin-left: 0;
+}
+
+
 @media (max-width: 1000px) {
     .position-card{
         transform: translate(150%, 0%);
@@ -118,6 +124,12 @@
     }
     .center-div{
         margin-left: 6rem!important;
+    }
+    .light-border{
+        border: none;
+    }
+    .follow-buttons{
+        visibility: visible;
     }
 }
 
@@ -228,7 +240,6 @@
     width: 34px;
     height: 32px;
     border: none;
-    /* margin-left: 19rem; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -314,3 +325,4 @@
     border-radius: 10px;
 
 }
+

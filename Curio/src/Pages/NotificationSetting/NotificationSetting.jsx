@@ -2,12 +2,20 @@ import React from 'react';
 import { useEffect } from 'react';
 import "./NotificationSetting.css";
 import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
-import Activity from "../../Components/NotificationsSetting/Activity/Activity"; 
+import Activity from "../../Components/NotificationsSetting/Activity/Activity";
+import { useNavigate } from 'react-router-dom';
 
 function NotificationSetting(props) {
-
+  const navigate = useNavigate();
   useEffect(() => {
+    const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+      }
     props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    }
   }, []);
 
   return (

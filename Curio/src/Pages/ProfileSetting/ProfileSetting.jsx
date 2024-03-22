@@ -6,11 +6,19 @@ import SocialLinksComponent from "../../Components/profileSetting/SocialLinksSec
 import ProfileImageUpload from "../../Components/profileSetting/ProfileImageUpload/ProfileImageUpload"
 import ProfileCategory from "../../Components/profileSetting/ProfileCategory/ProfileCategory"
 import Advanced from "../../Components/profileSetting/Advanced/Advanced"
+import { useNavigate } from 'react-router-dom';
 
 function ProfileSetting(props) {
-
+  const navigate = useNavigate();
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
     props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    }
   }, []);
 
   return (

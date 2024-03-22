@@ -85,21 +85,41 @@ function ShowFriendInformation(props) {
                         </div>
                         <div className="d-flex flex-column align-items-md-center align-items-sm-start">
                             <h1 className="show-friend-header d-flex align-items-center mb-0">{friendInfo.displayName}</h1>
-                            <p className="show-friend-username d-flex align-items-center">u/{username}</p>
+                            <p className="show-friend-username d-flex align-items-center me-auto">u/{username}</p>
+                        </div>
+                        <div className="d-flex responsive follow-buttons justify-content-start justify-content-sm-center">
+                            <button className={`d-flex justify-content-center align-items-center follow-button m-0 me-2 ms-0 ms-md-2 ${isFollowing ? 'following' : 'not-following'}`} onClick={handleFollowToggle}>
+                                <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
+                                <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
+                            </button>
+                            <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
+                                <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
+                            </button>
                         </div>
                     </div>
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
-                        <div className="w-100 p-4">
-                            <div className="d-flex align-items-center items-container justify-content-between">
-                                <div className="left-section">
+                        <div className="w-100 p-4 ps-3 pe-0">
+                            <div className="d-flex align-items-center items-container w-100">
+                                <div className="d-flex flex-row left-section w-100">
                                     <h3 className="friend-info-subhead me-2">{friendInfo.displayName}</h3>
-                                </div>
-                                <div className="right-section">
-                                    <button className="ellipsis-btn" onClick={handleEllipsisClick}>
+                                    <button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick}>
                                         <Ellipsis className="ellipsis-img" />
                                     </button>
-                                    <div className="dropdown-menus" style={{ 
-                                        display: showDropdown ? 'flex' : 'none'
+                                    <div className="dropdown-menu" style={{ 
+                                        display: showDropdown ? 'flex' : 'none',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-start',
+                                        position: 'absolute',
+                                        top: '0',
+                                        right: '0',
+                                        backgroundColor: '#FFFFFF',
+                                        borderRadius: '10px',
+                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
+                                        marginTop: '4rem',
+                                        marginRight: '1rem',
+                                        padding: '10px',
+                                        width: '188px',
+                                        zIndex: '1'
                                     }}>
                                         <ul className='drop-down-list'>
                                             <li className="drop-down-item">
@@ -125,19 +145,14 @@ function ShowFriendInformation(props) {
                         </div>
                         <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} />
                         <div className="d-flex">
-                        {isBlocked ?                      <>       <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
-                                <span className="d-flex align-items-center me-1 mt-3 minus"><BlockIcon /></span><span className="d-flex align-items-center">Blocked</span>
-                            </button> </>: (
-                        <>
-                            <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={() => {handleFollowToggle(); userFollow(username)}}>
-                                <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
-                                <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
+                            <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={handleFollowToggle}>
+                                    <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
+                                    <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
                             </button>
                             <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
-                                <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
+                                    <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
                             </button>
-                        </> )}
-                          </div>
+                        </div>
                             <div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
                                 <div className="d-flex flex-column">
                                     <p className="mb-0 stats">{friendInfo.postKarma}</p>
@@ -173,7 +188,7 @@ function ShowFriendInformation(props) {
                         <button className="btn control-button me-2 p-1 p-sm-3">Posts</button>
                         <button className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
-                    <div className="d-flex justify-content-start p-0 p-lg-4 mt-2">
+                    <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2">
                         <div className="pt-0 d-flex justify-content-start">
                             <Dropdown>
                                 <Dropdown.Toggle variant="success" id="dropdown-basic" className="sorting-buttons">
