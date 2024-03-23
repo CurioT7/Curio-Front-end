@@ -77,18 +77,16 @@ function Activity(){
         }
 
         try {
-            const token = 'your_token_here'; // replace with your actual token
+            const token = 'your_token_here'; 
             const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log(response)
-            // Handle response if needed
             return response;
         } catch (error) {
             console.error('Error sending data to backend:', error);
-            // Handle error if needed
         }
     }
 
