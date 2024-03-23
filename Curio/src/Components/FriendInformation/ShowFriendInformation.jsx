@@ -25,6 +25,7 @@ function ShowFriendInformation(props) {
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
     const [isBlocked, setIsBlocked] = useState(false);
+    const [friendusername , setFriendusername] = useState('');
 
     const handleBlockClick = () => {
         setIsBlocked(true);
@@ -35,10 +36,6 @@ function ShowFriendInformation(props) {
         setShowDropdown(!showDropdown);
     };
 
-    const handleFollowToggle = () => {
-        setIsFollowing(!isFollowing);
-    };
-
     const handleReportClick = () => {
         setShowReportMenu(true);
     };
@@ -46,6 +43,10 @@ function ShowFriendInformation(props) {
     const handleReportPopupClose = () => {
         setShowReportMenu(false);
     };
+
+    const handleFollowToggle = () => {
+        setIsFollowing(!isFollowing);
+    }
 
     useEffect(() => {
         async function showFriendInformation({username}) {
@@ -61,14 +62,18 @@ function ShowFriendInformation(props) {
         
     }, [username]);
 
-
-    if (isBlocked) {
-        return (
-            <div>
-                <h1>Hello</h1>
-            </div>
-        );
+    async function userFollow() {
+        try {
+            const response = await axios.post(`${hostUrl}/api/v1/me/friends/${username}`, {
+                username: 'Mostafa',
+                friendusername: username
+            });
+            console.log(response);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
+
 
     return (
         <>
@@ -100,8 +105,6 @@ function ShowFriendInformation(props) {
                                     <button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick}>
                                         <Ellipsis className="ellipsis-img" />
                                     </button>
-                                </div>
-                                <div className="right-section">
                                     <div className="dropdown-menu" style={{ 
                                         display: showDropdown ? 'flex' : 'none',
                                         flexDirection: 'column',

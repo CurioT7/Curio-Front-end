@@ -1,4 +1,32 @@
-.unblock-btn{
-  margin-left: 800px;
-  margin-top: 200px;
+.main-div{
+  margin-top: 15rem;
+}
+
+.header-title{
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.paragraph{
+  font-size: 14px;
+  color: rgb(87, 111, 118);
+}
+
+.continue-btn, .go-back-btn{
+  margin-right: 1rem;
+  background-color: #EAEDEF;
+  border-radius: 999px;
+  padding: 10px 14px 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.go-back-btn{
+  background-color: #0045AC;
+  color: white;
+}
+
+.reddit-figure{
+  height: 250px;
+  margin-left: 55rem;
 }
