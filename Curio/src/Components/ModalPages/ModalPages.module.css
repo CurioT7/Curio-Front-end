@@ -1,4 +1,7 @@
-
+.modal-content{
+  padding-top: 0px; 
+  padding-bottom: 0px;
+}
 
 .Header{
     border-bottom: none; 
@@ -12,12 +15,12 @@
 
 .body-content{
   border: none; 
-  height: 29rem;
+  height: 25rem;
   padding-top: 0px; 
   padding-bottom: 0px; 
 }
 
-.header-text, .header-text1{
+.headertext, .headertext1{
   font-weight: bold;
   font-size: 18px;
   display: inline-block;
@@ -66,6 +69,20 @@
   display: inline-block;
 }
 
+.check-button{
+  margin-right: 1rem;
+}
+
+.block{
+  color: rgb(42, 60, 66);
+  font-size: 12px;
+}
+
+.block-container:hover{
+  background-color: white;
+
+}
+
 .radio-container, .radio-container1 {
   margin-top: 0;
   display: flex;
@@ -87,13 +104,13 @@
 
 .option-button {
   background-color: #EAEDEF;
-  color: #333;
+  color: black;
   padding: 10px 10px 10px 10px;
   margin-right: 10px;
   cursor: pointer;
   border-radius: 999px;
   font-weight: 600;
-  margin-top: 15px;
+  margin-top: 0.5rem;
   border: 0;
   font-size : 14px;
   box-shadow: none;
@@ -123,8 +140,11 @@
 }
 .description-text{
   font-weight: bold;
-  font-size: 17px;
+  font-size: 16px;
   margin-bottom: 0;
+}
+.explanation-text{
+  font-size: 16px
 }
 
 .description{
@@ -176,10 +196,6 @@
 
 .report-thank{
   margin-bottom: 2rem;
-}
-
-.body-text{
-  margin-bottom: 1.5rem;
 }
 
 .main-button{
