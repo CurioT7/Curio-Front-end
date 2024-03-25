@@ -6,6 +6,7 @@ import { loginUser } from './LoginEndpoints';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import SignupHandlerForLogin from './SignupHandlerForLogin.jsx';
 
 
 function Login({
@@ -142,7 +143,7 @@ function Login({
         {/* TODO: integrate with signup */}
         <div className="sign-up">
           <b>New to Reddit? </b>
-          <a href="#" >Sign up</a>   
+          <SignupHandlerForLogin />
          </div>
       </div>
       <div className="submit">
