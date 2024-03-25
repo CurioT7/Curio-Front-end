@@ -272,8 +272,9 @@ margin-top: 60px;
     line-height: 1.25rem;
 }
 
- a{
+ .loginBox a{
   text-decoration-line: none;
+  color: blue;
 }
 
 .or{
@@ -300,4 +301,56 @@ hr{
  margin-left: 5px;
  margin-right: 5px;
    
+ }
+
+ .messageBox{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  flex-grow: 1;
+  box-sizing: border-box;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  align-self: center;
+  text-align: center;
+ }
+
+ .resetByEmail{
+  padding: 10px 10px 10px 10px;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+  background: #EAEDEF;
+--color-brand-onBackground: #ffffff;
+--color-brand-background-hover: #962900;
+border-radius: 20px;
+width: 100%;
+
+ }
+
+ .messageBox p{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+ }
+
+ .messageBox h1{
+  font-size: 1.5rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+ }
+
+ .messageFooter{
+  align-self: bottom;
+  text-align: center;
+  align-items: center;
+  padding-bottom: 2rem;
  }

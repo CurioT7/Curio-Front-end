@@ -3,6 +3,7 @@ import './Login.css';
 import Google from '../../styles/icons/Google.jsx';
 import './LoginEndpoints';
 import { loginUser, getGoogleToken } from './LoginEndpoints'; // Import the missing 'loginUser' function
+import SignupHandler from '../Navbar/SignupHandler.jsx';
 
 function Login({
   forgotUser,
