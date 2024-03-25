@@ -1,9 +1,8 @@
 import React from 'react';
-import './Loginpage.jsx';
+import "./LoginPage.jsx";
 import axios from 'axios';
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
-
 
 
 const loginUser = async (username, password) => {

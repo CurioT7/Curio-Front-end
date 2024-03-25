@@ -97,7 +97,7 @@ function Email (){
     // *-----------------------------------------------*//
     return(
         <Box className='container'>
-            <Box className='settings-section col'> 
+            <Box className='settings-section col'>
                 <Box className="user-settings-header">
                     <h2 className="settings-heading ">Manage Emails</h2>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">messages</h3>

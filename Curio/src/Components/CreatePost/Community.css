@@ -1,0 +1,39 @@
+.outer-div{
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.middle-div{
+    position: relative;
+    box-sizing: border-box;
+    min-width: 300px;
+    height: 40px;
+    border-radius: 4px;
+    transition: box-shadow .2s ease;
+    box-shadow: white;
+    border: white;
+    background-color: white;
+}
+.inner-div{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 8px;
+}
+.input-container{
+    font-family: inherit;
+    vertical-align: baseline;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    width: 100%;
+    vertical-align: middle;
+    color: #1c1c1c;
+}
+.community-arrow{
+    color: #878a8c;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 22px;
+}

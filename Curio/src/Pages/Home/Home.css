@@ -1,0 +1,7 @@
+.fixed-container{
+  position: fixed;
+  top: 4rem; 
+  right: 3rem;
+  height: calc(100vh - 2rem); 
+  overflow-y: auto;
+}

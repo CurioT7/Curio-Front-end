@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Heading, Text, Button } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, Flex, Switch, Spacer } from "@chakra-ui/react";
 import "./Advanced.css";
+import Titles from "../../feedSettings/childs/Titles";
 
 function Advanced() {
   const [followChecked, setFollowChecked] = useState(true);
@@ -52,78 +53,29 @@ function Advanced() {
   };
   return (
     <>
-      <Box className="advanced d-flex flex-wrap mb-3">
-        <Box className="follow">
-            <label htmlFor="follow-checkbox">
-              <h3 className="headings-settings" fontWeight="500" mb="1">
-                Allow people to follow you
-              </h3>
-            </label>
-            <Text className="headings-description" fontWeight="normal" color="gray.500">
-                Followers will be notified about posts you make to your profile and see them in their home feed.
-            </Text>
-        </Box>
-        <Box className="follow-checkbox">
-            <div className="form-check form-switch">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="flexSwitchCheckDefault"
-                data-testid="follow-checkbox"
-                checked={followChecked}
-                onClick={handleFollowChange}
-              />
-            </div>
-        </Box>
-      </Box>
-      <Box className="content-visibility d-flex flex-wrap mb-3">
-        <Box className="content-visibility-label">
-          <label htmlFor="content-visibility-checkbox">
-            <h3 className="headings-settings" fontWeight="500" mb="1">
-              Content visibility
-            </h3>
-          </label>
-          <Text className="headings-description" data-testid="heading-descrip" fontWeight="normal" color="gray.500">
-            Posts to this profile can appear in <a href="#">r/all</a> and your profile can be discovered in <a href="#">/users</a>
-          </Text>
-        </Box>
-        <Box className="content-visibility-switch">
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckDefault"
-              data-testid="content-visibility-checkbox"
-              checked={contentVisibilityChecked}
-              onClick={handleContentVisibilityChange}
-            />
-          </div>
-        </Box>
-      </Box>
-      <Box className="communities-visibility d-flex flex-wrap mb-3">
-        <Box className="communities-visibility-label">
-          <label htmlFor="communities-visibility-checkbox">
-            <h3 className="headings-settings" fontWeight="500" mb="1">
-              Active in communities visibility
-            </h3>
-          </label>
-          <Text className="headings-description" fontWeight="normal" color="gray.500">
-            Show which communities I am active in on my profile.
-          </Text>
-        </Box>
-        <Box className="communities-visibility-switch">
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckDefault"
-              data-testid="communities-visibility-checkbox"
-              checked={communitiesVisibilityChecked}
-              onClick={handleCommunitiesVisibilityChange}
-            />
-          </div>
-        </Box>
-      </Box>
+      <Flex mb={5} alignItems='center'>
+        <Titles title='Allow people to follow you'
+        description="Followers will be notified about posts you make to your profile and see them in their home feed."/>
+        <Spacer/>
+        <Switch size='lg' isChecked={followChecked} onChange={handleFollowChange}/>
+      </Flex>
+      <Flex mb={5} alignItems='center'>
+        <Titles title='Content visibility'
+        description={
+          <>
+            Posts to this profile can appear in <a href="#">r/all</a> and your profile can be discovered in <a href="#">/users</a>.
+          </>
+        }
+        />
+        <Spacer/>
+        <Switch size='lg' isChecked={contentVisibilityChecked} onChange={handleContentVisibilityChange}/>
+      </Flex>
+      <Flex mb={5} alignItems='center'>
+        <Titles title='Active in communities visibility'
+        description="Show which communities I am active in on my profile."/>
+        <Spacer/>
+        <Switch size='lg' isChecked={communitiesVisibilityChecked} onChange={handleCommunitiesVisibilityChange}/>
+      </Flex>
       <Box className="clear-history d-flex flex-wrap mb-3">
         <Box className="clear-history-label">
           <h3 className="headings-settings" fontWeight="500" mb="1">
