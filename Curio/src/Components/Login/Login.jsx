@@ -3,6 +3,7 @@ import './Login.css';
 import Google from '../../styles/icons/Google.jsx';
 import './LoginEndpoints';
 import { loginUser, getGoogleToken } from './LoginEndpoints'; // Import the missing 'loginUser' function
+import SignupHandlerForLogin from './SignupHandlerForLogin.jsx';
 
 function Login({
   forgotUser,
@@ -111,7 +112,7 @@ function Login({
           {/* TODO: integrate with yehya */}
           <div className="sign-up">
             <b>New to Reddit? </b>
-            <a href="#">Sign up</a>
+            <SignupHandlerForLogin />
           </div>
           <div className="submit">
             <button
