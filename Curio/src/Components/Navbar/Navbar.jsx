@@ -41,9 +41,15 @@ function NavbarComponent() {
                 <Nav className="d-flex ms-auto flex-grow-1 w-50">
                   <Nav.Link style={{height: "30px", marginTop: "10px"}} className='ms-auto d-flex align-items-center me-2 link-offcanvas' href="#action3"><img src={openchat} alt="profile" className='inbox-icon' /></Nav.Link>
                   <Nav.Link style={{height: "40px"}} className='mt-2 me-2 link-offcanvas' href="#action3"><img src={inbox} alt="profile" className='inbox-icon' /></Nav.Link>
+                  <Nav.Link style={{ height: "40px", display: "flex", alignItems: "center" }} className='mt-2 me-2 link-offcanvas'>
+                      <Link to={'user/CreatePost/'} style={{ display: "flex", alignItems: "center" }}>
+                          <img src={plus} alt="profile" className='inbox-icon' style={{ marginRight: "5px" }} />
+                          Create
+                      </Link>
+                  </Nav.Link>
                   <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', backgroundColor: "#ffffff!important", color:"#000000!important"}} className="signup-button px-2 me-4 ms-3 d-flex justify-content-center col-md-1 col-xs-1 link-offcanvas" title="Profile">
                     <NavDropdown.Item className="d-flex signup-button-item px-3"><span className="ms-3">View Profile</span></NavDropdown.Item>
-                    <NavDropdown.Item style={{height: "50px", color: "#000000!important"}} className="d-flex align-items-center signup-button-item px-2 link-offcanvas"><Link style={{color: "#000000!important"}} className='settings' to={'settings/profile'}><div style={{backgroundColor: "#f2f4f5!important"}} className='d-flex'><img style={{height: "20px"}} src={setting} alt="setting" className="settings-offcanvas align-text-middle mx-2"/><span>View Settings</span></div></Link></NavDropdown.Item>
+                    <NavDropdown.Item style={{height: "50px", color: "#000000!important"}} className="d-flex align-items-center signup-button-item px-2 link-offcanvas"><Link style={{color: "#000000!important"}} className='settings' to={'settings/account'}><div style={{backgroundColor: "#f2f4f5!important"}} className='d-flex'><img style={{height: "20px"}} src={setting} alt="setting" className="settings-offcanvas align-text-middle mx-2"/><span>View Settings</span></div></Link></NavDropdown.Item>
                   </NavDropdown>
                   <div className='d-flex align-items-center'>
                     <SignupHandler/>

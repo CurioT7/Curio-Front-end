@@ -4,6 +4,7 @@ import axios from 'axios';
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
+
 const loginUser = async (username, password) => {
   const url = `${VITE_SERVER_HOST}./api/auth/login`;
   const data = {

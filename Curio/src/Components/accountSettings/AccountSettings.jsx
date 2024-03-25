@@ -20,9 +20,9 @@ const AccountSettings = () =>{
                 <div className="settings-section col"> 
                     <h2 className="settings-heading ">Account settings</h2>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">account preferences</h3>
-                    <AccountPreferences></AccountPreferences>
+                    <AccountPreferences/>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">CONNECTED ACCOUNTS</h3>
-                    <ConnectedAccounts></ConnectedAccounts>
+                    <ConnectedAccounts/>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">delete ACCOUNTS</h3>
                     <Flex justifyContent='flex-end' className="mb-5">
                     <DeleteButton/>
