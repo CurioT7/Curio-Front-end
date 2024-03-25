@@ -51,13 +51,18 @@ function ShowFriendInformation(props) {
     };
 
     const handleFollowToggle = () => {
+        if (isFollowing) {
+            userUnfollow({username});
+        } else {
+            userFollow({username});
+        }
         setIsFollowing(!isFollowing);
     }
 
     useEffect(() => {
         async function showFriendInformation({username}) {
             try {
-                const response = await axios.get(`${hostUrl}/user/${username}/about`);
+                const response = await axios.get(`${hostUrl}/user/userTwo/about`);
                 console.log(response);
                 setFriendInfo(response.data);
             } catch (error) {
@@ -68,11 +73,14 @@ function ShowFriendInformation(props) {
         
     }, [username]);
 
-    async function userFollow(username, friendusername) {
+    async function userFollow(friendusername) {
         try {
-            const response = await axios.post(`${hostUrl}/api/v1/me/friends/${username}`, {
-                username: username,
+            const response = await axios.post(`${hostUrl}/api/me/friends`, {
                 friendusername: friendusername
+            },{
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             });
             console.log(response);
             return response;
@@ -80,6 +88,57 @@ function ShowFriendInformation(props) {
             console.error('Error:', error);
         }
     }
+
+    async function userUnfollow(friendusername) {
+        try {
+            console.log(localStorage.getItem('token'));
+            const response = await axios.delete(`${hostUrl}/api/me/friends`, {
+                friendusername: friendusername
+            },{
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function userBlock(friendusername) {
+        try {
+            console.log(localStorage.getItem('token'));
+            const response = await axios.post(`${hostUrl}/api/User/block`, {
+                friendusername: friendusername
+            }, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function userUnblock(friendusername) {
+        try {
+            const response = await axios.post(`${hostUrl}/api/User/unblock`, {
+                friendusername: friendusername
+            }, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
 
 
     return (
@@ -95,7 +154,7 @@ function ShowFriendInformation(props) {
                             <p className="show-friend-username d-flex align-items-center me-auto">u/{username}</p>
                         </div>
                         <div className="d-flex responsive follow-buttons justify-content-start justify-content-sm-center">
-                            <button className={`d-flex justify-content-center align-items-center follow-button m-0 me-2 ms-0 ms-md-2 ${isFollowing ? 'following' : 'not-following'}`} onClick={() => {handleFollowToggle(); userFollow('Ahmed' ,{username});}}>
+                            <button className={`d-flex justify-content-center align-items-center follow-button m-0 me-2 ms-0 ms-md-2 ${isFollowing ? 'following' : 'not-following'}`}>
                                 <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
                                 <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
                             </button>
@@ -139,7 +198,7 @@ function ShowFriendInformation(props) {
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Send a message</p></div>
                                             </li>
-                                            <li className="drop-down-item" onClick={props.handleBlockPage}>
+                                            <li className="drop-down-item" onClick={() => {props.handleBlockPage(); userBlock({username});}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Block account</p></div>
                                             </li>
@@ -154,16 +213,16 @@ function ShowFriendInformation(props) {
                                 </div>
                             </div>
                         </div>
-                        <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} />
+                        <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={username} />
                         <div className="d-flex">
                             {props.isBlocked ? (
-                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={props.handleUnblock}>
+                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {props.handleUnblock(); userUnblock({username});}}>
                                     <span className="d-flex align-items-center me-1 mt-3 minus"><BlockIcon /></span>
                                     <span className="d-flex align-items-center">Blocked</span>
                                  </button> 
                             ): (
                                 <>
-                                <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={() => {handleFollowToggle(); userFollow('Ahmed' ,{username});}}>
+                                <button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={handleFollowToggle}>
                                     <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
                                     <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
                                 </button>

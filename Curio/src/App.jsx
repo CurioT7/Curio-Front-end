@@ -17,7 +17,6 @@ import ForgotUser from './Components/ForgotUser/ForgotUser.jsx';
 import LoginPage from './Components/Login/Loginpage.jsx';
 import UserPage from './Pages/UserProfile/UserProfile.jsx'
 import TestData from './Components/TestingAPI/test.jsx';
-import UserPageTest from './Pages/CommonAncestor/CommonAncestor.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 
 
@@ -56,7 +55,6 @@ function App() {
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/user/:username' element={<UserPage/>} />
-          <Route path='/userprofile' element={<UserPageTest/>} />
         </Routes>
       </ChakraProvider>
     </div>
