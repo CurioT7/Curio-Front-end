@@ -1,44 +1,15 @@
 .loginModal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  overflow: auto;
-}
-
-.login-page {
-  background-image: url(../src/assets/Loginbackground.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 100%;
-  /* min-height: 100vh; */
-  background-color: white;
-}
-
-.loginInput {
-  width: 100%;
-  padding: 5px;
-  margin: 5px 0;
-  padding: auto;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-/* check */
-.modalParent {
-  position: relative;
+  position: relative; 
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  margin: auto;
-  overflow: hidden;
-  justify-content: space-between;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  overflow: auto;
+  justify-content: space-between; 
   left: 0px;
   right: 0px;
   top: 0;
@@ -50,11 +21,27 @@
   min-height: 400px;
   height: 100%;
   max-height: 640px;
+  padding: 20px;
   border: 1px solid #ffffff;
   border-radius: 10px;
   box-shadow: 0 -2px 10px 0 rgba(0, 0, 0, 0.1);
   background: var(--color-ui-modalbackground);
 }
+
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(255, 255, 255, 0.75);
+  overflow-y: auto;
+}
+
+.loginModal:focus {
+  outline: none;
+}
+
 .modalParent {
   position: relative;
   display: flex;
@@ -63,7 +50,7 @@
   box-sizing: border-box;
   margin: auto;
   overflow: hidden;
-  justify-content: space-between;
+  justify-content: space-between; 
   left: 0px;
   right: 0px;
   top: 0;
@@ -82,7 +69,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .modalParent {
+  .loginModal {
     width: 100%;
   }
 }
@@ -104,6 +91,28 @@
   border-bottom-right-radius: 0;
 }
 
+.myForm {
+  max-width: 100%; 
+  overflow: auto; 
+}
+
+.login-page {
+  background-image: url(../src/assets/Loginbackground.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  /* min-height: 100vh; */
+  background-color: white;
+}
+
+.loginInput {
+  width: 100%;
+  padding: 5px;
+  margin: 5px 0;
+  padding: auto;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
 .loginBox h1 {
   color: #000;
   font-family: var(--font-sans);
@@ -206,7 +215,7 @@
   height: 35px;
   margin-top: 80px;
   border: none;
- box-sizing: unset;
+  box-sizing: unset;
   --color-brand-background: #d93a00;
   --color-brand-onBackground: #ffffff;
   --color-brand-background-hover: #962900;
@@ -219,27 +228,27 @@
   background-color: var(--color-brand-background-hover);
 }
 
-.loginGoogle{
+.loginGoogle {
   align-self: right;
 }
-.continue-with-google{
+.continue-with-google {
   background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #BFBFBF;
-    border-radius: 30px;
-    width: 100%;
-    font-size: 18px;
-    box-sizing: border-box;
-    align-content: center;
-    padding: 0;
-    text-align: center;
+  color: #000000;
+  border: 1px solid #bfbfbf;
+  border-radius: 30px;
+  width: 100%;
+  font-size: 18px;
+  box-sizing: border-box;
+  align-content: center;
+  padding: 0;
+  text-align: center;
 }
 
-.logintext{
+.logintext {
   padding-left: 10px;
 }
 
-.backButton{
+.backButton {
   align-self: left;
   position: absolute;
   top: 20px;
@@ -248,14 +257,14 @@
   border: none;
 }
 
-.resetPass{
-  background-color:#D6D6D6 ;
+.resetPass {
+  background-color: #d6d6d6;
   border-radius: 20px;
-text-align: center;
-margin-top: 60px;
---color-brand-background: #d93a00;
---color-brand-onBackground: #ffffff;
---color-brand-background-hover: #962900;
+  text-align: center;
+  margin-top: 60px;
+  --color-brand-background: #d93a00;
+  --color-brand-onBackground: #ffffff;
+  --color-brand-background-hover: #962900;
 }
 .forgot {
   padding: 5px 0;
@@ -267,43 +276,42 @@ margin-top: 60px;
   text-align: left;
 }
 
-.loginInput p{
+.loginInput p {
   font-size: 0.875rem;
-    line-height: 1.25rem;
+  line-height: 1.25rem;
 }
 
- .loginBox a{
+.loginBox a {
   text-decoration-line: none;
   color: blue;
 }
 
-.or{
+.or {
   align-content: center;
   text-align: center;
   font-size: 0.9rem;
   padding: 10px 0;
   font-weight: 100;
   flex-wrap: unset;
-  color: #D6D6D6;
+  color: #d6d6d6;
 }
 
-hr{
- color: #D6D6D6;
- width: 40%;
- height: 1px;
- display: inline-flex;
- opacity: 0.25;
- margin-top: 10px;
- border-style: none;
- flex-grow: 1;
- margin: 0px;
- border-width: 5px;
- margin-left: 5px;
- margin-right: 5px;
-   
- }
+hr {
+  color: #d6d6d6;
+  width: 40%;
+  height: 1px;
+  display: inline-flex;
+  opacity: 0.25;
+  margin-top: 10px;
+  border-style: none;
+  flex-grow: 1;
+  margin: 0px;
+  border-width: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
 
- .messageBox{
+.messageBox {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -317,9 +325,9 @@ hr{
   border-bottom-right-radius: 0;
   align-self: center;
   text-align: center;
- }
+}
 
- .resetByEmail{
+.resetByEmail {
   padding: 10px 10px 10px 10px;
   text-align: center;
   font-size: 0.875rem;
@@ -327,30 +335,34 @@ hr{
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   font-family: var(--font-sans);
-  background: #EAEDEF;
---color-brand-onBackground: #ffffff;
---color-brand-background-hover: #962900;
-border-radius: 20px;
-width: 100%;
+  background: #eaedef;
+  --color-brand-onBackground: #ffffff;
+  --color-brand-background-hover: #962900;
+  border-radius: 20px;
+  width: 100%;
+}
 
- }
+.messageBox p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
 
- .messageBox p{
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
- }
-
- .messageBox h1{
+.messageBox h1 {
   font-size: 1.5rem;
-    line-height: 1.75rem;
-    font-weight: 700;
- }
+  line-height: 1.75rem;
+  font-weight: 700;
+}
 
- .messageFooter{
+.messageFooter {
   align-self: bottom;
   text-align: center;
   align-items: center;
   padding-bottom: 2rem;
- }
+}
+
+.loginError {
+  color: red;
+  font-size: 0.8em;
+}

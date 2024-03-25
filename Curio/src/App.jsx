@@ -45,10 +45,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
-          <Route path="/login" element={<LoginPage/>} />
-          <Route path="/resetpass" element={<ResetPass/>} />
+          <Route path="/login" element={<LoginPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path="/resetpass" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/home" element={<Home/>} />
-          <Route path="/forgotuser" element={<ForgotUser/>} />
           <Route path="/" element={<Home/>} />
           <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
           <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
