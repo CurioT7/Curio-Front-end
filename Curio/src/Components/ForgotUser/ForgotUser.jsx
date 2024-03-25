@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import '../Login/Login.css';
-import { verifyUsername } from '../Login/LoginEndpoints.js'; // Make sure to import verifyUsername
+import { verifyUsername } from '../Login/LoginEndpoints.js'; 
+import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
 
 function ForgotUser({ setForgotUser, ForgotUser }) {
   const [email, setEmail] = useState('');
-  const [error, setError] = useState(''); // Add this line
+  const [error, setError] = useState(''); 
 
   const handleVerify = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -16,10 +17,10 @@ function ForgotUser({ setForgotUser, ForgotUser }) {
     try {
       const response = await verifyUsername(email);
       console.log('Success:', response);
-      setError(''); // Clear the error message on success
+      setError(''); 
     } catch (error) {
       console.error('Error:', error);
-      setError('User does not exist'); // Set the error message on failure
+      setError('User does not exist'); 
     }
   };
 
@@ -51,7 +52,7 @@ function ForgotUser({ setForgotUser, ForgotUser }) {
               type="text"
               placeholder="Email *"
               required
-              onChange={(e) => setEmail(e.target.value)} // Update email when the input changes
+              onChange={(e) => setEmail(e.target.value)} 
             />
             {error && <div className="loginError">{error}</div>}
           </div>
@@ -61,7 +62,7 @@ function ForgotUser({ setForgotUser, ForgotUser }) {
               Get Help
             </a>
           </p>
-          <a href="#">Sign up •</a> <a href="Login">Log In</a>
+          <SignupHandlerForLogin /> <a href="Login">• Log In</a>
         </div>
       </div>
       <div className="submit">

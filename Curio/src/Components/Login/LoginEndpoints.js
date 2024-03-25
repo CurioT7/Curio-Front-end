@@ -72,7 +72,6 @@ const checkCredentials = async (username, email) => {
   return responseData;
 };
 
-// used in reset password in ForgotPass.jsx
 const resetPassword = async (username, email) => {
   const url = `${VITE_SERVER_HOST}/api/auth/password`;
   const data = {

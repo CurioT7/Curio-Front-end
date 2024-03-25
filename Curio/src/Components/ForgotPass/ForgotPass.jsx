@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../Login/Login.css';
 import { resetPassword } from '../Login/LoginEndpoints';
+import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
 
 function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
-  const [username, setUsername] = useState(''); // Add this line
+  const [username, setUsername] = useState(''); 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
@@ -21,7 +22,7 @@ function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
   const handleReset = async (event) => {
     event.preventDefault();
 
-    // Check if emailError is not empty or username is empty
+    
     if (emailError || username === '') {
       return;
     }
@@ -82,7 +83,7 @@ function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
               Get Help
             </a>
           </p>
-          <a href="#">Sign up •</a> <a href="Login">Log In</a>
+          <SignupHandlerForLogin/><a href="Login"> • Log In</a>
         </form>
       </div>
       <div className="submit">

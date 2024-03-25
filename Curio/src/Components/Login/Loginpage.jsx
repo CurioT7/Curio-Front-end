@@ -15,6 +15,8 @@ function LoginPage(props) {
   const [forgotPass, setForgotPass] = useState(false);
   const [changePass, setChangePass] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+
+  
   useEffect(() => {
     props.hideSidebar();
     return () => {
@@ -28,9 +30,8 @@ function LoginPage(props) {
         className="loginModal"
         isOpen={isOpen}
         contentLabel="Login Modal"
-        onRequestClose={() => setIsOpen(false)} // Add this line
+        onRequestClose={() => setIsOpen(false)}
       >
-        {/* <div className="modalParent"> */}
         {!forgotUser && !forgotPass && !changePass && (
           <Login
             forgotUser={forgotUser}
@@ -55,7 +56,6 @@ function LoginPage(props) {
         {changePass && !forgotUser && !forgotPass && (
           <ChangePass changePass={changePass} setChangePass={setChangePass} />
         )}
-        {/* </div> */}
       </Modal>
     </div>
   );

@@ -3,6 +3,7 @@ import { changePassword } from '../Login/LoginEndpoints';
 import  './ResetPass.css'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import logo from "../../assets/Curio_logo.png";
+import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
 
 function ResetPass(props) {
     const [password, setPassword] = useState('');
@@ -61,11 +62,11 @@ function ResetPass(props) {
                            <br /> have authorized.
                 </Checkbox>              
                 <div className='resetPass'>
-                    <button type="submit">Set Password</button>
+                    <button type="submit" >Set Password</button>
                 </div>
                 <br />
                 <div className='resetFooter'>
-                <a href="#">Sign up •</a> <a href="Login">Log In</a>
+                <SignupHandlerForLogin /> <a href="Login"> • Log In</a>
                 </div>
             </form>
 

@@ -140,7 +140,6 @@ function Login({
           </a>
           <b>?</b>
         </div>
-        {/* TODO: integrate with signup */}
         <div className="sign-up">
           <b>New to Reddit? </b>
           <SignupHandlerForLogin />
