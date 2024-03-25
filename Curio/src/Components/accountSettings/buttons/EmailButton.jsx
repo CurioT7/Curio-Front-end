@@ -53,7 +53,7 @@ const EmailButton = (props) =>{
               password: password
             }, {
               headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}` // replace with your token retrieval method
+                authorization: `Bearer ${localStorage.getItem('token')}` // replace with your token retrieval method
               }
             });
         
@@ -67,37 +67,6 @@ const EmailButton = (props) =>{
           }
     }
 
-    async function fetchDataFromBackend() {
-        try {
-            const response = await axios.get(`${serverHost}/api/auth/change_email`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            return response.data;
-        } catch (error) {
-            if (error.response) {
-                console.error('Server Error:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error', error.message);
-            }
-            console.error('Error config:', error.config);
-        }
-    }
-
-    React.useEffect(() => {
-        async function fetchAndSetData() {
-            const data = await fetchDataFromBackend();
-            if (data) {
-                setYourPass(data.password);
-                setEmail({ ...email, value: data.email.value });
-            }
-        }
-
-        fetchAndSetData();
-    }, []);
     return(
         <Box>
                 <Button onClick={onOpen} style={props.buttonStyle} variant='outline'>Change</Button>
