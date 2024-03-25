@@ -71,8 +71,8 @@ function RecentPosts() {
     }]);
 
     const renderTooltip = (props) => (
-        <Tooltip className="col-md-4 p-0 border-radius-set" style={{borderRadius: "50%"}} bsPrefix="card" id="button-tooltip" {...props}>
-            <Card.Img className="w-100 p-0 m-0 rounded" style={{height: "5rem", width: "auto"}} variant="top" src="https://styles.redditmedia.com/t5_36qrt/styles/bannerBackgroundImage_q2nc87lvybu01.png" />
+        <Tooltip className="col-md-3 p-0 border-radius-set" bsPrefix="card" id="button-tooltip" {...props}>
+            <Card.Img className="w-100 p-0 m-0 rounded border-radius-set" style={{height: "20%", width: "auto"}} variant="top" src="https://styles.redditmedia.com/t5_2v07v/styles/bannerBackgroundImage_mqp0c89ji3kc1.png" />
             <Card.Body className="rounded">
                 <div className="d-flex justify-content-between">
                     <div className="d-flex justify-content-start">
@@ -82,21 +82,21 @@ function RecentPosts() {
                         <h1 className="card-subreddit-name">r/Angular2</h1>
                     </div>
                     <div>
-                        <Button className="join-button" variant="primary">Join</Button>
+                        <Button className="join-button-recent" variant="primary">Join</Button>
                     </div>
                 </div>
-                <Card.Text className="subreddit-description">
+                <Card.Text className="subreddit-description mt-2">
                 Angular is Google's open source framework for crafting high-quality front-end web applications. r/Angular2 exists to help spread news, discuss current developments and help solve problems. Welcome!
                 </Card.Text>
                 <hr className="w-100"></hr>
-                <div className="d-flex justify-content-start">
+                <div className="d-flex justify-content-start mt-2">
                     <div className="d-flex flex-column mb-0 me-3">
-                        <p style={{height: "0.4rem"}}>70K</p>
-                        <p>Members</p>
+                        <p className="card-subreddit-footer" style={{height: "0.4rem", fontWeight: "600"}}>70K</p>
+                        <p className="card-subreddit-footer" style={{color: "#576f76", fontWeight: "600"}}>Members</p>
                     </div>
                     <div className="d-flex flex-column mt-0">
-                        <p style={{height: "0.4rem"}}>1.5K</p>
-                        <p><span className="rounded-circle" style={{backgroundColor: "#55bd46", width: "0.5rem", height: "0.5rem"}}></span>Online</p>
+                        <p className="card-subreddit-footer" style={{height: "0.4rem", fontWeight: "600"}}>1.5K</p>
+                        <p className="card-subreddit-footer" style={{color: "#576f76", fontWeight: "600"}}><span className="rounded-circle me-1" style={{backgroundColor: "#55bd46", width: "0.5rem", height: "0.5rem", display: "inline-block"}}></span>Online</p>
                     </div>
                 </div>
             </Card.Body>
@@ -121,6 +121,7 @@ function RecentPosts() {
                                 <div className="col-md-1 me-2">
                                     <OverlayTrigger
                                         placement="bottom"
+                                        trigger="click"
                                         delay={{ show: 250, hide: 400 }}
                                         overlay={renderTooltip}
                                     >
