@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Login.css';
 import Google from '../../styles/icons/Google.jsx';
 import './LoginEndpoints';
-import { loginUser, getGoogleToken } from './LoginEndpoints'; // Import the missing 'loginUser' function
+import { loginUser } from './LoginEndpoints'; 
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login({
@@ -20,6 +23,7 @@ function Login({
   const [loginError, setLoginError] = useState(''); 
   const formRef = useRef();
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (password.length < 8) {
@@ -42,20 +46,31 @@ function Login({
       console.log(responseData);
       let access_token = responseData.accessToken;
       localStorage.setItem('token', access_token);
+      navigate('/');
     } catch (error) {
       console.error('Failed to login:', error);
-      setLoginError('Wrong credentials'); // Set login error message
+      setLoginError('Wrong credentials'); 
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const token = await getGoogleToken();
-      console.log('Google token:', token);
-    } catch (error) {
-      console.error('Failed to login with Google:', error);
+  const handleGoogleSigninResponse = async (response) => {
+    console.log(response);
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const serverResponse = await axios.post(`${hostUrl}/api/auth/google`,{
+      token: response.access_token
+    });
+    if(serverResponse.status === 200){
+      const token = serverResponse.data.accessToken;
+      localStorage.setItem('token', token);
+      window.dispatchEvent(new Event('loginOrSignup'));
+      props.onHide();
+      navigate('/');
     }
-  };
+  }
+
+  const login = useGoogleLogin({
+    onSuccess: codeResponse => handleGoogleSigninResponse(codeResponse),
+  });
 
   return (
 
@@ -81,7 +96,7 @@ function Login({
           <button
             className="continue-with-google p-2 d-flex justify-content-between align-items-center align-content-center"
             type="button"
-            onClick={handleGoogleLogin}
+            onClick={login}
           >
             <div className="logintext">Continue with Google</div>
             <div className="loginGoogle">
@@ -131,7 +146,7 @@ function Login({
          </div>
       </div>
       <div className="submit">
-        <button type="submit" className="login_buttons" onClick={handleSubmit}>
+        <button type="submit" className="login_buttons" onClick={handleSubmit} >
           Login
         </button>
       </div>
