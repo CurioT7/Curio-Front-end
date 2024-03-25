@@ -1,9 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Login.css';
 import Google from '../../styles/icons/Google.jsx';
 import './LoginEndpoints';
-import { loginUser, getGoogleToken } from './LoginEndpoints'; // Import the missing 'loginUser' function
+import { loginUser } from './LoginEndpoints'; 
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import SignupHandlerForLogin from './SignupHandlerForLogin.jsx';
+
 
 function Login({
   forgotUser,
@@ -15,117 +19,140 @@ function Login({
 }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [loginError, setLoginError] = useState(''); 
   const formRef = useRef();
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (password.length < 8) {
+      setPasswordError('Password must be at least 8 characters long.');
+    } else {
+      setPasswordError('');
+    }
+  }, [username, password]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (usernameError || passwordError) {
+      return;
+    }
 
     try {
       const responseData = await loginUser(username, password);
       console.log('Correct Credentials');
       console.log(responseData);
-      // TODO: redirect to home page, integrate with yehya
-      // TODO: store access token in local storage done
       let access_token = responseData.accessToken;
-      localStorage.setItem('access_token', access_token);
-      // setIsOpen(false);
+      localStorage.setItem('token', access_token);
+      navigate('/');
     } catch (error) {
       console.error('Failed to login:', error);
+      setLoginError('Wrong credentials'); 
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const token = await getGoogleToken();
-      // Use the token here. For example, you can store it in the state or in a cookie.
-      console.log('Google token:', token);
-    } catch (error) {
-      console.error('Failed to login with Google:', error);
+  const handleGoogleSigninResponse = async (response) => {
+    console.log(response);
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const serverResponse = await axios.post(`${hostUrl}/api/auth/google`,{
+      token: response.access_token
+    });
+    if(serverResponse.status === 200){
+      const token = serverResponse.data.accessToken;
+      localStorage.setItem('token', token);
+      window.dispatchEvent(new Event('loginOrSignup'));
+      props.onHide();
+      navigate('/');
     }
-  };
+  }
+
+  const login = useGoogleLogin({
+    onSuccess: codeResponse => handleGoogleSigninResponse(codeResponse),
+  });
 
   return (
-    <div className="modalParent">
-      <div className="loginBox">
-        <form action="" onSubmit={handleSubmit} ref={formRef}>
-          <h1>Log In</h1>
-          <p>
-            By continuing, you agree to our
-            <a href="https://www.redditinc.com/policies/user-agreement">
-              {' '}
-              User Agreement{' '}
-            </a>
-            and <br />
-            acknowledge that you understand the
-            <a href="https://www.reddit.com/policies/privacy-policy">
-              {' '}
-              Privacy Policy.
-            </a>
-          </p>
 
-          <div>
-            <button
-              className="continue-with-google p-2 d-flex justify-content-between align-items-center align-content-center"
-              type="button"
-              onClick={handleGoogleLogin}
-            >
-              <div className="logintext">Continue with Google</div>
-              <div className="loginGoogle">
-                <Google />
-              </div>
-            </button>
-          </div>
-
-          <h6 className="or">
-            <hr />
-            OR
-            <hr />
-          </h6>
-          <div className="loginInput">
-            <input
-              type="text"
-              placeholder="Username *"
-              required
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className="loginInput">
-            <input
-              type="password"
-              placeholder="Password *"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="forgot">
-            <b>Forgot your </b>
-            <a href="#" onClick={() => setForgotUser(true)}>
-              username{' '}
-            </a>
-            <b>or</b>
-            <a href="#" onClick={() => setForgotPass(true)}>
-              {' '}
-              password
-            </a>
-            <b>?</b>
-          </div>
-          {/* TODO: integrate with yehya */}
-          <div className="sign-up">
-            <b>New to Reddit? </b>
-            <SignupHandlerForLogin />
-          </div>
-          <div className="submit">
-            <button
-              type="submit"
-              className="login_buttons"
-              onClick={handleSubmit}
-            >
-              Login
-            </button>
-          </div>
-        </form>
+    <>
+    
+    <div className="loginBox">
+      <div className="myForm">
+        <h1>Log In</h1>
+        <p>
+          By continuing, you agree to our
+          <a href="https://www.redditinc.com/policies/user-agreement">
+            {' '}
+            User Agreement{' '}
+          </a>
+          and <br />
+          acknowledge that you understand the
+          <a href="https://www.reddit.com/policies/privacy-policy">
+            {' '}
+            Privacy Policy.
+          </a>
+        </p>
+        <div>
+          <button
+            className="continue-with-google p-2 d-flex justify-content-between align-items-center align-content-center"
+            type="button"
+            onClick={login}
+          >
+            <div className="logintext">Continue with Google</div>
+            <div className="loginGoogle">
+              <Google />
+            </div>
+          </button>
+        </div>
+        <h6 className="or">
+          <hr />
+          OR
+          <hr />
+        </h6>
+        <div className="loginInput">
+          <input
+            type="text"
+            placeholder="Username *"
+            required
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="loginInput">
+          <input
+            type="password"
+            placeholder="Password *"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        {loginError && <div className="loginError">{loginError}</div>}{' '}
+        {passwordError && <div className="loginError">{passwordError}</div>}
+        <div className="forgot">
+          <b>Forgot your </b>
+          <a href="#" onClick={() => setForgotUser(true)}>
+            username{' '}
+          </a>
+          <b>or</b>
+          <a href="#" onClick={() => setForgotPass(true)}>
+            {' '}
+            password
+          </a>
+          <b>?</b>
+        </div>
+        <div className="sign-up">
+          <b>New to Reddit? </b>
+          <SignupHandlerForLogin />
+         </div>
+      </div>
+      <div className="submit">
+        <button type="submit" className="login_buttons" onClick={handleSubmit} >
+          Login
+        </button>
       </div>
     </div>
+
+      </>
   );
 }
 

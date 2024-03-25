@@ -2,10 +2,10 @@ import React from 'react';
 import '../Login/Login.css';
 import Modal from 'react-modal';
 
-function ChangePass({ setChangePass }) {
+function UserMessage({ setUserMessage }) {
     return (
         <>
-            <button className='backButton' onClick={() => setChangePass(false)}>
+            <button className='backButton' onClick={() => setUserMessage(false)}>
                 <svg fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 9.375H2.51l7.932-7.933-.884-.884-9 9a.625.625 0 0 0 0 .884l9 9 .884-.884-7.933-7.933H19v-1.25Z"></path>
                 </svg>
@@ -18,7 +18,7 @@ function ChangePass({ setChangePass }) {
                <div>
                <h1>Check your inbox</h1>
                 <p>
-                     You'll get a password reset email if the address you <br /> provided has been verified.
+                You'll get a username recovery email if the address you <br /> provided has been verified.
                 </p>
                 </div>
             </div>
@@ -30,4 +30,4 @@ function ChangePass({ setChangePass }) {
     );
 }
 
-export default ChangePass;
+export default UserMessage;
