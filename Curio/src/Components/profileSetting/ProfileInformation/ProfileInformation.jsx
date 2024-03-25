@@ -1,24 +1,22 @@
-import { useState } from 'react';
-import { Box, Heading, Text, Input, Textarea } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Text, Input, Textarea, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import { useToast, } from '@chakra-ui/react';
-import React from 'react';
-const serverHost = import.meta.env.VITE_SERVER_HOST;
 function ProfileInformation() {
   
-    const toast = useToast()
+  const serverHost = import.meta.env.VITE_SERVER_HOST;
+  const toast = useToast();
   const [displayName, setDisplayName] = useState('');
   const [about, setAbout] = useState('');
 
   function Toast(){
     toast({
-        
         description: "Changes Saved",
         status: 'info',
         duration: 3000,
         isClosable: true,
       })
-}
+  }
+  
   const handleDisplayNameChange = (event) => {
     setDisplayName(event.target.value);
     sendDataToBackend({displayName: displayName})
@@ -48,11 +46,9 @@ function ProfileInformation() {
         
         const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
         console.log(response)
-        // Handle response if needed
         return response;
     } catch (error) {
         console.error('Error sending data to backend:', error);
-        // Handle error if needed
     }
 }
   async function fetchDataFromBackend() {
@@ -67,11 +63,8 @@ function ProfileInformation() {
     async function fetchAndSetData() {
         const data = await fetchDataFromBackend();
         if (data) {
-            
           setDisplayName(data.displayName);
           setAbout(data.about);
-            //
-
         }
     }
 
