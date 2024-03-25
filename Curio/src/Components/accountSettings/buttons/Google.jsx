@@ -26,8 +26,12 @@ const Google = (props) =>{
     const handleGoogleSignupResponse = async (response) => {
         console.log(response);
         // const hostUrl = import.meta.env.VITE_SERVER_HOST;
-        const serverResponse = await axios.post(`${serverHost}/api/auth/google`,{
+        const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
           token: response.access_token
+        },{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         });
       }
     
