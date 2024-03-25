@@ -8,13 +8,28 @@ import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 const EmailButton = (props) =>{
     const serverHost = import.meta.env.VITE_SERVER_HOST;
-    const pass ="12345678"
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [password,setYourPass] = React.useState("")
     const [email,setNewEmail] = React.useState({
         value:"",
         isTouched:false,
     })
+    const [errorMessage, setErrorMessage] = React.useState({
+        value: "",
+        isCorrectEmail: false,
+        isCorrectPassword: false,
+      });
+    const toast = useToast()
+
+
+    function Toast(){
+        toast({
+            title: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     function handleYourPass(e){
         setYourPass(e.target.value)
     }
@@ -41,8 +56,8 @@ const EmailButton = (props) =>{
     }
     function handleSubmit(e){
         e.preventDefault();
-
-        clearForm();
+        sendDataToBackend();
+        
 
     }
     // send data to backend fetch data from backend--------------------------------
@@ -56,17 +71,23 @@ const EmailButton = (props) =>{
                 authorization: `Bearer ${localStorage.getItem('token')}` // replace with your token retrieval method
               }
             });
-        
-            if (response.status === 200) {
-              console.log('Email changed successfully');
-            } else {
-              console.log('Failed to change email');
-            }
+            setErrorMessage({value: "Email changed successfully", isCorrectPassword: true,isCorrectEmail: true});
+            clearForm();
+            Toast();
           } catch (error) {
             console.error('Failed to change email:', error);
+            switch (error.response.status) {
+                case 400:
+                    setErrorMessage({value: "You entered an incorrect password. Please try again.", isCorrectPassword: false, isCorrectEmail: true});
+                    break;
+                case 409:
+                    setErrorMessage({value: "You entered the current email address. Please enter a different one to proceed.", isCorrectEmail: false, isCorrectPassword: true});
+                    break;
+                default:
+                    break;
           }
+        }
     }
-
     return(
         <Box>
                 <Button onClick={onOpen} style={props.buttonStyle} variant='outline'>Change</Button>
@@ -81,10 +102,12 @@ const EmailButton = (props) =>{
                            
                                 <Box display='flex'  flexDirection='column'>
                                     <Text className='fs-6' fontWeight='600'>Update your email below. There will be a new verification email sent that you will need to use to verify this new email.</Text>
-                                    <Input placeholder='CURRENT PASSWORD' type='password' value={password} onChange={handleYourPass} size='lg' mb={5}></Input>
+                                    <Input isInvalid={!errorMessage.isCorrectPassword} placeholder='CURRENT PASSWORD' type='password' value={password} onChange={handleYourPass} size='lg' mb={5}></Input>
+                                    {errorMessage.isCorrectPassword === false ? (<PasswordErrorMessage text={errorMessage.value}/>):null}
 
-                                    <Input placeholder='NEW EMAIL' type='email' onBlur={handleNewEmailBlur} value={email.value} onChange={handleNewEmail} size='lg'></Input>
-                                    {email.isTouched&&!validateEmail(email.value) ? (<PasswordErrorMessage text="Please enter a valid email"/>):null}
+                                    <Input isInvalid={!errorMessage.isCorrectEmail} placeholder='NEW EMAIL' type='email' onBlur={handleNewEmailBlur} value={email.value} onChange={handleNewEmail} size='lg'></Input>
+                                    {email.isTouched&&!validateEmail(email.value)&&errorMessage.isCorrectEmail===true ? (<PasswordErrorMessage text="Please enter a valid email"/>):null}
+                                    {errorMessage.isCorrectEmail === false ? (<PasswordErrorMessage text={errorMessage.value}/>):null}
                                 </Box>
                             
                         </ModalBody>
