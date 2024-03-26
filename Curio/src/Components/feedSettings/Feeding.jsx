@@ -1,10 +1,9 @@
 import './Feeding.css'
-import { Switch, Flex, Spacer, Box } from '@chakra-ui/react'
+import { Switch, Flex, Spacer, Box, useToast } from '@chakra-ui/react'
 import Titles from './childs/Titles';
 import React from 'react';
 import DropDown from './childs/DropDown';
 import axios from 'axios';
-import { useToast, } from '@chakra-ui/react';
 
 
 function Feeding () {
@@ -18,6 +17,7 @@ function Feeding () {
     const [globalContentView,setGlobalContentView] = React.useState('card')
     const [rememberContentView,setRememberContentView] = React.useState(false)
     const [openPostsInNewTab, setOpenPostsInNewTab] = React.useState(false)
+    
     function Toast(){
         toast({
             
@@ -72,17 +72,18 @@ function Feeding () {
     }
     //send and get data from backend//
     async function sendDataToBackend(data) {
+    console.log(localStorage.getItem('token'));
+
         // Validate data
         if (!data || typeof data !== 'object') {
             console.error('Invalid data:', data);
             return;
         }
-
         try {
-            
+           
             const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log(response)
@@ -95,11 +96,17 @@ function Feeding () {
     }
 
     async function fetchDataFromBackend() {
+        const token = localStorage.getItem('token');
+        console.log(token)
+        if (!token) {
+        console.error('No token found');
+        return;
+        }
         try {
             
             const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             return response.data;
@@ -111,7 +118,6 @@ function Feeding () {
         async function fetchAndSetData() {
             const data = await fetchDataFromBackend();
             if (data) {
-                
                 setIsMature(data.adultContent);
                 setIsAuto(data.autoplayMedia);
                 setCommunityThemes(data.communityThemes);
@@ -120,8 +126,6 @@ function Feeding () {
                 setGlobalContentView(data.globalContentView);
                 setRememberContentView(data.rememberContentView);
                 setOpenPostsInNewTab(data.openPostsInNewTab);
-                //
-
             }
         }
 

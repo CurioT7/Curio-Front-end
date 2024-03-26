@@ -1,129 +1,121 @@
-import React, { useState } from 'react';
-import { Box, Heading, Text, Button } from "@chakra-ui/react";
+import React, { useState, useEffect } from 'react';
+import { Box, Text, Button, Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import "./Advanced.css";
+import Titles from "../../feedSettings/childs/Titles";
+import axios from 'axios';
 
 function Advanced() {
+  const serverHost = import.meta.env.VITE_SERVER_HOST;
   const [followChecked, setFollowChecked] = useState(true);
   const [contentVisibilityChecked, setContentVisibilityChecked] = useState(true);
   const [communitiesVisibilityChecked, setCommunitiesVisibilityChecked] = useState(true);
-  const [clearHistorychecked, setclearHistorychecked] = useState(false)
+  const [clearHistorychecked, setclearHistorychecked] = useState(false);
+  const toast = useToast();
 
   const handleFollowChange = () => {
     setFollowChecked(!followChecked); 
-    updateUserPreferences();
+    sendDataToBackend({allowFollow: !followChecked});
+    Toast();
   };
 
   const handleContentVisibilityChange = () => {
     setContentVisibilityChecked(!contentVisibilityChecked); 
-    updateUserPreferences();
+    sendDataToBackend({contentVisibility: !contentVisibilityChecked});
+    Toast();
   };
 
   const handleCommunitiesVisibilityChange = () => {
     setCommunitiesVisibilityChecked(!communitiesVisibilityChecked); 
-    updateUserPreferences();
+    sendDataToBackend({activeInCommunityVisibility: !communitiesVisibilityChecked});
+    Toast();
   };
 
   const handleClearHistoryChange = () => {
     setclearHistorychecked(!clearHistorychecked); 
-    updateUserPreferences();
+    sendDataToBackend({clearHistory: !clearHistorychecked});
+    Toast();
   };
 
-  // Define a function to update user preferences via API
-  const updateUserPreferences = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/api/settings/v1/me/prefs', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          displayName: '',
-          allowFollow: followChecked,
-          contentVisibility: contentVisibilityChecked,
-          activeInCommunityVisibility: communitiesVisibilityChecked,
-          clearHistory: clearHistorychecked
-        })
-      });
-      const data = await response.json();
-      console.log("User preferences updated successfully:", data);
-    } catch (error) {
-      console.error("Error updating user preferences:", error);
+  function Toast(){
+    toast({   
+        description: "Changes Saved",
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      })
+  }
+
+  async function sendDataToBackend(data) {
+    // Validate data
+    if (!data || typeof data !== 'object') {
+        console.error('Invalid data:', data);
+        return;
     }
-  };
+    try {
+        
+        const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        console.log(response)
+        return response;
+    } catch (error) {
+        console.error('Error sending data to backend:', error);
+    }
+  }
+
+  async function fetchDataFromBackend() {
+      try {
+          
+          const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`
+              }
+          });
+          return response.data;
+      } catch (error) {
+          console.error('Error fetching data from backend:', error);
+      }
+  }
+  useEffect(() => {
+    async function fetchAndSetData() {
+        const data = await fetchDataFromBackend();
+        if (data) {
+          setFollowChecked(data.followChecked);
+          setContentVisibilityChecked(data.contentVisibilityChecked);
+          setCommunitiesVisibilityChecked(data.communitiesVisibilityChecked);
+          setclearHistorychecked(data.clearHistorychecked)
+        }
+    }
+    fetchAndSetData();
+    }, []);
+
   return (
     <>
-      <Box className="advanced d-flex flex-wrap mb-3">
-        <Box className="follow">
-            <label htmlFor="follow-checkbox">
-              <h3 className="headings-settings" fontWeight="500" mb="1">
-                Allow people to follow you
-              </h3>
-            </label>
-            <Text className="headings-description" fontWeight="normal" color="gray.500">
-                Followers will be notified about posts you make to your profile and see them in their home feed.
-            </Text>
-        </Box>
-        <Box className="follow-checkbox">
-            <div className="form-check form-switch">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="flexSwitchCheckDefault"
-                data-testid="follow-checkbox"
-                checked={followChecked}
-                onClick={handleFollowChange}
-              />
-            </div>
-        </Box>
-      </Box>
-      <Box className="content-visibility d-flex flex-wrap mb-3">
-        <Box className="content-visibility-label">
-          <label htmlFor="content-visibility-checkbox">
-            <h3 className="headings-settings" fontWeight="500" mb="1">
-              Content visibility
-            </h3>
-          </label>
-          <Text className="headings-description" data-testid="heading-descrip" fontWeight="normal" color="gray.500">
-            Posts to this profile can appear in <a href="#">r/all</a> and your profile can be discovered in <a href="#">/users</a>
-          </Text>
-        </Box>
-        <Box className="content-visibility-switch">
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckDefault"
-              data-testid="content-visibility-checkbox"
-              checked={contentVisibilityChecked}
-              onClick={handleContentVisibilityChange}
-            />
-          </div>
-        </Box>
-      </Box>
-      <Box className="communities-visibility d-flex flex-wrap mb-3">
-        <Box className="communities-visibility-label">
-          <label htmlFor="communities-visibility-checkbox">
-            <h3 className="headings-settings" fontWeight="500" mb="1">
-              Active in communities visibility
-            </h3>
-          </label>
-          <Text className="headings-description" fontWeight="normal" color="gray.500">
-            Show which communities I am active in on my profile.
-          </Text>
-        </Box>
-        <Box className="communities-visibility-switch">
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckDefault"
-              data-testid="communities-visibility-checkbox"
-              checked={communitiesVisibilityChecked}
-              onClick={handleCommunitiesVisibilityChange}
-            />
-          </div>
-        </Box>
-      </Box>
+      <Flex mb={5} alignItems='center'>
+        <Titles title='Allow people to follow you'
+        description="Followers will be notified about posts you make to your profile and see them in their home feed."/>
+        <Spacer/>
+        <Switch size='lg' isChecked={followChecked} onChange={handleFollowChange}/>
+      </Flex>
+      <Flex mb={5} alignItems='center'>
+        <Titles title='Content visibility'
+        description={
+          <>
+            Posts to this profile can appear in <a href="#">r/all</a> and your profile can be discovered in <a href="#">/users</a>.
+          </>
+        }
+        />
+        <Spacer/>
+        <Switch size='lg' isChecked={contentVisibilityChecked} onChange={handleContentVisibilityChange}/>
+      </Flex>
+      <Flex mb={5} alignItems='center'>
+        <Titles title='Active in communities visibility'
+        description="Show which communities I am active in on my profile."/>
+        <Spacer/>
+        <Switch size='lg' isChecked={communitiesVisibilityChecked} onChange={handleCommunitiesVisibilityChange}/>
+      </Flex>
       <Box className="clear-history d-flex flex-wrap mb-3">
         <Box className="clear-history-label">
           <h3 className="headings-settings" fontWeight="500" mb="1">

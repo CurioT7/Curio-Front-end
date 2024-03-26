@@ -1,8 +1,5 @@
-:root{
-    --secclr:#1c1c1c;
+.flex-container {
+    display: flex;
+    flex-direction: column;
 }
-.headings-settings{
-    font-size: 16px;
-    line-height: 20px;
-    color: var(--secclr);
-}
+  

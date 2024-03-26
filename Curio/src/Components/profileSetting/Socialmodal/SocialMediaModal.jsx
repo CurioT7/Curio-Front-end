@@ -15,18 +15,11 @@ function SocialMediaModal(props) {
     const [url, setUrl] = useState("");
     const [isSaveEnabled, setIsSaveEnabled] = useState(false);
     const [isUrlValid, setIsUrlValid] = useState(true); 
-    const [isUrlDomain, setIsUrlDomain] = useState(true);
 
     const handleSave = () => {
         if (displayText && url) {
             if (!isValidUrl(url)) {
                 setIsUrlValid(false);
-                return;
-            }
-            const receivedDomain = getDomainFromUrl(props.urlPrefix);
-            const enteredDomain = getDomainFromUrl(url);
-            if (receivedDomain !== enteredDomain) {
-                setIsUrlDomain(false);
                 return;
             }
 
@@ -39,21 +32,13 @@ function SocialMediaModal(props) {
         }
     };
 
-    const getDomainFromUrl = (url) => {
-        try {
-            const domain = new URL(url).hostname;
-            return domain.startsWith("www.") ? domain.substring(4) : domain;
-        } catch (error) {
-            return "";
-        }
-    };
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === "display_text") {
             setDisplayText(value);
         } else if (name === "url") {
             setUrl(value);
+            sendDataToBackend({socialLinks: value})
         }
         setIsSaveEnabled(value !== "" && url !== "");
         setIsUrlValid(true); 
@@ -108,7 +93,7 @@ function SocialMediaModal(props) {
                             <input type="text" name="display_text" id="display_text" placeholder="Display text" className="display_text" value={displayText} onChange={handleInputChange} required/>
                             <input type="url" name="url" placeholder="https://www.webite.com/" className="url_website" value={url} onChange={handleInputChange} required/>
                             {!isUrlValid && <p style={{ color: 'red', fontSize: '12px' }}>Invalid URL</p>} 
-                            {!isUrlDomain && <p style={{ color: 'red', fontSize: '12px' }}>Domain is not allowed</p>} 
+                            {/* {!isUrlDomain && <p style={{ color: 'red', fontSize: '12px' }}>Domain is not allowed</p>}  */}
                         </div>
                     </ModalBody>
                 </ModalContent>

@@ -79,7 +79,7 @@ cursor: pointer;
 .card * {
     cursor: pointer;
 }
-.nsfw-checkbox,
+/* .nsfw-checkbox,
 .follow-checkbox,
 .content-visibility-switch,
 .communities-visibility-switch{
@@ -87,7 +87,8 @@ align-items: center;
 display: flex;
 flex-grow: 1;
 justify-content: flex-end;
-}
+} */
+/* 
 .form-switch input.form-check-input {
 width: 37.5px;
 height: 24px;
@@ -98,4 +99,4 @@ background-color: blue;
 }
 .form-switch .form-check-input:checked + .form-check-label::before {
 background-color: white;
-}
+} */
