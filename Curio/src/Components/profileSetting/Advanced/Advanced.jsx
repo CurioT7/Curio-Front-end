@@ -1,56 +1,96 @@
-import React, { useState } from 'react';
-import { Box, Heading, Text, Button, Flex, Switch, Spacer } from "@chakra-ui/react";
+import React, { useState, useEffect } from 'react';
+import { Box, Text, Button, Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import "./Advanced.css";
 import Titles from "../../feedSettings/childs/Titles";
+import axios from 'axios';
 
 function Advanced() {
+  const serverHost = import.meta.env.VITE_SERVER_HOST;
   const [followChecked, setFollowChecked] = useState(true);
   const [contentVisibilityChecked, setContentVisibilityChecked] = useState(true);
   const [communitiesVisibilityChecked, setCommunitiesVisibilityChecked] = useState(true);
-  const [clearHistorychecked, setclearHistorychecked] = useState(false)
+  const [clearHistorychecked, setclearHistorychecked] = useState(false);
+  const toast = useToast();
 
   const handleFollowChange = () => {
     setFollowChecked(!followChecked); 
-    updateUserPreferences();
+    sendDataToBackend({allowFollow: !followChecked});
+    Toast();
   };
 
   const handleContentVisibilityChange = () => {
     setContentVisibilityChecked(!contentVisibilityChecked); 
-    updateUserPreferences();
+    sendDataToBackend({contentVisibility: !contentVisibilityChecked});
+    Toast();
   };
 
   const handleCommunitiesVisibilityChange = () => {
     setCommunitiesVisibilityChecked(!communitiesVisibilityChecked); 
-    updateUserPreferences();
+    sendDataToBackend({activeInCommunityVisibility: !communitiesVisibilityChecked});
+    Toast();
   };
 
   const handleClearHistoryChange = () => {
     setclearHistorychecked(!clearHistorychecked); 
-    updateUserPreferences();
+    sendDataToBackend({clearHistory: !clearHistorychecked});
+    Toast();
   };
 
-  // Define a function to update user preferences via API
-  const updateUserPreferences = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/api/settings/v1/me/prefs', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          displayName: '',
-          allowFollow: followChecked,
-          contentVisibility: contentVisibilityChecked,
-          activeInCommunityVisibility: communitiesVisibilityChecked,
-          clearHistory: clearHistorychecked
-        })
-      });
-      const data = await response.json();
-      console.log("User preferences updated successfully:", data);
-    } catch (error) {
-      console.error("Error updating user preferences:", error);
+  function Toast(){
+    toast({   
+        description: "Changes Saved",
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      })
+  }
+
+  async function sendDataToBackend(data) {
+    // Validate data
+    if (!data || typeof data !== 'object') {
+        console.error('Invalid data:', data);
+        return;
     }
-  };
+    try {
+        
+        const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        console.log(response)
+        return response;
+    } catch (error) {
+        console.error('Error sending data to backend:', error);
+    }
+  }
+
+  async function fetchDataFromBackend() {
+      try {
+          
+          const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`
+              }
+          });
+          return response.data;
+      } catch (error) {
+          console.error('Error fetching data from backend:', error);
+      }
+  }
+  useEffect(() => {
+    async function fetchAndSetData() {
+        const data = await fetchDataFromBackend();
+        if (data) {
+          setFollowChecked(data.followChecked);
+          setContentVisibilityChecked(data.contentVisibilityChecked);
+          setCommunitiesVisibilityChecked(data.communitiesVisibilityChecked);
+          setclearHistorychecked(data.clearHistorychecked)
+        }
+    }
+    fetchAndSetData();
+    }, []);
+
   return (
     <>
       <Flex mb={5} alignItems='center'>

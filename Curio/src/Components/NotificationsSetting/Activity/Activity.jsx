@@ -93,7 +93,7 @@ function Activity(){
 
     async function fetchDataFromBackend() {
         try {
-            const token = 'your_token_here'; // replace with your actual token
+            const token = 'your_token_here'; 
             const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`

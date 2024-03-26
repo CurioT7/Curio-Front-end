@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, useDisclosure, Avatar } from '@chakra-ui/react';
+import axios from 'axios';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import "./Socialmodal.css";
 import {
     Modal,
@@ -10,8 +11,6 @@ import {
     ModalCloseButton,
 } from '@chakra-ui/react';
 import logo from "../../../assets/Curio_logo.png";
-
-
 import SocialMediaModal from "./SocialMediaModal";
 import SocialUsernameModal from "./SocialUsernameModal";
 import CurioInput from "./CurioInput";
@@ -21,8 +20,10 @@ function Socialmodal(props){
     const [selectedSocialLinks, setSelectedSocialLinks] = useState([]);
 
     const handleSocialLinkClick = (socialLink, iconClass) => {
-        event.stopPropagation();
-        setSelectedSocialLinks([...selectedSocialLinks, { link: socialLink, icon: iconClass }]);
+        // event.stopPropagation();
+        if (selectedSocialLinks.length < 5) { 
+            setSelectedSocialLinks([...selectedSocialLinks, { link: socialLink, icon: iconClass }]);
+        }
     };
 
     const handleRemoveSocialLink = (index) => {
@@ -33,7 +34,7 @@ function Socialmodal(props){
 
     return(
         <>
-        {selectedSocialLinks.map((link, index) => (
+        {selectedSocialLinks.slice(0, 5).map((link, index) => (
             <div key={index} className="selected-social-link">
                 <i className={link.icon}/> {link.link}
                 <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
