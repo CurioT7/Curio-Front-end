@@ -103,12 +103,17 @@ const changePassword = async (oldPassword, newPassword) => {
   };
 
   const token = localStorage.getItem('token');
+  console.log(token);
+  console.log(oldPassword);
+  console.log(newPassword);
+
 
   const response = await fetch(url, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
+
     },
     body: JSON.stringify(data),
   });
