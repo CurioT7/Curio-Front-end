@@ -18,6 +18,7 @@ import ForgotUser from './Components/ForgotUser/ForgotUser.jsx';
 import LoginPage from './Components/Login/Loginpage.jsx';
 import UserPage from './Pages/UserProfile/UserProfile.jsx'
 import TestData from './Components/TestingAPI/test.jsx';
+import ResetPass from './Components/ForgotPass/ResetPass.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 
 
@@ -45,9 +46,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
-          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/login" element={<LoginPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path="/resetpass" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/home" element={<Home/>} />
-          <Route path="/forgotuser" element={<ForgotUser/>} />
           <Route path="/" element={<Home/>} />
           <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
           <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
