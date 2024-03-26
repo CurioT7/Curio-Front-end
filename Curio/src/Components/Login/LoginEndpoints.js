@@ -5,7 +5,7 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
 const loginUser = async (username, password) => {
-  const url = `${VITE_SERVER_HOST}./api/auth/login`;
+  const url = `${VITE_SERVER_HOST}/api/auth/login`;
   const data = {
     username,
     password,
@@ -102,10 +102,13 @@ const changePassword = async (oldPassword, newPassword) => {
     password: newPassword,
   };
 
+  const token = localStorage.getItem('token');
+
   const response = await fetch(url, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   });

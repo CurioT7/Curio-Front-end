@@ -43,7 +43,7 @@ function ResetPass(props) {
              </div>
                 <div className="resetInput">
                     <input type="password"
-                        placeholder='New Password *'
+                        placeholder='Old Password *'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -51,7 +51,7 @@ function ResetPass(props) {
                 <br />
                 <div className="resetInput">
                     <input type="password"
-                        placeholder="Verify Password *"
+                        placeholder="New Password *"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                     />
