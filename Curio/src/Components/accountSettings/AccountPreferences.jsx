@@ -47,7 +47,7 @@ const AccountPreferences = () => {
             const token = 'your_token_here'; // replace with your actual token
             const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             return response.data;
@@ -68,7 +68,7 @@ const AccountPreferences = () => {
             const token = 'your_token_here'; // replace with your actual token
             const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log(response);

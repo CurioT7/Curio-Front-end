@@ -4,16 +4,27 @@ import React from "react"
 import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
 import { FaTrashAlt } from "react-icons/fa";
 import './formstyle.css'
+import axios from 'axios';
 
+import { useToast, } from '@chakra-ui/react';
 function DeleteButton(){
-    const pass ='123'
-    const name ='mostafa'
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
+    const toast = useToast()
+   
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ feedBack,setFeedBack] = React.useState("")
     const [isChecked,setIsChecked] =React.useState(false)
     const [userName,setUserName] = React.useState("")
     const [yourPass,setYourPass] = React.useState("")
     const [isChild,setIsChild] = React.useState(false)
+    function ToastErr(){
+        toast({
+            title: "Error occured, please try again later",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     function handleFeedBack (e){
         setFeedBack(e.target.value)
     }
@@ -36,7 +47,9 @@ function DeleteButton(){
             isChecked
         )
     }
-    function ClearForm(){
+
+
+    function clearForm(){
         setIsChild(false)
         setUserName("")
         setYourPass("")
@@ -44,17 +57,39 @@ function DeleteButton(){
         setFeedBack("")
         onClose
     }
+    async function sendDataToBackend(){
+        console.log(`Bearer ${localStorage.getItem('token')}`)
+        try {
+            const response = await axios.delete(`${serverHost}/api/settings/delete_account`, {
+                username: userName,
+                password: yourPass,
+            }, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            clearForm()
+        }
+        catch(error){
+            console.error('Faild To delete', error.message);
+            switch (error.response.status) {
+                case 401:
+                    
+                    setIsChild(false)
+                    setIsChecked(false)
+                    ToastErr()
+                    break;
+                
+                default:
+                    break;
+          }
+        }
+    }
     function handleSubmit(e){
         e.preventDefault();
-        if(yourPass !==pass || userName !== name){
-            alert("failed to submit")
-            setIsChild(false)
-            setIsChecked(false)
-            return
-        }
-        alert('submit done')
+        sendDataToBackend();
         
-        ClearForm()
+        
     }
     return(
         <Box>
