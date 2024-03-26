@@ -14,6 +14,9 @@ const MultiPageFormModal = (props) => {
     const [explanation, setExplanation] = useState(' ');
     const [reportType, setReportType] = useState(' ');
     const [furtherDetails, setFurtherDetails] = useState('');
+    const [isOptionSelected, setIsOptionSelected] = useState(false);
+    const [isSecondStep, setSecondStep] = useState(false);
+    const[isPrevStep, setPrevStep] = useState(false);
 
 
     const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -38,6 +41,7 @@ const MultiPageFormModal = (props) => {
     
     const handleRadioChange = (event) => {
         setSelectedOption(event.target.value);
+        setIsOptionSelected(true);
     };
 
     const handleOptionClick = (reason, explanation) => {
@@ -48,10 +52,13 @@ const MultiPageFormModal = (props) => {
             setReportReason(reason);
             setExplanation(explanation);
         }
+        setSecondStep(true);
     };
     
     const nextStep = () => {
         setStep(step + 1);
+        setIsOptionSelected(false);
+        setPrevStep(false);
         console.log(selectedOption)
         console.log(reportReason)
         console.log(furtherDetails)
@@ -63,10 +70,12 @@ const MultiPageFormModal = (props) => {
 
     const prevStep = () => {
         setStep(step - 1);
+        setPrevStep(false);
     };
 
     const handleFurtherDetailsChange = (details) => {
         setFurtherDetails(details);
+        setPrevStep(true);
     }
 
 
@@ -147,7 +156,7 @@ const MultiPageFormModal = (props) => {
                                     <input
                                         type="radio"
                                         name="reportType"
-                                        value="Username"
+                                        value="username"
                                         className={classes.input}
                                         onChange={handleRadioChange}
                                     />
@@ -157,7 +166,7 @@ const MultiPageFormModal = (props) => {
                                     <input
                                         type="radio"
                                         name="reportType"
-                                        value="Banner image"
+                                        value="banner image"
                                         className={classes.input}
                                         onChange={handleRadioChange}
                                     />
@@ -167,7 +176,7 @@ const MultiPageFormModal = (props) => {
                                     <input
                                         type="radio"
                                         name="reportType"
-                                        value="Avatar/profile image"
+                                        value="profile image"
                                         className={classes.input}
                                         onChange={handleRadioChange}
                                     />
@@ -180,74 +189,74 @@ const MultiPageFormModal = (props) => {
                              <p className={classes['body-text']}>What rule is this breaking?</p>
                              <div className="flex-container">
                              <button
-                                className={`${classes["option-button"]} ${reportReason === 'Harassment' ? classes['selected'] : ''}`}
-                                onClick={() => { handleOptionClick('Harassment'); handleDescriptionChange('Harassment'); handleExplanationChange('Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.'); }}
+                                className={`${classes["option-button"]} ${reportReason === 'harassment' ? classes['selected'] : ''}`}
+                                onClick={() => { handleOptionClick('harassment'); handleDescriptionChange('Harassment'); handleExplanationChange('Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.'); }}
                             >
                                 Harassment
                              </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Threatening violence' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Threatening violence'); handleDescriptionChange('Threatening violence'); handleExplanationChange('Encouraging, glorifying, or inciting violence or physical harm against individuals or groups of people, places, or animals.'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'threatening violence' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('threatening violence'); handleDescriptionChange('Threatening violence'); handleExplanationChange('Encouraging, glorifying, or inciting violence or physical harm against individuals or groups of people, places, or animals.'); }}
                                >
                                  Threatening violence
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Hate' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Hate'); handleDescriptionChange('Hate'); handleExplanationChange('Promoting hate or inciting violence based on identity or vulnerability.'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'hate' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('hate'); handleDescriptionChange('Hate'); handleExplanationChange('Promoting hate or inciting violence based on identity or vulnerability.'); }}
                                >
                                  Hate
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Minor abuse or sexualization' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Minor abuse or sexualization'); handleDescriptionChange('Minor abuse or sexualization'); handleExplanationChange('Sharing or soliciting content involving abuse, neglect, or sexualization of minors or any predatory or inappropriate behavior towards minors.'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'minor abuse or sexualization' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('minor abuse or sexualization'); handleDescriptionChange('Minor abuse or sexualization'); handleExplanationChange('Sharing or soliciting content involving abuse, neglect, or sexualization of minors or any predatory or inappropriate behavior towards minors.'); }}
                                >
                                  Minor abuse or sexualization
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Sharing personal information' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Sharing personal information'); handleDescriptionChange('Sharing personal information'); handleExplanationChange('Sharing or threatening to share private, personal, or confidential information about someone.'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'sharing personal information' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('sharing personal information'); handleDescriptionChange('Sharing personal information'); handleExplanationChange('Sharing or threatening to share private, personal, or confidential information about someone.'); }}
                                >
                                  Sharing personal information
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Non-consensual intimate media' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Non-consensual intimate media'); handleDescriptionChange('Non-consensual intimate media'); handleExplanationChange('Sharing, threatening to share, or soliciting intimate or sexually-explicit content of someone without their consent (including fake or "lookalike" pornography).'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'non-consensual intimate media' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('non-consensual intimate media'); handleDescriptionChange('Non-consensual intimate media'); handleExplanationChange('Sharing, threatening to share, or soliciting intimate or sexually-explicit content of someone without their consent (including fake or "lookalike" pornography).'); }}
                                >
                                  Non-consensual intimate media
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Prohibited transaction' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Prohibited transaction'); handleDescriptionChange('Prohibited transaction'); handleExplanationChange('Soliciting or facilitating transactions or gifts of illegal or prohibited goods and services'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'prohibited transaction' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('prohibited transaction'); handleDescriptionChange('Prohibited transaction'); handleExplanationChange('Soliciting or facilitating transactions or gifts of illegal or prohibited goods and services'); }}
                                >
                                  Prohibited transaction
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Impersonation' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Impersonation'); handleDescriptionChange('Impersonation'); handleExplanationChange('Impersonating an individual or entity in a misleading or deceptive way. This includes deepfakes, manipulated content, or false attributions. '); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'impersonation' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('impersonation'); handleDescriptionChange('Impersonation'); handleExplanationChange('Impersonating an individual or entity in a misleading or deceptive way. This includes deepfakes, manipulated content, or false attributions. '); }}
                                >
                                  Impersonation
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Copyright violation' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Copyright violation'); handleDescriptionChange('Copyright violation'); handleExplanationChange('Content posted to Reddit that infringes a copyright you own or control. (Note: Only the copyright owner or an authorized representative can submit a report.)'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'copyright violation' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('copyright violation'); handleDescriptionChange('Copyright violation'); handleExplanationChange('Content posted to Reddit that infringes a copyright you own or control. (Note: Only the copyright owner or an authorized representative can submit a report.)'); }}
                                >
                                  Copyright violation
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Trademark violation' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Trademark violation'); handleDescriptionChange('Trademark violation'); handleExplanationChange('Content posted to Reddit that infringes a trademark you own or control. (Note: Only the trademark owner or an authorized representative can submit a report.)'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'trademark violation' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('trademark violation'); handleDescriptionChange('Trademark violation'); handleExplanationChange('Content posted to Reddit that infringes a trademark you own or control. (Note: Only the trademark owner or an authorized representative can submit a report.)'); }}
                                >
                                  Trademark violation
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Self-harm or suicide' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Self-harm or suicide'); handleDescriptionChange('Self-harm or suicide'); handleExplanationChange('Behavior or comments that make you think someone may be considering suicide or seriously hurting themselves.'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'self-harm or suicide' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('self-harm or suicide'); handleDescriptionChange('Self-harm or suicide'); handleExplanationChange('Behavior or comments that make you think someone may be considering suicide or seriously hurting themselves.'); }}
                                >
                                  Self-harm or suicide
                                </button>
                                <button
-                                 className={`${classes["option-button"]} ${reportReason === 'Spam' ? classes['selected'] : ''}`}
-                                 onClick={() => { handleOptionClick('Spam'); handleDescriptionChange('Spam'); handleExplanationChange('Repeated, unwanted, or unsolicited manual or automated actions that negatively affect redditors, communities, and the Reddit platform.'); }}
+                                 className={`${classes["option-button"]} ${reportReason === 'spam' ? classes['selected'] : ''}`}
+                                 onClick={() => { handleOptionClick('spam'); handleDescriptionChange('Spam'); handleExplanationChange('Repeated, unwanted, or unsolicited manual or automated actions that negatively affect redditors, communities, and the Reddit platform.'); }}
                                >
                                  Spam
                                </button>
@@ -262,10 +271,10 @@ const MultiPageFormModal = (props) => {
                         )}
                         {step === 3 && (
                             <>
-                                {(reportReason === 'Harassment' || reportReason === 'Threatening violence' || reportReason === 'Non-consensual intimate media') && (
+                                {(reportReason === 'harassment' || reportReason === 'threatening violence' || reportReason === 'non-consensual intimate media') && (
                                     <>
                                     <p className={classes['body-text']}>
-                                        Who is the {reportReason === 'Harassment' ? 'harassment towards?' : reportReason === 'Threatening violence' ? 'threatening towards?' : reportReason === 'Non-consensual intimate media' ? 'non-consensual intimate media of?' : 'harrasment'} 
+                                        Who is the {reportReason === 'harassment' ? 'harassment towards?' : reportReason === 'threatening violence' ? 'threatening towards?' : reportReason === 'non-consensual intimate media' ? 'non-consensual intimate media of?' : 'harassment'} 
                                     </p>
                                         <div className={classes['radio-container1']}>
                                             <input
@@ -289,12 +298,12 @@ const MultiPageFormModal = (props) => {
                                         </div>
                                     </>
                                 )}
-                                {(reportReason === 'Sharing personal information' || reportReason === 'Impersonation' || reportReason === 'Copyright violation' || reportReason === 'Trademark violation')  && (
+                                {(reportReason === 'sharing personal information' || reportReason === 'impersonation' || reportReason === 'copyright violation' || reportReason === 'trademark violation')  && (
                                     <>
                                     <p className={classes['body-text']}>
-                                        {reportReason === 'Sharing personal information' ? 'Whose personal information is it?' : reportReason === 'Impersonation' ?
-                                        'Who is being impersonated?' : reportReason === 'Copyright violation' ?
-                                        'Whose copyright is it?' : reportReason === 'Trademark violation' ? 'Whose trademark is it?' : null} 
+                                        {reportReason === 'sharing personal information' ? 'whose personal information is it?' : reportReason === 'impersonation' ?
+                                        'Who is being impersonated?' : reportReason === 'copyright violation' ?
+                                        'whose copyright is it?' : reportReason === 'trademark violation' ? 'Whose trademark is it?' : null} 
                                     </p>
                                         <div className={classes['radio-container1']}>
                                             <input
@@ -302,13 +311,13 @@ const MultiPageFormModal = (props) => {
                                                 name="reportType"
                                                 value="username"
                                                 className={classes.input}
-                                                onChange={() => {handleFurtherDetailsChange(reportReason === 'Sharing personal information' ? 'Yours' : reportReason === 'Impersonation' ?
-                                                'You or an individual or entity you represent ' : reportReason === 'Copyright violation' ?
-                                                'Yours or an individual or entity you represent ' : reportReason === 'Trademark violation' ? 'Yours or an individual or entity you represent ' : null)}}
+                                                onChange={() => {handleFurtherDetailsChange(reportReason === 'sharing personal information' ? 'Yours' : reportReason === 'impersonation' ?
+                                                'You or an individual or entity you represent ' : reportReason === 'copyright violation' ?
+                                                'Yours or an individual or entity you represent ' : reportReason === 'trademark violation' ? 'Yours or an individual or entity you represent ' : null)}}
                                             />
-                                        {reportReason === 'Sharing personal information' ? 'Yours' : reportReason === 'Impersonation' ?
-                                        'You or an individual or entity you represent ' : reportReason === 'Copyright violation' ?
-                                        'Yours or an individual or entity you represent ' : reportReason === 'Trademark violation' ? 'Yours or an individual or entity you represent ' : null} 
+                                        {reportReason === 'sharing personal information' ? 'Yours' : reportReason === 'impersonation' ?
+                                        'You or an individual or entity you represent ' : reportReason === 'copyright violation' ?
+                                        'Yours or an individual or entity you represent ' : reportReason === 'trademark violation' ? 'Yours or an individual or entity you represent ' : null} 
                                         </div>
                                         <div className={classes['radio-container']}>
                                             <input
@@ -316,17 +325,17 @@ const MultiPageFormModal = (props) => {
                                                 name="reportType"
                                                 value="avatar"
                                                 className={classes.input}
-                                                onChange={() => {handleFurtherDetailsChange(reportReason === 'Sharing personal information' ? "Someone else's" : reportReason === 'Impersonation' ?
-                                                'Someone else' : reportReason === 'Copyright violation' ?
-                                                "Someone else's" : reportReason === 'Trademark violation' ? "Someone else's" : null)}}
+                                                onChange={() => {handleFurtherDetailsChange(reportReason === 'sharing personal information' ? "Someone else's" : reportReason === 'impersonation' ?
+                                                'Someone else' : reportReason === 'copyright violation' ?
+                                                "Someone else's" : reportReason === 'trademark violation' ? "Someone else's" : null)}}
                                             />
-                                        {reportReason === 'Sharing personal information' ? "Someone else's" : reportReason === 'Impersonation' ?
-                                        'Someone else' : reportReason === 'Copyright violation' ?
-                                        "Someone else's" : reportReason === 'Trademark violation' ? "Someone else's" : null} 
+                                        {reportReason === 'sharing personal information' ? "Someone else's" : reportReason === 'impersonation' ?
+                                        'Someone else' : reportReason === 'copyright violation' ?
+                                        "Someone else's" : reportReason === 'trademark violation' ? "Someone else's" : null} 
                                         </div>
                                     </>
                                 )}
-                                {(reportReason === 'Minor abuse or sexualization')  && (
+                                {(reportReason === 'minor abuse or sexualization')  && (
                                     <>
                                     <p className={classes['body-text']}>
                                         What type of minor abuse or sexualization is this? 
@@ -363,7 +372,7 @@ const MultiPageFormModal = (props) => {
                                         </div>
                                     </>
                                 )}
-                                 {(reportReason === 'Spam')  && (
+                                 {(reportReason === 'spam')  && (
                                     <>
                                     <p className={classes['body-text']}>
                                         What type of spam is this?
@@ -448,7 +457,7 @@ const MultiPageFormModal = (props) => {
                 </Modal.Body>
                 <Modal.Footer className={classes.footer}>
                     {step === 1 && (
-                        <button className={classes['main-button']} onClick={nextStep}>Next</button>
+                        <button className={classes['next-button']} onClick={nextStep} disabled={!isOptionSelected}>Next</button>
                     )}
                     {step === 2 && (
                         <div className={classes["flex-foot-container"]}>
@@ -459,16 +468,16 @@ const MultiPageFormModal = (props) => {
                                 {explanation && <p className={classes['explanation-text']}>{explanation}</p>}
                             </div>
                             <div className={classes['submit-btn-container']}>
-                                {reportReason === 'Hate' || reportReason === 'Prohibited transaction' ? (
-                                    <button className={classes['main-button']} onClick={() => {twoSteps(); reportUser(props.username, selectedOption, reportReason, furtherDetails)}}>Submit</button>
+                                {reportReason === 'hate' || reportReason === 'prohibited transaction' || reportReason === 'self-harm or suicide' ? (
+                                    <button className={classes['main-button']} disabled={!isSecondStep}  onClick={() => {twoSteps(); reportUser(props.username, selectedOption, reportReason, furtherDetails)}}>Submit</button>
                                 ) : (
-                                    <button className={classes['main-button']} onClick={nextStep}>Next</button>
-                                )}
+                                    <button className={classes['main-button']} disabled={!isSecondStep} onClick={nextStep}>Next</button>
+                                    )}
                             </div>
                         </div>
                     )}
                     {step === 3 && (
-                        <button className={classes['main-button']} onClick={() => {nextStep(); reportUser(props.username, selectedOption, reportReason, furtherDetails)}}>Submit</button>
+                        <button className={classes['submit-button']} disabled={!isPrevStep} onClick={() => {nextStep(); reportUser(props.username, selectedOption, reportReason, furtherDetails)}}>Submit</button>
                     )}
                     {step === 4 && (
                         <div className="d-flex flex-column w-100">
@@ -482,7 +491,7 @@ const MultiPageFormModal = (props) => {
                                 </div>
                             </div>
                             <div className="d-flex justify-content-end">
-                                <button className={`main-button ${classes['main-button']}`} onClick={props.onHide}>Done</button>
+                                <button className={`done-button ${classes['done-button']}`} onClick={props.onHide}>Done</button>
                             </div>
                         </div>
                     )}

@@ -11,6 +11,7 @@
 
 .footer{
   border-top: none;
+  height: 8rem;
 }
 
 .body-content{
@@ -160,7 +161,7 @@
 
 .submit-btn-container {
   position: absolute;
-  bottom: 8px;
+  bottom: 0px;
   right: 0px;
 }
 
@@ -198,12 +199,18 @@
   margin-bottom: 2rem;
 }
 
-.main-button{
+.main-button, .done-button, .next-button, .submit-button{
   background-color: #0045AC;
   border-radius: 999px;
   color: white;
   border: none;
   padding: 10px 15px 10px 15px;
+}
+
+.next-button, .submit-button{
+  position: absolute;
+  right: 0.8rem;
+  bottom: 4px;
 }
 
 .main-button:hover{

@@ -50,19 +50,11 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
-    const handleFollowToggle = () => {
-        if (isFollowing) {
-            userUnfollow({username});
-        } else {
-            userFollow({username});
-        }
-        setIsFollowing(!isFollowing);
-    }
 
     useEffect(() => {
         async function showFriendInformation({username}) {
             try {
-                const response = await axios.get(`${hostUrl}/user/userTwo/about`);
+                const response = await axios.get(`${hostUrl}/user/${username}/about`);
                 console.log(response);
                 setFriendInfo(response.data);
             } catch (error) {
@@ -75,36 +67,58 @@ function ShowFriendInformation(props) {
 
     async function userFollow(friendusername) {
         try {
-            const response = await axios.post(`${hostUrl}/api/me/friends`, {
+            await axios.post(`${hostUrl}/api/me/friends`, {
                 friendusername: friendusername
             },{
                 headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log(response);
-            return response;
+            return response.data;
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
     async function userUnfollow(friendusername) {
-        try {
-            console.log(localStorage.getItem('token'));
-            const response = await axios.delete(`${hostUrl}/api/me/friends`, {
+                await axios.delete(`${hostUrl}/api/me/friends`, {
                 friendusername: friendusername
             },{
                 headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
-            });
-            console.log(response);
-            return response;
-        } catch (error) {
-            console.error('Error:', error);
+            }).then(response => {
+                if (response.status === 200) {
+                  Toast(`${username} in now blocked.`); 
+                }
+              })
+              .catch(error => {
+                if (error.response) {
+                  switch (error.response.status) {
+                    case 404:
+                        console.log('Friend not found')
+                      break;
+                      case 500:
+                      Toast(`An unexpected error occurred on the server. Please try again later.`);
+                      break;
+                    default:
+                      break;
+                  }
+                }
+              });
+            };
+
+    const handleFollowToggle = () => {
+        if (isFollowing) {
+            userUnfollow(username);
+        } else {
+            userFollow(username);
         }
+        setIsFollowing(!isFollowing);
     }
+
 
     async function userBlock(friendusername) {
         try {
@@ -113,7 +127,8 @@ function ShowFriendInformation(props) {
                 friendusername: friendusername
             }, {
                 headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log(response);
@@ -129,7 +144,8 @@ function ShowFriendInformation(props) {
                 friendusername: friendusername
             }, {
                 headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log(response);
