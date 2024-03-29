@@ -1,0 +1,9 @@
+.center-div{
+    margin-left: 18rem;
+}
+
+@media (max-width: 1200px) {
+    .center-div{
+        margin-left: 5rem!important;
+    }
+}
