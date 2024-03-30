@@ -1,14 +1,15 @@
 
 import { IoIosArrowDown } from "react-icons/io";
 import "./CommunityPage.css";
+import React from 'react'
+import { Link, useParams } from 'react-router-dom'
 
-import { Link } from 'react-router-dom'
 function Listing(props) {
-  function myFunction() {
+ 
+  
+  function List() {
     document.getElementById("myDropdown").classList.toggle("show");
   }
-  
-  // Close the dropdown if the user clicks outside of it
   window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
       var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -21,15 +22,26 @@ function Listing(props) {
       }
     }
   }
+
+  const { Community } = useParams();
+  const [listValue, setListValue] = React.useState('Hot');
+  const [community, setCommunity] = React.useState("Community");
+  React.useEffect(() => {
+    setCommunity(Community);
+  }, [Community]);
+  console.log(community);
+  function changeListValue(value) {
+    setListValue(value);
+  }
   return (
     <div className="dropdown">
-      <button onClick={myFunction} className="dropbtn"> Hot <IoIosArrowDown className="arrow-icon"/></button>
+      <button onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
       <div id="myDropdown" className="dropdown-content">
         <p>Sort By</p>
-        <Link to={'/r/:Community/hot'} className="link-sort">Hot</Link>
-        <Link to={'/r/:Community/new'} className="link-sort">New</Link>
-        <Link to={'/r/:Community/top'} className="link-sort">Top</Link>
-        <Link to={'/r/:Community/rising'} className="link-sort">Rising</Link>
+        <Link to={`/r/${community}/hot`} onClick={() => changeListValue("Hot")} className="link-sort">Hot</Link>
+        <Link to={`/r/${community}/new`} onClick={() => changeListValue("New")} className="link-sort">New</Link>
+        <Link to={`/r/${community}/top`} onClick={() => changeListValue("Top")} className="link-sort">Top</Link>
+        <Link to={`/r/${community}/rising`} onClick={() => changeListValue("Rising")} className="link-sort">Rising</Link>
       </div>
     </div>
   );
