@@ -33,7 +33,20 @@ console.log(posts);
       <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
 
       <div className="post">
-        <Post/>
+        {posts.map((post) => (
+          <Post
+            
+            id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+          />
+        ))}
+        
       </div>
       
     </div>
