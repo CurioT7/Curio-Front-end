@@ -26,6 +26,11 @@ function Listing(props) {
   const { Community } = useParams();
   const [listValue, setListValue] = React.useState('Hot');
   const [community, setCommunity] = React.useState("Community");
+
+  React.useEffect(() => {
+    setListValue('Hot');
+  }, [Community]);
+  console.log(listValue);
   React.useEffect(() => {
     setCommunity(Community);
   }, [Community]);
