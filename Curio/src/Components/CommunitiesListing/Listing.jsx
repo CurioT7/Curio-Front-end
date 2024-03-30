@@ -1,15 +1,37 @@
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 
+import { IoIosArrowDown } from "react-icons/io";
+import "./CommunityPage.css";
+
+import { Link } from 'react-router-dom'
 function Listing(props) {
-
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+  
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
   return (
-    <DropdownButton id="dropdown-item-button" title="Dropdown button">
-      <Dropdown.ItemText>Dropdown item text</Dropdown.ItemText>
-      <Dropdown.Item as="button">Action</Dropdown.Item>
-      <Dropdown.Item as="button">Another action</Dropdown.Item>
-      <Dropdown.Item as="button">Something else</Dropdown.Item>
-    </DropdownButton>
+    <div className="dropdown">
+      <button onClick={myFunction} className="dropbtn"> Hot <IoIosArrowDown className="arrow-icon"/></button>
+      <div id="myDropdown" className="dropdown-content">
+        <p>Sort By</p>
+        <Link to={'/r/:Community/hot'} className="link-sort">Hot</Link>
+        <Link to={'/r/:Community/new'} className="link-sort">New</Link>
+        <Link to={'/r/:Community/top'} className="link-sort">Top</Link>
+        <Link to={'/r/:Community/rising'} className="link-sort">Rising</Link>
+      </div>
+    </div>
   );
 }
 
