@@ -2,7 +2,11 @@ import CommunityInfo from "./CommunityInfo";
 import CommunityHeader from "./CommunityHeader";
 import CommunityBody from "./CommunityBody";
 import "./CommunityPage.css";
+
+import React from 'react';
 function CommuntiyPage() {
+  
+
   return (
     <div className=" my-1 justify-content-center container-lg center-div ">
       <CommunityHeader />

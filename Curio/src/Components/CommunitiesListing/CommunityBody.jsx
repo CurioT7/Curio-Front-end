@@ -1,5 +1,6 @@
 import Listing from "./Listing";
 import "./CommunityPage.css";
+import Post from "../Post/Post";
 function CommunityBody({ props }) {
   return (
     <div className="community-body">
@@ -8,8 +9,8 @@ function CommunityBody({ props }) {
       </div>
       <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
 
-      <div>
-        post
+      <div className="post">
+        <Post/>
       </div>
       
     </div>
