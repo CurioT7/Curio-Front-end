@@ -42,7 +42,7 @@ function Listing(props) {
     <div className="dropdown">
       <button onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
       <div id="myDropdown" className="dropdown-content">
-        <p>Sort By</p>
+        <p className="Sort-title">Sort By</p>
         <Link to={`/r/${community}/hot`} onClick={() => changeListValue("Hot")} className="link-sort">Hot</Link>
         <Link to={`/r/${community}/new`} onClick={() => changeListValue("New")} className="link-sort">New</Link>
         <Link to={`/r/${community}/top`} onClick={() => changeListValue("Top")} className="link-sort">Top</Link>
