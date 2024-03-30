@@ -1,0 +1,15 @@
+.Post{
+    
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    
+   
+}
+.Post:hover{
+    background-color:rgb(241, 243, 244);
+}
+.text-body{
+    font-weight: 400;
+    font-size: 15px;
+}
