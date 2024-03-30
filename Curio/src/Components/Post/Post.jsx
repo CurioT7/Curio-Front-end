@@ -8,7 +8,7 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { LuShare } from "react-icons/lu";
 import { SlOptions } from "react-icons/sl";
 import './Post.css'
-function Post() {
+function Post(props) {
     return (
         <div>
             <Card className='Post' variant='ghost' >
@@ -18,7 +18,7 @@ function Post() {
                         <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
 
                         <Box>
-                        <h6 className='user-name'>User</h6>
+                        <h6 className='user-name'>{props.user}</h6>
                         
                         </Box>
                     </Flex>
@@ -31,11 +31,9 @@ function Post() {
                     </Flex>
                 </CardHeader>
                 <CardBody>
-                    <Heading as='h3' size='md'>title</Heading>
+                    <Heading as='h3' size='md'>{props.title}</Heading>
                     <Text className='text-body'>
-                    With Chakra UI, I wanted to sync the speed of development with the speed
-                    of design. I wanted the developer to be just as excited as the designer to
-                    create a screen.
+                    {props.content}
                     </Text>
                 </CardBody>
                 {/* <Image
@@ -58,14 +56,14 @@ function Post() {
                     <Box>
                     
                         <Button flex='1' variant='ghost' leftIcon={<BiUpvote />}>
-                        7
+                        {props.upvotes}
                         </Button>
                         
                         <Button flex='1' variant='ghost' leftIcon={<BiDownvote />}>
-                        1
+                        {props.downvotes}
                         </Button>
                         <Button flex='1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                        12
+                        {props.comments.length}
                         </Button>
                         <Button flex='1' variant='ghost' leftIcon={<LuShare />}/>
                         
