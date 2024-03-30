@@ -72,7 +72,7 @@
     text-decoration: none;
     display: block;
   }
-  .dropdown-content p {
+  .dropdown-content .Sort-title {
     padding: 10px 12px 0px 10px;
     color: black;
     font-size: 15px;
