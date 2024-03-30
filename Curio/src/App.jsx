@@ -19,6 +19,7 @@ import LoginPage from './Components/Login/Loginpage.jsx';
 import UserPage from './Pages/UserProfile/UserProfile.jsx'
 import TestData from './Components/TestingAPI/test.jsx';
 import ResetPass from './Components/ForgotPass/ResetPass.jsx';
+import CommuntiyPage from './Components/CommunitiesListing/CommunityPage.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 
 
@@ -59,6 +60,11 @@ function App() {
           <Route path='/user/:username' element={<ShowFriendInformation/>} />
           <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage/>} />
+          <Route path='/r/:Community' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/hot' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/new' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
+
         </Routes>
       </ChakraProvider>
     </div>

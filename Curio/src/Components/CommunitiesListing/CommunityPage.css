@@ -1,0 +1,99 @@
+.center-div{
+    margin-left: 18rem;
+    
+}
+
+@media (max-width: 1200px) {
+    .center-div{
+        margin-left: 7rem!important;
+    }
+}
+
+.comm-background{
+    height: 7rem;
+    width: 100%;
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+.list{
+    display: flex;
+    justify-content: end;
+}
+.post{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 1rem;
+}
+.dropbtn {
+    background-color:none;
+    color:rgb(90, 111, 118);
+    padding: 0.4rem;
+    margin-left: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+  }
+  
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: rgb(210, 216, 219);
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: fit-content;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .dropdown-content .link-sort {
+    color: black;
+    padding: 10px 12px 12px 10px;
+    
+    font-size: 15px;
+    text-decoration: none;
+    display: block;
+  }
+  .dropdown-content .Sort-title {
+    padding: 10px 12px 0px 10px;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown .link-sort:hover {background-color: #ddd;}
+  
+  .show {display: block;}
+  .arrow-icon{
+    margin-left: 0.5rem;
+  }
+  .headings-titles{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    border-bottom: 1px solid var(--thirdclr);
+    text-transform: uppercase;
+    color: var(--firstclr);
+}
