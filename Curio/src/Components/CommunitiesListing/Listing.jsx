@@ -34,9 +34,10 @@ function Listing(props) {
   React.useEffect(() => {
     setCommunity(Community);
   }, [Community]);
-  console.log(community);
+  
   function changeListValue(value) {
     setListValue(value);
+    props.onChangeSort(value);
   }
   return (
     <div className="dropdown">
