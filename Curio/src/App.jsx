@@ -60,6 +60,7 @@ function App() {
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/user/:username' element={<ShowFriendInformation/>} />
           <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/user/:username' element={<UserPage/>} />
           <Route path='/r/:Community' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/hot' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/new' element={<CommuntiyPage/>} />

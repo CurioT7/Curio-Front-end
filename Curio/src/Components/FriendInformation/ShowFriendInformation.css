@@ -70,7 +70,16 @@
 
 .follow-button{
     background-color: #ffffff;
-    border: 1px solid #00000080;
+    height: 35px;
+    width: 100px;
+    border-radius: 999px;
+    color: #0F1A1C;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.block-button{
+    background-color: #DBAF00;
     height: 35px;
     width: 100px;
     border-radius: 999px;
@@ -234,11 +243,19 @@
     padding: 10px;
 }
 
+.block-word{
+    color: rgb(42, 60, 66);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+}
+
 
 .ellipsis-btn{
     border-radius: 20px;
     width: 34px;
     height: 32px;
+    margin-right: 20px;
     border: none;
     display: flex;
     align-items: center;
@@ -309,6 +326,8 @@
 .following {
     background-color: white;
     color: black;
+    border: 1px solid #0F1A1C;
+
 }
 
 .not-following:hover{
