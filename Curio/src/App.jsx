@@ -19,9 +19,11 @@ import LoginPage from './Components/Login/Loginpage.jsx';
 import UserPage from './Pages/UserProfile/UserProfile.jsx'
 import TestData from './Components/TestingAPI/test.jsx';
 import ResetPass from './Components/ForgotPass/ResetPass.jsx';
+import CommuntiyPage from './Components/CommunitiesListing/CommunityPage.jsx';
 import Top from './Pages/TopCommunityPage/TopCommunity.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import TopCommunities from './Components/TopCommunities/TopCommunities.jsx';
+import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 
 
 
@@ -59,6 +61,13 @@ function App() {
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/user/:username' element={<UserPage/>} />
           <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/user/:username' element={<UserPage/>} />
+          <Route path='/r/:Community' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/hot' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/new' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
+          <Route path='/profile' element={<ProfilePage/>}/>
           <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
         </Routes>
     </div>
