@@ -1,0 +1,21 @@
+:root{
+    --secclr:#1c1c1c;
+    --thirdclr: #edeff1;
+    --fourcle: #0079d3;
+    --fif:#878a8c;
+}
+.post-methods{
+    display: flex;
+    flex-direction: row;
+    margin: 0 0 12px;
+    overflow: auto;
+} 
+.button-post-method{
+    width: 245px;
+    font-size: 14px;
+    /* border: 1px solid black;
+    border-radius: 0; */
+}
+.button-post-method:hover{
+    background-color: lightblue;
+}

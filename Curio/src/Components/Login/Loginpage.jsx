@@ -5,8 +5,7 @@ import '../ForgotUser/ForgotUser.jsx';
 import ForgotUser from '../ForgotUser/ForgotUser.jsx';
 import ForgotPass from '../ForgotPass/ForgotPass.jsx';
 import ChangePass from '../ForgotPass/ChangePass.jsx';
-
-import Login from './Login.jsx';
+import Login from "./Login.jsx";
 
 Modal.setAppElement('#root');
 
@@ -15,7 +14,6 @@ function LoginPage(props) {
   const [forgotPass, setForgotPass] = useState(false);
   const [changePass, setChangePass] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-
   
   useEffect(() => {
     props.hideSidebar();
