@@ -53,7 +53,7 @@ function CreateCommunity(props) {
     console.log(data);
     try{
       const response = await createCommunity({data});
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         props.onHide();
       }
     } catch (error) {

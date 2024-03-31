@@ -114,6 +114,7 @@ function SidebarComponent(props) {
         {isAuthenticated && <MenuItem component={<Link to="/" />} rootStyles={{paddingTop: '20px'}} icon={<Home />}> Home </MenuItem>}
         <MenuItem rootStyles={{marginTop: !isAuthenticated ? "20px" : ""}} icon={<Popular />}> Popular </MenuItem>
         <MenuItem icon={<All />}> All </MenuItem>
+        <MenuItem component={<Link to = "/user/CreatePost" />} icon={<Add />}> Create Post </MenuItem>
         <hr className='mt-3 w-100'></hr>
         {isAuthenticated &&
           <SubMenu label="YOUR COMMUNITIES" rootStyles={{
