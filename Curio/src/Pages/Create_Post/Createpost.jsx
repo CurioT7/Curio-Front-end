@@ -1,7 +1,8 @@
 import React from 'react';
 import { useEffect } from "react";
 import {useNavigate} from 'react-router-dom';
-import CreatePost from "../../Components/CreatePost/CreatePost"
+import { Box, Button, Text } from '@chakra-ui/react';
+import NewPostForm from "../../Components/Posts/NewPostForm"
 import "./Createpost.css"
 
 function Createpost(props) {
@@ -17,15 +18,18 @@ function Createpost(props) {
       }
     }, []);
   return (
-    <div className='container'>
-      <div className='row justify-content-evenly'>
-        <div className='col-7'>
-          <CreatePost/>
+    <div className='container-create-post container'>
+        <div className='left-container-post'>
+          <Box className="cont-create-post">
+            <Text className='create-post-title'>Create Post</Text>
+          </Box>
+          <div className='new-post-form'>
+            <NewPostForm/>
+          </div>
         </div>
-        <div className='col-2'>
+        <div className='right-container-post'>
           wfrefvvbgbgrfbwg
         </div>
-      </div>
     </div>
   );
 }

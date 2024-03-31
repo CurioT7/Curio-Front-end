@@ -97,6 +97,7 @@ function SignupHandler() {
         console.log('Token:', response.data.accessToken);
         setIsAuthenticated(true);
         window.dispatchEvent(new Event("loginOrSignup"));
+        navigate("/");
       }
       else{
         console.log('Signup failed');

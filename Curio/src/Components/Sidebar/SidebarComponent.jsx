@@ -24,7 +24,9 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import  FavouriteButton  from './FavouriteButton.jsx';
 import CommunityImageSideBar from './CommunityImageSideBar.jsx';
 import CreateCommunity from './CreateCommunity.jsx';
+import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
+import { textDecoration } from '@chakra-ui/react';
 
 
 
@@ -32,7 +34,7 @@ function SidebarComponent(props) {
   const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1200);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -62,6 +64,9 @@ function SidebarComponent(props) {
     };
   }, []);
 
+  const handleNavigation = (path) => {
+    navigate(path);
+  }
 
 
   const handleCreateCommunityClick = () => {
@@ -128,8 +133,8 @@ function SidebarComponent(props) {
             },
           }}>
             <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}} icon={<Add />}>Create a community</MenuItem>
-            <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/announcements</MenuItem>
-            <MenuItem prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/PS5</MenuItem>
+            <MenuItem onClick={() =>handleNavigation(`/r/announcements`)} prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/announcements</MenuItem>
+            <MenuItem onClick={() =>handleNavigation(`/r/PS5`)} prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/PS5</MenuItem>
           </SubMenu>
         }
         {isAuthenticated && <hr className='mt-3 ps-5 w-100'></hr>}
@@ -157,7 +162,9 @@ function SidebarComponent(props) {
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <MenuItem href="https://www.reddit.com/best/communities/1/" icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities</MenuItem>
+          <Link to="/communities/best/1" style={{ textDecoration: 'none' }}>
+          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities</MenuItem>
+          </Link>
           <MenuItem href="https://www.reddit.com/posts/2023/global/" icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Best of Reddit</MenuItem>
           <MenuItem href="https://www.reddit.com/topics/a-1/" icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Topics</MenuItem>
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>

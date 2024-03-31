@@ -53,10 +53,11 @@
 .join-button-recent{
     background-color: #EAEDEF!important;
     color: #000000!important;
-    height: 1rem!important;
+    height: 1.2rem!important;
     width: 3.4rem!important;
     font-size: 0.7rem!important;
     font-weight: 700!important;
+    border-radius: 10px;
 }
 
 .join-button-recent:hover{
@@ -79,4 +80,14 @@
     font-family: BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
     color: #000000;
     font-size: 0.875rem;
+}
+
+.recent-card-visibility{
+    visibility: visible;
+}   
+
+@media (max-width: 1200px){
+    .recent-card-visibility{
+        visibility: hidden;
+    } 
 }

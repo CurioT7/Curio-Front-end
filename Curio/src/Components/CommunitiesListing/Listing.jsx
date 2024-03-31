@@ -26,18 +26,24 @@ function Listing(props) {
   const { Community } = useParams();
   const [listValue, setListValue] = React.useState('Hot');
   const [community, setCommunity] = React.useState("Community");
+
+  React.useEffect(() => {
+    setListValue('Hot');
+  }, [Community]);
+  console.log(listValue);
   React.useEffect(() => {
     setCommunity(Community);
   }, [Community]);
-  console.log(community);
+  
   function changeListValue(value) {
     setListValue(value);
+    props.onChangeSort(value);
   }
   return (
     <div className="dropdown">
       <button onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
       <div id="myDropdown" className="dropdown-content">
-        <p>Sort By</p>
+        <p className="Sort-title">Sort By</p>
         <Link to={`/r/${community}/hot`} onClick={() => changeListValue("Hot")} className="link-sort">Hot</Link>
         <Link to={`/r/${community}/new`} onClick={() => changeListValue("New")} className="link-sort">New</Link>
         <Link to={`/r/${community}/top`} onClick={() => changeListValue("Top")} className="link-sort">Top</Link>

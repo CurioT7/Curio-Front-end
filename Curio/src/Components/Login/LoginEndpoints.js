@@ -1,15 +1,15 @@
-import React from 'react';
-import './Loginpage.jsx';
-import axios from 'axios';
+import React from "react";
+import "./Loginpage.jsx";
+import axios from "axios";
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
 const loginUser = async (username, password) => {
-  const url = `${VITE_SERVER_HOST}/api/auth/login`;
-  const data = {
-    username,
-    password,
-  };
+const url = `${VITE_SERVER_HOST}./api/auth/login`;
+const data = {
+  username,
+  password,
+};
 
   const response = await fetch(url, {
     method: 'POST',
@@ -113,13 +113,13 @@ const changePassword = async (oldPassword, newPassword) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
-
+      
     },
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    throw new Error("Network response was not ok");
   }
 
   const responseData = await response.json();
@@ -131,7 +131,7 @@ async function getGoogleToken() {
     const response = await axios.get(`${VITE_SERVER_HOST}/api/auth/google`);
     return response;
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
 }
 
