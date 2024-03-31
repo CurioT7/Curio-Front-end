@@ -5,3 +5,18 @@
   height: calc(100vh - 2rem); 
   overflow-y: auto;
 }
+
+.posts-container{
+  margin-left: 20rem;
+}
+
+@media (max-width: 1200px){
+  .posts-container{
+    margin-left: 5rem;
+    width: 100%;
+  }
+  .fixed-container{
+    overflow-y: hidden!important;
+  }
+  
+}
