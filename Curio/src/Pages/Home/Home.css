@@ -5,3 +5,23 @@
   height: calc(100vh - 2rem); 
   overflow-y: auto;
 }
+
+.home-body{
+  margin-left: 18rem;
+  margin-right: 25rem;
+  width: 100%;
+  
+}
+
+@media (max-width: 1200px) {
+  .home-body{
+      margin-left: 7rem!important;
+      margin-right: 7rem!important;
+  }
+}
+.home-post{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1rem;
+}
