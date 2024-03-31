@@ -12,7 +12,7 @@ export async function fetchDataFromBackend(subreddit) {
         console.error('Error fetching data from backend:', error);
     }
 }
-export async function fetchTopFromBackend(subreddit) {
+export async function fetchTopFromBackend(subreddit,time) {
     try {
         console.log(subreddit);
         const request = await axios.get(`${serverHost}/api/r/id sunt/top`,{
