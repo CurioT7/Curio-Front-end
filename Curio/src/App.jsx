@@ -22,6 +22,7 @@ import ResetPass from './Components/ForgotPass/ResetPass.jsx';
 import CommuntiyPage from './Components/CommunitiesListing/CommunityPage.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
+import PostDetails from './Pages/PostDetails/PostDetails.jsx';
 
 
 
@@ -66,6 +67,7 @@ function App() {
           <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
           <Route path='/profile' element={<ProfilePage/>}/>
+          <Route path='/post/post-details/:id' element={<PostDetails/>}/>
         </Routes>
       </ChakraProvider>
     </div>

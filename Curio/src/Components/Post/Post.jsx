@@ -12,8 +12,10 @@ import Downvotes from '../../styles/icons/Downvotes.jsx';
 import FilledDownvote from '../../styles/icons/FilledDownvote.jsx';
 import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Post.css'
 function Post(props) {
+    const navigate = useNavigate();
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const makePostUpvoted = () => {
@@ -33,13 +35,17 @@ function Post(props) {
         }
     }
 
+    const handleNavigationToDetails = () => {
+        navigate(`/post/post-details/${props.id}`);
+    }
+
 
     return (
         <div>
             <Card className='Post' variant='ghost' >
                 <CardHeader className='py-0'>
-                    <Flex spacing='4'>
-                    <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
+                    <Flex spacing='4' onClick={handleNavigationToDetails}>
+                    <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap' onClick={handleNavigationToDetails}>
                         <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
 
                         <Box>
@@ -55,7 +61,7 @@ function Post(props) {
                     />
                     </Flex>
                 </CardHeader>
-                <CardBody className='py-0'>
+                <CardBody className='py-0' onClick={handleNavigationToDetails}>
                     <Heading as='h3' size='md'>{props.title}</Heading>
                     {props.content && <Text className='text-body'>
                     {props.content}

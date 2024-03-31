@@ -20,7 +20,7 @@ function NavbarComponent() {
       {['lg'].map((expand) => (
         <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" style={{zIndex:"1000"}}>
           <Container fluid>
-            <Navbar.Brand href="#"><img src={logo} alt="logo" className="d-inline-block align-text-middle"/> Curio</Navbar.Brand>
+            <Navbar.Brand href="/"><img src={logo} alt="logo" className="d-inline-block align-text-middle"/> Curio</Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-${expand}`}
