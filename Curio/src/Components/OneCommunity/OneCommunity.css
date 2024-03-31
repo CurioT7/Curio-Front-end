@@ -1,0 +1,44 @@
+
+.number{
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 40px;
+}
+
+.browse{
+  font-size: 12px;
+  color: rgb(87, 111, 118);
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.columnBack, .columnBack1{
+  /* margin: 0;
+  padding: 0; */
+}
+
+.columnBack1{
+  background-color: #F9FAFA;;
+}
+
+.reddit-figure{
+  height: 36px;
+  border-radius: 20px;
+}
+
+.commName{
+  font-size: 12px;
+  font-weight: 700;
+  margin: 2px;
+}
+
+.commCategory{
+  font-size: 12px;
+  margin: 2px;
+}
+
+.commMembers{
+  font-size: 12px;
+  margin: 2px;
+  color: rgb(87, 111, 118);
+}
