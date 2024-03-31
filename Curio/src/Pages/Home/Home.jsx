@@ -9,7 +9,7 @@ function Home() {
 
   return (
     <>
-    <div className='d-flex'>
+    <div className='d-flex justify-content-center'>
       {/* Insert posts here (above recent posts) */}
       <div className='col-md-6 d-flex p-3 posts-container flex-column'>
          <Post

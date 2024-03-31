@@ -50,7 +50,8 @@
   
   .dropdown {
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
   }
   
   .dropdown-content {
