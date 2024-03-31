@@ -46,13 +46,13 @@ async function changeSortType(value) {
         else if (value === 'Top') {
             const data = await fetchTopFromBackend(Community);
             if (data) {
-                setPosts(data.posts);
+                setPosts(data.post);
             }
         }
         else if (value === 'Rising') {
             const data = await fetchRisingFromBackend(Community);
             if (data) {
-                setPosts(data.posts);
+                setPosts(data.post);
             }
         }
     }
