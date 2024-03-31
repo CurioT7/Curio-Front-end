@@ -19,7 +19,9 @@ import LoginPage from './Components/Login/Loginpage.jsx';
 import UserPage from './Pages/UserProfile/UserProfile.jsx'
 import TestData from './Components/TestingAPI/test.jsx';
 import ResetPass from './Components/ForgotPass/ResetPass.jsx';
+import Top from './Pages/TopCommunityPage/TopCommunity.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
+import TopCommunities from './Components/TopCommunities/TopCommunities.jsx';
 
 
 
@@ -35,13 +37,12 @@ function App() {
   }
 
   return (
-    <div>
+    <div style={{height: '100vh'}}>
        <div className='d-flex'>
         <div style={{position: 'fixed', zIndex: '99'}}>
           <SidebarComponent sidebarVisibility={isSidebarVisible} />
         </div>
       </div>
-      <ChakraProvider>
         <NavbarComponent/>
         <Routes>
           <Route path="/" element={<Home/>} />
@@ -56,11 +57,10 @@ function App() {
           <Route path='/settings/feeding' element={<FeedingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-          <Route path='/user/:username' element={<ShowFriendInformation/>} />
-          <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage/>} />
+          <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
         </Routes>
-      </ChakraProvider>
     </div>
   )
 }
