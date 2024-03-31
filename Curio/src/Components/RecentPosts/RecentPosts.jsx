@@ -104,7 +104,7 @@ function RecentPosts() {
     );
 
     return (
-        <div>
+        <div className="recent-card-visibility">
             <div className="recent-posts-card p-3 mb-3">
                 <div className="d-flex justify-content-between">
                     <div className="d-flex col-8">

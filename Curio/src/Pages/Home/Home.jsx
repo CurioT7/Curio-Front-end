@@ -11,7 +11,7 @@ function Home() {
     <>
     <div className='d-flex'>
       {/* Insert posts here (above recent posts) */}
-      <div className='col-md-6 d-flex p-3' style={{marginLeft: "20rem"}}>
+      <div className='col-md-6 d-flex p-3 posts-container'>
          <Post
             user="Alice"
             title="Second Post"
