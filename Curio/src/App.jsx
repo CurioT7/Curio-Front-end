@@ -69,6 +69,7 @@ function App() {
           <Route path='/profile' element={<ProfilePage/>}/>
           <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
         </Routes>
+      </ChakraProvider>
     </div>
   );
 }
