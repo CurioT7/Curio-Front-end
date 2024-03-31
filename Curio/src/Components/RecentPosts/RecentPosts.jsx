@@ -82,7 +82,7 @@ function RecentPosts() {
                         <h1 className="card-subreddit-name">r/Angular2</h1>
                     </div>
                     <div>
-                        <Button className="join-button-recent" variant="primary">Join</Button>
+                        <button className="join-button-recent" variant="primary">Join</button>
                     </div>
                 </div>
                 <Card.Text className="subreddit-description mt-2">
