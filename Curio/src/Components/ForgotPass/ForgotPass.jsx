@@ -65,7 +65,7 @@ function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
               type="text"
               placeholder="Username *"
               required
-              onChange={(e) => setUsername(e.target.value)} // Update username when the input changes
+              onChange={(e) => setUsername(e.target.value)} 
             />
           </div>
           <div className="loginInput">
@@ -73,7 +73,7 @@ function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
               type="text"
               placeholder="Email *"
               required
-              onChange={(e) => setEmail(e.target.value)} // Update email when the input changes
+              onChange={(e) => setEmail(e.target.value)} 
             />
           </div>
           {emailError && <div className="loginError">{emailError}</div>}
@@ -83,7 +83,7 @@ function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
               Get Help
             </a>
           </p>
-          <SignupHandlerForLogin/><a href="Login"> • Log In</a>
+          <SignupHandlerForLogin /><a href="Login">• Log In</a>
         </form>
       </div>
       <div className="submit">
