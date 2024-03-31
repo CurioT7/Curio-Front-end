@@ -9,7 +9,7 @@ function Home() {
 
   return (
     <>
-    <div className='d-flex justify-content-center'>
+    
       {/* Insert posts here (above recent posts) */}
       <div className='col-md-6 d-flex p-3 posts-container flex-column'>
          <Post
@@ -41,7 +41,7 @@ function Home() {
       <div className='d-flex justify-content-end ms-auto mb-4 fixed-container' style={{marginRight: "3rem", paddingTop: "1.2rem", height: "100vh", overflowY: "auto", width: "20%"}}>
           <RecentPosts />
       </div>
-    </div>
+    
     </>
   )
 }
