@@ -1,0 +1,27 @@
+.textarea-container{
+    position: relative;
+}
+.custom-textarea{
+    padding: 8px 68px 8px 16px;
+    border: 1px solid #edeff1;
+    background-color: transparent;
+    resize: none;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    outline: none;
+    margin-bottom: 8px;
+}
+.counter-title{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    text-transform: uppercase;
+    bottom: 12px;
+    color: #878a8c;
+    pointer-events: none;
+    position: absolute;
+    right: 12px;
+}
