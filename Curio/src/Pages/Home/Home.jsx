@@ -1,8 +1,8 @@
 import React from 'react'
+import { useState } from 'react'
 import "./Home.css"
 import RecentPosts from '../../Components/RecentPosts/RecentPosts'
 import Post from '../../Components/Post/Post'
-import BackToTopButton from './BackToTopButton';
 
 function Home() {
 
@@ -36,7 +36,6 @@ function Home() {
             downvotes={1}
             comments={[4, 5]} // Dummy array for comments
           />
-          <BackToTopButton/>
           
       </div>
       <div className='d-flex justify-content-end ms-auto mb-4 fixed-container' style={{marginRight: "3rem", paddingTop: "1.2rem", height: "100vh", overflowY: "auto", width: "20%"}}>
