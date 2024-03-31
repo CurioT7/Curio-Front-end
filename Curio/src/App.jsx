@@ -21,6 +21,7 @@ import TestData from './Components/TestingAPI/test.jsx';
 import ResetPass from './Components/ForgotPass/ResetPass.jsx';
 import CommuntiyPage from './Components/CommunitiesListing/CommunityPage.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
+import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 
 
 
@@ -64,6 +65,7 @@ function App() {
           <Route path='/r/:Community/new' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
+          <Route path='/profile' element={<ProfilePage/>}/>
         </Routes>
       </ChakraProvider>
     </div>

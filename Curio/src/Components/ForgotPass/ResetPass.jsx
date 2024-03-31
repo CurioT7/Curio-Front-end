@@ -35,7 +35,7 @@ function ResetPass(props) {
         <div className='reset-password'>
         <div className='resetBox'>
         
-            <form onSubmit={handleChangePassword}>
+            <form onSubmit={handleChangePassword} className='resetForm'>
             <div className='resetText'>
                 <img src={logo} alt="Curio Logo" />
             <h3>Reset your password</h3>
