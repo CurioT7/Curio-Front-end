@@ -3,6 +3,7 @@ import "./Community.css";
 import { Input } from '@chakra-ui/react';
 
 
+
 function Community() {
   return (
     <div class="outer-div">

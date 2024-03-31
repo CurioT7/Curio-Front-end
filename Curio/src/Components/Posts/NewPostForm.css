@@ -1,5 +1,6 @@
 .create-post-container{
-    background-color:gray;
+    background-color:white;
     margin-bottom: 15px;
     border-radius: 5px;
+    width: 100%;
 }

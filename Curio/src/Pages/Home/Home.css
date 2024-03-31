@@ -6,22 +6,17 @@
   overflow-y: auto;
 }
 
-.home-body{
-  margin-left: 18rem;
-  margin-right: 25rem;
-  width: 100%;
-  
+.posts-container{
+  margin-left: 20rem;
 }
 
-@media (max-width: 1200px) {
-  .home-body{
-      margin-left: 7rem!important;
-      margin-right: 7rem!important;
+@media (max-width: 1200px){
+  .posts-container{
+    margin-left: 5rem;
+    width: 100%;
   }
-}
-.home-post{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 1rem;
+  .fixed-container{
+    overflow-y: hidden!important;
+  }
+  
 }
