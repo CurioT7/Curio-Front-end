@@ -5,22 +5,22 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
 const loginUser = async (username, password) => {
-  const url = `${VITE_SERVER_HOST}./api/auth/login`;
-  const data = {
-    username,
-    password,
-  };
+const url = `${VITE_SERVER_HOST}./api/auth/login`;
+const data = {
+  username,
+  password,
+};
 
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error('Network response was not ok');
   }
 
   const responseData = await response.json();
@@ -34,15 +34,15 @@ const verifyUsername = async (email) => {
   };
 
   const response = await fetch(url, {
-    method: "GET",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error('Network response was not ok');
   }
 
   const responseData = await response.json();
@@ -57,15 +57,15 @@ const checkCredentials = async (username, email) => {
   };
 
   const response = await fetch(url, {
-    method: "GET",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error('Network response was not ok');
   }
 
   const responseData = await response.json();
@@ -73,22 +73,22 @@ const checkCredentials = async (username, email) => {
 };
 
 const resetPassword = async (username, email) => {
-  const url = `${VITE_SERVER_HOST}/api/auth/reset_password`;
+  const url = `${VITE_SERVER_HOST}/api/auth/password`;
   const data = {
     username: username,
     email: email,
   };
 
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error('Network response was not ok');
   }
 
   const responseData = await response.json();
@@ -102,10 +102,18 @@ const changePassword = async (oldPassword, newPassword) => {
     password: newPassword,
   };
 
+  const token = localStorage.getItem('token');
+  console.log(token);
+  console.log(oldPassword);
+  console.log(newPassword);
+
+
   const response = await fetch(url, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      
     },
     body: JSON.stringify(data),
   });

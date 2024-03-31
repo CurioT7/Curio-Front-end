@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import "./Navbar.css";
 import Signup from "../../styles/icons/Signup";
 import { NavDropdown } from "react-bootstrap";
 import Dots from "../../styles/icons/Dots";
@@ -10,7 +9,7 @@ import Preferences from "../Signup/Preferences";
 import { signup } from "../Signup/SignupEndpoints";
 import { useNavigate } from "react-router-dom";
 
-function SignupHandler() {
+function SignupHandlerForLogin() {
 
 
   const [isSignupInfoModalOpen, setSignupInfoModalOpen] = useState(false);
@@ -120,10 +119,7 @@ function SignupHandler() {
 
     return (
         <>
-            <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', width:"20px!important"}} className="link-offcanvas signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
-                {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Login / Register</span></NavDropdown.Item>}
-                {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Logout</span></NavDropdown.Item>}
-            </NavDropdown>
+            <button style={{color: "#0045ac"}} onClick={handleSignupInfoClick}>Signup</button>
             {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
             {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
             {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}
@@ -131,4 +127,4 @@ function SignupHandler() {
         </>
     );
 }
-export default SignupHandler;
+export default SignupHandlerForLogin;

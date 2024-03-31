@@ -18,7 +18,10 @@ import ForgotUser from "./Components/ForgotUser/ForgotUser.jsx";
 import LoginPage from "./Components/Login/Loginpage.jsx";
 import UserPage from "./Pages/UserProfile/UserProfile.jsx";
 import TestData from "./Components/TestingAPI/test.jsx";
-import { ChakraProvider } from "@chakra-ui/react";
+import ResetPass from './Components/ForgotPass/ResetPass.jsx';
+import CommuntiyPage from './Components/CommunitiesListing/CommunityPage.jsx';
+import { ChakraProvider } from '@chakra-ui/react';
+import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -41,84 +44,27 @@ function App() {
       <ChakraProvider>
         <NavbarComponent />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/settings/profile"
-            element={
-              <ProfSetting
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/forgotuser" element={<ForgotUser />} />
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/settings/privacy"
-            element={
-              <SecurityPrivacy
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
-          <Route
-            path="/settings/notifications"
-            element={
-              <NotificationSetting
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
-          <Route
-            path="/settings/account"
-            element={
-              <AccSettings
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
-          <Route
-            path="/settings/feeding"
-            element={
-              <FeedingSettings
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
-          <Route
-            path="/settings/email"
-            element={
-              <EmailSettings
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
-          <Route
-            path="/settings/chatandmasseging"
-            element={
-              <ChatAndMessagingSettings
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
-          <Route path="/user/:username" element={<ShowFriendInformation />} />
-          <Route
-            path="/user/CreatePost"
-            element={
-              <CreatePost
-                hideSidebar={handleHideSidebar}
-                showSidebar={handleShowSidebar}
-              />
-            }
-          />
+          <Route path="/" element={<Home/>} />
+          <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
+          <Route path="/login" element={<LoginPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path="/resetpass" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path="/home" element={<Home/>} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
+          <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/settings/account' element={<AccSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/settings/feeding' element={<FeedingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/user/:username' element={<ShowFriendInformation/>} />
+          <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/user/:username' element={<UserPage/>} />
+          <Route path='/r/:Community' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/hot' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/new' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
+          <Route path='/profile' element={<ProfilePage/>}/>
         </Routes>
       </ChakraProvider>
     </div>

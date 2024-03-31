@@ -1,0 +1,120 @@
+.resetpassword{
+    display: flex;
+    flex-direction: column;
+    background-image: '../src/assets/Loginbackground.jpg';
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.resetBox {
+    width: 80%;
+    height: 100vh;
+    position: absolute;
+    right: 0;
+    box-sizing: border-box;
+}
+.resetText img{
+    display: block;
+    width: 60px;
+    height: 60px;
+}
+
+.resetForm {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 7vh;
+}
+
+.resetText{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding-bottom: 1vh;
+}
+.resetInput{
+    transition: all .2s ease-in-out;
+    height: 48px;
+    width: 50%;
+    padding: 22px 12px 10px 10px;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: 4px;
+    background-color: #fcfcfb;
+    font-family: Noto Sans, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    box-sizing: border-box;
+}
+
+.resetInput input:focus {
+    border-width: 0;
+    outline: none;
+  }
+.resetInput input::placeholder{
+    color: #b3b3b3;
+    border: none;
+}
+
+.resetPass {
+    background-color: transparent;
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+.resetPass button{
+    background: #3394dc;
+    font-family: IBMPlexSans, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    line-height: unset;
+    min-height: 35px;
+    max-width: 392px;
+    width: auto;
+    min-width: 155px;
+    padding: 5px 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.termsCheck{
+    padding-top: 4vh;
+}
+.resetText h3{
+    font-family: Noto Sans, sans-serif;
+    font-weight: 600;
+    line-height: 22px;
+    font-size: 25px;
+}
+
+.resetText p{
+    font-family: Noto Sans, sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 21px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.resetFooter a {
+    text-decoration-line: none;
+  color:#0079d3;
+  padding-top: 2vh;
+  font-family: IBMPlexSans, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    line-height: 24px;
+    text-transform: uppercase;
+
+}

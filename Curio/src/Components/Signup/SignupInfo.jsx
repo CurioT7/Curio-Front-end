@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 
 
 
@@ -17,12 +18,13 @@ function SignupInfo(props) {
   const navigate = useNavigate();
 
   const handleGoogleSignupResponse = async (response) => {
+    console.log(response);
     const hostUrl = import.meta.env.VITE_SERVER_HOST;
-    const serverResponse = await axios.post(`${hostUrl}/api/auth/google/mobile`,{
-      token: response.credential
+    const serverResponse = await axios.post(`${hostUrl}/api/auth/google`,{
+      token: response.access_token
     });
     if(serverResponse.status === 200){
-      const token = serverResponse.data.token;
+      const token = serverResponse.data.accessToken;
       localStorage.setItem('token', token);
       window.dispatchEvent(new Event('loginOrSignup'));
       props.onHide();
@@ -30,21 +32,9 @@ function SignupInfo(props) {
     }
   }
 
-  useEffect(() => {
-    google.accounts.id.initialize({
-      client_id: import.meta.env.VITE_CLIENT_ID,
-      callback: handleGoogleSignupResponse
-    });
-    google.accounts.id.renderButton(
-      document.getElementById("google-signup-button"),
-      {
-        theme: "outline",
-        size: "large",
-        text: "sign up with google",
-        locale: "en",
-      }
-    );
-  }, []);
+  const login = useGoogleLogin({
+    onSuccess: codeResponse => handleGoogleSignupResponse(codeResponse),
+  });
 
 
   const [email, setEmail] = useState(props.enteredEmail || '');
@@ -107,12 +97,21 @@ function SignupInfo(props) {
             <h1 className='signup-header'>Sign Up</h1>
             <p className='signup-info'>By continuing, you agree to our <a style={{color: "#0d6efd"}} href="https://www.redditinc.com/policies/user-agreement">User Agreement</a> and acknowledge that you understand the <a style={{color: "#0d6efd"}} href="https://www.reddit.com/policies/privacy-policy">Privacy Policy</a>.</p>
         </div>
-        <div className="d-flex justify-content-center mb-3" id="google-signup-button" style={{paddingLeft: '80px', paddingRight: '80px'}}>
-            
+        <div className="d-flex justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            <button
+              className="continue-with-google w-100 p-2 d-flex justify-content-between align-items-center align-content-center"
+              type="button"
+              onClick={login}
+            >
+              <div className="logintext">Continue with Google</div>
+              <div className="loginGoogle">
+                <Google />
+              </div>
+            </button>
         </div>
         <div className="d-flex justify-content-between align-items-center align-content-center mb-3 mt-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <hr className='w-50'></hr>
-            <p style={{fontSize: '0.7rem'}} className='px-3'>OR</p>
+            <p style={{fontSize: '0.7rem'}} className='px-3 d-flex align-items-center'>OR</p>
             <hr className='w-50'></hr>
         </div>
         <div style={{borderRadius: '30px', paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
