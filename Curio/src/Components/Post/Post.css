@@ -53,3 +53,55 @@
     color: #0045ac;
     cursor: pointer;
 }
+
+.back-button-post-content:hover{
+    background-color: #E2E7E9!important;
+}
+
+.posts-content-container{
+  margin-left: 22rem;
+}
+
+.post-content-header{
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+}
+
+.post-details-content{
+    color: #2a3c42;
+    font-size: 0.9rem;
+}
+
+.username-comments-section{
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #0f1a1c;
+    line-height: 1rem;
+}
+
+.username-comments-section:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.comment-upvotes{
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.votes-hover-effect{
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+}
+
+.votes-hover-effect:hover{
+    background-color: #E2E7E9;
+    cursor: pointer;
+}
+
+@media (max-width: 1200px){
+    .posts-content-container{
+        margin-left: 8rem;
+    }
+}
