@@ -23,9 +23,26 @@ function Listing(props) {
     }
   }
 
+  function TopBy() {
+    document.getElementById("SortTop").classList.toggle("show");
+  }
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+
   const { Community } = useParams();
   const [listValue, setListValue] = React.useState('Hot');
   const [community, setCommunity] = React.useState("Community");
+  const [sortTop, setSortTop] = React.useState("Today");
 
   React.useEffect(() => {
     setListValue('Hot');
@@ -39,16 +56,32 @@ function Listing(props) {
     setListValue(value);
     props.onChangeSort(value);
   }
+  function changeSortTop(value) {
+    setSortTop(value);
+   
+  }
   return (
     <div className="dropdown">
-      <button onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
-      <div id="myDropdown" className="dropdown-content">
-        <p className="Sort-title">Sort By</p>
-        <Link to={`/r/${community}/hot`} onClick={() => changeListValue("Hot")} className="link-sort">Hot</Link>
-        <Link to={`/r/${community}/new`} onClick={() => changeListValue("New")} className="link-sort">New</Link>
-        <Link to={`/r/${community}/top`} onClick={() => changeListValue("Top")} className="link-sort">Top</Link>
-        <Link to={`/r/${community}/rising`} onClick={() => changeListValue("Rising")} className="link-sort">Rising</Link>
+      <div>
+        <button onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
+        <div id="myDropdown" className="dropdown-content">
+          <p className="Sort-title">Sort By</p>
+          <Link to={`/r/${community}/hot`} onClick={() => changeListValue("Hot")} className="link-sort">Hot</Link>
+          <Link to={`/r/${community}/new`} onClick={() => changeListValue("New")} className="link-sort">New</Link>
+          <Link to={`/r/${community}/top`} onClick={() => changeListValue("Top")} className="link-sort">Top</Link>
+          <Link to={`/r/${community}/rising`} onClick={() => changeListValue("Random")} className="link-sort">Random</Link>
+        </div>
       </div>
+      {/* <div>
+        <button onClick={TopBy} className="dropbtn"> {sortTop} <IoIosArrowDown className="arrow-icon"/></button>
+        <div id="SortTop" className="dropdown-content">
+          <p className="Sort-title">Sort By</p>
+          <Link to={`/r/${community}/top`}  className="link-sort">Today</Link>
+          <Link to={`/r/${community}/top`}  className="link-sort">Week</Link>
+          <Link to={`/r/${community}/top`}  className="link-sort">Month</Link>
+          <Link to={`/r/${community}/top`}  className="link-sort">Year</Link>
+        </div>
+      </div> */}
     </div>
   );
 }
