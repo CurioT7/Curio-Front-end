@@ -35,8 +35,6 @@ const scrollToTop = () => {
         left: "70%",
         color: "black",
         fontSize: "2rem", 
-        marginBottom: "0.5rem", 
-        marginTop: "0.5rem", 
         borderRadius: "20%",
         width: "2rem",
         }
