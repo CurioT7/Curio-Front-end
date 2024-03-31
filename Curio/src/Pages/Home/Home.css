@@ -12,7 +12,8 @@
 
 @media (max-width: 1200px){
   .posts-container{
-    margin-left: 5rem;;
+    margin-left: 5rem;
+    width: 100%;
   }
   .fixed-container{
     overflow-y: hidden!important;

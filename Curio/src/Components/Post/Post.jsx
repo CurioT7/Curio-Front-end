@@ -37,7 +37,7 @@ function Post(props) {
     return (
         <div>
             <Card className='Post' variant='ghost' >
-                <CardHeader>
+                <CardHeader className='py-0'>
                     <Flex spacing='4'>
                     <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                         <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
@@ -57,9 +57,16 @@ function Post(props) {
                 </CardHeader>
                 <CardBody className='py-0'>
                     <Heading as='h3' size='md'>{props.title}</Heading>
-                    <Text className='text-body'>
+                    {props.content && <Text className='text-body'>
                     {props.content}
-                    </Text>
+                    </Text>}
+                    {props.image && <Image
+                        objectFit='cover'
+                        src={props.image}
+                        alt='Chakra UI'
+                        className='mb-1'
+                    />}
+                    
                 </CardBody>
                 {/* <Image
                     objectFit='cover'
