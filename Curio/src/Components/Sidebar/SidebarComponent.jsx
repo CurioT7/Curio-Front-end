@@ -26,6 +26,7 @@ import CommunityImageSideBar from './CommunityImageSideBar.jsx';
 import CreateCommunity from './CreateCommunity.jsx';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
+import { textDecoration } from '@chakra-ui/react';
 
 
 
@@ -161,7 +162,9 @@ function SidebarComponent(props) {
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <MenuItem href="https://www.reddit.com/best/communities/1/" icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities</MenuItem>
+          <Link to="/communities/best/1" style={{ textDecoration: 'none' }}>
+          <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities</MenuItem>
+          </Link>
           <MenuItem href="https://www.reddit.com/posts/2023/global/" icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Best of Reddit</MenuItem>
           <MenuItem href="https://www.reddit.com/topics/a-1/" icon={<Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Topics</MenuItem>
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>

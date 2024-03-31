@@ -88,9 +88,7 @@
     font-size: 0.75rem;
 }
 
-.follow-button:hover{
-    border: 1px solid #0F1A1C;
-}
+
 
 .position-card{
     transform: translate(250%, 0%);
