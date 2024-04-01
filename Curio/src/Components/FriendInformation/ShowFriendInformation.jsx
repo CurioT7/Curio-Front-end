@@ -182,6 +182,7 @@ function ShowFriendInformation(props) {
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
                         <div className="w-100 p-4 ps-3 pe-0">
                             <div className="d-flex align-items-center items-container w-100">
+                                <h1 style={{fontSize: "1rem"}} className="show-friend-header">{friendInfo.displayName || username}</h1>
                                 <div className="d-flex flex-row left-section w-100">
                                     {props.isBlocked ? (
                                         null
