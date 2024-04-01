@@ -79,9 +79,19 @@ function SidebarComponent(props) {
     };
   }, []);
 
-  useEffect(() => {    
-    getJoinedCommunities();
-  }, [getJoinedCommunities]);
+  useEffect(() => { 
+    window.addEventListener("communityCreated", getJoinedCommunities);   
+    return () => {
+      window.removeEventListener("communityCreated", getJoinedCommunities);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkAuthentication();
+    if(isAuthenticated){
+      getJoinedCommunities();
+    }
+  }, [isAuthenticated]);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -200,7 +210,7 @@ function SidebarComponent(props) {
         <a className='rights-reserved ms-4'>Reddit, Inc. © 2024. All rights reserved.</a>
       </div>
     </Sidebar>
-    {isCreateCommunityModalOpen && <CreateCommunity show={isCreateCommunityModalOpen} getJoinedCommunities={getJoinedCommunities} onHide={() => setCreateCommunityModalOpen(false)} />}
+    {isCreateCommunityModalOpen && <CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />}
     </div>
 
   )
