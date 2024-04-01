@@ -4,6 +4,15 @@ import CreateCommunity from '../../Components/Sidebar/CreateCommunity';
 import '@testing-library/jest-dom';
 
 
+jest.mock('../../Components/Sidebar/CreateCommunityEndpoints', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+}));
 
 test('validates community name length with 3 characters', () => {
   const { getByPlaceholderText } = render(<CreateCommunity show onHide={() => {}} />);
