@@ -74,8 +74,14 @@ function UsernameInfo(props) {
     setUsername(generateRandomUsername());
   }
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if(username === '' || password === '' || username.length < 3 || password.length < 8){
+      return;
+    }
+    const usernameAvailability = await checkUsernameAvailability(username);
+    if (usernameAvailability.status === 409){
+      setUsernameErrorMsg("That username is already taken");
+      setIsUsernameValid(1);
       return;
     }
     props.onEnteredUsername(username);
