@@ -12,6 +12,8 @@ import RadioButtonActive from '../../styles/icons/RadioButtonActive';
 import Mature from '../../styles/icons/Mature';
 import createCommunity from './CreateCommunityEndpoints.js';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
+import ExclamationPoint from '../../styles/icons/ExclamationPoint.jsx';
 
 function CreateCommunity(props) {
   const [selectedType, setSelectedType] = useState('public');
@@ -19,6 +21,12 @@ function CreateCommunity(props) {
   const [communityName, setCommunityName] = useState('');
   const [isMature, setIsMature] = useState(false);
   const [isNameValid, setIsNameValid] = useState(0);
+  const toast = useToast({
+    containerStyle: {
+      maxWidth: "2000px!important",
+      backgroundColor: "#EB001F",
+    },
+  });
   const navigate = useNavigate();
 
   const handleTypeChange = (type) => {
@@ -50,11 +58,30 @@ function CreateCommunity(props) {
       over18: isMature,
       privacyMode: selectedType
     }
-    console.log(data);
     try{
       const response = await createCommunity({data});
       if (response.status === 200 || response.status === 201) {
+        props.getJoinedCommunities();
         props.onHide();
+      }
+      if (response.response.status === 400){
+        console.log('error bad request')
+        toast({
+          description: "That subreddit already exists",
+          status: "error",
+          position: "top",
+          isClosable: true,
+          containerStyle: {
+            maxWidth: "2000px!important",
+            width: "1000px",
+            backgroundColor: "#EB001F",
+            fontWeight: "300",
+            borderRadius: "10px",
+            marginTop: "4rem"
+          },
+          icon: <ExclamationPoint />,
+          duration: null
+        });
       }
     } catch (error) {
       console.error('Error:', error);
