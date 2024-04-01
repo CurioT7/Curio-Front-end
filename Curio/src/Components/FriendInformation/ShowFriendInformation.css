@@ -343,3 +343,23 @@
 
 }
 
+.sort-by{
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.sort-button{
+    border-radius: 20px;
+    color: #576f76;
+    font-size: 0.9rem;
+}
+
+.sort-button:hover{
+    background-color: #E2E7E9;
+}
+
+.dropdown-hover-effect:hover{
+    background-color: #f2f4f5;
+    cursor: pointer;
+}
+
