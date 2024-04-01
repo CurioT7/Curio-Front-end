@@ -46,6 +46,7 @@ function CommentInputForm() {
                                 className="form-control textarea-comment p-2 px-3 border-0"
                                 placeholder="Add a comment"
                                 style={{borderRadius: "20px"}}
+                                data-testid="textarea-input"
                             />}
                             {inputState === 2 && <ReactQuill className="border-0" theme="snow" />}
                             {(inputState === 1 || inputState === 2) && <div className="d-flex justify-content-between">
@@ -53,8 +54,8 @@ function CommentInputForm() {
                                     <button type="button" onClick={handleSwitchToRich} style={{backgroundColor: (inputState === 2) ? "#D2DADD" : ""}} className="switch-rich p-2"><SwitchToRichFormat /></button>
                                 </div>
                                 <div className="d-flex ms-auto mb-2">
-                                    <button onClick={() => setInputState(0)} className="me-3 cancel-comment-button p-2">Cancel</button>
-                                    <button className="me-4 comment-button-post-details p-2">Comment</button>
+                                    <button data-testid="cancel-textarea-comment" onClick={() => setInputState(0)} className="me-3 cancel-comment-button p-2">Cancel</button>
+                                    <button data-testid="comment-confirm" className="me-4 comment-button-post-details p-2">Comment</button>
                                 </div>
                             </div>
                             }
