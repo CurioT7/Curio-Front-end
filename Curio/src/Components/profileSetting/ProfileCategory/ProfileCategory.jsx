@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'; 
-import { useToast, Flex, Switch, Spacer } from '@chakra-ui/react';
+import { useToast, Flex, Switch, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 import "./ProfileCategory.css"
 import Titles from "../../feedSettings/childs/Titles";
 import axios from 'axios';
@@ -7,14 +7,28 @@ import axios from 'axios';
 function ProfileCategory() {
   
   const serverHost = import.meta.env.VITE_SERVER_HOST;
-  const toast = useToast()
+  const toast = useToast();
   const [isChecked, setIsChecked] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [pendingChange, setPendingChange] = useState(false);
 
   const handleSwitchChange = () => {
-    setIsChecked(!isChecked); 
-    sendDataToBackend({NSFW: !isChecked})
-    Toast();
+    // setPendingChange(!isChecked);
+    if (isChecked) { // Only open the modal if isChecked is true
+      setIsModalOpen(true);
+    } else {
+      confirmChange();
+    }
   };
+
+  const confirmChange = () => {
+    setIsChecked(!isChecked);
+    console.log(!isChecked)
+    sendDataToBackend({NSFW: !isChecked});
+    setIsModalOpen(false);
+    Toast();
+  };  
+  
 
   function Toast(){
     toast({   
@@ -39,11 +53,9 @@ function ProfileCategory() {
             }
         });
         console.log(response)
-        // Handle response if needed
         return response;
     } catch (error) {
         console.error('Error sending data to backend:', error);
-        // Handle error if needed
     }
   }
 
@@ -71,12 +83,29 @@ function ProfileCategory() {
   }, []);
 
   return (
-    <Flex mb={5} alignItems='center'>
-        <Titles title='NSFW'
-        description="This content is NSFW (may contain nudity, pornography, profanity, or inappropriate content for those under 18)"/>
-        <Spacer/>
-        <Switch size='lg' isChecked={isChecked} onChange={handleSwitchChange}/>
-    </Flex>
+    <>
+      <Flex mb={5} alignItems='center'>
+          <Titles title='NSFW'
+          description="This content is NSFW (may contain nudity, pornography, profanity, or inappropriate content for those under 18)"/>
+          <Spacer/>
+          <Switch size='lg' isChecked={isChecked} onChange={handleSwitchChange}/>
+      </Flex>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>SWITCH ACCOUNT TO SFW</ModalHeader>
+          <ModalCloseButton onClick={() => setIsChecked(true)} />
+          <ModalBody>
+            If your account contains <a href="#">NSFW content</a> (contains nudity, pornography, profanity or inappropriate content for those under 18) 
+            and it’s not set to NSFW, this will result in actions up to and including suspension of your account.
+          </ModalBody>
+          <Flex justifyContent="flex-end" p="3">
+            <Button variant='outline' colorScheme='blue' mr={3} onClick={() => setIsModalOpen(false)}>CANCEL</Button>
+            <Button colorScheme="blue" onClick={confirmChange}>I UNDERSTAND</Button>
+          </Flex>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
 
