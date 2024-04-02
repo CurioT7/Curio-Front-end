@@ -10,13 +10,14 @@ import { BrowserRouter } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
+import { useToast } from '@chakra-ui/react';
 
 
 
 function SignupInfo(props) {
 
   const navigate = useNavigate();
-
+  const toast = useToast();
   const handleGoogleSignupResponse = async (response) => {
     console.log(response);
     const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -24,9 +25,34 @@ function SignupInfo(props) {
       token: response.access_token
     });
     if(serverResponse.status === 200){
+      const getUsername = await axios.get(`${hostUrl}/api/settings/v1/me`, {
+          headers: {  
+            Authorization: `Bearer ${serverResponse.data.accessToken}`
+          }
+      });
+      if(getUsername.status === 200){
+        localStorage.setItem('username', getUsername.data.username);
+      }
       const token = serverResponse.data.accessToken;
       localStorage.setItem('token', token);
       window.dispatchEvent(new Event('loginOrSignup'));
+      
+      toast({
+          description: "Connection succeeded",
+          status: "success",
+          position: "bottom",
+          isClosable: true,
+          backgroundColor: "#55BD46",
+          containerStyle: {
+            width: "500px",
+            backgroundColor: "#55BD46",
+            fontWeight: "300",
+            borderRadius: "20px",
+          },
+          height: "100%",
+          duration: 3000
+        });
+
       props.onHide();
       navigate('/');
     }

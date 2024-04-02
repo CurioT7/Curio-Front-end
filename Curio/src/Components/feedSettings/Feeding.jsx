@@ -187,7 +187,7 @@ function Feeding () {
                             
                         </Flex>
                     </Box>
-
+                    
                 </div>
             </div>
         </div>
@@ -195,4 +195,4 @@ function Feeding () {
     
 }
 
-export default Feeding ;
+export default Feeding;

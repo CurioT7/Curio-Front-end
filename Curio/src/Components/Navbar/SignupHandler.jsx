@@ -9,6 +9,7 @@ import Gender from "../Signup/Gender";
 import Preferences from "../Signup/Preferences";
 import { signup } from "../Signup/SignupEndpoints";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 
 function SignupHandler() {
 
@@ -21,6 +22,7 @@ function SignupHandler() {
   const [password, setEnteredPassword] = useState('');
   const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,6 +99,21 @@ function SignupHandler() {
         console.log('Token:', response.data.accessToken);
         setIsAuthenticated(true);
         window.dispatchEvent(new Event("loginOrSignup"));
+        toast({
+          description: "Account Created Successfully!",
+          status: "success",
+          position: "bottom",
+          isClosable: true,
+          backgroundColor: "#55BD46",
+          containerStyle: {
+            width: "500px",
+            backgroundColor: "#55BD46",
+            fontWeight: "300",
+            borderRadius: "20px",
+          },
+          height: "100%",
+          duration: 3000
+        });
         navigate("/");
       }
       else{
@@ -114,6 +131,21 @@ function SignupHandler() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     setIsAuthenticated(false);
+    toast({
+          description: "Logout Successful!",
+          status: "success",
+          position: "bottom",
+          isClosable: true,
+          backgroundColor: "#55BD46",
+          containerStyle: {
+            width: "500px",
+            backgroundColor: "#55BD46",
+            fontWeight: "300",
+            borderRadius: "20px",
+          },
+          height: "100%",
+          duration: 3000
+        });
     window.dispatchEvent(new Event("loginOrSignup"));
     navigate("/");
   }

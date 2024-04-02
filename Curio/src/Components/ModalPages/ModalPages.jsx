@@ -84,17 +84,17 @@ const MultiPageFormModal = (props) => {
         props.onHide();
     };
 
-    const reportUser = async (reportedUsername, reportType, reportReason ,reportFurtherDetails ) => {
+    const reportUser = async (reportedUsername, reportType, reportReason ,reportDetails ) => {
+        console.log(localStorage.getItem('token'));
         try {
             const response = await axios.post(`${hostUrl}/api/report_user`, {
                 reportedUsername: reportedUsername,
                 reportType: reportType,
                 reportReason: reportReason,
-                reportFurtherDetails: reportFurtherDetails
+                reportDetails
             }, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    authorization : `Bearer ${localStorage.getItem('token')}`
                 }
             });
     
@@ -103,7 +103,6 @@ const MultiPageFormModal = (props) => {
             console.error(error);
         }
     };
-
 
 
     return (
@@ -187,7 +186,7 @@ const MultiPageFormModal = (props) => {
                         {step === 2 && (
                             <>
                              <p className={classes['body-text']}>What rule is this breaking?</p>
-                             <div className="flex-container">
+                             <div className={classes['flex-container']}>
                              <button
                                 className={`${classes["option-button"]} ${reportReason === 'harassment' ? classes['selected'] : ''}`}
                                 onClick={() => { handleOptionClick('harassment'); handleDescriptionChange('Harassment'); handleExplanationChange('Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.'); }}
