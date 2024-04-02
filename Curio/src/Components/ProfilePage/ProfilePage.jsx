@@ -1,14 +1,27 @@
 import './ProfilePage.css';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
 import {useNavigate} from 'react-router-dom';
-import React, { useRef } from 'react';
-
-
+import React, { useRef, useEffect, useState } from 'react';
+import RecentPosts from '../RecentPosts/RecentPosts.jsx';
+import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
+import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
 function ProfilePage(){
 
   const navigate = useNavigate();
   const tabListRef = useRef();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState(null);
+
   
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const StoredUsername = localStorage.getItem('username');
+    if (!token) {
+     navigate('/login');
+    }
+    setIsLoggedIn(true);
+    setUsername(StoredUsername);
+  }, []);
 
   const scrollLeft = () => {
       tabListRef.current.scrollLeft -= 100;
@@ -46,33 +59,43 @@ return(
     <Tab>Upvoted</Tab>
     <Tab>Downvoted</Tab>
   </TabList>
-  <hr />
+  <div className='postCreate'>
+    <button onClick={()=> navigate('/user/CreatePost')} >+ Create a post</button>
+  </div>
+  <hr style={{width: "90%"}} />  
   <TabPanels className="profilePannels">
-    <TabPanel>
-      <p>u/sad_p0tat0o hasn't posted yet</p>
+    <TabPanel  onClick={() => getUserOverview(username)}>
+      <RecentPosts />
     </TabPanel>
+
     <TabPanel>
-      <p>u/sad_p0tat0o hasn't posted yet</p>
+       <RecentPosts />
     </TabPanel>
-    <TabPanel>
+
+    <TabPanel onClick={()=> getUserComments(username)}>
       <p>u/sad_p0tat0o hasn't commented yet</p>
     </TabPanel>
-    <TabPanel>
+
+    <TabPanel >
       <p>Looks like you haven't saved anything yet</p>
     </TabPanel>
-    <TabPanel>
+
+    <TabPanel >
       <p>Looks like you haven't hidden anything yet</p>
     </TabPanel>
-    <TabPanel>
+
+    <TabPanel  onClick={()=> getUserUpvoted(username)}>
       <p>Looks like you haven't upvoted anything yet</p>
     </TabPanel>
-    <TabPanel>
+
+    <TabPanel  onClick={()=> getUserDownvoted(username)}>
       <p>Looks like you haven't downvoted anything yet</p>
     </TabPanel>
+    
   </TabPanels>
 </Tabs>
 </div>
-
+<BackToTheTopButton style={{ left: "90%", position: 'static' }} />
 </div>
 
 <div className="rightSideBar">
