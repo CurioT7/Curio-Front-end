@@ -77,7 +77,7 @@ async function changeSortType(value,time) {
         {randomPost.isSelected==false ? (posts.map((post) => (
           <><Post
             
-            id={post._id}
+            _id={post._id}
             title={post.title}
             body={post.body}
             user={post.authorName}
@@ -91,7 +91,7 @@ async function changeSortType(value,time) {
         ))):(
         <><Post
             
-          id={randomPost.post._id}
+          _id={randomPost.post._id}
           title={randomPost.post.title}
           body={randomPost.post.body}
           user={randomPost.post.authorName}
