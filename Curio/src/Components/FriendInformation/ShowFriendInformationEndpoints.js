@@ -15,5 +15,38 @@ async function showFriendInformation({username}) {
     }
 }
 
+async function userBlock(usernameToBlock) {
+    try {
+        console.log(localStorage.getItem('token'));
+        const response = await axios.post(`${hostUrl}/api/User/block`, {
+            usernameToBlock
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        localStorage.setItem('blockedUser', usernameToBlock);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
-export default showFriendInformation;
+async function userUnblock(usernameToUnblock) {
+    try {
+        const response = await axios.post(`${hostUrl}/api/User/unblock`, {
+            usernameToUnblock
+        }, {
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        localStorage.removeItem('blockedUser');
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+
+export {userBlock, userUnblock, showFriendInformation};

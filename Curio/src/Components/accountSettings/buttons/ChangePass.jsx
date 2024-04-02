@@ -160,7 +160,7 @@ function ChangePass(props){
     
     return(
         <Box>
-                <Button onClick={onOpen} style={props.buttonStyle} variant='outline'>Change</Button>
+                <Button onClick={onOpen} style={props.buttonStyle} colorScheme='blue' variant='outline'>Change</Button>
 
                 <Modal  size='3xl' isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />

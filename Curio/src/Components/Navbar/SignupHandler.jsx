@@ -9,6 +9,7 @@ import Gender from "../Signup/Gender";
 import Preferences from "../Signup/Preferences";
 import { signup } from "../Signup/SignupEndpoints";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 
 function SignupHandler() {
 
@@ -21,6 +22,7 @@ function SignupHandler() {
   const [password, setEnteredPassword] = useState('');
   const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,6 +99,21 @@ function SignupHandler() {
         console.log('Token:', response.data.accessToken);
         setIsAuthenticated(true);
         window.dispatchEvent(new Event("loginOrSignup"));
+        toast({
+          description: "Account Created Successfully!",
+          status: "success",
+          position: "bottom",
+          isClosable: true,
+          backgroundColor: "#55BD46",
+          containerStyle: {
+            width: "500px",
+            backgroundColor: "#55BD46",
+            fontWeight: "300",
+            borderRadius: "20px",
+          },
+          height: "100%",
+          duration: 3000
+        });
         navigate("/");
       }
       else{
@@ -114,21 +131,40 @@ function SignupHandler() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     setIsAuthenticated(false);
+    toast({
+          description: "Logout Successful!",
+          status: "success",
+          position: "bottom",
+          isClosable: true,
+          backgroundColor: "#55BD46",
+          containerStyle: {
+            width: "500px",
+            backgroundColor: "#55BD46",
+            fontWeight: "300",
+            borderRadius: "20px",
+          },
+          height: "100%",
+          duration: 3000
+        });
     window.dispatchEvent(new Event("loginOrSignup"));
     navigate("/");
   }
 
-    return (
-        <>
-            <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', width:"20px!important"}} className="link-offcanvas signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
-                {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Login / Register</span></NavDropdown.Item>}
-                {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Logout</span></NavDropdown.Item>}
-            </NavDropdown>
-            {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
-            {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
-            {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}
-            {isPreferencesModalOpen && <Preferences show={isPreferencesModalOpen} onHide={() => setPreferencesModalOpen(false)} onBackToGender={handleBackToGender} onSignup={handleSignup} />}
-        </>
-    );
+  return (
+      <>
+          <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', width:"20px!important"}} className="link-offcanvas signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
+              {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Login / Register</span></NavDropdown.Item>}
+              {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup />
+              <span className="ms-3">
+                Logout
+                </span>
+              </NavDropdown.Item>}
+          </NavDropdown>
+          {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
+          {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
+          {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}
+          {isPreferencesModalOpen && <Preferences show={isPreferencesModalOpen} onHide={() => setPreferencesModalOpen(false)} onBackToGender={handleBackToGender} onSignup={handleSignup} />}
+      </>
+  );
 }
 export default SignupHandler;
