@@ -55,7 +55,7 @@ test('handles navigation to details page', () => {
   fireEvent.click(screen.getByText(post.user));
 
 
-  expect(mockNavigate).toHaveBeenCalledWith(`/post/post-details/${post.id}`);
+  expect(mockNavigate).toHaveBeenCalledWith(`/post/post-details/${post._id}`);
 });
 
 describe('Post component', () => {
