@@ -6,8 +6,6 @@ import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
 import { useNavigate } from 'react-router-dom';
 import Block from "../../Components/SafetyPrivacy/Safety/Block/Block.jsx";
 import Mute from "../../Components/SafetyPrivacy/Safety/Mute/Mute.jsx";
-import { Link } from '@chakra-ui/react'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 
 
@@ -45,9 +43,6 @@ useEffect(() => {
           <Mute/>
           </div>
         </div>
-        <Link href='#' isExternal>
-          Manage third-party app authorization <ExternalLinkIcon mx='2px' />
-        </Link>
       </div> 
     </div>
   );
