@@ -64,7 +64,7 @@ function Post(props) {
             localStorage.setItem('recentPosts', JSON.stringify([post]));
         }
 
-        if (recentPosts.length === 0) {
+        if (recentPosts && recentPosts.length === 0) {
             localStorage.setItem('recentPosts', JSON.stringify([post]));
         }
         window.dispatchEvent(new Event('newRecentPost'));

@@ -5,6 +5,7 @@ import ExclamationMark from '../../styles/icons/ExclamationIcon';
 import classes from './ModalPages.module.css';
 import Back from '../../styles/icons/Back'
 import axios from "axios";
+import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
 
 const MultiPageFormModal = (props) => {
     const [step, setStep] = useState(1);
@@ -17,6 +18,7 @@ const MultiPageFormModal = (props) => {
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isSecondStep, setSecondStep] = useState(false);
     const[isPrevStep, setPrevStep] = useState(false);
+    const [isBlocked, setIsBlocked] = useState(false);
 
 
     const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -103,6 +105,15 @@ const MultiPageFormModal = (props) => {
             console.error(error);
         }
     };
+
+    const handleBlockToggle = () => {
+        if (!isBlocked) {
+            userBlock(props.username);
+        } else {
+            userUnblock(props.username);
+        }
+        setIsBlocked(!isBlocked);
+    }
 
 
     return (
@@ -486,7 +497,7 @@ const MultiPageFormModal = (props) => {
                                   <p className={` m-0' ${classes['block']}`}>You won't be able to send direct messages or chat requests to each other.</p>
                                 </div>
                                 <div className='form-check form-switch d-flex align-items-center'>
-                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" id="mature" role="switch" name="mature" value="mature" />
+                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" id="block" role="switch" name="block" value="block" onChange={handleBlockToggle} />
                                 </div>
                             </div>
                             <div className="d-flex justify-content-end">
