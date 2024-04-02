@@ -48,7 +48,7 @@ function NavbarComponent() {
                       </Link>
                   </Nav.Link>
                   <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', backgroundColor: "#ffffff!important", color:"#000000!important"}} className="signup-button px-2 me-4 ms-3 d-flex justify-content-center col-md-1 col-xs-1 link-offcanvas" title="Profile">
-                    <NavDropdown.Item className="d-flex signup-button-item px-3"><span className="ms-3"> <Link style={{color: "#000000!important"}} className='settings' to={'profile'} > View Profile </Link> </span></NavDropdown.Item>
+                    <NavDropdown.Item className="d-flex signup-button-item px-3"><span className="ms-3"> <Link style={{color: "#000000!important"}} className='settings' to={'user'} > View Profile </Link> </span></NavDropdown.Item>
                     <NavDropdown.Item style={{height: "50px", color: "#000000!important"}} className="d-flex align-items-center signup-button-item px-2 link-offcanvas"><Link style={{color: "#000000!important"}} className='settings' to={'settings/account'}><div style={{backgroundColor: "#f2f4f5!important"}} className='d-flex'><img style={{height: "20px"}} src={setting} alt="setting" className="settings-offcanvas align-text-middle mx-2"/><span>View Settings</span></div></Link></NavDropdown.Item>
                   </NavDropdown>
                   <div className='d-flex align-items-center'>

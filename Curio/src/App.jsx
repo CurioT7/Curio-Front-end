@@ -66,7 +66,7 @@ function App() {
           <Route path='/r/:Community/new' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
-          <Route path='/profile' element={<ProfilePage/>}/>
+          <Route path='/user' element={<ProfilePage/>}/>
           <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
         </Routes>
       </ChakraProvider>
