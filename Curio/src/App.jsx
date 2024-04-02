@@ -69,10 +69,10 @@ function App() {
           <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage/>} />
           <Route path='/r/:Community' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/hot' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/new' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/Hot' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/New' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/Top' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
           <Route path='/user' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
