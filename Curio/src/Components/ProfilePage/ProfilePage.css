@@ -20,17 +20,6 @@
 justify-content: flex-start;
 }
 
-.profileName{
-
-}
-
-.userName{
-
-}
-
-.tableList{
-
-}
 
 .rightSideBar{
     justify-content: flex-end;
@@ -174,3 +163,15 @@ line-height: 1.25rem;
 .scrollableTabList::-webkit-scrollbar {
     display: none;
 }
+
+.postCreate button{
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding-right: 2%;
+    padding-left: 2%;
+    margin-top: 10px;
+    border: 1px solid black;
+    padding-top: 2px;
+    padding-bottom: 2px
+}
+

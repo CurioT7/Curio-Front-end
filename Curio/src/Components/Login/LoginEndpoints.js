@@ -72,7 +72,7 @@ const checkCredentials = async (username, email) => {
   return responseData;
 };
 
-const resetPassword = async (username, email) => {
+const forgotPassword = async (username, email) => {
   const url = `${VITE_SERVER_HOST}/api/auth/password`;
   const data = {
     username: username,
@@ -94,6 +94,29 @@ const resetPassword = async (username, email) => {
   const responseData = await response.json();
   return responseData;
 };
+
+const resetPassword = async (newPassword) => {
+  const url = `${VITE_SERVER_HOST}/api/auth/resetpass`;
+  const data = {
+    password: newPassword,
+  };
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  const responseData = await response.json();
+  return responseData;
+};
+
 
 const changePassword = async (oldPassword, newPassword) => {
   const url = `${VITE_SERVER_HOST}/api/auth/change_password`;
@@ -138,6 +161,7 @@ async function getGoogleToken() {
 export {
   loginUser,
   resetPassword,
+  forgotPassword,
   getGoogleToken,
   verifyUsername,
   checkCredentials,
