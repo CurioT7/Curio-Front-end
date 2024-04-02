@@ -15,6 +15,7 @@ import showFriendInformation from "./ShowFriendInformationEndpoints.js";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Block from "../../styles/icons/Block";
+import DownArrow from "../../styles/icons/DownArrow";
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
@@ -27,6 +28,8 @@ function ShowFriendInformation(props) {
     const [friendInfo, setFriendInfo] = useState({});
     // const [isnextPage, setIsNextPage] = useState(false);
     const [friendusername , setFriendusername] = useState('');
+    const [showSortings, setShowSortings] = useState(false);
+    const [sortingState, setSortingState] = useState(1);
 
     // handleNextPage = () => {
     //     props.nextPage();
@@ -40,6 +43,10 @@ function ShowFriendInformation(props) {
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
+    };
+
+    const handleSortingsClick = () => {
+        setShowSortings(!showSortings);
     };
 
     const handleReportClick = () => {
@@ -182,6 +189,7 @@ function ShowFriendInformation(props) {
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
                         <div className="w-100 p-4 ps-3 pe-0">
                             <div className="d-flex align-items-center items-container w-100">
+                                <h1 style={{fontSize: "1rem"}} className="show-friend-header">{friendInfo.displayName || username}</h1>
                                 <div className="d-flex flex-row left-section w-100">
                                     {props.isBlocked ? (
                                         null
@@ -285,18 +293,42 @@ function ShowFriendInformation(props) {
                         <button className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
                     <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2">
-                        <div className="pt-0 d-flex justify-content-start">
-                            <Dropdown>
-                                <Dropdown.Toggle variant="success" id="dropdown-basic" className="sorting-buttons">
-                                    New
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="dropdown-menu sorting-dropdown-menu">
-                                    <h4 className="d-flex justify-content-center list-header">Sort By</h4>
-                                    <Dropdown.Item href="#/action-1">Hot</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">New</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Top</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                        <div className="pt-0 w-75 d-flex">
+                            <button className="d-flex justify-content-center ms-2 sort-button p-2" style={{backgroundColor : showSortings ? "#D2DADD" : ""}} onClick={handleSortingsClick}>{sortingState === 0 ? "Hot" : sortingState === 1 ? "New" : "Top"}<div className="ms-1"><DownArrow /></div></button>
+
+                            <div className="" style={{ 
+                                        display: showSortings ? 'flex' : 'none',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-start',
+                                        position: 'absolute',
+                                        translateY: '-20%!important',
+                                        translateX: '0%',
+                                        backgroundColor: '#FFFFFF',
+                                        borderRadius: '10px',
+                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
+                                        marginTop: '2rem',
+                                        marginRight: '1rem',
+                                        padding: '0px',
+                                        width: '4rem !important',
+                                        zIndex: '1'
+                                    }}>
+                                        <ul className='drop-down-list'>
+                                            <li className="drop-down-item">
+                                                    <div className="d-flex justify-content-center"><p className='text-text sort-by mb-0 p-2 ms-0'>Sort By</p></div>
+                                            </li>
+                                        </ul>
+                                        <ul className='drop-down-list w-100 p-0'>
+                                            <li className="drop-down-item dropdown-hover-effect mb-0 pt-2" style={{backgroundColor: (sortingState === 0) ? "#EAEDEF" : ""}} onClick={() => setSortingState(0)}>
+                                                    <div className="pt-2"><p className='text-text'>Hot</p></div>
+                                            </li>
+                                            <li className="drop-down-item dropdown-hover-effect p-0 pt-2 mb-0" style={{backgroundColor: (sortingState === 1) ? "#EAEDEF" : ""}} onClick={() => setSortingState(1)}>
+                                                    <div className="pt-2"><p className='text-text'>New</p></div>
+                                            </li>
+                                            <li className="drop-down-item dropdown-hover-effect mb-1 p-0 pt-2" style={{backgroundColor: (sortingState === 2) ? "#EAEDEF" : ""}} onClick={() => setSortingState(2)}>
+                                                    <div className="pt-2"><p className='text-text'>Top</p></div>
+                                            </li>
+                                        </ul>   
+                                    </div>
                         </div>
                     </div>
                 </div>

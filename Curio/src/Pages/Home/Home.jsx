@@ -9,7 +9,7 @@ function Home() {
 
   return (
     <>
-    <div className='d-flex'>
+    
       {/* Insert posts here (above recent posts) */}
       <div className='col-md-6 d-flex p-3 posts-container flex-column'>
          <Post
@@ -20,6 +20,7 @@ function Home() {
             downvotes={1}
             comments={[4, 5]} // Dummy array for comments
           />
+          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           <Post
             user="r/netherlands"
             title="Second Post"
@@ -43,7 +44,7 @@ function Home() {
           <BackToTheTopButton/>
 
       </div>
-    </div>
+    
     </>
   )
 }
