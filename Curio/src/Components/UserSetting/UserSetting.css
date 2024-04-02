@@ -4,14 +4,6 @@
     --thirdclr: #edeff1;
     --fourcle: #0079d3;
 }
-/* .special{
-    color: var(--secclr);
-    border-bottom: 3px solid var(--fourcle);
-} */
-.selected-setting {
-    color: red;
-  }
-  
 #user_settings{
     font-size: 18px;
     font-weight: 500;
@@ -21,6 +13,8 @@
 .user-settings-links{
     padding: 0 20px;
     border-bottom: 1px solid var(--thirdclr);
+    margin: 0 auto;
+    max-width: 1200px;
 }
 .user-settings-links .setting-link{
     color: var(--firstclr);
