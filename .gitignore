@@ -6,3 +6,5 @@ Curio/package.json
 /node_modules
 *.env
 *.json
+Curio/.env
+*.json
