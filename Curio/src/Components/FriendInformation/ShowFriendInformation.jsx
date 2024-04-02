@@ -11,9 +11,9 @@ import ReportIcon from "../../styles/icons/Report";
 import MessageIcon from "../../styles/icons/SendMessage";
 import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
-import showFriendInformation from "./ShowFriendInformationEndpoints.js";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import {userBlock , userUnblock} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
@@ -24,9 +24,13 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 function ShowFriendInformation(props) {
     const { username } = useParams();
     const [showDropdown, setShowDropdown] = useState(false);
-    const [isFollowing, setIsFollowing] = useState(false);
+    const initialFollowStatus = localStorage.getItem('followedUser');
+    const [isFollowing, setIsFollowing] = useState(initialFollowStatus === username);
+    const initialBlockStatus = localStorage.getItem('blockedUser');
+    const [isBlocked, setIsBlocked] = useState(initialBlockStatus === username);
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
+
     // const [isnextPage, setIsNextPage] = useState(false);
     const [friendusername , setFriendusername] = useState('');
     const [showSortings, setShowSortings] = useState(false);
@@ -83,41 +87,56 @@ function ShowFriendInformation(props) {
                     'authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response);
-            return response.data;
+            localStorage.setItem('followedUser', friendUsername);
+        
+            console.log('Friend followed');
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    async function userUnfollow(friendUsername) {
-                await axios.delete(`${hostUrl}/api/me/friends`, {
+
+        async function userUnfollow(friendUsername) {
+        try {
+            await axios.patch(`${hostUrl}/api/me/friends`, {
                 friendUsername
             },{
                 headers: {
                     'Content-Type': 'application/json',
                     'authorization': `Bearer ${localStorage.getItem('token')}`
                 }
-            }).then(response => {
-                if (response.status === 200) {
-                  console.log('Friend unfollowed')
-                }
-              })
-              .catch(error => {
-                if (error.response) {
-                  switch (error.response.status) {
-                    case 404:
-                        console.log('Friend not found')
-                      break;
-                      case 500:
-                        console.log(`An unexpected error occurred on the server. Please try again later.`);
-                      break;
-                    default:
-                      break;
-                  }
-                }
-              });
-            };
+            });
+    
+            localStorage.removeItem('followedUser');
+    
+            console.log('Friend unfollowed');
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
+    // async function userUnfollow(friendUsername) {
+    //     try {
+    //         await axios.post(`${hostUrl}/api/me/friends`, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'authorization': `Bearer ${localStorage.getItem('token')}`
+    //             },
+    //             data: {
+    //                 friendUsername
+    //             }
+    //         });
+    
+    //         // Remove the follow status from local storage
+    //         localStorage.removeItem('followedUser');
+    
+    //         console.log('Friend unfollowed');
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // };
+    
 
     const handleFollowToggle = () => {
         if (isFollowing) {
@@ -129,39 +148,39 @@ function ShowFriendInformation(props) {
     }
 
 
-    async function userBlock(usernameToBlock) {
-        try {
-            console.log(localStorage.getItem('token'));
-            const response = await axios.post(`${hostUrl}/api/User/block`, {
-                usernameToBlock
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            console.log(response);
-            return response;
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+    // async function userBlock(usernameToBlock) {
+    //     setIsBlocked(true);
+    //     try {
+    //         console.log(localStorage.getItem('token'));
+    //         const response = await axios.post(`${hostUrl}/api/User/block`, {
+    //             usernameToBlock
+    //         }, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //             }
+    //         });
+    //         localStorage.setItem('blockedUser', usernameToBlock);
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // }
 
-    async function userUnblock(usernameToUnblock) {
-        try {
-            const response = await axios.post(`${hostUrl}/api/User/unblock`, {
-                usernameToUnblock
-            }, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            console.log(response);
-            return response;
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+    // async function userUnblock(usernameToUnblock) {
+    //     setIsBlocked(false);
+    //     try {
+    //         const response = await axios.post(`${hostUrl}/api/User/unblock`, {
+    //             usernameToUnblock
+    //         }, {
+    //             headers: {
+    //                 authorization: `Bearer ${localStorage.getItem('token')}`
+    //             }
+    //         });
+    //         localStorage.removeItem('blockedUser');
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // }
 
 
 
@@ -176,15 +195,6 @@ function ShowFriendInformation(props) {
                         <div className="d-flex flex-column align-items-md-center align-items-sm-start">
                             <h1 className="show-friend-header d-flex align-items-center mb-0">{friendInfo.displayName}</h1>
                             <p className="show-friend-username d-flex align-items-center me-auto">u/{username}</p>
-                        </div>
-                        <div className="d-flex responsive follow-buttons justify-content-start justify-content-sm-center">
-                            <button className={`d-flex justify-content-center align-items-center follow-button m-0 me-2 ms-0 ms-md-2 ${isFollowing ? 'following' : 'not-following1'}`}>
-                                <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
-                                <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
-                            </button>
-                            <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
-                                <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
-                            </button>
                         </div>
                     </div>
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">

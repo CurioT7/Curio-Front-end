@@ -4,47 +4,104 @@ import "./Home.css"
 import RecentPosts from '../../Components/RecentPosts/RecentPosts'
 import Post from '../../Components/Post/Post'
 import BackToTheTopButton from "./BackToTopButton.jsx";
-import axios from 'axios';
+import Listing from '../../Components/CommunitiesListing/Listing.jsx'
+import { fetchPostsFromBackend,fetchHotFromBackend,fetchNewFromBackend,fetchTopFromBackend,fetchRandomFromBackend } from './HomeEndPoints.js'
 function Home() {
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    const hostUrl = import.meta.env.VITE_SERVER_HOST;
-    const subreddit = "Books fuga";
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${hostUrl}/api/best`);
-        if (response.status === 200) {
-          setPosts(response.data.SortedPosts || response.data);
-        }
-        else{
-          console.error("Failed to fetch data");
-        }
-      } catch (error) {
-        console.error(error);
+
+  const[posts, setPosts] = React.useState([])
+  const[randomPost, setRandomPost] = React.useState({
+    post:{
+
+    },
+    isSelected: false
+  })
+React.useEffect(() => {
+  async function fetchAndSetData() {
+      const data = await fetchPostsFromBackend();
+      if (data) {
+          setPosts(data);
+          setRandomPost({ ...randomPost, isSelected: false });
       }
-    }
-    fetchData();
-  }, []);
+  }
+
+  fetchAndSetData();
+}, []);
+
+console.log(posts);
+
+
+async function changeSortType(value,time) {
+  
+  console.log(`value :${value}`);
+  async function SetData() {
+      if (value === 'Hot') {
+          const data = await fetchHotFromBackend();
+          if (data) {
+              setPosts(data);
+              setRandomPost({ ...randomPost, isSelected: false });
+          }
+      }
+      else if (value === 'New') {
+          const data = await fetchNewFromBackend();
+          if (data) {
+              setPosts(data);
+              setRandomPost({ ...randomPost, isSelected: false });
+          }
+      }
+      else if (value === 'Top') {
+          const data = await fetchTopFromBackend();
+          if (data) {
+              setPosts(data);
+              setRandomPost({ ...randomPost, isSelected: false });
+          }
+      }
+      else if (value === 'Random') {
+          // const data = await fetchRandomFromBackend();
+          // if (data) {
+          //     setRandomPost({ post: data, isSelected: true });
+          //     console.log(`this is random post: ${randomPost.post}`);
+          // }
+      }
+  }
+  SetData();
+}
   return (
     <>
     
       {/* Insert posts here (above recent posts) */}
       <div className='col-md-6 d-flex p-3 posts-container flex-column'>
-          {posts && posts.map((post, index) => {
-            return (
-              <Post
-                key={index}
-                _id={post._id}
-                user={post.authorName}
-                title={post.title}
-                image={post.image}
-                content={post.content}
-                upvotes={post.upvotes}
-                downvotes={post.downvotes}
-                comments={post.comments}
-              />
-            )
-          })}
+        <div className='my-1'>
+        <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
+        <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+        </div>
+        {randomPost.isSelected==false ? (posts.map((post) => (
+          <><Post
+            
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+          />
+          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+          </>
+        ))):(
+        <><Post
+            
+          _id={randomPost.post._id}
+          title={randomPost.post.title}
+          body={randomPost.post.body}
+          user={randomPost.post.authorName}
+          upvotes={randomPost.post.upvotes}
+          downvotes={randomPost.post.downvotes}
+          comments={randomPost.post.comments}
+          content={randomPost.post.content}
+        />
+        <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+        </>)}
          <Post
             _id={1}
             user="r/germany"

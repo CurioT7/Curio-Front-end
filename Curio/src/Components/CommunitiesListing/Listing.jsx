@@ -2,7 +2,7 @@
 import { IoIosArrowDown } from "react-icons/io";
 import "./CommunityPage.css";
 import React from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 
 function Listing(props) {
  
@@ -26,23 +26,49 @@ function Listing(props) {
     }
   }
 
-  
-  
+  const navigate= useNavigate();
+  const commSortArr = ["Hot", "New", "Top", "Random"];
+  const topSortArr = ["Now", "Today", "This Week", "This Month", "This Year", "All Time"];
+  const homeSortArr = ["Best", "Hot", "New", "Top","Random"];
+  const profileSortArr = ["Hot", "New", "Top"];
   const { Community } = useParams();
   const [listValue, setListValue] = React.useState('Hot');
   const [community, setCommunity] = React.useState("Community");
   const [sortTop, setSortTop] = React.useState("Today");
 
   React.useEffect(() => {
-    setListValue('Hot');
-  }, [Community]);
-  console.log(listValue);
-  React.useEffect(() => {
-    setCommunity(Community);
-  }, [Community]);
+    const savedListValue = localStorage.getItem('listValue');
+    if (props.isHome) {
+      setListValue(savedListValue);
+    } 
+     else if (props.isProfile) {
+      setListValue(savedListValue);
+    }
+  }, []);
   
+  const handleListValueChange = (value) => {
+    if (props.isHome) {
+      localStorage.setItem('listValue', value);
+      // navigate.push(`/${value}`);
+    }
+  };
+  
+  if (props.isCommunity) {
+    React.useEffect(() => {
+      
+      setListValue('Hot');
+      
+    }, [Community]);
+    React.useEffect(() => {
+      setCommunity(Community);
+    }, [Community]);
+  }
+  console.log(listValue);
+  
+  console.log(community);
   function changeListValue(value) {
     setListValue(value);
+    handleListValueChange(value);
     props.onChangeSort(value,sortTop);
   }
   function changeSortTop(value) {
@@ -56,10 +82,14 @@ function Listing(props) {
         <button onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
         <div id="myDropdown" className="dropdown-content">
           <p className="Sort-title">Sort By</p>
-          <Link to={`/r/${community}/hot`} onClick={() => changeListValue("Hot")} className="link-sort">Hot</Link>
-          <Link to={`/r/${community}/new`} onClick={() => changeListValue("New")} className="link-sort">New</Link>
-          <Link to={`/r/${community}/top`} onClick={() => changeListValue("Top")} className="link-sort">Top</Link>
-          <Link to={`/r/${community}/rising`} onClick={() => changeListValue("Random")} className="link-sort">Random</Link>
+         
+          {props.isCommunity &&<>{commSortArr.map((Sort)=>(
+            <Link to={`/r/${community}/${Sort}`} onClick={() => changeListValue(Sort)} className="link-sort">{Sort}</Link>
+          ))}</> }
+
+           {props.isHome &&<>{homeSortArr.map((Sort)=>(
+            <Link to={`/${Sort}`} onClick={() => changeListValue(Sort)} className="link-sort">{Sort}</Link>
+          ))}</> }
         </div>
       </div>
       <div>
@@ -67,12 +97,11 @@ function Listing(props) {
         <button onClick={TopBy} className="dropbtn"> {sortTop} <IoIosArrowDown className="arrow-icon"/></button>
         <div id="SortTop" className="dropdown-content ">
           <p className="Sort-title">Sort By</p>
-          <Link to={`/r/${community}/top`} onClick={()=> changeSortTop("Now")}  className="link-sort">Now</Link>
-          <Link to={`/r/${community}/top`} onClick={()=> changeSortTop("Today")}  className="link-sort">Today </Link>
-          <Link to={`/r/${community}/top`} onClick={()=> changeSortTop("This Week")}  className="link-sort">This Week</Link>
-          <Link to={`/r/${community}/top`} onClick={()=> changeSortTop("This Month")}  className="link-sort">This Month</Link>
-          <Link to={`/r/${community}/top`} onClick={()=> changeSortTop("This Year")}  className="link-sort">This Year</Link>
-          <Link to={`/r/${community}/top`} onClick={()=> changeSortTop("All Time")}  className="link-sort">All Time</Link>
+          {props.isCommunity &&<>{topSortArr.map((Sort)=>(
+            <Link to={`/r/${community}/Top`} onClick={() => changeSortTop(Sort)} className="link-sort">{Sort}</Link>
+          ))} </>  }
+          
+          
         </div>
         </div>}
       </div>

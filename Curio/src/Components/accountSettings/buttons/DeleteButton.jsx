@@ -85,6 +85,8 @@ function DeleteButton(){
           }
         }
     }
+
+    
     function handleSubmit(e){
         e.preventDefault();
         sendDataToBackend();
