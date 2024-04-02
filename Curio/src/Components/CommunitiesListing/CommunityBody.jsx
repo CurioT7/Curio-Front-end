@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
 import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend } from "./CommunityEndPoints";
 function CommunityBody({ props }) {
-  const serverHost = import.meta.env.VITE_SERVER_HOST;
+  
   const[posts, setPosts] = React.useState([])
   const[randomPost, setRandomPost] = React.useState({
     post:{
@@ -73,7 +73,7 @@ console.log(posts);
   return (
     <div className="community-body">
       <div className=" list mb-3">
-        <Listing onChangeSort={changeSortType} />
+        <Listing onChangeSort={changeSortType} isCommunity={true} isProfile={false} isHome={false} />
       </div>
       <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
 

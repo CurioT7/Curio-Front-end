@@ -53,6 +53,11 @@ function App() {
           <Route path="/resetpass" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/home" element={<Home/>} />
           <Route path="/" element={<Home/>} />
+          <Route path="/Hot" element={<Home/>} />
+          <Route path="/New" element={<Home/>} />
+          <Route path="/Top" element={<Home/>} />
+          <Route path="/Random" element={<Home/>} />
+          <Route path="/Best" element={<Home/>} />
           <Route path="/settings/privacy" element={<SecurityPrivacy hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
           <Route path='/settings/notifications' element={<NotificationSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/settings/account' element={<AccSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
@@ -63,10 +68,10 @@ function App() {
           <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage/>} />
           <Route path='/r/:Community' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/hot' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/new' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/top' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/Hot' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/New' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/Top' element={<CommuntiyPage/>} />
+          <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
           <Route path='/profile' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
