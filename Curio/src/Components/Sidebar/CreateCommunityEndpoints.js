@@ -20,7 +20,10 @@ async function createCommunity({data}) {
         return response;
     } catch (error) {
         console.error('Error:', error);
+        return error;
     }
 }
+
+
 
 export default createCommunity;

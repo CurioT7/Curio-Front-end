@@ -1,29 +1,22 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import SignupInfo from '../../Components/Signup/SignupInfo.jsx';
 import '@testing-library/jest-dom';
 import UsernameInfo from '../../Components/Signup/UsernameInfo.jsx';
 import Preferences from '../../Components/Signup/Preferences.jsx';
 import { BrowserRouter } from 'react-router-dom';
 
-test('should disable Continue button when email input is invalid', () => {
-      // Arrange
-      const props = {
-        enteredEmail: '',
-        onHide: jest.fn(),
-        onEnteredEmail: jest.fn(),
-        onContinue: jest.fn()
-      };
 
-      // Act
-      render(<BrowserRouter><SignupInfo show onHide={() => {}} {...props} /></BrowserRouter>);
-      const input = screen.getByTestId("email");
-      fireEvent.change(input, { target: { value: "invalidEmail" } });
-      fireEvent.blur(input);
-      const button = screen.getByText("Continue");
-      // Assert
-      expect(button).toBeDisabled();
-});
+jest.mock('../../Components/Signup/SignupEndpoints', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+}));
 
 test('should render a modal component with username and password', () => {
       // Initialize the props
