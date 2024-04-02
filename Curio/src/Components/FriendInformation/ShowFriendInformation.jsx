@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
+import Post from "../Post/Post";
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
@@ -292,7 +293,7 @@ function ShowFriendInformation(props) {
                         <button className="btn control-button me-2 p-1 p-sm-3">Posts</button>
                         <button className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
-                    <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2">
+                    <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2 ms-0 ms-lg-4">
                         <div className="pt-0 w-75 d-flex">
                             <button className="d-flex justify-content-center ms-2 sort-button p-2" style={{backgroundColor : showSortings ? "#D2DADD" : ""}} onClick={handleSortingsClick}>{sortingState === 0 ? "Hot" : sortingState === 1 ? "New" : "Top"}<div className="ms-1"><DownArrow /></div></button>
 
@@ -331,6 +332,33 @@ function ShowFriendInformation(props) {
                                     </div>
                         </div>
                     </div>
+                <hr style={{backgroundColor: "#0000008F"}} className="d-flex justify-content-center col-12 col-md-7 ms-0 ms-lg-5"></hr>
+                <div className="ms-0 ms-lg-5 mt-4 col-md-7">
+                    <Post
+                        user="r/netherlands"
+                        title="Second Post"
+                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
+                        upvotes={10}
+                        downvotes={1}
+                        comments={[4, 5]} // Dummy array for comments
+                    />
+                    <Post
+                        user="r/netherlands"
+                        title="Second Post"
+                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
+                        upvotes={10}
+                        downvotes={1}
+                        comments={[4, 5]} // Dummy array for comments
+                    />
+                    <Post
+                        user="r/netherlands"
+                        title="Second Post"
+                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
+                        upvotes={10}
+                        downvotes={1}
+                        comments={[4, 5]} // Dummy array for comments
+                    />
+                </div>
                 </div>
             </>
         );

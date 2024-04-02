@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
@@ -69,6 +69,11 @@ function RecentPosts() {
         upvotes: 4,
         comments: 9
     }]);
+    const [isClear, setIsClear] = useState(false);
+    const handleClear = () => {
+        setRecentPosts([]);
+        setIsClear(true);
+    }
 
     const renderTooltip = (props) => (
         <Tooltip className="col-md-3 p-0 border-radius-set" bsPrefix="card" id="button-tooltip" {...props}>
@@ -104,6 +109,8 @@ function RecentPosts() {
     );
 
     return (
+        <>
+        {!isClear && 
         <div className="recent-card-visibility">
             <div className="recent-posts-card p-3 mb-3">
                 <div className="d-flex justify-content-between">
@@ -111,7 +118,7 @@ function RecentPosts() {
                         <p className="small-header">RECENT POSTS</p>
                     </div>
                     <div className="col-2 align-items-start d-flex justify-content-end">
-                        <button style={{ color: "#0045ac", fontSize: "0.875rem", lineHeight: "1.25rem", fontWeight: "500" }}>Clear</button>
+                        <button onClick={handleClear} style={{ color: "#0045ac", fontSize: "0.875rem", lineHeight: "1.25rem", fontWeight: "500" }}>Clear</button>
                     </div>
                 </div>
                 {recentPosts.map((post, index) => (
@@ -146,6 +153,8 @@ function RecentPosts() {
                 ))}
             </div>
         </div>
+        }
+        </>
     );
 }
 
