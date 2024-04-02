@@ -9,71 +9,46 @@ import "./RecentPosts.css";
 import { width } from "@mui/system";
 
 function RecentPosts() {
-    const [recentPosts, setRecentPosts] = useState([{
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    },
-    {
-        subreddit: "r/Angular2",
-        postHeader: "Rxjs Stop other http request if the first request you fire returns a request and cancel the others",
-        upvotes: 4,
-        comments: 9
-    }]);
+    const [recentPosts, setRecentPosts] = useState([]);
     const [isClear, setIsClear] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const handleClear = () => {
         setRecentPosts([]);
+        localStorage.removeItem('recentPosts');
         setIsClear(true);
     }
+    const handleUpdateRecentPosts = () => {
+        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
+        setRecentPosts(recentPosts);
+    }
+
+
+    const checkAuthentication = () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+        setIsAuthenticated(true);
+        } else {
+        setIsAuthenticated(false);
+        }
+    };
+
+
+    useEffect(() => {
+        checkAuthentication();
+        window.addEventListener('loginOrSignup', checkAuthentication);
+        return () => {
+            window.removeEventListener('loginOrSignup', checkAuthentication);
+        }
+    }, []);
+
+    useEffect(() => {
+        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
+        setRecentPosts(recentPosts);
+        window.addEventListener('newRecentPost', handleUpdateRecentPosts);
+        return () => {
+            window.removeEventListener('newRecentPost', handleUpdateRecentPosts);
+        }
+    }, []);
 
     const renderTooltip = (props) => (
         <Tooltip className="col-md-3 p-0 border-radius-set" bsPrefix="card" id="button-tooltip" {...props}>
@@ -84,7 +59,7 @@ function RecentPosts() {
                         <div className="m-0 p-0 col-md-4 me-2">
                             <img className="rounded-circle col-md-2 p-0 m-0" style={{height: "30px", width: "30px"}} src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" />
                         </div>
-                        <h1 className="card-subreddit-name">r/Angular2</h1>
+                        <h1 className="card-subreddit-name">r/Angular 2</h1>
                     </div>
                     <div>
                         <button className="join-button-recent" variant="primary">Join</button>
@@ -110,7 +85,7 @@ function RecentPosts() {
 
     return (
         <>
-        {!isClear && 
+        {!isClear && isAuthenticated && recentPosts && recentPosts.length > 0  &&
         <div className="recent-card-visibility">
             <div className="recent-posts-card p-3 mb-3">
                 <div className="d-flex justify-content-between">
@@ -121,7 +96,7 @@ function RecentPosts() {
                         <button onClick={handleClear} style={{ color: "#0045ac", fontSize: "0.875rem", lineHeight: "1.25rem", fontWeight: "500" }}>Clear</button>
                     </div>
                 </div>
-                {recentPosts.map((post, index) => (
+                {recentPosts && recentPosts.map((post, index) => (
                     <div className="col-md-12 mb-2" key={index}>
                         <div className="d-flex flex-column">
                             <div className="d-flex justify-content-start col-md-12">
@@ -135,15 +110,15 @@ function RecentPosts() {
                                         <img className="rounded-circle" src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="reddit" />
                                     </OverlayTrigger>
                                 </div>
-                                <p className="d-flex align-items-center sub-recent-name">{post.subreddit}</p>
+                                <p className="d-flex align-items-center sub-recent-name">{post.user}</p>
                             </div>
                             <div className="col-md-12 mb-0">
-                                <p className="post-header">{post.postHeader}</p>
+                                <p className="post-header">{post.title}</p>
                             </div>
                             <div className="d-flex justify-content-start col-md-12 mb-0" style={{ height: "1rem" }}>
-                                <p className="post-small-footer me-2">{post.upvotes} upvotes</p>
+                                <p className="post-small-footer me-2">{(post.upvotes - post.downvotes > 0) ? (post.upvotes - post.downvotes) : 0} upvotes</p>
                                 <span className="post-small-footer me-2">.</span>
-                                <p className="post-small-footer">{post.comments} comments</p>
+                                <p className="post-small-footer">{post.comments.length} comments</p>
                             </div>
                             <div className="col-md-12 px-0 mx-0 mt-0">
                                 <hr className="w-100 mx-0 px-0"></hr>

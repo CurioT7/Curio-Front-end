@@ -36,7 +36,39 @@ function Post(props) {
     }
 
     const handleNavigationToDetails = () => {
-        navigate(`/post/post-details/${props.id}`);
+        const post = {
+            _id: props._id,
+            user: props.user,
+            title: props.title,
+            image: props.image,
+            upvotes: props.upvotes,
+            downvotes: props.downvotes,
+            comments: props.comments,
+            dateViewed: new Date().toISOString()
+        }
+        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
+        console.log(post);
+
+
+        if (recentPosts && Array.isArray(recentPosts)) {
+
+            const postExists = recentPosts.find((recentPost) => recentPost._id === post._id);
+            if (!postExists) {
+
+                recentPosts.unshift(post);
+                recentPosts.slice(0,10);
+                localStorage.setItem('recentPosts', JSON.stringify(recentPosts));
+            }
+        }
+        else {
+            localStorage.setItem('recentPosts', JSON.stringify([post]));
+        }
+
+        if (recentPosts.length === 0) {
+            localStorage.setItem('recentPosts', JSON.stringify([post]));
+        }
+        window.dispatchEvent(new Event('newRecentPost'));
+        navigate(`/post/post-details/${props._id}`);
     }
 
 
@@ -98,7 +130,7 @@ function Post(props) {
                                 {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
                             </button>
                             <div className='me-2'>
-                                <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{props.upvotes - props.downvotes}</span>
+                                <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{(props.upvotes - props.downvotes > 0) ? (props.upvotes - props.downvotes) : 0}</span>
                             </div>
                             <button data-testid="downvotes" className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
                                 {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
