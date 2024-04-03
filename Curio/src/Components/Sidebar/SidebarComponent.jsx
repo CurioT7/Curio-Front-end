@@ -163,8 +163,8 @@ function SidebarComponent(props) {
             },
           }}>
             <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}} icon={<Add />}>Create a community</MenuItem>
-            {joinedCommunities.map((community) => (
-              <MenuItem onClick={() => handleNavigation(`/r/${community.name}`)} prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/{community.name}</MenuItem>
+            {joinedCommunities.map((community, index) => (
+              <MenuItem key={index} onClick={() => handleNavigation(`/r/${community.name}`)} prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/{community.name}</MenuItem>
             ))}
           </SubMenu>
         }
