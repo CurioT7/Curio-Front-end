@@ -81,7 +81,7 @@ function Activity(){
             const token = 'your_token_here'; 
             const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log(response)
@@ -96,7 +96,7 @@ function Activity(){
             const token = 'your_token_here'; 
             const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             return response.data;

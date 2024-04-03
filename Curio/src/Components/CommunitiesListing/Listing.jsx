@@ -26,7 +26,7 @@ function Listing(props) {
     }
   }
 
-  const navigate= useNavigate();
+ 
   const commSortArr = ["Hot", "New", "Top", "Random"];
   const topSortArr = ["Now", "Today", "This Week", "This Month", "This Year", "All Time"];
   const homeSortArr = ["Best", "Hot", "New", "Top","Random"];
