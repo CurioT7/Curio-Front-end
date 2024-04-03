@@ -55,7 +55,7 @@ function Advanced() {
         
         const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
         console.log(response)
