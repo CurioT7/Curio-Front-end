@@ -18,8 +18,9 @@ function Home() {
 React.useEffect(() => {
   async function fetchAndSetData() {
       const data = await fetchPostsFromBackend();
+      console.log(data);
       if (data) {
-          setPosts(data);
+          setPosts(data.SortedPosts || data);
           setRandomPost({ ...randomPost, isSelected: false });
       }
   }
@@ -37,21 +38,21 @@ async function changeSortType(value,time) {
       if (value === 'Hot') {
           const data = await fetchHotFromBackend();
           if (data) {
-              setPosts(data);
+              setPosts(data.SortedPosts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           }
       }
       else if (value === 'New') {
           const data = await fetchNewFromBackend();
           if (data) {
-              setPosts(data);
+              setPosts(data.SortedPosts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           }
       }
       else if (value === 'Top') {
           const data = await fetchTopFromBackend();
           if (data) {
-              setPosts(data);
+              setPosts(data.SortedPosts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           }
       }
@@ -74,7 +75,7 @@ async function changeSortType(value,time) {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {randomPost.isSelected==false ? (posts.map((post) => (
+        {(randomPost.isSelected==false) ? (posts.map((post) => (
           <><Post
             
             _id={post._id}
