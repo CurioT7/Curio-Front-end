@@ -1,10 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import LoginPage from '../../Components/Login/LoginPagenents/Login/LoginPage'
+import LoginPage from '../../Components/Login/Loginpage';
 
 describe('LoginPage', () => {
     test('renders LoginPage component', () => {
         render(<LoginPage />);
+        const loginPageElement = screen.getByTestId('loginPage');
+        expect(loginPageElement).toBeInTheDocument();
     });
 
     test('renders login modal', () => {

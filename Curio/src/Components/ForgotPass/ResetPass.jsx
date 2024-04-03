@@ -19,11 +19,11 @@ function ResetPass(props) {
         }
     }, [password, newPassword]);
 
-    const handleChangePassword = async (event) => {
+    const handleResetPassword = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await changePassword(password);
+            const response = await resetPassword(password);
             console.log('Success:', response);
         } catch (error) {
             console.error('Error:', error);
@@ -44,7 +44,7 @@ function ResetPass(props) {
         <div className='reset-password'>
         <div className='resetBox'>
         
-            <form onSubmit={handleChangePassword} className='resetForm'>
+            <form onSubmit={handleResetPassword} className='resetForm'>
             <div className='resetText'>
                 <img src={logo} alt="Curio Logo" />
             <h3>Reset your password</h3>
