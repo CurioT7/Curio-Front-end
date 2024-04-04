@@ -27,6 +27,7 @@ async function userBlock(usernameToBlock) {
             }
         });
         localStorage.setItem('blockedUser', usernameToBlock);
+        return response.message;
     } catch (error) {
         console.error('Error:', error);
     }

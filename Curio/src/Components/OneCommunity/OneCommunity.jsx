@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import '../CommunityPopup/CommunityPopup.jsx';
 import "./OneCommunity.css";
 
 
 function Community({ index, name, category, members, picture }) {
+
   const backgroundColor = Math.floor(index / 4) % 2 === 0 ? 'columnBack' : 'columnBack1';
 
   return (

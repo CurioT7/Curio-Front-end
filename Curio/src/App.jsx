@@ -25,6 +25,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import TopCommunities from './Components/TopCommunities/TopCommunities.jsx';
 import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
+import CommPopup from './Components/CommunityPopup/CommunityPopup.jsx';
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -69,6 +70,7 @@ function App() {
           <Route path='/profile' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
+          <Route path='/commPopup' element={<CommPopup/>} />
         </Routes>
       </ChakraProvider>
     </div>
