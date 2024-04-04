@@ -115,28 +115,6 @@ function ShowFriendInformation(props) {
     };
 
 
-    // async function userUnfollow(friendUsername) {
-    //     try {
-    //         await axios.post(`${hostUrl}/api/me/friends`, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'authorization': `Bearer ${localStorage.getItem('token')}`
-    //             },
-    //             data: {
-    //                 friendUsername
-    //             }
-    //         });
-    
-    //         // Remove the follow status from local storage
-    //         localStorage.removeItem('followedUser');
-    
-    //         console.log('Friend unfollowed');
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // };
-    
-
     const handleFollowToggle = () => {
         if (isFollowing) {
             userUnfollow(username);
@@ -145,41 +123,6 @@ function ShowFriendInformation(props) {
         }
         setIsFollowing(!isFollowing);
     }
-
-
-    // async function userBlock(usernameToBlock) {
-    //     setIsBlocked(true);
-    //     try {
-    //         console.log(localStorage.getItem('token'));
-    //         const response = await axios.post(`${hostUrl}/api/User/block`, {
-    //             usernameToBlock
-    //         }, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         });
-    //         localStorage.setItem('blockedUser', usernameToBlock);
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // }
-
-    // async function userUnblock(usernameToUnblock) {
-    //     setIsBlocked(false);
-    //     try {
-    //         const response = await axios.post(`${hostUrl}/api/User/unblock`, {
-    //             usernameToUnblock
-    //         }, {
-    //             headers: {
-    //                 authorization: `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         });
-    //         localStorage.removeItem('blockedUser');
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // }
 
 
 
