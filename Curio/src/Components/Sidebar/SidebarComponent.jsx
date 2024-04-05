@@ -163,8 +163,8 @@ function SidebarComponent(props) {
             },
           }}>
             <MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}} icon={<Add />}>Create a community</MenuItem>
-            {joinedCommunities.map((community) => (
-              <MenuItem onClick={() => handleNavigation(`/r/${community.name}`)} prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/{community.name}</MenuItem>
+            {joinedCommunities.map((community, index) => (
+              <MenuItem key={index} onClick={() => handleNavigation(`/r/${community.name}`)} prefix={<CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={<FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/{community.name}</MenuItem>
             ))}
           </SubMenu>
         }
@@ -193,7 +193,7 @@ function SidebarComponent(props) {
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <Link to="/communities/best/1" style={{ textDecoration: 'none' }}>
+          <Link to="/communities/best/:pages" style={{ textDecoration: 'none' }}>
           <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities</MenuItem>
           </Link>
           <MenuItem href="https://www.reddit.com/posts/2023/global/" icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Best of Reddit</MenuItem>

@@ -4,7 +4,7 @@ const serverHost = import.meta.env.VITE_SERVER_HOST;
 export async function fetchDataFromBackend(subreddit) {
     try {
         console.log(subreddit);
-        const request = await axios.get(`${serverHost}/api/r/${subreddit}/hot`,{
+        const request = await axios.get(`${serverHost}/api/r/id sunt/hot`,{
             Subreddit: subreddit
         });
         return request.data;
@@ -15,7 +15,7 @@ export async function fetchDataFromBackend(subreddit) {
 export async function fetchTopFromBackend(subreddit,time) {
     try {
         console.log(subreddit);
-        const request = await axios.get(`${serverHost}/api/r/${subreddit}/top`,{
+        const request = await axios.get(`${serverHost}/api/r/id sunt/top`,{
             Subreddit: subreddit
         });
         return request.data;
@@ -26,7 +26,7 @@ export async function fetchTopFromBackend(subreddit,time) {
 export async function fetchNewFromBackend(subreddit) {
     try {
         console.log(subreddit);
-        const request = await axios.get(`${serverHost}/api/r/${subreddit}/new`,{
+        const request = await axios.get(`${serverHost}/api/r/id sunt/new`,{
             Subreddit: subreddit
         });
         return request.data;
@@ -37,7 +37,7 @@ export async function fetchNewFromBackend(subreddit) {
 export async function fetchRisingFromBackend(subreddit) {
     try {
         console.log(subreddit);
-        const request = await axios.get(`${serverHost}/api/r/${subreddit}/random`,{
+        const request = await axios.get(`${serverHost}/api/r/ducimus ut/random`,{
             Subreddit: subreddit
         });
         return request.data;

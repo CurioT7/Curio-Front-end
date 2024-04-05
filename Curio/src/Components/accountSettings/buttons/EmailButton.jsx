@@ -90,7 +90,7 @@ const EmailButton = (props) =>{
     }
     return(
         <Box>
-                <Button onClick={onOpen} style={props.buttonStyle} variant='outline'>Change</Button>
+                <Button onClick={onOpen} style={props.buttonStyle} variant='outline' colorScheme='blue'>Change</Button>
 
                 <Modal isCentered size='md' isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
