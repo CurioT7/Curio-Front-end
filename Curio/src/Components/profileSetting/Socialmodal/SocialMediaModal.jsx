@@ -14,21 +14,29 @@ function SocialMediaModal(props) {
     const [displayText, setDisplayText] = useState("");
     const [url, setUrl] = useState("");
     const [isSaveEnabled, setIsSaveEnabled] = useState(false);
-    const [isUrlValid, setIsUrlValid] = useState(true); 
+    const [domainMessage, setdomainMessage] = useState(""); 
+    const [urlMessage, seturlMessage] = useState("");
 
     const handleSave = () => {
         if (displayText && url) {
-            if (!isValidUrl(url)) {
-                setIsUrlValid(false);
-                return;
-            }
+            const enteredDomain = (new URL(url)).hostname;
 
-            props.handleSocialLinkClick(displayText, props.icon);
-            setDisplayText("");
-            setUrl("");
-            setIsSaveEnabled(false);
-            setIsUrlValid(true); 
-            onClose();
+            // Split the domain by dots and extract the second part
+            const domainParts = enteredDomain.split('.');
+            const extractedDomain = domainParts.length >= 2 ? domainParts[1] : null;
+
+            const wwwPrefix = enteredDomain.startsWith("www.") ? "www." : "";
+            
+            // Check if entered domain matches platform's domain
+            if ((extractedDomain === props.name.toLowerCase()) || props.name.toLowerCase() === "custom url") {
+                props.handleSocialLinkClick(url, displayText, props.icon);
+                setDisplayText("");
+                setUrl("");
+                setIsSaveEnabled(false);
+                onClose();
+            } else {
+                setdomainMessage("Domain is not allowed");
+            }
         }
     };
 
@@ -38,10 +46,8 @@ function SocialMediaModal(props) {
             setDisplayText(value);
         } else if (name === "url") {
             setUrl(value);
-            sendDataToBackend({socialLinks: value})
         }
         setIsSaveEnabled(value !== "" && url !== "");
-        setIsUrlValid(true); 
     };
 
     const handleClose = () => {
@@ -53,16 +59,7 @@ function SocialMediaModal(props) {
 
     const handleGoBack = () => {
         onClose();
-    };
-
-    const isValidUrl = (url) => {
-        try {
-            new URL(url);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    };
+    };    
 
     return (
         <>
@@ -92,8 +89,7 @@ function SocialMediaModal(props) {
                             <li className="custom-url-li list-inline-item mb-2 mx-1"><i className={props.icon}/> {props.name} </li>
                             <input type="text" name="display_text" id="display_text" placeholder="Display text" className="display_text" value={displayText} onChange={handleInputChange} required/>
                             <input type="url" name="url" placeholder="https://www.webite.com/" className="url_website" value={url} onChange={handleInputChange} required/>
-                            {!isUrlValid && <p style={{ color: 'red', fontSize: '12px' }}>Invalid URL</p>} 
-                            {/* {!isUrlDomain && <p style={{ color: 'red', fontSize: '12px' }}>Domain is not allowed</p>}  */}
+                            {domainMessage && <p style={{ color: 'red', fontSize: '12px' }}>{domainMessage}</p>}
                         </div>
                     </ModalBody>
                 </ModalContent>
