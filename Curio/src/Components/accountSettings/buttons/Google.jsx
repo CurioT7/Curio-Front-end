@@ -42,12 +42,13 @@ const Google = (props) =>{
         console.log(`Bearer ${localStorage.getItem('token')}`)
         try {
             const response = await axios.post(`${serverHost}/api/google/connect`, {
-                token:`Bearer ${localStorage.getItem('token')}`
+                token:`Bearer ${localStorage.getItem('token')}`,
+                password: yourPass
             });
             clearForm()
         }
         catch(error){
-            console.error('Faild To delete', error.message);
+            console.error( error.message);
             switch (error.response.status) {
                 case 401:
                     
@@ -60,15 +61,7 @@ const Google = (props) =>{
     }
     function handleSubmit(e){
         e.preventDefault();
-        sendDataToBackend
-        if(yourPass !== pass){
-            
-            
-            return
-        }
-        
-        clearForm();
-        alert("You have connected you google")
+        sendDataToBackend()
     }
     return(
         <>
