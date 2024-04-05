@@ -95,6 +95,12 @@ function SignupInfo(props) {
     if(email === ''){
       return;
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailRegex.test(email)){
+        setEmailErrorMsg("that email is invalid");
+        setIsEmailValid(1);
+        return;
+    }
     props.onEnteredEmail(email);
     props.onContinue();
   }
