@@ -27,6 +27,7 @@ import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
 import CommPopup from './Components/CommunityPopup/CommunityPopup.jsx';
 
+
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
@@ -69,7 +70,7 @@ function App() {
           <Route path='/r/:Community/rising' element={<CommuntiyPage/>} />
           <Route path='/profile' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
-          <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
+          <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
           <Route path='/commPopup' element={<CommPopup/>} />
         </Routes>
       </ChakraProvider>

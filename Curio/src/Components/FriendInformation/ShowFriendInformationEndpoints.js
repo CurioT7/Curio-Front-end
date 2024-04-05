@@ -26,8 +26,8 @@ async function userBlock(usernameToBlock) {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        localStorage.setItem('blockedUser', usernameToBlock);
-        return response.message;
+        console.log(response);
+        return response;
     } catch (error) {
         console.error('Error:', error);
     }
@@ -42,7 +42,8 @@ async function userUnblock(usernameToUnblock) {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        localStorage.removeItem('blockedUser');
+        console.log(response);
+        return response;
     } catch (error) {
         console.error('Error:', error);
     }
