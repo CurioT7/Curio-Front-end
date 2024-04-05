@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../Login/Login.css';
-import { resetPassword } from '../Login/LoginEndpoints';
+import { forgotPassword } from '../Login/LoginEndpoints';
 import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
 
 function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
@@ -28,7 +28,7 @@ function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
     }
 
     try {
-      const response = await resetPassword(username, email);
+      const response = await forgotPassword(username, email);
       console.log('Success:', response);
       setChangePass(true);
       setForgotPass(false);
