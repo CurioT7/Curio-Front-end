@@ -6,3 +6,7 @@ Curio/package.json
 /node_modules
 *.env
 *.json
+Curio/yarn.lock
+Curio/package-lock.json
+Curio/.env
+Curio/package-lock.json

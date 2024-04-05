@@ -74,8 +74,20 @@ function UsernameInfo(props) {
     setUsername(generateRandomUsername());
   }
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if(username === '' || password === '' || username.length < 3 || password.length < 8){
+      return;
+    }
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(password)){
+      setPasswordErrorMsg("Password must contain at least one letter and one number.");
+      setIsPasswordValid(1);
+      return;
+    }
+    const usernameAvailability = await checkUsernameAvailability(username);
+    if (usernameAvailability.status === 409){
+      setUsernameErrorMsg("That username is already taken");
+      setIsUsernameValid(1);
       return;
     }
     props.onEnteredUsername(username);

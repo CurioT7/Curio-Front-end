@@ -27,7 +27,8 @@ function Mute() {
                   authorization: `Bearer ${localStorage.getItem('token')}` 
               }
             });
-            setMutedCommunities(response.data.mute); 
+            // setMutedCommunities(response.data.mute); 
+            setBlockedUsers(response.data.viewMutedCommunities || []);
         } catch (error) {
             if (error.response){
                 switch (error.response.status) {

@@ -9,7 +9,7 @@ function Safety() {
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [blockedUserInput, setBlockedUserInput] = useState('');
   const toast = useToast();
-
+ 
   function Toast(message){
     toast({
         description: message,
@@ -28,7 +28,8 @@ function Safety() {
                   authorization: `Bearer ${localStorage.getItem('token')}` 
               }
             });
-            setBlockedUsers(response.data.block); // Set blocked users directly
+            // setBlockedUsers(response.data.block); // Set blocked users directly
+            setBlockedUsers(response.data.viewBlockedPeople || []);
         } catch (error) {
             if (error.response){
                 switch (error.response.status) {
@@ -98,11 +99,13 @@ function Safety() {
 
   
   const handleAddBlockedUser = () => {
-    postBlockUser(blockedUserInput);
-    patchBlockUser(blockedUserInput);
-    const newUser = { username: blockedUserInput};
-    setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-    setBlockedUserInput('');
+    if (blockedUserInput.trim() != ''){
+      postBlockUser(blockedUserInput);
+      patchBlockUser(blockedUserInput);
+      const newUser = { username: blockedUserInput};
+      setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
+      setBlockedUserInput('');
+    }
 };
 //////////////////////////////////// Unblock /////////////////////////////////
     const postunBlockUser = (username) => {
@@ -134,11 +137,6 @@ function Safety() {
     };
     const handleRemoveBlockedUser = index => {
         const updatedBlockedUsers = [...blockedUsers];
-        setUnblockedUsers(prevUnblockedUsers => [...prevUnblockedUsers, unblockedUser]); // Add user to unblocked list
-        setTimeout(() => {
-        setUnblockedUsers(prevUnblockedUsers => prevUnblockedUsers.filter(user => user !== unblockedUser)); 
-        }, 86400000);
-
         const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].username;
         setBlockedUsers(updatedBlockedUsers);
         // Call postunBlockUser here after removing the user
@@ -153,10 +151,10 @@ function Safety() {
         <Input id="blockedUserInput" type="text" placeholder="Block new user" className="form-control mr-sm-2" value={blockedUserInput} onChange={(e) => setBlockedUserInput(e.target.value)} required />
         <Button className="btn btn-primary" data-testid="add-block-user" onClick={handleAddBlockedUser} disabled={blockedUserInput.trim() === ''}>ADD</Button>
     </Box>
-    {blockedUsers.map((user, index) => (
+    {blockedUsers.length > 0 && blockedUsers.map((user, index) => (
         <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
-        <Text>{user.username}</Text> 
-        <Button className="btn btn-primary" onClick={() => {handleRemoveBlockedUser(index); handleUnblockUser();}} bg="transparent" border="none">Remove</Button>
+          <Text>{user.username}</Text> 
+          <Button className="btn btn-primary" onClick={() => {handleRemoveBlockedUser(index); handleUnblockUser();}} bg="transparent" border="none">Remove</Button>
         </Flex>
     ))}
     </Box>
