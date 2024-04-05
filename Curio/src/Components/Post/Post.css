@@ -159,3 +159,21 @@
 .ql-toolbar.ql-snow{
     border: none!important;
 }
+
+.post-dropdown-control{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+
+.post-dropdown-control:hover{
+    background-color: #E2E7E9;
+}
+
+.dropdown-list-post-control:hover{
+    background-color: #E2E7E9;
+}
+
+.post-dropdown{
+    width: 7rem!important;
+}

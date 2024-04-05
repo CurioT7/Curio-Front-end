@@ -14,6 +14,7 @@ import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Post.css'
+import PostControl from './PostControl.jsx';
 function Post(props) {
     const navigate = useNavigate();
     const [upvoted, setUpvoted] = useState(false);
@@ -76,8 +77,8 @@ function Post(props) {
         <div>
             <Card className='Post' variant='ghost' >
                 <CardHeader className='py-0'>
-                    <Flex spacing='4' onClick={handleNavigationToDetails}>
-                    <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap' onClick={handleNavigationToDetails}>
+                    <Flex spacing='4'>
+                    <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                         <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
 
                         <Box>
@@ -85,12 +86,7 @@ function Post(props) {
                         
                         </Box>
                     </Flex>
-                    <IconButton
-                        variant='ghost'
-                        colorScheme='gray'
-                        aria-label='See menu'
-                        icon={<SlOptions />}
-                    />
+                    <PostControl _id={props._id} />
                     </Flex>
                 </CardHeader>
                 <CardBody className='py-0' onClick={handleNavigationToDetails}>

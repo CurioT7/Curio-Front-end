@@ -7,10 +7,19 @@ import Upvotes from "../../styles/icons/Upvotes";
 import Downvotes from "../../styles/icons/Downvotes";
 import FilledUpvote from "../../styles/icons/FilledUpvote";
 import FilledDownvote from "../../styles/icons/FilledDownvote";
+import Ellipsis from "../../styles/icons/Elippsis";
+import SaveButton from "../../styles/icons/SaveButton";
+import ReportPost from "../../styles/icons/ReportPost";
+import Hide from "../../styles/icons/Hide";
 
 function PostComments(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
+
+    const [showControls, setShowControls] = useState(false);
+    const handleEllipsisClick = () => {
+        setShowControls(!showControls);
+    };
 
     const makeCommentUpvoted = () => {
         if (upvoted) {
@@ -51,14 +60,33 @@ function PostComments(props) {
                 <Button flex='1' style={{backgroundColor: "#ffffff"}} className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
                     <span className='share-post-text'>Share</span>
                 </Button>
-                <IconButton
-                    className='ms-auto'
-                    variant='ghost'
-                    colorScheme='gray'
-                    aria-label='See menu'
-                    borderRadius={"50%"}
-                    icon={<SlOptions />}
-                />
+                <button className="post-dropdown-control d-flex justify-content-center align-items-center" onClick={handleEllipsisClick}>
+                    <Ellipsis className="ellipsis-img" />
+                </button>
+                {showControls && <div className="post-dropdown" style={{ 
+                                                    display: showControls ? 'flex' : 'none',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    position: 'absolute',
+                                                    backgroundColor: '#FFFFFF',
+                                                    borderRadius: '10px',
+                                                    boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
+                                                    marginTop: '9.5rem',
+                                                    marginLeft: '9rem',
+                                                    zIndex: '1'
+                                                }}>
+                                                    <ul className='drop-down-list w-100 px-0'>
+                                                        <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                                <SaveButton />
+                                                                <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>Save</p></div>
+                                                        </li>
+                                                        <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                                <ReportPost />
+                                                                <div><p className='mt-3 text-text'>Report</p></div>
+                                                        </li>
+                                                    </ul>   
+                                                </div>
+                        }
             </div>
         </div>
     );
