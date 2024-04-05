@@ -72,7 +72,7 @@ function Feeding () {
     }
     //send and get data from backend//
     async function sendDataToBackend(data) {
-    console.log(localStorage.getItem('token'));
+    // console.log(localStorage.getItem('token'));
 
         // Validate data
         if (!data || typeof data !== 'object') {
@@ -86,7 +86,7 @@ function Feeding () {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response)
+            // console.log(response)
             // Handle response if needed
             return response;
         } catch (error) {
@@ -97,7 +97,7 @@ function Feeding () {
 
     async function fetchDataFromBackend() {
         const token = localStorage.getItem('token');
-        console.log(token)
+        // console.log(token)
         if (!token) {
         console.error('No token found');
         return;
