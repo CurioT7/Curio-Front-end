@@ -44,7 +44,11 @@ function ProfileInformation() {
 
     try {
         
-        const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data);
+        const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data,{
+          headers: {
+              authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      });
         console.log(response)
         return response;
     } catch (error) {
@@ -53,7 +57,11 @@ function ProfileInformation() {
 }
   async function fetchDataFromBackend() {
     try {
-      const response = axios.get(`${serverHost}/api/settings/v1/me/prefs`);
+      const response = axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    });
       return response.data;
     } catch (error) {
       console.error('Error fetching data from backend:', error);

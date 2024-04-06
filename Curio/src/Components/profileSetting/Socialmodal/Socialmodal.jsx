@@ -41,7 +41,7 @@ function Socialmodal(props){
     useEffect(() => {
         async function fetchsocialLinks() {
             try {
-                const response = await axios.get(`${serverHost}/user/Arianna.Gutkowski53/about`);
+                const response = await axios.get(`${serverHost}/user/${username}/about`);
                 if (response.status === 200) {
                     console.log("Description: Successful request.");
                     const formattedSocialLinks = response.data.socialLinks.map(link => ({
@@ -72,7 +72,7 @@ function Socialmodal(props){
 
     return(
         <>
-        {selectedSocialLinks.slice(0, 5).map((link, index) => (
+        {Array.isArray(selectedSocialLinks) && selectedSocialLinks.slice(0, 5).map((link, index) => (
             <div key={index} className="selected-social-link">
                 <i className={link.icon}/> {link.name}
                 <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>

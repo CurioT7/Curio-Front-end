@@ -5,12 +5,12 @@ import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalClo
 import { FaTrashAlt } from "react-icons/fa";
 import './formstyle.css'
 import axios from 'axios';
-
+import {useNavigate} from 'react-router-dom'
 import { useToast, } from '@chakra-ui/react';
 function DeleteButton(){
     const serverHost = import.meta.env.VITE_SERVER_HOST;
     const toast = useToast()
-   
+    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ feedBack,setFeedBack] = React.useState("")
     const [isChecked,setIsChecked] =React.useState(false)
@@ -68,6 +68,7 @@ function DeleteButton(){
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
+            navigate('/')
             clearForm()
         }
         catch(error){

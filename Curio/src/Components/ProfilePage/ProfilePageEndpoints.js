@@ -5,7 +5,7 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
 const getUserOverview = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/overview`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/overview`;
 
     const response = await fetch(url, {
         method: 'GET',
@@ -57,7 +57,9 @@ const getUserOverview = async (username) => {
 };
 
 const getUserComments = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/comments`;
+    
+    const url = `${VITE_SERVER_HOST}/user/${localStorage.getItem('username')}/comments`;
+    const token = localStorage.getItem('token')
 
     const response = await fetch(url, {
         method: 'GET',
@@ -65,6 +67,7 @@ const getUserComments = async (username) => {
             'Content-Type': 'application/json',
         },
     });
+    console.log(response);
 
     if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -85,11 +88,12 @@ const getUserComments = async (username) => {
         linkedSubreddit: comment.linkedSubreddit
     }));
 
+
     return userComments;
 };
 
 const getUserDownvoted = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/downvoted`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/downvoted`;
 
     const response = await fetch(url, {
         method: 'GET',
@@ -140,7 +144,7 @@ const getUserDownvoted = async (username) => {
 };
 
 const getUserUpvoted = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/upvoted`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/upvoted`;
 
     const response = await fetch(url, {
         method: 'GET',
@@ -194,7 +198,7 @@ const getUserUpvoted = async (username) => {
 };
 
 const getUserSubmitted = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/submitted`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/submitted`;
 
     const response = await fetch(url, {
         method: 'GET',
@@ -235,7 +239,7 @@ const getUserSubmitted = async (username) => {
 };
 
 const getUserAbout = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/about`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/about`;
 
     const response = await fetch(url, {
         method: 'GET',
