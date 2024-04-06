@@ -4,15 +4,26 @@ import Ellipsis from "../../styles/icons/Elippsis";
 import SaveButton from "../../styles/icons/SaveButton";
 import ReportPost from "../../styles/icons/ReportPost";
 import Hide from "../../styles/icons/Hide";
+import ReportReason  from "./ReportReason";
 
 
 function PostControl(props) {
 
   const [showControls, setShowControls] = useState(false);
+  const [isReportReasonModalOpen, setReportReasonModalOpen] = useState(false);
+  const [isReportSubmittedModalOpen, setReportSubmittedModalOpen] = useState(false);
+  const handleOpenReportModal = () => {
+    setReportReasonModalOpen(true);
+  }
   const handleEllipsisClick = () => {
     setShowControls(!showControls);
   };
+  const handleShowSubmittedReport = () => {
+    setShowControls(false);
+    setReportSubmittedModalOpen(true);
+  }
   return (
+    <>
     <div>
       <button className="post-dropdown-control d-flex justify-content-center align-items-center" onClick={handleEllipsisClick}>
         <Ellipsis className="ellipsis-img" />
@@ -43,7 +54,7 @@ function PostControl(props) {
                                                     <Hide />
                                                     <div><p className='mt-3 text-text'>Hide</p></div>
                                             </li>
-                                            <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                            <li onClick={handleOpenReportModal} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                     <ReportPost />
                                                     <div><p className='mt-3 text-text'>Report</p></div>
                                             </li>
@@ -51,6 +62,8 @@ function PostControl(props) {
                                     </div>
             }
     </div>
+    <ReportReason show={isReportReasonModalOpen} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
+    </>
   );
 }
 
