@@ -47,6 +47,8 @@ function Login({
       console.log(responseData);
       let access_token = responseData.accessToken;
       localStorage.setItem('token', access_token);
+      window.dispatchEvent(new Event('loginOrSignup'));
+      localStorage.setItem('username', username);
       navigate('/');
     } catch (error) {
       console.error('Failed to login:', error);
