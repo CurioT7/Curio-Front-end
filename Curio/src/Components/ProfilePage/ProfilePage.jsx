@@ -11,16 +11,24 @@ function ProfilePage(){
   const tabListRef = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState(null);
+  const [userAbout, setUserAbout] = useState({});
 
+  useEffect(() => {
+    getUserAbout().then(data => setUserAbout(data));
+  }, []);
   
   useEffect(() => {
     const token = localStorage.getItem('token');
     const StoredUsername = localStorage.getItem('username');
     if (!token) {
-     navigate('/login');
+      navigate('/login');
     }
     setIsLoggedIn(true);
     setUsername(StoredUsername);
+
+    if (StoredUsername) {
+      getUserAbout(StoredUsername).then(data => setUserAbout(data));
+    }
   }, []);
 
   const scrollLeft = () => {
@@ -38,8 +46,8 @@ return(
 <div className="mainComponent">
 <div className="userInfo">
 <img src="./src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-<h3 className="profileName">User</h3>
-<h5 className="userName"> u/sad_p0tat0o </h5>
+<h3 className="profileName">{username}</h3>
+<h5 className="userName"> u/{username} </h5>
 </div>
 
 <div className="tableList">
@@ -64,8 +72,9 @@ return(
   </div>
   <hr style={{width: "90%"}} />  
   <TabPanels className="profilePannels">
-    <TabPanel  onClick={() => getUserOverview(username)}>
+    <TabPanel>
       <RecentPosts />
+      <RecentPosts/>
     </TabPanel>
 
     <TabPanel>
@@ -73,7 +82,8 @@ return(
     </TabPanel>
 
     <TabPanel onClick={()=> getUserComments(username)}>
-      <p>u/sad_p0tat0o hasn't commented yet</p>
+      { !(getUserComments() || []).length ? <p> u/{username} hasn't commented yet</p> : null }
+
     </TabPanel>
 
     <TabPanel >
@@ -89,7 +99,7 @@ return(
     </TabPanel>
 
     <TabPanel  onClick={()=> getUserDownvoted(username)}>
-      <p>Looks like you haven't downvoted anything yet</p>
+      { !(getUserDownvoted() || []).length ? <p>Looks like you haven't downvoted anything yet</p> : null }
     </TabPanel>
     
   </TabPanels>
@@ -114,16 +124,16 @@ return(
      Share 
  </button>
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-  <div className="profilevalue">1</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.postKarma}</div>
+  <div className="profilevalue">{userAbout.commentKarma}</div>
   <div className="profileItem">Post Karma</div>
   <div className="profileItem">Comment Karma</div>
 </div>
 <br />
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 0.5fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
 
-  <div className="profilevalue">Mar 3, 2024</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.cakeDay}</div> 
+   <div className="profilevalue">{userAbout.goldRecieved}</div>
   <div className="profileItem">Cake day</div>
   <div className="profileItem">Gold Received</div>
 </div>

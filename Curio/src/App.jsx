@@ -37,7 +37,9 @@ function App() {
   const handleShowSidebar = () => {
     setIsSidebarVisible(true);
   };
-
+  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
+ 
   return (
     <div>
       <div className="d-flex">
@@ -51,7 +53,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
           <Route path="/login" element={<LoginPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
-          <Route path="/resetpass" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path="/resetpass/:token" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/change_password" element={<ChangePassword hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/home" element={<Home/>} />
           <Route path="/" element={<Home/>} />
@@ -67,13 +69,13 @@ function App() {
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
-          <Route path='/user/:username' element={<UserPage/>} />
+          <Route path='/user' element={<UserPage/>} />
           <Route path='/r/:Community' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Hot' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/New' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Top' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
-          <Route path='/user' element={<ProfilePage/>}/>
+          <Route path='/user/:username' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
         </Routes>
