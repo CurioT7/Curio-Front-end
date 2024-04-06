@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import axios from 'axios';
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
+
+const token = localStorage.getItem('token');
 
 async function showFriendInformation({username}) {
     try {
@@ -32,6 +33,7 @@ async function userBlock(usernameToBlock) {
         console.error('Error:', error);
     }
 }
+
 
 async function userUnblock(usernameToUnblock) {
     try {
