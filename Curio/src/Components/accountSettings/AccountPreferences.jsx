@@ -35,7 +35,7 @@ const AccountPreferences = () => {
     
     const handleGender = (event) => {
         setGender(event.target.value);
-        sendDataToBackend({gender: gender})
+        sendDataToBackend({gender: event.target.value})
         Toast()
       };
     
