@@ -12,11 +12,23 @@ export async function fetchDataFromBackend(subreddit) {
         console.error('Error fetching data from backend:', error);
     }
 }
-export async function fetchTopFromBackend(subreddit,time) {
+export async function fetchTopFromBackend(subreddit) {
     try {
         console.log(subreddit);
         const request = await axios.get(`${serverHost}/api/r/id sunt/top`,{
             Subreddit: subreddit
+        });
+        return request.data;
+    } catch (error) {
+        console.error('Error fetching data from backend:', error);
+    }
+}
+export async function fetchTopTimeFromBackend(subreddit,timeinterval) {
+    try {
+        console.log(subreddit);
+        const request = await axios.get(`${serverHost}/api/r/${subreddit}/top/${timeinterval}`,{
+            Subreddit: subreddit,
+            timeinterval: timeinterval
         });
         return request.data;
     } catch (error) {
