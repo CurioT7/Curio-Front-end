@@ -60,15 +60,18 @@ function DeleteButton(){
     async function sendDataToBackend(){
         console.log(`Bearer ${localStorage.getItem('token')}`)
         try {
-            const response = await axios.delete(`${serverHost}/api/settings/delete_account`, {
+            const response = await axios.delete(`${serverHost}/api/settings/delete_account`,{data: {
                 username: userName,
                 password: yourPass,
-            }, {
+            }, 
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             navigate('/')
+            localStorage.removeItem('token')
+            localStorage.removeItem('username');
+            window.dispatchEvent(new Event("loginOrSignup"));
             clearForm()
         }
         catch(error){
