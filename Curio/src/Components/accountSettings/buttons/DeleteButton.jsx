@@ -70,6 +70,8 @@ function DeleteButton(){
             });
             navigate('/')
             localStorage.removeItem('token')
+            localStorage.removeItem('username');
+            window.dispatchEvent(new Event("loginOrSignup"));
             clearForm()
         }
         catch(error){
