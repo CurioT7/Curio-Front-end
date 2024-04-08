@@ -55,9 +55,9 @@ To set up CURIO locally, follow these steps:
    yarn dev
 
 ## Environment Variables
-- VITE_SERVER_HOST: Host URL for the server.
-- VITE_CLIENT_ID: Client ID for authentication purposes.
-- VITE_CLIENT_SECRET: Client secret associated with the provided client ID.
+- **VITE_SERVER_HOST**: Host URL for the server.
+- **VITE_CLIENT_ID**: Client ID for authentication purposes.
+- **VITE_CLIENT_SECRET**: Client secret associated with the provided client ID.
    
 ## Usage
 
