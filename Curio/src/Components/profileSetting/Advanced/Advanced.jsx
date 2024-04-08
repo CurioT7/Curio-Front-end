@@ -66,11 +66,17 @@ function Advanced() {
   }
 
   async function fetchDataFromBackend() {
+    const token = localStorage.getItem('token');
+        // console.log(token)
+        if (!token) {
+        console.error('No token found');
+        return;
+        }
       try {
           
           const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
               headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
+                  authorization: `Bearer ${localStorage.getItem('token')}`
               }
           });
           return response.data;

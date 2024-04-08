@@ -5,6 +5,8 @@ import Login from '../../Components/Login/Login';
 describe('Login', () => {
     test('renders Login component', () => {
         render(<Login />);
+        const loginComponent = screen.getByTestId('loginComponent');
+        expect(loginComponent).toBeInTheDocument();
     });
 
     test('renders login button', () => {
@@ -36,5 +38,5 @@ describe('Login', () => {
         fireEvent.change(passwordInput, { target: { value: '' } });
       
         expect(buttonElement).toBeDisabled();
-      });
+    });
 });
