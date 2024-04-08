@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import axios from 'axios';
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
+
+const token = localStorage.getItem('token');
 
 async function showFriendInformation({username}) {
     try {
@@ -26,11 +27,13 @@ async function userBlock(usernameToBlock) {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        localStorage.setItem('blockedUser', usernameToBlock);
+        console.log(response);
+        return response;
     } catch (error) {
         console.error('Error:', error);
     }
 }
+
 
 async function userUnblock(usernameToUnblock) {
     try {
@@ -41,7 +44,8 @@ async function userUnblock(usernameToUnblock) {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        localStorage.removeItem('blockedUser');
+        console.log(response);
+        return response;
     } catch (error) {
         console.error('Error:', error);
     }

@@ -26,6 +26,8 @@ import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
 import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 
+import CommPopup from './Components/CommunityPopup/CommunityPopup.jsx';
+
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -69,15 +71,16 @@ function App() {
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
-          <Route path='/user' element={<UserPage/>} />
           <Route path='/r/:Community' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Hot' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/New' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Top' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
-          <Route path='/user/:username' element={<ProfilePage/>}/>
+          <Route path='/user' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
-          <Route path='/communities/best/:page' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
+          <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
+          <Route path='/commPopup' element={<CommPopup/>} />
+          <Route path='/user/:username' element={<UserPage/>} />
         </Routes>
       </ChakraProvider>
     </div>
