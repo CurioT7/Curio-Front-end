@@ -2,7 +2,7 @@ import './ProfilePage.css';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
 import {useNavigate} from 'react-router-dom';
 import React, { useRef, useEffect, useState } from 'react';
-import RecentPosts from '../RecentPosts/RecentPosts.jsx';
+import RecentPosts from '../RecentPosts/RecentPosts.jsx'
 import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
 import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
 function ProfilePage(){
@@ -11,16 +11,41 @@ function ProfilePage(){
   const tabListRef = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState(null);
+  const [userAbout, setUserAbout] = useState({});
+  const [userComments, setUserComments] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const[upvotedPosts, setUpvotedPosts] = useState([]);
+  useEffect(() => {
+    getUserOverview(username)
+      .then(data => setUserPosts(data.userPosts))
+      .catch(error => console.error(error));
+  }, [username]);
 
+useEffect(() => {
+  getUserUpvoted(username)
+  .then(data => setUpvotedPosts(data))
+  .catch(error => console.error(error));
+  }, [username]);
+
+  useEffect(() => {
+    getUserComments(username)
+      .then(data => setUserComments(data))
+      .catch(error => console.error(error));
+  }, [username]);
   
   useEffect(() => {
     const token = localStorage.getItem('token');
     const StoredUsername = localStorage.getItem('username');
     if (!token) {
-     navigate('/login');
+      navigate('/login');
     }
     setIsLoggedIn(true);
     setUsername(StoredUsername);
+
+    if (StoredUsername) {
+      getUserAbout(StoredUsername).then(data => setUserAbout(data));
+    }
+    console.log(userAbout);
   }, []);
 
   const scrollLeft = () => {
@@ -37,9 +62,10 @@ return(
 <div className="profileContainer">
 <div className="mainComponent">
 <div className="userInfo">
-<img src="./src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-<h3 className="profileName">User</h3>
-<h5 className="userName"> u/sad_p0tat0o </h5>
+<img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+{/* //C:\Users\Developer\Desktop\Curio-Front-end\Curio\src\assets\Curio_logo.png */}
+<h3 className="profileName">{username}</h3>
+<h5 className="userName"> u/{username} </h5>
 </div>
 
 <div className="tableList">
@@ -64,16 +90,67 @@ return(
   </div>
   <hr style={{width: "90%"}} />  
   <TabPanels className="profilePannels">
-    <TabPanel  onClick={() => getUserOverview(username)}>
-      <RecentPosts />
+    <TabPanel>
+      {/* overview */}
+      {userPosts.length === 0 && userComments.length === 0 ? (
+        <p>u/{username} hasn't posted or commented yet</p>
+      ) : (
+        <>
+          {userPosts.map(post => (
+            <div className='post-card' key={post.id}>
+              <div className='author'>
+              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+              <b>u/{post.authorName}</b>
+              </div>
+              <p>{post.content}</p>
+            </div>
+          ))}
+          {userComments.map(comment => (
+            <div className='comment-card' key={comment.id}>
+              <h6>u/author    •   title</h6>
+              <div className='author'>
+              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+              <b>u/{comment.authorName}</b>
+              </div>
+              <p>{comment.content}</p>
+            </div>
+          ))}
+        </>
+      )}
     </TabPanel>
 
     <TabPanel>
-       <RecentPosts />
-    </TabPanel>
+  {userPosts.length === 0 ? (
+    <p>u/{username} hasn't posted yet</p>
+  ) : (
+    userPosts.map(post => (
+      <div className='post-card' key={post.id}>
+        <div className='author'>
+        <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+        <b>u/{post.authorName}</b>
+        </div>
+        <p>{post.content}</p>
+      </div>
+    ))
+  )}
+</TabPanel>
 
-    <TabPanel onClick={()=> getUserComments(username)}>
-      <p>u/sad_p0tat0o hasn't commented yet</p>
+    <TabPanel>
+      {userComments.length === 0 ? (
+        <p>u/{username} hasn't commented yet</p>
+      ) : (
+        userComments.map(comment => (
+          <div className='comment-card' key={comment.id}>
+           <h6>u/author    •   title</h6>
+           <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{comment.authorName}</b>
+            </div>
+            <p>{comment.content}</p>
+          </div>
+        ))
+    
+      )}
     </TabPanel>
 
     <TabPanel >
@@ -84,12 +161,25 @@ return(
       <p>Looks like you haven't hidden anything yet</p>
     </TabPanel>
 
-    <TabPanel  onClick={()=> getUserUpvoted(username)}>
-      <p>Looks like you haven't upvoted anything yet</p>
+    <TabPanel>
+      {upvotedPosts.length === 0 ? (
+        <p>Looks like you haven't upvoted anything yet</p>
+      ) : (
+        // upvotedPosts.map(post => (
+        //   <div className='post-card' key={post.id}>
+        //     <div className='author'>
+        //       <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+        //       <b>u/{post.authorName}</b>
+        //     </div>
+        //     <p>{post.content}</p>
+        //   </div>
+        // ))
+        <h6>upvoted</h6>
+      )}
     </TabPanel>
 
     <TabPanel  onClick={()=> getUserDownvoted(username)}>
-      <p>Looks like you haven't downvoted anything yet</p>
+      { !(getUserDownvoted() || []).length ? <p>Looks like you haven't downvoted anything yet</p> : null }
     </TabPanel>
     
   </TabPanels>
@@ -114,16 +204,16 @@ return(
      Share 
  </button>
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-  <div className="profilevalue">1</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.postKarma || '1'}</div>
+  <div className="profilevalue">{userAbout.commentKarma || '0'}</div>
   <div className="profileItem">Post Karma</div>
   <div className="profileItem">Comment Karma</div>
 </div>
 <br />
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 0.5fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
 
-  <div className="profilevalue">Mar 3, 2024</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.cakeDay || 'Mar 3, 2023'} </div> 
+   <div className="profilevalue">{userAbout.goldRecieved || '0'}</div>
   <div className="profileItem">Cake day</div>
   <div className="profileItem">Gold Received</div>
 </div>
@@ -131,7 +221,7 @@ return(
 
  <p>Settings</p>
  <div className="profileSettings">
-<img src="./src/assets/Curio_logo.png" alt="profile" />
+<img src="../src/assets/Curio_logo.png" alt="profile" />
 <div className="textContainer">
         <h5>Profile</h5>
         <h6>Customise your profile</h6>

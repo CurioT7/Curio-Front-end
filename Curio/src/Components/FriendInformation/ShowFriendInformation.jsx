@@ -17,6 +17,7 @@ import {userBlock , userUnblock} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
+import { useNavigate } from "react-router-dom";
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
@@ -32,6 +33,7 @@ function ShowFriendInformation(props) {
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
 
+
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
     };
@@ -41,6 +43,12 @@ function ShowFriendInformation(props) {
     };
 
     const handleReportClick = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+         navigate('/login');
+        setShowReportMenu(false);
+        }
+        else
         setShowReportMenu(true);
     };
 
@@ -48,6 +56,7 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         showFriendInformation({username});
@@ -85,6 +94,7 @@ function ShowFriendInformation(props) {
     
 
     async function userFollow(friendUsername) {
+
         try {
             await axios.post(`${hostUrl}/api/me/friends`, {
                 friendUsername
@@ -124,12 +134,27 @@ function ShowFriendInformation(props) {
 
 
     const handleFollowToggle = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+         navigate('/login');
+        }
+        else{
         if (isFollowing) {
             userUnfollow(username);
         } else {
             userFollow(username);
         }
         setIsFollowing(!isFollowing);
+    }
+    }
+
+    const handleUserBlock = (username) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+         navigate('/login');
+        }
+        else
+        userBlock(username);
     }
 
 
@@ -183,7 +208,7 @@ function ShowFriendInformation(props) {
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Send a message</p></div>
                                             </li>
-                                            <li className="drop-down-item" onClick={() => { userBlock(username, props.handleBlockPage());}}>
+                                            <li className="drop-down-item" onClick={() => { handleUserBlock(username); props.handleBlockPage();}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Block account</p></div>
                                             </li>

@@ -39,7 +39,9 @@ function App() {
   const handleShowSidebar = () => {
     setIsSidebarVisible(true);
   };
-
+  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
+ 
   return (
     <div>
       <div className="d-flex">
@@ -53,7 +55,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
           <Route path="/login" element={<LoginPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
-          <Route path="/resetpass" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path="/resetpass/:token" element={<ResetPass hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/change_password" element={<ChangePassword hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/home" element={<Home/>} />
           <Route path="/" element={<Home/>} />
@@ -78,6 +80,7 @@ function App() {
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
           <Route path='/commPopup' element={<CommPopup/>} />
+          <Route path='/user/:username' element={<UserPage/>} />
         </Routes>
       </ChakraProvider>
     </div>
