@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import axios from 'axios';
 import { Button, useDisclosure } from '@chakra-ui/react';
 import "./Socialmodal.css";
@@ -16,27 +16,65 @@ import SocialUsernameModal from "./SocialUsernameModal";
 import CurioInput from "./CurioInput";
 
 function Socialmodal(props){
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedSocialLinks, setSelectedSocialLinks] = useState([]);
 
-    const handleSocialLinkClick = (socialLink, iconClass) => {
-        // event.stopPropagation();
+    const handleSocialLinkClick = (url, name, iconClass) => {
         if (selectedSocialLinks.length < 5) { 
-            setSelectedSocialLinks([...selectedSocialLinks, { link: socialLink, icon: iconClass }]);
+            setSelectedSocialLinks([...selectedSocialLinks, { name: name, link: url, icon: iconClass }]);
         }
     };
+    
+    
 
     const handleRemoveSocialLink = (index) => {
+        const linkToRemove = selectedSocialLinks[index];
+        window.open(linkToRemove.link, "_blank"); // Open the link in a new tab
         const updatedLinks = [...selectedSocialLinks];
         updatedLinks.splice(index, 1);
         setSelectedSocialLinks(updatedLinks);
     };
+    
+
+    /////////////////////////////////// Fetch //////////////////////////////
+    useEffect(() => {
+        async function fetchsocialLinks() {
+            try {
+                const response = await axios.get(`${serverHost}/user/${username}/about`);
+                if (response.status === 200) {
+                    console.log("Description: Successful request.");
+                    const formattedSocialLinks = response.data.socialLinks.map(link => ({
+                        link: link.url,
+                        name: link.displayName,
+                        icon: `fa-brands fa-${link.platform}`,
+                    }));
+                    setSelectedSocialLinks(formattedSocialLinks);
+                }
+            } catch (error) {
+                if (error.response){
+                    switch (error.response.status) {
+                        case 404:
+                            console.error("User not found.");
+                            break;    
+                        case 500:
+                            console.error("An unexpected error occurred on the server. Please try again later.");
+                            break;
+                        default:
+                            break;
+                        }
+                }
+            }
+        }
+        fetchsocialLinks();
+    }, []);
+    
 
     return(
         <>
-        {selectedSocialLinks.slice(0, 5).map((link, index) => (
+        {Array.isArray(selectedSocialLinks) && selectedSocialLinks.slice(0, 5).map((link, index) => (
             <div key={index} className="selected-social-link">
-                <i className={link.icon}/> {link.link}
+                <i className={link.icon}/> {link.name}
                 <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
             </div>
         ))}

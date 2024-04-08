@@ -21,15 +21,20 @@
   background-color: #F9FAFA;;
 }
 
-.reddit-figure{
+.reddit-figure, .reddit-figure1{
   height: 36px;
   border-radius: 20px;
+}
+
+.reddit-figure1{
+  margin-right: 4px;
 }
 
 .commName{
   font-size: 12px;
   font-weight: 700;
   margin: 2px;
+  cursor: pointer;
 }
 
 .commCategory{
@@ -41,4 +46,53 @@
   font-size: 12px;
   margin: 2px;
   color: rgb(87, 111, 118);
+}
+
+#overlay-example .tooltip-arrow {
+  display: none;
+}
+
+#overlay-example .tooltip-inner {
+  background: rgba(248, 248, 248, 1);
+  color: rgb(19, 19, 19);
+  width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+  opacity: 100%;  
+}
+
+
+.viewCommButton{
+  background-color: #0045AC;
+  border-radius: 99px;
+  color: white;
+  justify-content: center;
+}
+
+.viewCommButton:hover{
+  background-color: #003584;
+}
+
+.viewCommButton:active{
+  background-color: #003584;
+}
+
+.popOverHeader{
+  height: 2.5rem;
+
+}
+
+.popo44{
+  width: 300px;
+}
+
+.popOverCol{
+  height: 50px;
+}
+
+.powerOverRow{
+  height: 50px;
+}
+
+.membersText{
+  color: rgb(172, 172, 172);
 }

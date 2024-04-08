@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import "./Activity.css"
-import update from "../update-pref";
+// import update from "../update-pref";
 import axios from 'axios';
 import { useToast, Flex, Switch, Spacer } from '@chakra-ui/react';
 import Titles from "../../feedSettings/childs/Titles";
@@ -27,45 +27,45 @@ function Activity(){
     }
     const handleMentionChange = () => {
         setMentionChecked(!mentionChecked);
-       sendDataToBackend({mentionChecked: !mentionChecked});
-         Toast()
+        sendDataToBackend({mentions: !mentionChecked});
+        Toast()
     };
 
     const handleCommentsChange = () => {
         setCommentsChecked(!commentsChecked);
-       sendDataToBackend({commentsChecked: !commentsChecked});
+        sendDataToBackend({comments: !commentsChecked});
         Toast()
     };
     
     const handleUpvotesPostsChange = () => {
         setUpvotesPostsChecked(!upvotesPostsChecked);
-         sendDataToBackend({upvotesPostsChecked: !upvotesPostsChecked});
+         sendDataToBackend({upvotesPosts: !upvotesPostsChecked});
         Toast()
     };
     
     const handleUpvotesCommentsChange = () => {
         setUpvotesCommentsChecked(!upvotesCommentsChecked);
-        sendDataToBackend({upvotesCommentsChecked: !upvotesCommentsChecked});
+        sendDataToBackend({upvotesComments: !upvotesCommentsChecked});
         Toast()
     };
     
     const handleRepliesChange = () => {
         setRepliesChecked(!repliesChecked);
-        sendDataToBackend({repliesChecked: !repliesChecked});
+        sendDataToBackend({replies: !repliesChecked});
         Toast()
         
     };
     
     const handleNewFollowersChange = () => {
         setNewFollowersChecked(!newFollowersChecked);
-        sendDataToBackend({newFollowersChecked: !newFollowersChecked});
+        sendDataToBackend({newFollowers: !newFollowersChecked});
         Toast()
         
     };
 
     const handlePostsFollowChange = () => {
         setPostsFollowChecked(!postsFollowChecked);
-        sendDataToBackend({postsFollowChecked: !postsFollowChecked});
+        sendDataToBackend({postsYouFollow: !postsFollowChecked});
         Toast()
         
     };
@@ -78,13 +78,13 @@ function Activity(){
         }
 
         try {
-            const token = 'your_token_here'; 
+            // const token = 'your_token_here'; 
             const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response)
+            // console.log(response)
             return response;
         } catch (error) {
             console.error('Error sending data to backend:', error);
@@ -92,8 +92,13 @@ function Activity(){
     }
 
     async function fetchDataFromBackend() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No token found');
+            return;
+            }
         try {
-            const token = 'your_token_here'; 
+            // const token = 'your_token_here'; 
             const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
