@@ -18,6 +18,12 @@ function ReportReason(props) {
       props.showSubmittedReport();
       props.onHide();
     }
+    if (e.target.textContent === "Next") {
+      console.log("Next button clicked");
+      props.setReportReason(reportReason);
+      props.showExtraReasons();
+      props.onHide();
+    }
   }
   return (
     <Modal

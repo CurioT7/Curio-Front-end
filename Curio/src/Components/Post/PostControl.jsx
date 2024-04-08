@@ -6,6 +6,7 @@ import ReportPost from "../../styles/icons/ReportPost";
 import Hide from "../../styles/icons/Hide";
 import ReportReason  from "./ReportReason.jsx";
 import ReportSubmitted from "./ReportSubmitted.jsx";
+import ReportExtraReason from "./ReportExtraReason.jsx";
 
 
 function PostControl(props) {
@@ -13,6 +14,8 @@ function PostControl(props) {
   const [showControls, setShowControls] = useState(false);
   const [isReportReasonModalOpen, setReportReasonModalOpen] = useState(false);
   const [isReportSubmittedModalOpen, setReportSubmittedModalOpen] = useState(false);
+  const [isExtraReasonModalOpen, setExtraReasonModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState('');
   const handleOpenReportModal = () => {
     setReportReasonModalOpen(true);
   }
@@ -22,6 +25,14 @@ function PostControl(props) {
   const handleShowSubmittedReport = () => {
     setShowControls(false);
     setReportSubmittedModalOpen(true);
+  }
+  const handleSetReportReason = (reason) => {
+    console.log(reason)
+    setReportReason(reason);
+  }
+  const handleShowExtraReasons = () => {
+    setShowControls(false);
+    setExtraReasonModalOpen(true);
   }
   return (
     <>
@@ -63,8 +74,9 @@ function PostControl(props) {
                                       </div>
               }
       </div>
-      <ReportReason show={isReportReasonModalOpen} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
+      <ReportReason show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
       <ReportSubmitted show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
+      <ReportExtraReason show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
     </>
   );
 }
