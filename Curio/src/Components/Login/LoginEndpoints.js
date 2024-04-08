@@ -5,7 +5,7 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
 const loginUser = async (username, password) => {
-const url = `${VITE_SERVER_HOST}./api/auth/login`;
+const url = `${VITE_SERVER_HOST}/api/auth/login`;
 const data = {
   username,
   password,
@@ -96,7 +96,9 @@ const forgotPassword = async (username, email) => {
 };
 
 const resetPassword = async (newPassword) => {
-  const url = `${VITE_SERVER_HOST}/api/auth/resetpass`;
+  const token = localStorage.getItem('token');
+  console.log(token)
+  const url = `${VITE_SERVER_HOST}/api/auth/reset_password/${token}`;
   const data = {
     password: newPassword,
   };
