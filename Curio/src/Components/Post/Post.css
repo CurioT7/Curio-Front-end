@@ -177,3 +177,8 @@
 .post-dropdown{
     width: 7rem!important;
 }
+
+.block-warning-secondary{
+    font-size: 0.75rem;
+    color: #2a3c42;
+}
