@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import ProfilePage from './ProfilePage.jsx';
+import ProfilePage from '../../Components/ProfilePage/ProfilePage';
 describe('ProfilePage component', () => {
   beforeEach(() => {
     render(<ProfilePage />);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import StatsLayout from "../../Components/FollowUser/FollowUser.jsx"
 import FriendInformation from "../../Components/FriendInformation/ShowFriendInformation.jsx"
 import './UserProfile.css'
-import BlockPicture from "../../styles/icons/BlockPic.png"
+import Picture from "../../styles/icons/BlockPic.png"
 import { Link } from 'react-router-dom';
 
 function UserPage( ) {
@@ -32,7 +32,7 @@ function UserPage( ) {
             <div className='w-100 h-100 flex items-center justify-content-center text-center'> 
               <div className='w-1/2 flex flex-col items-center text-center justify-content-center '>
                 <div className='d-flex justify-content-center'>
-                <img src={BlockPicture} alt='reddit figure' className='reddit-figure-blocked'/>
+                <img src={Picture} alt='reddit figure' className='reddit-figure'/>
                 </div>
                 <h1 className='header-title'>u/Yehia is blocked</h1>
                 <p className='paragraph'>

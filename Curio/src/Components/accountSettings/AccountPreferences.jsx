@@ -6,6 +6,7 @@ import React from "react"
 import Titles from "../feedSettings/childs/Titles"
 import ChangePass from "./buttons/ChangePass"
 import EmailButton from "./buttons/EmailButton"
+import GeneratePass from "./buttons/GeneratePass"
 import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 
@@ -13,8 +14,10 @@ import axios from 'axios';
 const AccountPreferences = () => {
     const serverHost = import.meta.env.VITE_SERVER_HOST;
     const [email, setEmail] = React.useState("example@gamil.com");
+    const [username,setUsername] = React.useState("example")
     const [gender, setGender] = React.useState("MAN")
     const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
+    const [findPass, setFindPassword] = React.useState(false)
 
     const toast = useToast()
     function Toast(){
@@ -44,7 +47,6 @@ const AccountPreferences = () => {
     
     async function fetchDataFromBackend() {
         try {
-            const token = 'your_token_here'; // replace with your actual token
             const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
@@ -62,16 +64,29 @@ const AccountPreferences = () => {
             console.error('Error config:', error.config);
         }
     }
+    async function FindUserInformation(){
+        try{
+            const request = await axios.get(`${serverHost}/api/settings/v1/me`, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                
+                }});
+                
+                return request.data;
+        }
+        catch(error){
+
+        }
+    }
 
     async function sendDataToBackend(data) {
         try {
-            const token = 'your_token_here'; // replace with your actual token
             const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response);
+            
             return response;
         } catch (error) {
             if (error.response) {
@@ -88,9 +103,15 @@ const AccountPreferences = () => {
     React.useEffect(() => {
         async function fetchAndSetData() {
             const data = await fetchDataFromBackend();
+            const UserData = await FindUserInformation();
             if (data) {
                 setGender(data.gender);
                 setIP(data.locationCustomization);
+            }
+            if(UserData){
+                setEmail(UserData.email);
+                setUsername(UserData.username);
+                setFindPassword(UserData.createdPassword);
             }
         }
 
@@ -99,30 +120,40 @@ const AccountPreferences = () => {
 
     // Update data when gender or ip changes
     
-
+    
       return(
         <Box mb={10}>
-            <Flex mb={5} wrap='wrap'>
-                <Titles title='Email Address' description={email}/>
-              
-                <Spacer />
-                <>
-                <EmailButton buttonStyle={buttonStyle}/>
-                </>
-            </Flex>
+            {findPass==false &&  <Flex mb={5} wrap='wrap'>
+                    <Titles title='Email Address' description={email}/>
+                
+                    <Spacer />
+                    <>
+                    <GeneratePass email={email} username={username} buttonStyle={buttonStyle}/>
+                    </>
+                </Flex>}
+           
+           {findPass===true&& <Box>
+                <Flex mb={5} wrap='wrap'>
+                    <Titles title='Email Address' description={email}/>
+                
+                    <Spacer />
+                    <>
+                    <EmailButton buttonStyle={buttonStyle}/>
+                    </>
+                </Flex>
 
-            <Flex mb={5}>
-                <Titles title='Change password' description='Password must be at least 8 characters long'/>
-                {/* <div>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Change password</h3> 
-                    <p className="headings-description fw-normal text-muted">Password must be at least 8 characters long</p>
-                </div> */}
-                <Spacer />
-                <>
-                <ChangePass buttonStyle={buttonStyle}/>
-                </>
-            </Flex>
-
+                <Flex mb={5}>
+                    <Titles title='Change password' description='Password must be at least 8 characters long'/>
+                    {/* <div>
+                        <h3 className="headings-settings d-flex fw-500 mb-1">Change password</h3> 
+                        <p className="headings-description fw-normal text-muted">Password must be at least 8 characters long</p>
+                    </div> */}
+                    <Spacer />
+                    <>
+                    <ChangePass buttonStyle={buttonStyle}/>
+                    </>
+                </Flex>
+            </Box>}
             <Flex mb={5}>
                 <Titles title='Gender' description='This information may be used to improve your recommendations and ads.'/>
                 

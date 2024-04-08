@@ -55,7 +55,7 @@ function Advanced() {
         
         const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
         console.log(response)
@@ -66,11 +66,17 @@ function Advanced() {
   }
 
   async function fetchDataFromBackend() {
+    const token = localStorage.getItem('token');
+        // console.log(token)
+        if (!token) {
+        console.error('No token found');
+        return;
+        }
       try {
           
           const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
               headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
+                  authorization: `Bearer ${localStorage.getItem('token')}`
               }
           });
           return response.data;

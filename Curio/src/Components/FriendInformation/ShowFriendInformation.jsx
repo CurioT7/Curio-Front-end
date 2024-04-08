@@ -24,27 +24,13 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 function ShowFriendInformation(props) {
     const { username } = useParams();
     const [showDropdown, setShowDropdown] = useState(false);
-    const initialFollowStatus = localStorage.getItem('followedUser');
-    const [isFollowing, setIsFollowing] = useState(initialFollowStatus === username);
-    const initialBlockStatus = localStorage.getItem('blockedUser');
-    const [isBlocked, setIsBlocked] = useState(initialBlockStatus === username);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [isBlocked, setIsBlocked] = useState(false);
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
-
-    // const [isnextPage, setIsNextPage] = useState(false);
     const [friendusername , setFriendusername] = useState('');
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
-
-    // handleNextPage = () => {
-    //     props.nextPage();
-    //     setIsNextPage(true);
-    // }
-
-    // const handleBlockClick = () => {
-    //     setIsBlocked(!isBlocked);
-    // };
-
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
@@ -64,18 +50,39 @@ function ShowFriendInformation(props) {
 
 
     useEffect(() => {
-        async function showFriendInformation({username}) {
-            try {
-                const response = await axios.get(`${hostUrl}/user/${username}/about`);
-                console.log(response);
-                setFriendInfo(response.data);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
         showFriendInformation({username});
-        
+        getFollower({username});
     }, [username]);
+
+    async function showFriendInformation({username}) {
+        try {
+            const response = await axios.get(`${hostUrl}/user/${username}/about`);
+            setFriendInfo(response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function getFollower({ username }) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('Error:', error);
+                return;
+            }
+    
+            await axios.get(`${hostUrl}/api/me/friends/${username}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setIsFollowing(true);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    
 
     async function userFollow(friendUsername) {
         try {
@@ -116,28 +123,6 @@ function ShowFriendInformation(props) {
     };
 
 
-    // async function userUnfollow(friendUsername) {
-    //     try {
-    //         await axios.post(`${hostUrl}/api/me/friends`, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'authorization': `Bearer ${localStorage.getItem('token')}`
-    //             },
-    //             data: {
-    //                 friendUsername
-    //             }
-    //         });
-    
-    //         // Remove the follow status from local storage
-    //         localStorage.removeItem('followedUser');
-    
-    //         console.log('Friend unfollowed');
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // };
-    
-
     const handleFollowToggle = () => {
         if (isFollowing) {
             userUnfollow(username);
@@ -146,41 +131,6 @@ function ShowFriendInformation(props) {
         }
         setIsFollowing(!isFollowing);
     }
-
-
-    // async function userBlock(usernameToBlock) {
-    //     setIsBlocked(true);
-    //     try {
-    //         console.log(localStorage.getItem('token'));
-    //         const response = await axios.post(`${hostUrl}/api/User/block`, {
-    //             usernameToBlock
-    //         }, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         });
-    //         localStorage.setItem('blockedUser', usernameToBlock);
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // }
-
-    // async function userUnblock(usernameToUnblock) {
-    //     setIsBlocked(false);
-    //     try {
-    //         const response = await axios.post(`${hostUrl}/api/User/unblock`, {
-    //             usernameToUnblock
-    //         }, {
-    //             headers: {
-    //                 authorization: `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         });
-    //         localStorage.removeItem('blockedUser');
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // }
 
 
 
@@ -233,7 +183,7 @@ function ShowFriendInformation(props) {
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Send a message</p></div>
                                             </li>
-                                            <li className="drop-down-item" onClick={() => {props.handleBlockPage(); userBlock(username);}}>
+                                            <li className="drop-down-item" onClick={() => { userBlock(username, props.handleBlockPage());}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Block account</p></div>
                                             </li>
@@ -264,7 +214,7 @@ function ShowFriendInformation(props) {
                                 <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
                                     <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
                                 </button>
-                        </>
+                                </>
                             )}
 
                         </div>
