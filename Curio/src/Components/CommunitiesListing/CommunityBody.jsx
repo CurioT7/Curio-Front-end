@@ -5,7 +5,7 @@ import React from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
-import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend } from "./CommunityEndPoints";
+import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend } from "./CommunityEndPoints";
 function CommunityBody({ props }) {
   
   const[posts, setPosts] = React.useState([])
@@ -53,11 +53,21 @@ async function changeSortType(value,time) {
             }
         }
         else if (value === 'Top') {
-            const data = await fetchTopFromBackend(Community,time);
+          if(time==="All Time"){
+            const data = await fetchTopFromBackend(Community);
             if (data) {
-                setPosts(data.post);
-                setRandomPost({ ...randomPost, isSelected: false });
+              setPosts(data.post);
+              setRandomPost({ ...randomPost, isSelected: false });
+          }
+          }
+          else{
+            const data = await fetchTopTimeFromBackend(Community,time);
+            if (data) {
+              setPosts(data.post);
+              setRandomPost({ ...randomPost, isSelected: false });
+              }
             }
+            
         }
         else if (value === 'Random') {
             const data = await fetchRisingFromBackend(Community);
