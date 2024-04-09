@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import "./ProfileSetting.css";
 import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
-import ProfileInformation from "../../Components/profileSetting/ProfileInformation/ProfileInformation"
-import SocialLinksComponent from "../../Components/profileSetting/SocialLinksSection/SocialLinksSection"
-import ProfileImageUpload from "../../Components/profileSetting/ProfileImageUpload/ProfileImageUpload"
-import ProfileCategory from "../../Components/profileSetting/ProfileCategory/ProfileCategory"
-import Advanced from "../../Components/profileSetting/Advanced/Advanced"
+import ProfileInformation from "../../Components/profileSetting/ProfileInformation/ProfileInformation";
+import SocialLinksComponent from "../../Components/profileSetting/SocialLinksSection/SocialLinksSection";
+import ProfileImageUpload from "../../Components/profileSetting/ProfileImageUpload/ProfileImageUpload";
+import ProfileCategory from "../../Components/profileSetting/ProfileCategory/ProfileCategory";
+import Advanced from "../../Components/profileSetting/Advanced/Advanced";
 import { useNavigate } from 'react-router-dom';
 
 function ProfileSetting(props) {
