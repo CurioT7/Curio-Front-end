@@ -111,6 +111,9 @@ function NavbarComponent() {
             <i class="fa fa-bars" aria-hidden="true"></i>
           </label>
         </div>
+        <div style={{color: "#000000!important"}}>
+          <SignupHandler/>
+        </div>
       </nav>
 
     );

@@ -152,8 +152,8 @@ function SignupHandler() {
 
   return (
       <>
-          <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', width:"20px!important"}} className="link-offcanvas signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
-              {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><Signup /><span className="ms-3">Login / Register</span></NavDropdown.Item>}
+          <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', color: "#000000!important"}} className="link-offcanvas signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
+              {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><div className="col-2 me-0 pe-0 d-flex align-items-center"><Signup /></div><span className="ms-1">Login / Register</span></NavDropdown.Item>}
               {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup />
               <span className="ms-3">
                 Logout
