@@ -6,17 +6,51 @@ import CloseButton from '../../styles/icons/CloseButton.jsx';
 import ReportIcon from "../../styles/icons/ReportIcon.jsx";
 import axios from "axios";
 import './ReportModals.css';
+import { useToast } from '@chakra-ui/react'
 
 function ReportReason(props) {
+  const toast = useToast();
   const [reportReason, setReportReason] = useState('');
   const handleReportReason = (e) => {
     setReportReason(e.target.textContent);
   }
-  const handleReportSubmit = (e) => {
+  const handleReportSubmit = async (e) => {
     if (e.target.textContent === "Submit Report") {
-      console.log("Report submitted");
-      props.showSubmittedReport();
-      props.onHide();
+      try{
+          var hostUrl = import.meta.env.VITE_SERVER_HOST;
+          const response = await axios.post(`${hostUrl}/api/report`, {
+            reportReason: props.reportReason,
+            reportExtraReason: reportExtraReason,
+            itemId: props.postId
+          },
+           {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+          if (response.status === 200){
+            props.showSubmittedFinalReport();
+            props.onHide();
+          }
+          if (response.status === 400 || response.status === 404){
+            toast({
+              description: "Invalid reason chosen.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+              backgroundColor: '#EB001F',
+            })
+          }
+        }
+        catch(err){
+          toast({
+            description: "Server Error. Please try again later.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+          console.log(err);
+        }
     }
     if (e.target.textContent === "Next") {
       console.log("Next button clicked");

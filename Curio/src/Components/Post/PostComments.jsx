@@ -11,10 +11,40 @@ import Ellipsis from "../../styles/icons/Elippsis";
 import SaveButton from "../../styles/icons/SaveButton";
 import ReportPost from "../../styles/icons/ReportPost";
 import Hide from "../../styles/icons/Hide";
+import ReportReason  from "./ReportReason.jsx";
+import ReportSubmitted from "./ReportSubmitted.jsx";
+import ReportExtraReason from "./ReportExtraReason.jsx";
 
 function PostComments(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
+    const [isReportReasonModalOpen, setReportReasonModalOpen] = useState(false);
+    const [isReportSubmittedModalOpen, setReportSubmittedModalOpen] = useState(false);
+    const [isExtraReasonModalOpen, setExtraReasonModalOpen] = useState(false);
+    const [reportReason, setReportReason] = useState('');
+    const handleOpenReportModal = () => {
+        setReportReasonModalOpen(true);
+    }
+    const handleShowSubmittedReport = () => {
+    setShowControls(false);
+    setReportSubmittedModalOpen(true);
+    }
+    const handleSetReportReason = (reason) => {
+        console.log(reason)
+        setReportReason(reason);
+    }
+    const handleShowExtraReasons = () => {
+        setShowControls(false);
+        setExtraReasonModalOpen(true);
+    }
+    const handleBackToReasonModal = () => {
+        setExtraReasonModalOpen(false);
+        setReportReasonModalOpen(true);
+    }
+    const showSubmittedFinalReport = () => {
+        setExtraReasonModalOpen(false);
+        setReportSubmittedModalOpen(true);
+    }
 
     const [showControls, setShowControls] = useState(false);
     const handleEllipsisClick = () => {
@@ -39,6 +69,7 @@ function PostComments(props) {
     }
 
     return (
+        <>
         <div className="d-flex flex-column">
             <div className="d-flex mb-3">
                 <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://preview.redd.it/snoovatar/avatars/nftv2_bmZ0X2VpcDE1NToxMzdfZWI5NTlhNzE1ZGZmZmU2ZjgyZjQ2MDU1MzM5ODJjNDg1OWNiMTRmZV8yNjYyMzA1MA_rare_fece1052-efb7-4ff4-be96-0aabece1e0fa-headshot.png?width=64&height=64&crop=smart&auto=webp&s=523c745b5c559087b4577764c49f60ad3af2c0c6' />
@@ -80,7 +111,7 @@ function PostComments(props) {
                                                                 <SaveButton />
                                                                 <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>Save</p></div>
                                                         </li>
-                                                        <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                        <li onClick={handleOpenReportModal} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                                 <ReportPost />
                                                                 <div><p className='mt-3 text-text'>Report</p></div>
                                                         </li>
@@ -89,6 +120,11 @@ function PostComments(props) {
                         }
             </div>
         </div>
+        <ReportReason show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
+        <ReportSubmitted show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
+        <ReportExtraReason showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
+        </>
+        
     );
 }
 

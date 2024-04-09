@@ -7,10 +7,13 @@ import Hide from "../../styles/icons/Hide";
 import ReportReason  from "./ReportReason.jsx";
 import ReportSubmitted from "./ReportSubmitted.jsx";
 import ReportExtraReason from "./ReportExtraReason.jsx";
+import axios from "axios";
+import {useToast} from '@chakra-ui/react';
+
 
 
 function PostControl(props) {
-
+  const toast = useToast();
   const [showControls, setShowControls] = useState(false);
   const [isReportReasonModalOpen, setReportReasonModalOpen] = useState(false);
   const [isReportSubmittedModalOpen, setReportSubmittedModalOpen] = useState(false);
@@ -33,6 +36,44 @@ function PostControl(props) {
   const handleShowExtraReasons = () => {
     setShowControls(false);
     setExtraReasonModalOpen(true);
+  }
+  const handleBackToReasonModal = () => {
+    setExtraReasonModalOpen(false);
+    setReportReasonModalOpen(true);
+  }
+  const showSubmittedFinalReport = () => {
+    setExtraReasonModalOpen(false);
+    setReportSubmittedModalOpen(true);
+  }
+  const handleHide = async () => {
+    try{
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.post(`${hostUrl}/api/hide`, {
+        itemId: props.postId
+      },
+       {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200){
+        console.log('Hidden');
+      }
+      if (response.status === 400 || response.status === 404){
+        console.log('Error');
+      }
+      if (response.status === 409){
+        toast({
+          description: "Item already hidden.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
   }
   return (
     <>
@@ -62,7 +103,7 @@ function PostControl(props) {
                                                       <SaveButton />
                                                       <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>Save</p></div>
                                               </li>
-                                              <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                              <li onClick={handleHide} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                       <Hide />
                                                       <div><p className='mt-3 text-text'>Hide</p></div>
                                               </li>
@@ -76,7 +117,7 @@ function PostControl(props) {
       </div>
       <ReportReason show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
       <ReportSubmitted show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
-      <ReportExtraReason show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
+      <ReportExtraReason showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
     </>
   );
 }
