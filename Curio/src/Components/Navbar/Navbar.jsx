@@ -63,8 +63,9 @@ function NavbarComponent() {
   //     ))}
   //   </>
   // );
-  let subMenu = document.getElementById("subMenu");
+  
   function toggleMenu(){
+    let subMenu = document.getElementById("subMenu");
     subMenu.classList.toggle("open-menu");
   }
     return (
@@ -107,6 +108,10 @@ function NavbarComponent() {
                 <img src={setting} alt="setting" />
                 <p>Settings</p>
               </Link>
+              <hr />
+              <div className="user-info sub-menu-link">
+                <SignupHandler/>
+              </div>
             </div>
           </div>
         </ul>
@@ -114,9 +119,6 @@ function NavbarComponent() {
           <label htmlFor="chk1">
             <i class="fa fa-bars" aria-hidden="true"></i>
           </label>
-        </div>
-        <div style={{color: "#000000!important"}}>
-          <SignupHandler/>
         </div>
       </nav>
 
