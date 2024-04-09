@@ -1,6 +1,6 @@
 import React, { useState, useRef  }  from 'react';
 import "./Createpostarea.css";
-import Text_Editor from "./Text_Editor";
+import Text_Editor from "./Post_Section/Post_Section";
 
 
 function Createpostarea() {

@@ -63,16 +63,19 @@ function NavbarComponent() {
   //     ))}
   //   </>
   // );
-  let subMenu = document.getElementById("subMenu");
+  
   function toggleMenu(){
+    let subMenu = document.getElementById("subMenu");
     subMenu.classList.toggle("open-menu");
   }
     return (
       <nav className='navbar-component'>
         <input type="checkbox" name="" id="chk1"/>
         <div className="logo">
+          <Link to={'/'} style={{ display: "flex" }}>
           <img src={logo} alt="logo" className="curio-logo"/>
           <h1 className='title-platform'>Curio</h1>
+          </Link>
         </div>
         <div className="search-box">
           <form action="">
@@ -85,9 +88,11 @@ function NavbarComponent() {
             <a href="#" style={{ display: "flex" }}><img src={advertise} alt="advertise"/></a>
           </li>
           <li className='sub-right-navbar'><a href="#" style={{ display: "flex" }}><img src={openchat} alt="logo"/></a></li>
-          <li className='sub-right-navbar'><a href="#" className='create-icon' style={{ display: "flex" }}>
+          <li className='sub-right-navbar'>
+          <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
             <img src={plus} alt="profile" style={{ marginRight: "5px" }} />
-            Create</a>
+            Create
+          </Link>
           </li>
 
           <li className='sub-right-navbar'><a href="#" style={{ display: "flex" }}><img src={inbox} alt="logo"/></a></li>
@@ -99,10 +104,10 @@ function NavbarComponent() {
                 <h6>View Profile</h6>
               </div>
               <hr />
-              <a href="#" className="sub-menu-link">
+              <Link to={'settings/account'} className="sub-menu-link">
                 <img src={setting} alt="setting" />
                 <p>Settings</p>
-              </a>
+              </Link>
               <hr />
               <div className="user-info sub-menu-link">
                 <SignupHandler/>
