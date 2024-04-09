@@ -152,14 +152,14 @@ function SignupHandler() {
 
   return (
       <>
-          <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', color: "#000000!important"}} className="link-offcanvas signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
-              {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><div className="col-2 me-0 pe-0 d-flex align-items-center"><Signup /></div><span className="ms-1">Login / Register</span></NavDropdown.Item>}
-              {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup />
-              <span className="ms-3">
+          <div style={{borderRadius: '999px!important', color: "#000000!important"}} className="link-offcanvas signup-button new-dropdown-signup mt-0 p-0 d-flex justify-content-center">
+              {!isAuthenticated && <div onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><div className="col-2 me-2 pe-0 d-flex align-items-center"><Signup /></div><span className="ms-1 new-dropdown-label col-12">Login / Register</span></div>}
+              {isAuthenticated && <div onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup />
+              <span className="ms-3 new-dropdown-label">
                 Logout
                 </span>
-              </NavDropdown.Item>}
-          </NavDropdown>
+              </div>}
+          </div>
           {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
           {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
           {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}

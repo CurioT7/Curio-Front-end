@@ -190,3 +190,11 @@
 .dropdown-toggle::after{
     display: none;
 }
+
+.new-dropdown-signup:hover{
+    cursor: pointer;
+}
+
+.new-dropdown-label:hover{
+    color: #0d6efd;
+}
