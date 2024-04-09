@@ -6,6 +6,7 @@ import classes from './ModalPages.module.css';
 import Back from '../../styles/icons/Back'
 import axios from "axios";
 import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
+import { useToast } from '@chakra-ui/react';
 
 const MultiPageFormModal = (props) => {
     const [step, setStep] = useState(1);
@@ -13,12 +14,36 @@ const MultiPageFormModal = (props) => {
     const [reportReason, setReportReason] = useState(' ');
     const [description, setDescription] = useState(' ');
     const [explanation, setExplanation] = useState(' ');
-    const [reportType, setReportType] = useState(' ');
     const [furtherDetails, setFurtherDetails] = useState('');
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isSecondStep, setSecondStep] = useState(false);
     const[isPrevStep, setPrevStep] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const [isBlockedError, setIsBlockedError] = useState(false);
+
+    const toast = useToast()
+    function Toast() {
+        toast({
+            title: "error",
+            description: "You can't block somebody again within 24 hours of blocking them",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
+    const toastsuccess = useToast()
+    function ToastSuccess() {
+        toastsuccess({
+            description: "User Blocked successfully",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
 
 
     const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -28,10 +53,6 @@ const MultiPageFormModal = (props) => {
             setStep(1);
         }
     }, [props.show]);
-
-    const handleReportType = (repType) => {
-        setReportType(repType);
-    };
 
     const handleDescriptionChange = (description) => {
         setDescription(description);
@@ -49,10 +70,8 @@ const MultiPageFormModal = (props) => {
     const handleOptionClick = (reason, explanation) => {
         if (reportReason === reason) {
             setReportReason('');
-            setExplanation('');
         } else {
             setReportReason(reason);
-            setExplanation(explanation);
         }
         setSecondStep(true);
     };
@@ -106,13 +125,27 @@ const MultiPageFormModal = (props) => {
         }
     };
 
-    const handleBlockToggle = () => {
+
+    const handleBlockToggle = async() => {
+        if(isBlockedError){
+            setIsBlockedError(false);
+        }
+        else{
         if (!isBlocked) {
-            userBlock(props.username);
+            const result = await userBlock(props.username);
+            if(result.success){
+                setIsBlocked(true);
+                ToastSuccess();
+            }
+            if (!result.success) {
+                Toast();
+                setIsBlockedError(true);
+            }
         } else {
             userUnblock(props.username);
         }
-        setIsBlocked(!isBlocked);
+    }
+    setIsBlocked(!isBlocked);
     }
 
 

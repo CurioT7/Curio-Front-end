@@ -18,7 +18,6 @@ async function showFriendInformation({username}) {
 
 async function userBlock(usernameToBlock) {
     try {
-        console.log(localStorage.getItem('token'));
         const response = await axios.post(`${hostUrl}/api/User/block`, {
             usernameToBlock
         }, {
@@ -27,10 +26,13 @@ async function userBlock(usernameToBlock) {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(response);
-        return response;
+        return { success: true, response };
     } catch (error) {
+        if (error.response && error.response.status === 403) {
+            console.error('Error:', error.response.data);
+        }
         console.error('Error:', error);
+        return { success: false, error };
     }
 }
 
@@ -44,7 +46,6 @@ async function userUnblock(usernameToUnblock) {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(response);
         return response;
     } catch (error) {
         console.error('Error:', error);
