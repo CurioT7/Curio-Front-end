@@ -91,7 +91,7 @@ function NavbarComponent() {
           </li>
 
           <li className='sub-right-navbar'><a href="#" style={{ display: "flex" }}><img src={inbox} alt="logo"/></a></li>
-          <li className='sub-right-navbar'><a href="#" style={{ display: "flex" }}><img src={profile} alt="logo" onClick={toggleMenu}/></a></li>
+          <li className='sub-right-navbar'><a href="#" style={{ display: "flex" , flexDirection: "column"}}><img src={profile} alt="logo" onClick={toggleMenu}/></a></li>
           <div className="sub-menu-wrap" id='subMenu'>
             <div className="sub-menu">
               <div className="user-info">
