@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./Text_Editor.css";
-import Icons from "./Icons";
+import "./Post_Section.css";
+import Icons from "../Icons";
 
-function Text_Editor() {
+function Post_Section() {
   const [inputText, setInputText] = useState("");
   const [boldMode, setBoldMode] = useState(false);
   const [italicMode, setItalicMode] = useState(false);
@@ -67,4 +67,4 @@ function Text_Editor() {
   );
 }
 
-export default Text_Editor;
+export default Post_Section;
