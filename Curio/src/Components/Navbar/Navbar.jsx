@@ -7,12 +7,13 @@ import plus from "../../assets/Plus_navbar.png";
 import inbox from "../../assets/Inbox_navbar.png";
 import profile from "../../assets/Profile_navbar.png";
 import setting from "../../assets/Setting_navbar.png";
-import search_icon from "../../assets/search_icon.png"
+// import search_icon from "../../assets/search_icon.png"
+import { Tooltip } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
-import { Navbar, Container, Nav, NavDropdown, Form, Button, Offcanvas } from 'react-bootstrap';
+// import { Navbar, Container, Nav, NavDropdown, Form, Button, Offcanvas } from 'react-bootstrap';
 // import Avatar from '../../styles/icons/Avatar';
-import SearchInput from "./SearchInput"
+// import SearchInput from "./SearchInput"
 
 function NavbarComponent() {
   const username = localStorage.getItem('username');
@@ -85,18 +86,41 @@ function NavbarComponent() {
         </div>
         <ul className='right-section-navbar'>
           <li className='sub-right-navbar'>
-            <a href="#" style={{ display: "flex" }}><img src={advertise} alt="advertise"/></a>
+            <Tooltip label="Advertise on Curio">
+              <a href="#" style={{ display: "flex" }}>
+                <img src={advertise} alt="advertise" />
+              </a>
+            </Tooltip>
           </li>
-          <li className='sub-right-navbar'><a href="#" style={{ display: "flex" }}><img src={openchat} alt="logo"/></a></li>
           <li className='sub-right-navbar'>
-          <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
-            <img src={plus} alt="profile" style={{ marginRight: "5px" }} />
-            Create
-          </Link>
+            <Tooltip label="Open chat">
+              <a href="#" style={{ display: "flex" }}>
+                <img src={openchat} alt="logo"/>
+              </a>
+            </Tooltip>
           </li>
-
-          <li className='sub-right-navbar'><a href="#" style={{ display: "flex" }}><img src={inbox} alt="logo"/></a></li>
-          <li className='sub-right-navbar'><a href="#" style={{ display: "flex" , flexDirection: "column"}}><img src={profile} alt="logo" onClick={toggleMenu}/></a></li>
+          <li className='sub-right-navbar'>
+            <Tooltip label="Create post">
+              <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
+                <img src={plus} alt="profile" style={{ marginRight: "5px" }} />
+                Create
+              </Link>
+            </Tooltip>
+          </li>
+          <li className='sub-right-navbar'>
+            <Tooltip label="Open inbox">
+              <a href="#" style={{ display: "flex" }}>
+                <img src={inbox} alt="logo"/>
+              </a>
+            </Tooltip>
+          </li>
+          <li className='sub-right-navbar' onClick={toggleMenu}>
+            <Tooltip label="Open profile menu">
+              <a href="#" style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
+                <img src={profile} alt="logo"/>
+              </a>
+            </Tooltip>
+          </li>
           <div className="sub-menu-wrap" id='subMenu'>
             <div className="sub-menu">
               <Link to={`user/${username}`} className="user-info" onClick={toggleMenu}>

@@ -28,8 +28,6 @@ function Socialmodal(props){
         }
     };
     
-    
-
     const handleRemoveSocialLink = (index) => {
         const linkToRemove = selectedSocialLinks[index];
         window.open(linkToRemove.link, "_blank"); // Open the link in a new tab
@@ -37,41 +35,6 @@ function Socialmodal(props){
         updatedLinks.splice(index, 1);
         setSelectedSocialLinks(updatedLinks);
     };
-    
-
-    /////////////////////////////////// Fetch //////////////////////////////
-    useEffect(() => {
-        async function fetchsocialLinks() {
-            try {
-                const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`,
-                {
-                    headers: {
-                        authorization: `Bearer ${localStorage.getItem('token')}` 
-                    }
-                });
-                const formattedSocialLinks = response.data.socialLinks.map(link => ({
-                    link: link.url,
-                    name: link.displayName,
-                    icon: `fa-brands fa-${link.platform}`,
-                }));
-                setSelectedSocialLinks(formattedSocialLinks);
-            } catch (error) {
-                if (error.response){
-                    switch (error.response.status) {
-                        case 404:
-                            console.error("User preferences not found.");
-                            break;    
-                        case 500:
-                            console.error("An unexpected error occurred on the server. Please try again later.");
-                            break;
-                        default:
-                            break;
-                        }
-                }
-            }
-        }
-        fetchsocialLinks();
-    }, []);
 
     const patchSocialLink = (iconClass, name, url) => {
         let platform;
@@ -82,7 +45,6 @@ function Socialmodal(props){
             case "fa-brands fa-instagram":
                 platform = "Instagram";
                 break;
-
             case "fa-brands fa-twitter":
                 platform = "Twitter";
                 break;
@@ -102,7 +64,7 @@ function Socialmodal(props){
                 platform = "Tumblr";
                 break;
             case "fa-brands fa-spotify":
-                platform = "Sptify";
+                platform = "Spotify";
                 break;
             case "fa-brands fa-soundcloud":
                 platform = "SoundCloud";
@@ -114,8 +76,12 @@ function Socialmodal(props){
                 platform = "Unknown";
         }
     
+        // Construct the new social link object
+        // const newLink = { displayName: name, url: url, platform: platform };
+        // console.log(newLink)
+    
         axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
-            socialLinks: [...selectedSocialLinks, { displayName: name, url: url, platform: platform }]
+            socialLinks: [...selectedSocialLinks, { displayName: name, url: url, platform: platform }] // Append the new link to the existing list
         },{
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}` 
@@ -125,7 +91,43 @@ function Socialmodal(props){
         }).catch(error => {
             // Handle error if needed
         });
+
+        // console.log(socialLinks)
     };
+    
+    // Fetch Function
+    useEffect(() => {
+        async function fetchsocialLinks() {
+            try {
+                const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}` 
+                    }
+                });
+                const formattedSocialLinks = response.data.socialLinks.map(link => ({
+                    link: link.url,
+                    name: link.displayName,
+                    icon: `fa-brands fa-${link.platform}`,
+                }));
+                setSelectedSocialLinks(formattedSocialLinks || []); 
+
+            } catch (error) {
+                if (error.response){
+                    switch (error.response.status) {
+                        case 404:
+                            console.error("User preferences not found.");
+                            break;    
+                        case 500:
+                            console.error("An unexpected error occurred on the server. Please try again later.");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        fetchsocialLinks();
+    }, []);
     
 
     return(
