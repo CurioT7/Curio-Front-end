@@ -149,14 +149,17 @@
     font-weight: 500;
 }
 @media(max-width:1000px) {
+    .navbar-component .right-section-navbar{
+        background: gray;
+    }
     .search-box button{
         position: absolute;
     }
     .navbar-component ul{
         position: fixed;
-        top: 40px;
+        top: 35px;
         right: -100%;
-        background: white;
+        /* background: white; */
         height: 100vh;
         width: 50%;
         flex-direction: column;
