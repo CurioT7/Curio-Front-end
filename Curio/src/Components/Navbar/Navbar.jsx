@@ -15,7 +15,7 @@ import { Navbar, Container, Nav, NavDropdown, Form, Button, Offcanvas } from 're
 import SearchInput from "./SearchInput"
 
 function NavbarComponent() {
-  // const username = localStorage.getItem('username');
+  const username = localStorage.getItem('username');
   // return (
   //   <>
   //     {['lg'].map((expand) => (
@@ -99,17 +99,17 @@ function NavbarComponent() {
           <li className='sub-right-navbar'><a href="#" style={{ display: "flex" , flexDirection: "column"}}><img src={profile} alt="logo" onClick={toggleMenu}/></a></li>
           <div className="sub-menu-wrap" id='subMenu'>
             <div className="sub-menu">
-              <div className="user-info">
+              <Link to={`user/${username}`} className="user-info" onClick={toggleMenu}>
                 <img src={profile} alt="logo"/>
                 <h6>View Profile</h6>
-              </div>
+              </Link>
               <hr />
-              <Link to={'settings/account'} className="sub-menu-link">
+              <Link to={'settings/account'} className="sub-menu-link" onClick={toggleMenu}> 
                 <img src={setting} alt="setting" />
                 <p>Settings</p>
               </Link>
               <hr />
-              <div className="user-info sub-menu-link">
+              <div className="user-info sub-menu-link" onClick={toggleMenu}>
                 <SignupHandler/>
               </div>
             </div>
