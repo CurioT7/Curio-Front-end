@@ -1,10 +1,8 @@
 import React from 'react';
 import "./NewPostForm.css";
 import { Flex } from '@chakra-ui/react';
-import Community from "./Community";
+import Community from "./Community/Community";
 import CreatePostArea from "./Createpostarea"
-import Post_Method from "./Post_Methods";
-import EditCreatearea from "./EditCreatearea";
 
 function Posts() {
   return (
@@ -12,9 +10,7 @@ function Posts() {
       <Community/>
       <Flex width="100%">
         <div className="create-post-container">
-          <Post_Method/>
           <CreatePostArea/>
-          <EditCreatearea/>
         </div>
       </Flex>
     </Flex>
