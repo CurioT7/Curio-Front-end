@@ -12,7 +12,20 @@ function ImageVideo() {
           <input type="file" accept="image/png,image/gif,image/jpeg,image/webp,video/mp4,video/quicktime" className='file-input' />
           <div className='upload-button-container'>
             <p className='upload-text'>Drag and drop image or  
-            <Button className="upload-button" variant='outline' colorScheme='blue'>Upload</Button>
+            <Button 
+            className="upload-button" 
+            variant='outline' 
+            colorScheme='blue'
+            style={{borderRadius: '9999px',
+              display: 'inline-block',
+              margin: '10px 8px',
+              lineHeight: '18px',
+              position: 'relative',
+              boxSizing: 'border-box',
+              fontFamily: 'Noto Sans, Arial, sans-serif',
+              fontSize: '14px',
+            }} 
+            >Upload</Button>
             </p>
           </div>
         </div>

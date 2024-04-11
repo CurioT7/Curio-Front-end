@@ -21,11 +21,3 @@
 .upload-text{
     color: #0079d3;
 }
-.upload-button{
-    display: inline-block;
-    margin: 10px 8px;
-    line-height: 18px;
-    position: relative;
-    border-radius: 9999px;
-    box-sizing: border-box;
-}
