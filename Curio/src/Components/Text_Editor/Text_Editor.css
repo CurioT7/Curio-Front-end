@@ -40,3 +40,10 @@
     display: flex;
     position: absolute;
 }
+
+.Text-optional-textarea::placeholder {
+    font-style: normal; /* Ensure placeholder text is not italic */
+    font-weight: normal; /* Ensure placeholder text is not bold */
+    color: #aaa; /* Example color for placeholder text */
+  }
+  

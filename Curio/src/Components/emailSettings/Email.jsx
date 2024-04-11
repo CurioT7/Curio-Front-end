@@ -5,7 +5,7 @@ import './Email.css'
 import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;// Accessing the environment variable
+const serverHost = import.meta.env.VITE_SERVER_HOST;
 function Email (){
     const toast = useToast()
     const [newFollowerEmail,setNewFollowerEmail]=React.useState(true)
