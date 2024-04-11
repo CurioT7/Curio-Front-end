@@ -9,7 +9,7 @@ function Safety() {
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [blockedUserInput, setBlockedUserInput] = useState('');
   const toast = useToast();
-
+ 
   function Toast(message){
     toast({
         description: message,
@@ -28,7 +28,8 @@ function Safety() {
                   authorization: `Bearer ${localStorage.getItem('token')}` 
               }
             });
-            setBlockedUsers(response.data.block); // Set blocked users directly
+            // setBlockedUsers(response.data.block); // Set blocked users directly
+            setBlockedUsers(response.data.viewBlockedPeople || []);
         } catch (error) {
             if (error.response){
                 switch (error.response.status) {
@@ -62,23 +63,24 @@ function Safety() {
   };
 
   
-  const postBlockUser = (username) => {
-    axios.post(`${serverHost}/api/User/block`, {
-      usernameToBlock: username
-    },{
-      headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}` 
-      }
-    }).then(response => {
+  const postBlockUser = async (username) => {
+    try {
+      const response = await axios.post(`${serverHost}/api/User/block`, {
+        usernameToBlock: username
+      }, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       if (response.status === 200) {
-        Toast(`${username} in now blocked.`); 
+        Toast(`${username} is now blocked.`);
+        return true;
       }
-    })
-    .catch(error => {
+    } catch (error) {
       if (error.response) {
         switch (error.response.status) {
           case 403:
-            Toast(`${username} successfully blocked`);
+            Toast(`${username} can't be blocked after 24 hours of unblocking`);
             break;
           case 404:
             Toast(`${username} to block not found`);
@@ -86,24 +88,28 @@ function Safety() {
           case 409:
             Toast(`${username} already blocked`);
             break;
-            case 500:
+          case 500:
             Toast(`An unexpected error occurred on the server. Please try again later.`);
             break;
           default:
             break;
         }
       }
-    });
+      return false;
+    }
   };
-
   
-  const handleAddBlockedUser = () => {
-    postBlockUser(blockedUserInput);
-    patchBlockUser(blockedUserInput);
-    const newUser = { username: blockedUserInput};
-    setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-    setBlockedUserInput('');
-};
+  const handleAddBlockedUser = async () => {
+    if (blockedUserInput.trim() !== '') {
+      const blockResult = await postBlockUser(blockedUserInput);
+      if (blockResult === true) {
+        patchBlockUser(blockedUserInput);
+        const newUser = { username: blockedUserInput };
+        setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
+        setBlockedUserInput('');
+      }
+    }
+  };
 //////////////////////////////////// Unblock /////////////////////////////////
     const postunBlockUser = (username) => {
         axios.post(`${serverHost}/api/User/unblock`, {
@@ -134,11 +140,6 @@ function Safety() {
     };
     const handleRemoveBlockedUser = index => {
         const updatedBlockedUsers = [...blockedUsers];
-        setUnblockedUsers(prevUnblockedUsers => [...prevUnblockedUsers, unblockedUser]); // Add user to unblocked list
-        setTimeout(() => {
-        setUnblockedUsers(prevUnblockedUsers => prevUnblockedUsers.filter(user => user !== unblockedUser)); 
-        }, 86400000);
-
         const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].username;
         setBlockedUsers(updatedBlockedUsers);
         // Call postunBlockUser here after removing the user
@@ -153,10 +154,10 @@ function Safety() {
         <Input id="blockedUserInput" type="text" placeholder="Block new user" className="form-control mr-sm-2" value={blockedUserInput} onChange={(e) => setBlockedUserInput(e.target.value)} required />
         <Button className="btn btn-primary" data-testid="add-block-user" onClick={handleAddBlockedUser} disabled={blockedUserInput.trim() === ''}>ADD</Button>
     </Box>
-    {blockedUsers.map((user, index) => (
+    {blockedUsers.length > 0 && blockedUsers.map((user, index) => (
         <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
-        <Text>{user.username}</Text> 
-        <Button className="btn btn-primary" onClick={() => {handleRemoveBlockedUser(index); handleUnblockUser();}} bg="transparent" border="none">Remove</Button>
+          <Text>{user.username}</Text> 
+          <Button className="btn btn-primary" onClick={() => {handleRemoveBlockedUser(index); handleUnblockUser();}} bg="transparent" border="none">Remove</Button>
         </Flex>
     ))}
     </Box>

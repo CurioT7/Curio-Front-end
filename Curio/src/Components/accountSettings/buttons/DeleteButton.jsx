@@ -5,12 +5,12 @@ import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalClo
 import { FaTrashAlt } from "react-icons/fa";
 import './formstyle.css'
 import axios from 'axios';
-
+import {useNavigate} from 'react-router-dom'
 import { useToast, } from '@chakra-ui/react';
 function DeleteButton(){
     const serverHost = import.meta.env.VITE_SERVER_HOST;
     const toast = useToast()
-   
+    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ feedBack,setFeedBack] = React.useState("")
     const [isChecked,setIsChecked] =React.useState(false)
@@ -60,14 +60,18 @@ function DeleteButton(){
     async function sendDataToBackend(){
         console.log(`Bearer ${localStorage.getItem('token')}`)
         try {
-            const response = await axios.delete(`${serverHost}/api/settings/delete_account`, {
+            const response = await axios.delete(`${serverHost}/api/settings/delete_account`,{data: {
                 username: userName,
                 password: yourPass,
-            }, {
+            }, 
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
+            navigate('/')
+            localStorage.removeItem('token')
+            localStorage.removeItem('username');
+            window.dispatchEvent(new Event("loginOrSignup"));
             clearForm()
         }
         catch(error){
@@ -85,6 +89,8 @@ function DeleteButton(){
           }
         }
     }
+
+    
     function handleSubmit(e){
         e.preventDefault();
         sendDataToBackend();

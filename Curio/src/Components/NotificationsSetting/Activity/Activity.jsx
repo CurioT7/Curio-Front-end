@@ -1,166 +1,201 @@
-import React, { useState } from "react";
-import { Box } from "@chakra-ui/react";
-import "./Activity.css"
-import update from "../update-pref";
-import axios from 'axios';
-import { useToast, Flex, Switch, Spacer } from '@chakra-ui/react';
+import React, { useState, useEffect } from "react";
+import { Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
+import axios from "axios";
 import Titles from "../../feedSettings/childs/Titles";
 
-function Activity(){
-    const serverHost = import.meta.env.VITE_SERVER_HOST;
-    const toast = useToast()
-    const [mentionChecked, setMentionChecked] = useState(true);
-    const [commentsChecked, setCommentsChecked] = useState(true);
-    const [upvotesPostsChecked, setUpvotesPostsChecked] = useState(true);
-    const [upvotesCommentsChecked, setUpvotesCommentsChecked] = useState(true);
-    const [repliesChecked, setRepliesChecked] = useState(true);
-    const [newFollowersChecked, setNewFollowersChecked] = useState(true);
-    const [postsFollowChecked, setPostsFollowChecked] = useState(true);
-    function Toast(){
-        toast({
-            
-            description: "Changes Saved",
-            status: 'info',
-            duration: 3000,
-            isClosable: true,
-          })
+const serverHost = import.meta.env.VITE_SERVER_HOST;
+
+function Activity() {
+  const toast = useToast();
+  const [mentions, setMentionChecked] = useState(true);
+  const [comments, setCommentsChecked] = useState(true);
+  const [upvotesPosts, setUpvotesPostsChecked] = useState(true);
+  const [upvotesComments, setUpvotesCommentsChecked] = useState(true);
+  const [replies, setRepliesChecked] = useState(true);
+  const [newFollowers, setNewFollowersChecked] = useState(true);
+  const [postsYouFollow, setPostsFollowChecked] = useState(true);
+
+  function Toast() {
+    toast({
+      description: "Changes Saved",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+
+  function handleMentionChange(){
+    setMentionChecked(!mentions);
+    sendDataToBackend({mentions :! mentions});
+    Toast();
+  };
+
+  function handleCommentsChange(){
+    setCommentsChecked(!comments);
+    sendDataToBackend({comments :! comments});
+    Toast();
+  };
+
+  function handleUpvotesPostsChange(){
+    setUpvotesPostsChecked(!upvotesPosts);
+    sendDataToBackend({upvotesPosts :! upvotesPosts});
+    Toast();
+  };
+
+  function handleUpvotesCommentsChange(){
+    setUpvotesCommentsChecked(!upvotesComments);
+    sendDataToBackend({upvotesComments :! upvotesComments});
+    Toast();
+  };
+
+  function handleRepliesChange(){
+    setRepliesChecked(!replies);
+    sendDataToBackend({replies :! replies});
+    Toast();
+  };
+
+  function handleNewFollowersChange(){
+    setNewFollowersChecked(!newFollowers);
+    sendDataToBackend({newFollowers :! newFollowers});
+    Toast();
+  };
+
+  function handlePostsFollowChange(){
+    setPostsFollowChecked(!postsYouFollow);
+    sendDataToBackend({postsYouFollow :! postsYouFollow});
+  };
+
+  async function sendDataToBackend(data) {
+    try {
+      const response = await axios.patch(
+        `${serverHost}/api/settings/v1/me/prefs`,
+        data,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+        if (error.response) {
+            console.error('Server Error:', error.response.data);
+        } else if (error.request) {
+            console.error('No response received:', error.request);
+        } else {
+            console.error('Error', error.message);
+        }
+        console.error('Error config:', error.config);
     }
-    const handleMentionChange = () => {
-        setMentionChecked(!mentionChecked);
-       sendDataToBackend({mentionChecked: !mentionChecked});
-         Toast()
-    };
+  }
 
-    const handleCommentsChange = () => {
-        setCommentsChecked(!commentsChecked);
-       sendDataToBackend({commentsChecked: !commentsChecked});
-        Toast()
-    };
-    
-    const handleUpvotesPostsChange = () => {
-        setUpvotesPostsChecked(!upvotesPostsChecked);
-         sendDataToBackend({upvotesPostsChecked: !upvotesPostsChecked});
-        Toast()
-    };
-    
-    const handleUpvotesCommentsChange = () => {
-        setUpvotesCommentsChecked(!upvotesCommentsChecked);
-        sendDataToBackend({upvotesCommentsChecked: !upvotesCommentsChecked});
-        Toast()
-    };
-    
-    const handleRepliesChange = () => {
-        setRepliesChecked(!repliesChecked);
-        sendDataToBackend({repliesChecked: !repliesChecked});
-        Toast()
-        
-    };
-    
-    const handleNewFollowersChange = () => {
-        setNewFollowersChecked(!newFollowersChecked);
-        sendDataToBackend({newFollowersChecked: !newFollowersChecked});
-        Toast()
-        
-    };
-
-    const handlePostsFollowChange = () => {
-        setPostsFollowChecked(!postsFollowChecked);
-        sendDataToBackend({postsFollowChecked: !postsFollowChecked});
-        Toast()
-        
-    };
-
-    async function sendDataToBackend(data) {
-        // Validate data
-        if (!data || typeof data !== 'object') {
-            console.error('Invalid data:', data);
-            return;
+  async function fetchDataFromBackend() {
+    try {
+      const response = await axios.get(
+        `${serverHost}/api/settings/v1/me/prefs`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-
-        try {
-            const token = 'your_token_here'; 
-            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            console.log(response)
-            return response;
-        } catch (error) {
-            console.error('Error sending data to backend:', error);
+      );
+      return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Server Error:', error.response.data);
+        } else if (error.request) {
+            console.error('No response received:', error.request);
+        } else {
+            console.error('Error', error.message);
         }
+        console.error('Error config:', error.config);
     }
+  }
 
-    async function fetchDataFromBackend() {
-        try {
-            const token = 'your_token_here'; 
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            return response.data;
-        } catch (error) {
-            console.error('Error fetching data from backend:', error);
+  useEffect(() => {
+    async function fetchAndSetData() {
+        const data = await fetchDataFromBackend();
+        if (data) {
+          setMentionChecked(data.mentions);
+          setCommentsChecked(data.comments);
+          setUpvotesPostsChecked(data.upvotesPosts);
+          setUpvotesCommentsChecked(data.upvotesComments);
+          setRepliesChecked(data.replies);
+          setNewFollowersChecked(data.newFollowers);
+          setPostsFollowChecked(data.postsYouFollow);
         }
-    }
-    React.useEffect(() => {
-        async function fetchAndSetData() {
-            const data = await fetchDataFromBackend();
-            if (data) {
-                
-                setMentionChecked(data.mentionChecked);
-                setCommentsChecked(data.commentsChecked);
-                setUpvotesPostsChecked(data.upvotesPostsChecked);
-                setUpvotesCommentsChecked(data.upvotesCommentsChecked);
-                setRepliesChecked(data.repliesChecked);
-                setNewFollowersChecked(data.newFollowersChecked);
-                setPostsFollowChecked(data.postsFollowChecked);
-            }
-        }
+      } 
 
-        fetchAndSetData();
-    }, []);
+    fetchAndSetData();
+  }, []);
 
-    return(
-        <>
-            <Flex mb={5} alignItems='center'>
-                <Titles title='Mentions of u/username'/>
-                <Spacer/>
-                <Switch size='lg' isChecked={mentionChecked} onChange={handleMentionChange}/>
-            </Flex>
-            <Flex mb={5} alignItems='center'>
-                <Titles title='Comments on your posts'/>
-                <Spacer/>
-                <Switch size='lg' isChecked={commentsChecked} onChange={handleCommentsChange}/>
-            </Flex>
-            <Flex mb={5} alignItems='center'>
-                <Titles title='Upvotes on your posts'/>
-                <Spacer/>
-                <Switch size='lg' isChecked={upvotesPostsChecked} onChange={handleUpvotesPostsChange}/>
-            </Flex>
-            <Flex mb={5} alignItems='center'>
-                <Titles title='Upvotes on your comments'/>
-                <Spacer/>
-                <Switch size='lg' isChecked={upvotesCommentsChecked} onChange={handleUpvotesCommentsChange}/>
-            </Flex>
-            <Flex mb={5} alignItems='center'>
-                <Titles title='Replies to your comments'/>
-                <Spacer/>
-                <Switch size='lg' isChecked={repliesChecked} onChange={handleRepliesChange}/>
-            </Flex>
-            <Flex mb={5} alignItems='center'>
-                <Titles title='New followers'/>
-                <Spacer/>
-                <Switch size='lg' isChecked={newFollowersChecked} onChange={handleNewFollowersChange}/>
-            </Flex>
-            <Flex mb={5} alignItems='center'>
-                <Titles title='Posts you follow'/>
-                <Spacer/>
-                <Switch size='lg' isChecked={postsFollowChecked} onChange={handlePostsFollowChange}/>
-            </Flex>
-        </>
-    );
+  return (
+    <>
+      <Flex mb={5} alignItems="center">
+        <Titles title="Mentions of u/username" />
+        <Spacer />
+        <Switch
+          size="lg"
+          isChecked={mentions}
+          onChange={handleMentionChange}
+        />
+      </Flex>
+      <Flex mb={5} alignItems="center">
+        <Titles title="Comments on your posts" />
+        <Spacer />
+        <Switch
+          size="lg"
+          isChecked={comments}
+          onChange={handleCommentsChange}
+        />
+      </Flex>
+      <Flex mb={5} alignItems="center">
+        <Titles title="Upvotes on your posts" />
+        <Spacer />
+        <Switch
+          size="lg"
+          isChecked={upvotesPosts}
+          onChange={handleUpvotesPostsChange}
+        />
+      </Flex>
+      <Flex mb={5} alignItems="center">
+        <Titles title="Upvotes on your comments" />
+        <Spacer />
+        <Switch
+          size="lg"
+          isChecked={upvotesComments}
+          onChange={handleUpvotesCommentsChange}
+        />
+      </Flex>
+      <Flex mb={5} alignItems="center">
+        <Titles title="Replies to your comments" />
+        <Spacer />
+        <Switch
+          size="lg"
+          isChecked={replies}
+          onChange={handleRepliesChange}
+        />
+      </Flex>
+      <Flex mb={5} alignItems="center">
+        <Titles title="New followers" />
+        <Spacer />
+        <Switch
+          size="lg"
+          isChecked={newFollowers}
+          onChange={handleNewFollowersChange}
+        />
+      </Flex>
+      <Flex mb={5} alignItems="center">
+        <Titles title="Posts you follow" />
+        <Spacer />
+        <Switch
+          size="lg"
+          isChecked={postsYouFollow}
+          onChange={handlePostsFollowChange}
+        />
+      </Flex>
+    </>
+  );
 }
 
 export default Activity;

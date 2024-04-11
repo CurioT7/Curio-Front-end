@@ -1,5 +1,13 @@
-.center-div{
+.community-container{
     margin-left: 18rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    max-width: 1140px;
+    width: 100%;
+    margin-right: auto;
     
 }
 
@@ -7,6 +15,38 @@
     .center-div{
         margin-left: 7rem!important;
     }
+}
+
+.community-content {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  
+  justify-content: space-between;
+}
+
+.community-post {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.community-info {
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+  display: none;
+  
+  
+}
+
+@media (min-width: 992px) {
+  .community-info {
+      display: block;
+  }
+  .community-post {
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+  }
 }
 
 .comm-background{
@@ -50,7 +90,8 @@
   
   .dropdown {
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
   }
   
   .dropdown-content {

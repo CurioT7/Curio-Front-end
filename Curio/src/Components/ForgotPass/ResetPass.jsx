@@ -1,20 +1,31 @@
 import React, { useState , useEffect } from 'react';
-import { changePassword } from '../Login/LoginEndpoints'; 
+import { resetPassword } from '../Login/LoginEndpoints'; 
 import  './ResetPass.css'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import logo from "../../assets/Curio_logo.png";
 import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
+import { useParams } from 'react-router-dom';
 
 function ResetPass(props) {
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [checked, setChecked] = useState(false);
+    const [match, setMatch] = useState(true);
+    const {token} = useParams();
 
-    const handleChangePassword = async (event) => {
+    useEffect(() => {
+        if(password !== newPassword){
+            setMatch(false);
+        } else {
+            setMatch(true);
+        }
+    }, [password, newPassword]);
+
+    const handleResetPassword = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await changePassword(password, newPassword);
+            const response = await resetPassword(password);
             console.log('Success:', response);
         } catch (error) {
             console.error('Error:', error);
@@ -35,7 +46,7 @@ function ResetPass(props) {
         <div className='reset-password'>
         <div className='resetBox'>
         
-            <form onSubmit={handleChangePassword} className='resetForm'>
+            <form onSubmit={handleResetPassword} className='resetForm'>
             <div className='resetText'>
                 <img src={logo} alt="Curio Logo" />
             <h3>Reset your password</h3>
@@ -43,7 +54,7 @@ function ResetPass(props) {
              </div>
                 <div className="resetInput">
                     <input type="password"
-                        placeholder='Old Password *'
+                        placeholder='New Password *'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -51,10 +62,12 @@ function ResetPass(props) {
                 <br />
                 <div className="resetInput">
                     <input type="password"
-                        placeholder="New Password *"
+                        placeholder="Confirm Password *"
                         value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
+                        onChange={(e) => setNewPassword(e.target.value)
+                        }
                     />
+                    {!match && <div>Password does not match</div>}
                 </div>
                 <Checkbox className='termsCheck' checked={!checked} onChange={() => setChecked(checked)} >     
                            Changing your password logs you out of all browsers on your

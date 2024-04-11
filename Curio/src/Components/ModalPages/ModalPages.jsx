@@ -5,6 +5,8 @@ import ExclamationMark from '../../styles/icons/ExclamationIcon';
 import classes from './ModalPages.module.css';
 import Back from '../../styles/icons/Back'
 import axios from "axios";
+import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
+import { useToast } from '@chakra-ui/react';
 
 const MultiPageFormModal = (props) => {
     const [step, setStep] = useState(1);
@@ -12,11 +14,36 @@ const MultiPageFormModal = (props) => {
     const [reportReason, setReportReason] = useState(' ');
     const [description, setDescription] = useState(' ');
     const [explanation, setExplanation] = useState(' ');
-    const [reportType, setReportType] = useState(' ');
     const [furtherDetails, setFurtherDetails] = useState('');
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isSecondStep, setSecondStep] = useState(false);
     const[isPrevStep, setPrevStep] = useState(false);
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [isBlockedError, setIsBlockedError] = useState(false);
+
+    const toast = useToast()
+    function Toast() {
+        toast({
+            title: "error",
+            description: "You can't block somebody again within 24 hours of blocking them",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
+    const toastsuccess = useToast()
+    function ToastSuccess() {
+        toastsuccess({
+            description: "User Blocked successfully",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
 
 
     const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -26,10 +53,6 @@ const MultiPageFormModal = (props) => {
             setStep(1);
         }
     }, [props.show]);
-
-    const handleReportType = (repType) => {
-        setReportType(repType);
-    };
 
     const handleDescriptionChange = (description) => {
         setDescription(description);
@@ -47,10 +70,8 @@ const MultiPageFormModal = (props) => {
     const handleOptionClick = (reason, explanation) => {
         if (reportReason === reason) {
             setReportReason('');
-            setExplanation('');
         } else {
             setReportReason(reason);
-            setExplanation(explanation);
         }
         setSecondStep(true);
     };
@@ -84,17 +105,17 @@ const MultiPageFormModal = (props) => {
         props.onHide();
     };
 
-    const reportUser = async (reportedUsername, reportType, reportReason ,reportFurtherDetails ) => {
+    const reportUser = async (reportedUsername, reportType, reportReason ,reportDetails ) => {
+        console.log(localStorage.getItem('token'));
         try {
             const response = await axios.post(`${hostUrl}/api/report_user`, {
                 reportedUsername: reportedUsername,
                 reportType: reportType,
                 reportReason: reportReason,
-                reportFurtherDetails: reportFurtherDetails
+                reportDetails
             }, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    authorization : `Bearer ${localStorage.getItem('token')}`
                 }
             });
     
@@ -104,6 +125,28 @@ const MultiPageFormModal = (props) => {
         }
     };
 
+
+    const handleBlockToggle = async() => {
+        if(isBlockedError){
+            setIsBlockedError(false);
+        }
+        else{
+        if (!isBlocked) {
+            const result = await userBlock(props.username);
+            if(result.success){
+                setIsBlocked(true);
+                ToastSuccess();
+            }
+            if (!result.success) {
+                Toast();
+                setIsBlockedError(true);
+            }
+        } else {
+            userUnblock(props.username);
+        }
+    }
+    setIsBlocked(!isBlocked);
+    }
 
 
     return (
@@ -187,7 +230,7 @@ const MultiPageFormModal = (props) => {
                         {step === 2 && (
                             <>
                              <p className={classes['body-text']}>What rule is this breaking?</p>
-                             <div className="flex-container">
+                             <div className={classes['flex-container']}>
                              <button
                                 className={`${classes["option-button"]} ${reportReason === 'harassment' ? classes['selected'] : ''}`}
                                 onClick={() => { handleOptionClick('harassment'); handleDescriptionChange('Harassment'); handleExplanationChange('Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.'); }}
@@ -487,7 +530,7 @@ const MultiPageFormModal = (props) => {
                                   <p className={` m-0' ${classes['block']}`}>You won't be able to send direct messages or chat requests to each other.</p>
                                 </div>
                                 <div className='form-check form-switch d-flex align-items-center'>
-                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" id="mature" role="switch" name="mature" value="mature" />
+                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" id="block" role="switch" name="block" value="block" onChange={handleBlockToggle} />
                                 </div>
                             </div>
                             <div className="d-flex justify-content-end">

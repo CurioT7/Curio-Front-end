@@ -1,0 +1,70 @@
+
+
+.parentDiv{
+  font-style: -apple-system , BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  margin: 0 auto;
+}
+
+.best-of-reddit{
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 2rem;
+}
+
+.top-communities{
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+
+.number{
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.browse{
+  font-size: 12px;
+  color: rgb(87, 111, 118);
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.rowHeight{
+  height: 80px;
+}
+
+.pagesStyles {
+  text-decoration: none;
+  color: black;
+}
+
+.pagesStyles:hover {
+  text-decoration: underline;
+}
+
+.dropDownIcon{
+  height: 24px;
+  width: 24px;
+}
+
+.dropDownContainer{
+  margin-top: -1rem;
+}
+
+.topRow{
+  margin-top: 1rem;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+.firstPages{
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.upContainer{
+  margin-top: 2rem;
+}

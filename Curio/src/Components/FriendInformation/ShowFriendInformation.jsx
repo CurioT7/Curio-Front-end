@@ -11,38 +11,71 @@ import ReportIcon from "../../styles/icons/Report";
 import MessageIcon from "../../styles/icons/SendMessage";
 import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
-import showFriendInformation from "./ShowFriendInformationEndpoints.js";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import {userBlock , userUnblock} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
+import DownArrow from "../../styles/icons/DownArrow";
+import Post from "../Post/Post";
+import { useNavigate } from "react-router-dom";
+import { useToast } from '@chakra-ui/react';
+import redditPic from "../../styles/icons/hmm-snoo.png"
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
+
 
 
 function ShowFriendInformation(props) {
     const { username } = useParams();
     const [showDropdown, setShowDropdown] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
+    const [blockedUsers, setBlockedUsers] = useState([]);
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
-    // const [isnextPage, setIsNextPage] = useState(false);
     const [friendusername , setFriendusername] = useState('');
+    const [showSortings, setShowSortings] = useState(false);
+    const [sortingState, setSortingState] = useState(1);
+    const [displayToast, setDisplayToast] = useState(false);
 
-    // handleNextPage = () => {
-    //     props.nextPage();
-    //     setIsNextPage(true);
-    // }
+    const token = localStorage.getItem('token');
+    const toastError = useToast();
 
-    // const handleBlockClick = () => {
-    //     setIsBlocked(!isBlocked);
-    // };
+    function ToastError() {
+        toastError({
+            description: "You can't block somebody again within 24 hours of blocking them",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
+    const toastsuccess = useToast()
+    function ToastSuccess() {
+        toastsuccess({
+            description: "User Blocked successfully",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
 
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
     };
 
+    const handleSortingsClick = () => {
+        setShowSortings(!showSortings);
+    };
+
     const handleReportClick = () => {
+        if (!token) {
+         navigate('/login');
+        setShowReportMenu(false);
+        }
+        else
         setShowReportMenu(true);
     };
 
@@ -50,67 +83,85 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
+    const navigate = useNavigate();
 
     useEffect(() => {
-        async function showFriendInformation({username}) {
-            try {
-                const response = await axios.get(`${hostUrl}/user/${username}/about`);
-                console.log(response);
-                setFriendInfo(response.data);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
         showFriendInformation({username});
-        
+        getFollower({username});
+        getBlocked({username});
     }, [username]);
 
-    async function userFollow(friendusername) {
+
+    async function showFriendInformation({username}) {
         try {
-            await axios.post(`${hostUrl}/api/me/friends`, {
-                friendusername: friendusername
-            },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            console.log(response);
-            return response.data;
+            const response = await axios.get(`${hostUrl}/user/${username}/about`);
+            setFriendInfo(response.data);
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    async function userUnfollow(friendusername) {
-                await axios.delete(`${hostUrl}/api/me/friends`, {
-                friendusername: friendusername
+    async function getFollower({ username }) {
+        try {
+            if (!token) {
+                console.error('Error:', error);
+                return;
+            }
+    
+            await axios.get(`${hostUrl}/api/me/friends/${username}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                }
+            });
+            setIsFollowing(true);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    
+
+    async function userFollow(friendUsername) {
+
+        try {
+            await axios.post(`${hostUrl}/api/me/friends`, {
+                friendUsername
             },{
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
                 }
-            }).then(response => {
-                if (response.status === 200) {
-                  Toast(`${username} in now blocked.`); 
+            });
+        
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+
+        async function userUnfollow(friendUsername) {
+        try {
+            await axios.patch(`${hostUrl}/api/me/friends`, {
+                friendUsername
+            },{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
                 }
-              })
-              .catch(error => {
-                if (error.response) {
-                  switch (error.response.status) {
-                    case 404:
-                        console.log('Friend not found')
-                      break;
-                      case 500:
-                      Toast(`An unexpected error occurred on the server. Please try again later.`);
-                      break;
-                    default:
-                      break;
-                  }
-                }
-              });
-            };
+            });
+    
+    
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
 
     const handleFollowToggle = () => {
+        if (!token) {
+         navigate('/login');
+        }
+        else{
         if (isFollowing) {
             userUnfollow(username);
         } else {
@@ -118,42 +169,93 @@ function ShowFriendInformation(props) {
         }
         setIsFollowing(!isFollowing);
     }
+    }
 
-
-    async function userBlock(friendusername) {
+    async function getBlocked({ username }) {
         try {
-            console.log(localStorage.getItem('token'));
-            const response = await axios.post(`${hostUrl}/api/User/block`, {
-                friendusername: friendusername
-            }, {
+            if (!token) {
+                console.error('Token not found');
+                return;
+            }
+    
+            const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
-            console.log(response);
-            return response;
+            setBlockedUsers(response.data.viewBlockedPeople || []);
+            if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.username === username)) {
+                props.isUserBlocked();
+            }
+            return response.data
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    async function userUnblock(friendusername) {
+    const patchBlockUser = (name) => {
+        const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
+          viewBlockedPeople: [...blockedUsers, { username: name}]
+        },{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        if(response.status === 200){
+            const newUser = { username: name};
+            setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
+        }
+      };
+
+      const handleUserBlock = async (username) => {
+        if (!token) {
+            navigate('/login');
+        } else {
+            const result = await userBlock(username);
+            if(result.success){
+                patchBlockUser(username);
+                props.handleBlockPage();
+                ToastSuccess();
+            }
+            if (!result.success) {
+                ToastError();
+            }
+        }
+    }
+
+    const handleUserUnblock = async (username) => {
         try {
-            const response = await axios.post(`${hostUrl}/api/User/unblock`, {
-                friendusername: friendusername
+            const index = blockedUsers.findIndex((user) => user.username === username);
+            if (index === -1) {
+                console.error('User not found in blocked users array');
+                return;
+            }
+    
+            const updatedBlockedUsers = [...blockedUsers];
+            updatedBlockedUsers.splice(index, 1);
+    
+
+            const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
+                viewBlockedPeople: updatedBlockedUsers
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
-            console.log(response);
-            return response;
+    
+            if (response.status === 200) {
+                setBlockedUsers(updatedBlockedUsers);
+                props.handleUnblock();
+                userUnblock(username);
+            }
         } catch (error) {
             console.error('Error:', error);
         }
-    }
+    };
+    
 
 
 
@@ -169,19 +271,11 @@ function ShowFriendInformation(props) {
                             <h1 className="show-friend-header d-flex align-items-center mb-0">{friendInfo.displayName}</h1>
                             <p className="show-friend-username d-flex align-items-center me-auto">u/{username}</p>
                         </div>
-                        <div className="d-flex responsive follow-buttons justify-content-start justify-content-sm-center">
-                            <button className={`d-flex justify-content-center align-items-center follow-button m-0 me-2 ms-0 ms-md-2 ${isFollowing ? 'following' : 'not-following'}`}>
-                                <span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? <Minus /> : <PlusIcon />}</span>
-                                <span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}</span>
-                            </button>
-                            <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
-                                <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
-                            </button>
-                        </div>
                     </div>
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
                         <div className="w-100 p-4 ps-3 pe-0">
                             <div className="d-flex align-items-center items-container w-100">
+                                <h1 style={{fontSize: "1rem"}} className="show-friend-header">{friendInfo.displayName || username}</h1>
                                 <div className="d-flex flex-row left-section w-100">
                                     {props.isBlocked ? (
                                         null
@@ -214,7 +308,7 @@ function ShowFriendInformation(props) {
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Send a message</p></div>
                                             </li>
-                                            <li className="drop-down-item" onClick={() => {props.handleBlockPage(); userBlock({username});}}>
+                                            <li className="drop-down-item" onClick={() => {handleUserBlock(username);}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Block account</p></div>
                                             </li>
@@ -230,9 +324,10 @@ function ShowFriendInformation(props) {
                             </div>
                         </div>
                         <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={username} />
+                        {displayToast && <div className="toast">User has been blocked</div>}
                         <div className="d-flex">
                             {props.isBlocked ? (
-                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {props.handleUnblock(); userUnblock({username});}}>
+                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {handleUserUnblock(username);}}>
                                     <span className="d-flex align-items-center me-1 mt-3 minus"><BlockIcon /></span>
                                     <span className="d-flex align-items-center">Blocked</span>
                                  </button> 
@@ -245,7 +340,7 @@ function ShowFriendInformation(props) {
                                 <button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
                                     <span className="d-flex align-items-center me-1 mt-3 minus"><Chat /></span><span className="d-flex align-items-center">Chat</span>
                                 </button>
-                        </>
+                                </>
                             )}
 
                         </div>
@@ -284,21 +379,78 @@ function ShowFriendInformation(props) {
                         <button className="btn control-button me-2 p-1 p-sm-3">Posts</button>
                         <button className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
-                    <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2">
-                        <div className="pt-0 d-flex justify-content-start">
-                            <Dropdown>
-                                <Dropdown.Toggle variant="success" id="dropdown-basic" className="sorting-buttons">
-                                    New
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="dropdown-menu sorting-dropdown-menu">
-                                    <h4 className="d-flex justify-content-center list-header">Sort By</h4>
-                                    <Dropdown.Item href="#/action-1">Hot</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">New</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Top</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                    <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2 ms-0 ms-lg-4">
+                        <div className="pt-0 w-75 d-flex">
+                            <button className="d-flex justify-content-center ms-2 sort-button p-2" style={{backgroundColor : showSortings ? "#D2DADD" : ""}} onClick={handleSortingsClick}>{sortingState === 0 ? "Hot" : sortingState === 1 ? "New" : "Top"}<div className="ms-1"><DownArrow /></div></button>
+
+                            <div className="" style={{ 
+                                        display: showSortings ? 'flex' : 'none',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-start',
+                                        position: 'absolute',
+                                        translateY: '-20%!important',
+                                        translateX: '0%',
+                                        backgroundColor: '#FFFFFF',
+                                        borderRadius: '10px',
+                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
+                                        marginTop: '2rem',
+                                        marginRight: '1rem',
+                                        padding: '0px',
+                                        width: '4rem !important',
+                                        zIndex: '1'
+                                    }}>
+                                        <ul className='drop-down-list'>
+                                            <li className="drop-down-item">
+                                                    <div className="d-flex justify-content-center"><p className='text-text sort-by mb-0 p-2 ms-0'>Sort By</p></div>
+                                            </li>
+                                        </ul>
+                                        <ul className='drop-down-list w-100 p-0'>
+                                            <li className="drop-down-item dropdown-hover-effect mb-0 pt-2" style={{backgroundColor: (sortingState === 0) ? "#EAEDEF" : ""}} onClick={() => setSortingState(0)}>
+                                                    <div className="pt-2"><p className='text-text'>Hot</p></div>
+                                            </li>
+                                            <li className="drop-down-item dropdown-hover-effect p-0 pt-2 mb-0" style={{backgroundColor: (sortingState === 1) ? "#EAEDEF" : ""}} onClick={() => setSortingState(1)}>
+                                                    <div className="pt-2"><p className='text-text'>New</p></div>
+                                            </li>
+                                            <li className="drop-down-item dropdown-hover-effect mb-1 p-0 pt-2" style={{backgroundColor: (sortingState === 2) ? "#EAEDEF" : ""}} onClick={() => setSortingState(2)}>
+                                                    <div className="pt-2"><p className='text-text'>Top</p></div>
+                                            </li>
+                                        </ul>   
+                                    </div>
                         </div>
                     </div>
+                <hr style={{backgroundColor: "#0000008F"}} className="d-flex justify-content-center col-12 col-md-7 ms-0 ms-lg-5"></hr>
+                {props.isBlocked ? (
+                <div className="ms-0 ms-lg-5 mt-4 col-md-7 d-flex flex-column align-items-center">
+                    <img src= {redditPic} className="blockprofileImage text-center"></img>
+                    <p className="blockText">u/{username} hasn't posted yet</p>
+                </div>
+                ) :(
+                <div className="ms-0 ms-lg-5 mt-4 col-md-7">
+                    <Post
+                        user="r/netherlands"
+                        title="Second Post"
+                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
+                        upvotes={10}
+                        downvotes={1}
+                        comments={[4, 5]} // Dummy array for comments
+                    />
+                    <Post
+                        user="r/netherlands"
+                        title="Second Post"
+                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
+                        upvotes={10}
+                        downvotes={1}
+                        comments={[4, 5]} // Dummy array for comments
+                    />
+                    <Post
+                        user="r/netherlands"
+                        title="Second Post"
+                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
+                        upvotes={10}
+                        downvotes={1}
+                        comments={[4, 5]} // Dummy array for comments
+                    />
+                </div>)}
                 </div>
             </>
         );

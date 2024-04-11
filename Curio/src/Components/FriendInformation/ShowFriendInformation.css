@@ -88,9 +88,7 @@
     font-size: 0.75rem;
 }
 
-.follow-button:hover{
-    border: 1px solid #0F1A1C;
-}
+
 
 .position-card{
     transform: translate(250%, 0%);
@@ -343,5 +341,35 @@
     width: 10rem;
     border-radius: 10px;
 
+}
+
+.sort-by{
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.sort-button{
+    border-radius: 20px;
+    color: #576f76;
+    font-size: 0.8rem;
+}
+
+.sort-button:hover{
+    background-color: #E2E7E9;
+}
+
+.dropdown-hover-effect:hover{
+    background-color: #f2f4f5;
+    cursor: pointer;
+}
+
+.blockprofileImage{
+    width: 60px;
+    height: 90px;
+}
+
+.blockText{
+    font-weight: 700;
+    font-size: 18px;
 }
 

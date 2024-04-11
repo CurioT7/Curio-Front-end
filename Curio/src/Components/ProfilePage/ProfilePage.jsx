@@ -1,9 +1,60 @@
-import React from "react";
 import './ProfilePage.css';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
-
-
+import {useNavigate} from 'react-router-dom';
+import React, { useRef, useEffect, useState } from 'react';
+import RecentPosts from '../RecentPosts/RecentPosts.jsx'
+import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
+import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
 function ProfilePage(){
+
+  const navigate = useNavigate();
+  const tabListRef = useRef();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState(null);
+  const [userAbout, setUserAbout] = useState({});
+  const [userComments, setUserComments] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const[upvotedPosts, setUpvotedPosts] = useState([]);
+  useEffect(() => {
+    getUserOverview(username)
+      .then(data => setUserPosts(data.userPosts))
+      .catch(error => console.error(error));
+  }, [username]);
+
+useEffect(() => {
+  getUserUpvoted(username)
+  .then(data => setUpvotedPosts(data))
+  .catch(error => console.error(error));
+  }, [username]);
+
+  useEffect(() => {
+    getUserComments(username)
+      .then(data => setUserComments(data))
+      .catch(error => console.error(error));
+  }, [username]);
+  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const StoredUsername = localStorage.getItem('username');
+    if (!token) {
+      navigate('/login');
+    }
+    setIsLoggedIn(true);
+    setUsername(StoredUsername);
+
+    if (StoredUsername) {
+      getUserAbout(StoredUsername).then(data => setUserAbout(data));
+    }
+    console.log(userAbout);
+  }, []);
+
+  const scrollLeft = () => {
+      tabListRef.current.scrollLeft -= 100;
+  };
+
+  const scrollRight = () => {
+      tabListRef.current.scrollLeft += 100;
+  };
 
 return(
 
@@ -11,14 +62,21 @@ return(
 <div className="profileContainer">
 <div className="mainComponent">
 <div className="userInfo">
-<img src="./src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-<h3 className="profileName">User</h3>
-<h5 className="userName"> u/sad_p0tat0o </h5>
+<img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+{/* //C:\Users\Developer\Desktop\Curio-Front-end\Curio\src\assets\Curio_logo.png */}
+<h3 className="profileName">{username}</h3>
+<h5 className="userName"> u/{username} </h5>
 </div>
 
 <div className="tableList">
 <Tabs variant='soft-rounded' colorScheme='yellow'>
-  <TabList>
+<button onClick={scrollRight}> 
+<svg rpl="" fill="currentColor" height="16" icon-name="caret-right-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+      <path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z"></path>
+    </svg>
+ </button>
+
+  <TabList className="scrollableTabList" ref={tabListRef}>
     <Tab>Overview</Tab>
     <Tab>Posts</Tab>
     <Tab>Comments</Tab>
@@ -27,33 +85,107 @@ return(
     <Tab>Upvoted</Tab>
     <Tab>Downvoted</Tab>
   </TabList>
-  <hr />
+  <div className='postCreate'>
+    <button onClick={()=> navigate('/user/CreatePost')} >+ Create a post</button>
+  </div>
+  <hr style={{width: "90%"}} />  
   <TabPanels className="profilePannels">
     <TabPanel>
-      <p>u/sad_p0tat0o hasn't posted yet</p>
+      {/* overview */}
+      {userPosts.length === 0 && userComments.length === 0 ? (
+        <p>u/{username} hasn't posted or commented yet</p>
+      ) : (
+        <>
+          {userPosts.map(post => (
+            <div className='post-card' key={post.id}>
+              <div className='author'>
+              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+              <b>u/{post.authorName}</b>
+              </div>
+              <p>{post.content}</p>
+            </div>
+          ))}
+          {userComments.map(comment => (
+            <div className='comment-card' key={comment.id}>
+              <h6>u/author    •   title</h6>
+              <div className='author'>
+              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+              <b>u/{comment.authorName}</b>
+              </div>
+              <p>{comment.content}</p>
+            </div>
+          ))}
+        </>
+      )}
     </TabPanel>
+
     <TabPanel>
-      <p>u/sad_p0tat0o hasn't posted yet</p>
+  {userPosts.length === 0 ? (
+    <p>u/{username} hasn't posted yet</p>
+  ) : (
+    userPosts.map(post => (
+      <div className='post-card' key={post.id}>
+        <div className='author'>
+        <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+        <b>u/{post.authorName}</b>
+        </div>
+        <p>{post.content}</p>
+      </div>
+    ))
+  )}
+</TabPanel>
+
+    <TabPanel>
+      {userComments.length === 0 ? (
+        <p>u/{username} hasn't commented yet</p>
+      ) : (
+        userComments.map(comment => (
+          <div className='comment-card' key={comment.id}>
+           <h6>u/author    •   title</h6>
+           <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{comment.authorName}</b>
+            </div>
+            <p>{comment.content}</p>
+          </div>
+        ))
+    
+      )}
     </TabPanel>
-    <TabPanel>
-      <p>u/sad_p0tat0o hasn't commented yet</p>
-    </TabPanel>
-    <TabPanel>
+
+    <TabPanel >
       <p>Looks like you haven't saved anything yet</p>
     </TabPanel>
-    <TabPanel>
+
+    <TabPanel >
       <p>Looks like you haven't hidden anything yet</p>
     </TabPanel>
+
     <TabPanel>
-      <p>Looks like you haven't upvoted anything yet</p>
+      {upvotedPosts.length === 0 ? (
+        <p>Looks like you haven't upvoted anything yet</p>
+      ) : (
+        // upvotedPosts.map(post => (
+        //   <div className='post-card' key={post.id}>
+        //     <div className='author'>
+        //       <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+        //       <b>u/{post.authorName}</b>
+        //     </div>
+        //     <p>{post.content}</p>
+        //   </div>
+        // ))
+        <h6>upvoted</h6>
+      )}
     </TabPanel>
-    <TabPanel>
-      <p>Looks like you haven't downvoted anything yet</p>
+
+    <TabPanel  onClick={()=> getUserDownvoted(username)}>
+      { !(getUserDownvoted() || []).length ? <p>Looks like you haven't downvoted anything yet</p> : null }
     </TabPanel>
+    
   </TabPanels>
 </Tabs>
 </div>
-
+<BackToTheTopButton style={{ left: "90%", position: 'static' }} />
 </div>
 
 <div className="rightSideBar">
@@ -72,20 +204,52 @@ return(
      Share 
  </button>
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-  <div className="profilevalue">1</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.postKarma || '1'}</div>
+  <div className="profilevalue">{userAbout.commentKarma || '0'}</div>
   <div className="profileItem">Post Karma</div>
   <div className="profileItem">Comment Karma</div>
 </div>
 <br />
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 0.5fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
 
-  <div className="profilevalue">Mar 3, 2024</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.cakeDay || 'Mar 3, 2023'} </div> 
+   <div className="profilevalue">{userAbout.goldRecieved || '0'}</div>
   <div className="profileItem">Cake day</div>
   <div className="profileItem">Gold Received</div>
 </div>
  <Divider orientation='horizontal' />
+
+ <p>Settings</p>
+ <div className="profileSettings">
+<img src="../src/assets/Curio_logo.png" alt="profile" />
+<div className="textContainer">
+        <h5>Profile</h5>
+        <h6>Customise your profile</h6>
+    </div>
+<button onClick={() => navigate('/settings/profile')} > Edit Profile</button></div>
+
+<div className="profileSettings">
+<svg rpl="" fill="currentColor" height="20" icon-name="avatar-style-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+      <path d="m19.683 5.252-3.87-3.92a1.128 1.128 0 0 0-.8-.332h-1.55a1.093 1.093 0 0 0-1.1.91 1.9 1.9 0 0 1-3.744 0A1.094 1.094 0 0 0 7.533 1h-1.55c-.3 0-.588.12-.8.332L1.317 5.253a1.1 1.1 0 0 0 .014 1.557l1.87 1.829a1.121 1.121 0 0 0 1.48.076l.32-.24v1.936c.344-.31.786-.49 1.25-.511V5.977L3.993 7.668l-1.68-1.646L6.036 2.25H7.42a3.156 3.156 0 0 0 6.16 0h1.383l3.723 3.772-1.7 1.668-2.236-1.749v8.138c.501.337.927.774 1.25 1.284V8.509l.338.264a1.117 1.117 0 0 0 1.436-.109l1.894-1.853a1.101 1.101 0 0 0 .015-1.559ZM13.691 20H1.31A1.325 1.325 0 0 1 0 18.663v-4.916a1.03 1.03 0 0 1 .5-.884.988.988 0 0 1 .98-.014 3 3 0 0 0 3.3-.266c.334-.342.649-.702.944-1.078a.624.624 0 0 1 .775-.163l6.75 3.5A2.945 2.945 0 0 1 15 17.584v1.079A1.325 1.325 0 0 1 13.691 20Zm-12.44-5.873v4.536c0 .054.033.087.058.087h12.382c.025 0 .06-.033.06-.087v-1.079a1.72 1.72 0 0 0-1.035-1.609l-6.349-3.29a9.24 9.24 0 0 1-.76.831 4.235 4.235 0 0 1-4.357.611Zm4.022 4.042-.9-.862 3.138-3.3.9.862-3.138 3.3Zm3.04 0-.913-.857 2.09-2.219.91.857-2.088 2.219Z"></path>
+    </svg>
+<div className="textContainer">
+        <h5>Avatar</h5>
+        <h6>Customise and style</h6>
+    </div>
+<button onClick={()=> window.location.href='https://www.reddit.com/avatar'}> Style Avatar</button></div>
+
+<div className="profileSettings">
+<svg rpl="" fill="currentColor" height="20" icon-name="mod-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 20c-.101 0-.202-.014-.3-.04C8.249 19.554 1 17.277 1 12V3.187A1.122 1.122 0 0 1 1.846 2.1L9.73.108c.177-.044.363-.044.54 0L18.154 2.1A1.122 1.122 0 0 1 19 3.187V12c0 5.277-7.249 7.554-8.7 7.957A1.162 1.162 0 0 1 10 20ZM2.25 3.283V12c0 4.465 6.989 6.531 7.786 6.751.725-.22 7.714-2.286 7.714-6.751V3.283L10 1.33 2.25 3.283Z"></path>
+    </svg>
+<div className="textContainer">
+        <h5>Moderation</h5>
+        <h6>Moderation tools</h6>
+    </div>
+<button> Mod Settings</button>
+</div>
+
+
 </div>
 </div>    
 </>

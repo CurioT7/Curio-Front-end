@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'; 
-import { useToast, Flex, Switch, Spacer } from '@chakra-ui/react';
+import { useToast, Flex, Switch, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 import "./ProfileCategory.css"
 import Titles from "../../feedSettings/childs/Titles";
 import axios from 'axios';
@@ -7,16 +7,29 @@ import axios from 'axios';
 function ProfileCategory() {
   
   const serverHost = import.meta.env.VITE_SERVER_HOST;
-  const toast = useToast()
-  const [isChecked, setIsChecked] = useState(false); 
+  const toast = useToast();
+  const [NSFW, setIsChecked] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [pendingChange, setPendingChange] = useState(false);
 
   const handleSwitchChange = () => {
-    setIsChecked(!isChecked); 
-    sendDataToBackend({NSFW: !isChecked})
-    Toast();
+    // setPendingChange(!isChecked);
+    if (NSFW) { // Only open the modal if isChecked is true
+      setIsModalOpen(true);
+    } else {
+      confirmChange();
+    }
   };
 
-  function Toast(){
+  const confirmChange = () => {
+    setIsChecked(!NSFW);
+    sendDataToBackend({NSFW: !NSFW});
+    setIsModalOpen(false);
+    Toast();
+  };  
+  
+
+  function Toast(){ 
     toast({   
         description: "Changes Saved",
         status: 'info',
@@ -35,24 +48,28 @@ function ProfileCategory() {
         
         const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
         console.log(response)
-        // Handle response if needed
         return response;
     } catch (error) {
         console.error('Error sending data to backend:', error);
-        // Handle error if needed
     }
   }
 
   async function fetchDataFromBackend() {
+    const token = localStorage.getItem('token');
+        // console.log(token)
+        if (!token) {
+        console.error('No token found');
+        return;
+        }
       try {
           
           const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
               headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
               }
           });
           return response.data;
@@ -64,19 +81,36 @@ function ProfileCategory() {
       async function fetchAndSetData() {
           const data = await fetchDataFromBackend();
           if (data) {
-            setIsChecked(data.isChecked);
+            setIsChecked(data.NSFW);
           }
       }
       fetchAndSetData();
   }, []);
 
   return (
-    <Flex mb={5} alignItems='center'>
-        <Titles title='NSFW'
-        description="This content is NSFW (may contain nudity, pornography, profanity, or inappropriate content for those under 18)"/>
-        <Spacer/>
-        <Switch size='lg' isChecked={isChecked} onChange={handleSwitchChange}/>
-    </Flex>
+    <>
+      <Flex mb={5} alignItems='center'>
+          <Titles title='NSFW'
+          description="This content is NSFW (may contain nudity, pornography, profanity, or inappropriate content for those under 18)"/>
+          <Spacer/>
+          <Switch size='lg' isChecked={NSFW} onChange={handleSwitchChange}/>
+      </Flex>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>SWITCH ACCOUNT TO SFW</ModalHeader>
+          <ModalCloseButton onClick={() => setIsChecked(true)} />
+          <ModalBody>
+            If your account contains <a href="#">NSFW content</a> (contains nudity, pornography, profanity or inappropriate content for those under 18) 
+            and it’s not set to NSFW, this will result in actions up to and including suspension of your account.
+          </ModalBody>
+          <Flex justifyContent="flex-end" p="3">
+            <Button variant='outline' colorScheme='blue' mr={3} onClick={() => setIsModalOpen(false)}>CANCEL</Button>
+            <Button colorScheme="blue" onClick={confirmChange}>I UNDERSTAND</Button>
+          </Flex>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
 

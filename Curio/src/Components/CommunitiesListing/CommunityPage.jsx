@@ -8,7 +8,7 @@ function CommuntiyPage() {
   
 
   return (
-    <div className=" my-1 justify-content-center container-lg center-div ">
+    <div className=" community-container ">
       <CommunityHeader />
       <div className="row me-3 justify-content-center ">    
         <div className="col-12 col-lg-8">   
