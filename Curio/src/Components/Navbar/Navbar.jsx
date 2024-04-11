@@ -10,13 +10,33 @@ import setting from "../../assets/Setting_navbar.png";
 import { Tooltip } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
+import LoggedOutHandler from './LoggedOutHandler';
+import { useNavigate } from 'react-router-dom';
 
 function NavbarComponent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+  const checkAuthentication = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  };
+
+  const navigateToLogin = () => {
+    navigate('/login');
+  }
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    window.addEventListener("loginOrSignup", checkAuthentication);
     setIsAuthenticated(!!token);
+    return () => {
+      window.removeEventListener("loginOrSignup", checkAuthentication);
+    };
   }, []);
 
   const username = localStorage.getItem('username');
@@ -87,6 +107,20 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
+        }
+        {!isAuthenticated &&
+          <div className='d-flex ms-auto'>
+            <Tooltip label="Log in to Reddit">
+              <div onClick={navigateToLogin} className='d-flex align-items-center me-2 mt-0'>
+                <button className='logged-out-login-button p-2 px-3'>Log in</button>
+              </div>
+            </Tooltip>
+            <Tooltip label="Open settings menu">
+              <div>
+                <LoggedOutHandler />
+              </div>
+            </Tooltip>
+          </div>
         }
       </ul>
       <div className="sub-menu-wrap" id='subMenu'>
