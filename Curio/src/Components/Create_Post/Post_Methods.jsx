@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Button, Flex } from '@chakra-ui/react';
 import "./Post_Methods.css"
 
-function Post_Methods() {
-  const [selectedTab, setSelectedTab] = useState(null); // Initialize state for tracking clicked button
+function Post_Methods({ onMethodSelect }) {
+  const [selectedTab, setSelectedTab] = useState("Post"); // Initialize state for tracking clicked button
 
   // Function to handle button click and update selectedTab state
   const handleButtonClick = (buttonName) => {
     setSelectedTab(buttonName);
+    onMethodSelect(buttonName);
   };
 
   return (
