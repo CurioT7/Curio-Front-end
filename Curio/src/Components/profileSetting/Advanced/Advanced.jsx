@@ -76,7 +76,7 @@ function Advanced() {
           
           const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
               headers: {
-                  authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
               }
           });
           return response.data;
