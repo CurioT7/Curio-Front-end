@@ -42,7 +42,7 @@ function GeneratePass(props){
     }
     return(
         <Box>
-                <Button onClick={onOpen} style={props.buttonStyle} variant='outline' colorScheme='blue'>Change</Button>
+                {props.isEmail ?(<Button onClick={onOpen} style={props.buttonStyle} variant='outline' colorScheme='blue'>Change</Button>):<Button color='red' onClick={onOpen} variant='unstyled' leftIcon={<FaTrashAlt />} > Delete Account</Button>}
 
                 <Modal isCentered size='md' isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />

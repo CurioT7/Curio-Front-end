@@ -128,7 +128,7 @@ const AccountPreferences = () => {
                 
                     <Spacer />
                     <>
-                    <GeneratePass email={email} username={username} buttonStyle={buttonStyle}/>
+                    <GeneratePass isEmail={true} email={email} username={username} buttonStyle={buttonStyle}/>
                     </>
                 </Flex>}
            
