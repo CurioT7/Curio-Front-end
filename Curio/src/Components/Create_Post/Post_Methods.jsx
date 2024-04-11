@@ -42,6 +42,16 @@ function Post_Methods() {
       >
         Link
       </Button>
+      <Button
+        className='button-post-method'
+        colorScheme={selectedTab === "Polls" ? "blue" : ""} // Change color based on selectedTab state
+        size='lg'
+        variant='ghost'
+        leftIcon={<i className="fa-regular fa-image"/>}
+        onClick={() => handleButtonClick("Polls")} // Update selectedTab state on button click
+      >
+        Polls
+      </Button>
     </Flex>
   );
 }

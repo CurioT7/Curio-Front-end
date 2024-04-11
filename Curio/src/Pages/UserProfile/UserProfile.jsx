@@ -6,11 +6,15 @@ import Picture from "../../styles/icons/BlockPic.png"
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-function UserPage( ) {
+function UserPage( props ) {
   const [isNextPage, setIsNextPage] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+
+  const handleBlockUser = () => {
+    setIsBlocked(true);
+  }
 
   const handleUnblock = () => {
     setIsBlocked(false);
@@ -18,11 +22,12 @@ function UserPage( ) {
 
   const handleBlockPage = () => {
     setIsNextPage(!isNextPage);
-
+    props.hideSidebar();
   }
   const handleBlock = () => {
     setIsBlocked(!isBlocked);
     setIsNextPage(!isNextPage);
+    props.showSidebar();
   }
 
 
@@ -50,7 +55,7 @@ function UserPage( ) {
             </div>
           </div>
           ) : (
-              <FriendInformation isBlocked={isBlocked} handleBlockPage={handleBlockPage} handleUnblock={handleUnblock} />
+              <FriendInformation isBlocked={isBlocked} handleBlockPage={handleBlockPage} handleUnblock={handleUnblock} isUserBlocked={handleBlockUser} />
           )}
       </div>
   );
