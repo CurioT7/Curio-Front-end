@@ -26,16 +26,12 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 
 function ShowFriendInformation(props) {
-    const { username } = useParams();
     const [showDropdown, setShowDropdown] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [blockedUsers, setBlockedUsers] = useState([]);
     const [showReportMenu, setShowReportMenu] = useState(false);
-    const [friendInfo, setFriendInfo] = useState({});
-    const [friendusername , setFriendusername] = useState('');
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
-    const [displayToast, setDisplayToast] = useState(false);
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
@@ -86,22 +82,12 @@ function ShowFriendInformation(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        showFriendInformation({username});
-        getFollower({username});
-        getBlocked({username});
-    }, [username]);
+        getFollower(props.username);
+        getBlocked(props.username);
+    }, [props.username]);
 
 
-    async function showFriendInformation({username}) {
-        try {
-            const response = await axios.get(`${hostUrl}/user/${username}/about`);
-            setFriendInfo(response.data);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    async function getFollower({ username }) {
+    async function getFollower(username) {
         try {
             if (!token) {
                 console.error('Error:', error);
@@ -163,15 +149,15 @@ function ShowFriendInformation(props) {
         }
         else{
         if (isFollowing) {
-            userUnfollow(username);
+            userUnfollow(props.username);
         } else {
-            userFollow(username);
+            userFollow(props.username);
         }
         setIsFollowing(!isFollowing);
     }
     }
 
-    async function getBlocked({ username }) {
+    async function getBlocked(username) {
         try {
             if (!token) {
                 console.error('Token not found');
@@ -229,7 +215,7 @@ function ShowFriendInformation(props) {
         try {
             const index = blockedUsers.findIndex((user) => user.username === username);
             if (index === -1) {
-                console.error('User not found in blocked users array');
+                console.error('User not found');
                 return;
             }
     
@@ -257,8 +243,6 @@ function ShowFriendInformation(props) {
     };
     
 
-
-
     return (
         <>
             <div className="d-flex flex-column justify-content-center mt-5 center-div">
@@ -268,14 +252,14 @@ function ShowFriendInformation(props) {
                             <img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="user-profile-image"/>
                         </div>
                         <div className="d-flex flex-column align-items-md-center align-items-sm-start">
-                            <h1 className="show-friend-header d-flex align-items-center mb-0">{friendInfo.displayName}</h1>
-                            <p className="show-friend-username d-flex align-items-center me-auto">u/{username}</p>
+                            <h1 className="show-friend-header d-flex align-items-center mb-0">{props.friendInfo.displayName}</h1>
+                            <p className="show-friend-username d-flex align-items-center me-auto">u/{props.username}</p>
                         </div>
                     </div>
                     <div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
                         <div className="w-100 p-4 ps-3 pe-0">
                             <div className="d-flex align-items-center items-container w-100">
-                                <h1 style={{fontSize: "1rem"}} className="show-friend-header">{friendInfo.displayName || username}</h1>
+                                <h1 style={{fontSize: "1rem"}} className="show-friend-header">{props.friendInfo.displayName || props.username}</h1>
                                 <div className="d-flex flex-row left-section w-100">
                                     {props.isBlocked ? (
                                         null
@@ -308,7 +292,7 @@ function ShowFriendInformation(props) {
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Send a message</p></div>
                                             </li>
-                                            <li className="drop-down-item" onClick={() => {handleUserBlock(username);}}>
+                                            <li className="drop-down-item" onClick={() => {handleUserBlock(props.username);}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Block account</p></div>
                                             </li>
@@ -323,11 +307,10 @@ function ShowFriendInformation(props) {
                                 </div>
                             </div>
                         </div>
-                        <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={username} />
-                        {displayToast && <div className="toast">User has been blocked</div>}
+                        <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
                         <div className="d-flex">
                             {props.isBlocked ? (
-                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {handleUserUnblock(username);}}>
+                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {handleUserUnblock(props.username);}}>
                                     <span className="d-flex align-items-center me-1 mt-3 minus"><BlockIcon /></span>
                                     <span className="d-flex align-items-center">Blocked</span>
                                  </button> 
@@ -346,22 +329,22 @@ function ShowFriendInformation(props) {
                         </div>
                             <div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
                                 <div className="d-flex flex-column">
-                                    <p className="mb-0 stats">{friendInfo.postKarma}</p>
+                                    <p className="mb-0 stats">{props.friendInfo.postKarma}</p>
                                     <p className="secondary-subheader">Post Karma</p>
                                 </div>
                                 <div className="d-flex flex-column">
-                                    <p className="mb-0 stats">{friendInfo.commentKarma}</p>
+                                    <p className="mb-0 stats">{props.friendInfo.commentKarma}</p>
                                     <p className="secondary-subheader">Comment Karma</p>
                                 </div>
                                 <div className="d-flex flex-column">
-                                    <p className="mb-0 stats">{friendInfo.cakeDay}</p>
+                                    <p className="mb-0 stats">{props.friendInfo.cakeDay}</p>
                                     <p className="secondary-subheader">Cake day</p>
                                 </div>
                             </div>
                             <div className="pe-4 ps-4 me-4 ms-4 mt-0 mb-4" style={{border: '1px solid #0000001a'}}></div>
                             <h3 className="muted-header p-4 pt-0 mb-1">MODERATOR OF THESE COMMUNITIES</h3>
                             <div className="d-flex flex-column">
-                                {friendInfo.moderatedSubreddits && friendInfo.moderatedSubreddits.map((community, index) => (
+                                {props.friendInfo.moderatedSubreddits && props.friendInfo.moderatedSubreddits.map((community, index) => (
                                     <div key={index} className="d-flex justify-content-between p-4 pt-0 pb-0">
                                     <img src={community.icon} alt="community icon" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3" />
                                     <div className="d-flex flex-column me-auto">
@@ -422,7 +405,7 @@ function ShowFriendInformation(props) {
                 {props.isBlocked ? (
                 <div className="ms-0 ms-lg-5 mt-4 col-md-7 d-flex flex-column align-items-center">
                     <img src= {redditPic} className="blockprofileImage text-center"></img>
-                    <p className="blockText">u/{username} hasn't posted yet</p>
+                    <p className="blockText">u/{props.username} hasn't posted yet</p>
                 </div>
                 ) :(
                 <div className="ms-0 ms-lg-5 mt-4 col-md-7">

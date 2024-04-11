@@ -5,12 +5,32 @@ import './UserProfile.css'
 import Picture from "../../styles/icons/BlockPic.png"
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 function UserPage( props ) {
+  const { username } = useParams();
   const [isNextPage, setIsNextPage] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [friendInfo, setFriendInfo] = useState({});
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    showFriendInformation(username);
+  }, [username]);
+
+  async function showFriendInformation(username) {
+    try {
+        const response = await axios.get(`${hostUrl}/user/${username}/about`);
+        setFriendInfo(response.data);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 
   const handleBlockUser = () => {
     setIsBlocked(true);
@@ -41,7 +61,7 @@ function UserPage( props ) {
                 <div className='d-flex justify-content-center'>
                 <img src={Picture} alt='reddit figure' className='block-page-fig'/>
                 </div>
-                <h1 className='header-title'>u/Yehia is blocked</h1>
+                <h1 className='header-title'>u/{username} is blocked</h1>
                 <p className='paragraph'>
                   Are u sure you want to continue to their profile?
                 </p>
@@ -55,7 +75,8 @@ function UserPage( props ) {
             </div>
           </div>
           ) : (
-              <FriendInformation isBlocked={isBlocked} handleBlockPage={handleBlockPage} handleUnblock={handleUnblock} isUserBlocked={handleBlockUser} />
+              <FriendInformation isBlocked={isBlocked} handleBlockPage={handleBlockPage} handleUnblock={handleUnblock} isUserBlocked={handleBlockUser} username={username}
+              friendInfo={friendInfo}  />
           )}
       </div>
   );
