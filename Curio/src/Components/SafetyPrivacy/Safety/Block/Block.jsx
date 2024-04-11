@@ -138,10 +138,26 @@ function Safety() {
         }
         });
     };
+
+    const patchUnblockUser = (name) => {
+      const updatedBlockedUsers = blockedUsers.filter(user => user.username !== name);
+      axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
+        viewBlockedPeople: updatedBlockedUsers
+      }, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }).then(response => {
+      }).catch(error => {
+      });
+    };
+
+
     const handleRemoveBlockedUser = index => {
         const updatedBlockedUsers = [...blockedUsers];
         const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].username;
         setBlockedUsers(updatedBlockedUsers);
+        patchUnblockUser(unblockedUser);
         // Call postunBlockUser here after removing the user
         postunBlockUser(unblockedUser);
     };
