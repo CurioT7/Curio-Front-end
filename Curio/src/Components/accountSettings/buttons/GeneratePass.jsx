@@ -3,7 +3,7 @@ import React from "react"
 import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
 import { MdMarkEmailUnread } from "react-icons/md";
 import axios from 'axios';
-
+import { FaTrashAlt } from "react-icons/fa";
 function GeneratePass(props){
 
     const serverHost = import.meta.env.VITE_SERVER_HOST;
@@ -21,7 +21,7 @@ function GeneratePass(props){
         onClose()
     }
     async function sendDataToBackend(){
-        console.log(`Bearer ${localStorage.getItem('token')}`)
+        
         try {
             const response = await axios.post(`${serverHost}/api/auth/password`, {
                 username: props.username,
@@ -47,13 +47,13 @@ function GeneratePass(props){
                 <Modal isCentered size='md' isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader mt={5}> <Box display='flex'> <MdMarkEmailUnread className='fs-1 me-3' /><h4> Change your email address</h4> </Box></ModalHeader>
+                        <ModalHeader mt={5}> <Box display='flex'> <MdMarkEmailUnread className='fs-1 me-3' /><h4> {props.title}</h4> </Box></ModalHeader>
                         <ModalCloseButton />
                         
                         <ModalBody>
                            
                                 <Box display='flex'  flexDirection='column'>
-                                    {isSent===false&&<Text className='fs-6' fontWeight='400'>To change your email address, you need to create a Reddit password first. We'll walk you through it.</Text>}
+                                    {isSent===false&&<Text className='fs-6' fontWeight='400'>{props.context}, you need to create a Curio password first. We'll walk you through it.</Text>}
                                     {isSent===true&&<Text className='fs-6' fontWeight='400'>We sent a message to {props.email} with a link to create your password.</Text>}
                                 </Box>
                             
