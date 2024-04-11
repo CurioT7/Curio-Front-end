@@ -61,8 +61,8 @@ function Createpostarea() {
             {inputTitle.length}/300
           </div>
         </div>
+        {renderSelectedMethod()}
       </div>
-      {renderSelectedMethod()}
       <EditCreatearea />
     </div>
   );

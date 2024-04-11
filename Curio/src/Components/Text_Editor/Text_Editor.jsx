@@ -56,7 +56,7 @@ function Text_Editor() {
   };
 
   return (
-    <div className="container">
+    <div>
       <div className="inner-container">
         <div className="nested-container">
           <div className="nested-div">
@@ -99,7 +99,7 @@ function Text_Editor() {
               />
             </div>
           </div>
-          <div>
+          <div className="text-optional-container">
             <textarea
               className="Text-optional-textarea"
               rows="1"
