@@ -9,7 +9,7 @@ import { MdMarkEmailUnread } from "react-icons/md";
 const Google = (props) =>{
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")
-    const [isClicked,setIsClicked]=React.useState(false)
+    const [wrongPass,setWrongPass]=React.useState(false)
     const pass ="12345678"
     const serverHost = import.meta.env.VITE_SERVER_HOST;
     function handleYourPass(e){
@@ -27,7 +27,8 @@ const Google = (props) =>{
         console.log(response);
         // const hostUrl = import.meta.env.VITE_SERVER_HOST;
         const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
-          token: response.access_token
+          token: response.access_token,
+          password: yourPass
         },{
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -44,14 +45,18 @@ const Google = (props) =>{
             const response = await axios.post(`${serverHost}/api/google/connect`, {
                 token:`Bearer ${localStorage.getItem('token')}`,
                 password: yourPass
-            });
+            },{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }});
+            setWrongPass(false)
             clearForm()
         }
         catch(error){
             console.error( error.message);
             switch (error.response.status) {
-                case 401:
-                    
+                case 400:
+                    setWrongPass(true)
                     break;
                 
                 default:
@@ -78,7 +83,7 @@ const Google = (props) =>{
                                 <Box display='flex'  flexDirection='column' >
                                     <Text  fontWeight='400'>To continue, confirm your password and sign in with Google.</Text>
                                     <Input placeholder='PASSWORD' type='password' value={yourPass} onChange={handleYourPass} size='lg' mb={5}></Input>
-                                    {yourPass!==pass && isClicked?(<PasswordErrorMessage text="enter valid password"/>):null}
+                                    {wrongPass?(<PasswordErrorMessage text="enter valid password"/>):null}
                                     <Button onClick={login}  leftIcon={<FcGoogle className='fs-4'/>} alignSelf='center' className='fs-6 py-6 fw-bold' variant='outline' size='md' type='submit' style={{borderRadius: "30px", padding: "10px 20px",width:"250px", height:"40px", position:'relative', top:'2vh'}} >Continue with Google</Button>
                                     
                                 </Box>

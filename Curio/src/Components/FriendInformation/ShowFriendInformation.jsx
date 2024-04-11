@@ -17,20 +17,50 @@ import {userBlock , userUnblock} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
+import { useNavigate } from "react-router-dom";
+import { useToast } from '@chakra-ui/react';
+import redditPic from "../../styles/icons/hmm-snoo.png"
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
+
 
 
 function ShowFriendInformation(props) {
     const { username } = useParams();
     const [showDropdown, setShowDropdown] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
-    const [isBlocked, setIsBlocked] = useState(false);
+    const [blockedUsers, setBlockedUsers] = useState([]);
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
     const [friendusername , setFriendusername] = useState('');
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
+    const [displayToast, setDisplayToast] = useState(false);
+
+    const token = localStorage.getItem('token');
+    const toastError = useToast();
+
+    function ToastError() {
+        toastError({
+            description: "You can't block somebody again within 24 hours of blocking them",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
+    const toastsuccess = useToast()
+    function ToastSuccess() {
+        toastsuccess({
+            description: "User Blocked successfully",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
@@ -41,6 +71,11 @@ function ShowFriendInformation(props) {
     };
 
     const handleReportClick = () => {
+        if (!token) {
+         navigate('/login');
+        setShowReportMenu(false);
+        }
+        else
         setShowReportMenu(true);
     };
 
@@ -48,11 +83,14 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         showFriendInformation({username});
         getFollower({username});
+        getBlocked({username});
     }, [username]);
+
 
     async function showFriendInformation({username}) {
         try {
@@ -65,7 +103,6 @@ function ShowFriendInformation(props) {
 
     async function getFollower({ username }) {
         try {
-            const token = localStorage.getItem('token');
             if (!token) {
                 console.error('Error:', error);
                 return;
@@ -74,7 +111,7 @@ function ShowFriendInformation(props) {
             await axios.get(`${hostUrl}/api/me/friends/${username}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'authorization': `Bearer ${token}`
                 }
             });
             setIsFollowing(true);
@@ -85,18 +122,17 @@ function ShowFriendInformation(props) {
     
 
     async function userFollow(friendUsername) {
+
         try {
             await axios.post(`${hostUrl}/api/me/friends`, {
                 friendUsername
             },{
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                    'authorization': `Bearer ${token}`
                 }
             });
-            localStorage.setItem('followedUser', friendUsername);
         
-            console.log('Friend followed');
         } catch (error) {
             console.error('Error:', error);
         }
@@ -110,13 +146,11 @@ function ShowFriendInformation(props) {
             },{
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                    'authorization': `Bearer ${token}`
                 }
             });
     
-            localStorage.removeItem('followedUser');
     
-            console.log('Friend unfollowed');
         } catch (error) {
             console.error('Error:', error);
         }
@@ -124,6 +158,10 @@ function ShowFriendInformation(props) {
 
 
     const handleFollowToggle = () => {
+        if (!token) {
+         navigate('/login');
+        }
+        else{
         if (isFollowing) {
             userUnfollow(username);
         } else {
@@ -131,6 +169,93 @@ function ShowFriendInformation(props) {
         }
         setIsFollowing(!isFollowing);
     }
+    }
+
+    async function getBlocked({ username }) {
+        try {
+            if (!token) {
+                console.error('Token not found');
+                return;
+            }
+    
+            const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setBlockedUsers(response.data.viewBlockedPeople || []);
+            if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.username === username)) {
+                props.isUserBlocked();
+            }
+            return response.data
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const patchBlockUser = (name) => {
+        const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
+          viewBlockedPeople: [...blockedUsers, { username: name}]
+        },{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        if(response.status === 200){
+            const newUser = { username: name};
+            setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
+        }
+      };
+
+      const handleUserBlock = async (username) => {
+        if (!token) {
+            navigate('/login');
+        } else {
+            const result = await userBlock(username);
+            if(result.success){
+                patchBlockUser(username);
+                props.handleBlockPage();
+                ToastSuccess();
+            }
+            if (!result.success) {
+                ToastError();
+            }
+        }
+    }
+
+    const handleUserUnblock = async (username) => {
+        try {
+            const index = blockedUsers.findIndex((user) => user.username === username);
+            if (index === -1) {
+                console.error('User not found in blocked users array');
+                return;
+            }
+    
+            const updatedBlockedUsers = [...blockedUsers];
+            updatedBlockedUsers.splice(index, 1);
+    
+
+            const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
+                viewBlockedPeople: updatedBlockedUsers
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            if (response.status === 200) {
+                setBlockedUsers(updatedBlockedUsers);
+                props.handleUnblock();
+                userUnblock(username);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
 
 
 
@@ -183,7 +308,7 @@ function ShowFriendInformation(props) {
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Send a message</p></div>
                                             </li>
-                                            <li className="drop-down-item" onClick={() => { userBlock(username, props.handleBlockPage());}}>
+                                            <li className="drop-down-item" onClick={() => {handleUserBlock(username);}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>
                                                     <div><p className='text-text'>Block account</p></div>
                                             </li>
@@ -199,9 +324,10 @@ function ShowFriendInformation(props) {
                             </div>
                         </div>
                         <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={username} />
+                        {displayToast && <div className="toast">User has been blocked</div>}
                         <div className="d-flex">
                             {props.isBlocked ? (
-                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {props.handleUnblock(); userUnblock(username);}}>
+                                 <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {handleUserUnblock(username);}}>
                                     <span className="d-flex align-items-center me-1 mt-3 minus"><BlockIcon /></span>
                                     <span className="d-flex align-items-center">Blocked</span>
                                  </button> 
@@ -293,6 +419,12 @@ function ShowFriendInformation(props) {
                         </div>
                     </div>
                 <hr style={{backgroundColor: "#0000008F"}} className="d-flex justify-content-center col-12 col-md-7 ms-0 ms-lg-5"></hr>
+                {props.isBlocked ? (
+                <div className="ms-0 ms-lg-5 mt-4 col-md-7 d-flex flex-column align-items-center">
+                    <img src= {redditPic} className="blockprofileImage text-center"></img>
+                    <p className="blockText">u/{username} hasn't posted yet</p>
+                </div>
+                ) :(
                 <div className="ms-0 ms-lg-5 mt-4 col-md-7">
                     <Post
                         user="r/netherlands"
@@ -318,7 +450,7 @@ function ShowFriendInformation(props) {
                         downvotes={1}
                         comments={[4, 5]} // Dummy array for comments
                     />
-                </div>
+                </div>)}
                 </div>
             </>
         );

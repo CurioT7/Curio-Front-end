@@ -20,9 +20,10 @@ function TopCommunities(props) {
   let pages = [];
 
   const [communityInfo, setCommunityInfo] = useState([]);
+  const [communitiesnumber, setCommunitiesNumber] = useState(0);
   const [isDropDown, toggleDropDown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const commPerPage = 100;
+  const commPerPage = 250;
   useEffect(() => {
     props.hideSidebar();
     showCommunityInformation(currentPage);
@@ -33,6 +34,7 @@ function TopCommunities(props) {
       const response = await axios.get(`${hostUrl}/api/best/communities?page=${page}`);
         console.log(response.data.communities);
         setCommunityInfo(response.data.communities);
+        setCommunitiesNumber(response.data.totalCommunitiesCount);
     } catch (error) {
         console.error('Error:', error);
     }
@@ -1552,7 +1554,7 @@ const communitiesTest = [
   const firstCommIndex = lastCommIndex - commPerPage;
   const currentComms = communityInfo.slice(firstCommIndex, lastCommIndex);
 
-  for (let i = 1; i <= Math.ceil(communityInfo.length / commPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(communitiesnumber / commPerPage); i++) {
     pages.push(i);
   }
 
@@ -1565,7 +1567,7 @@ const communitiesTest = [
       <h2 className="browse">Browse Reddit's largest communities</h2>
       {currentComms.map((_, index) => {
         return index % 4 === 0 ? (
-          <div className="row row-cols-xl-4 w-100 rowHeight">
+          <div className="row rows-cols-1 row-cols-xl-4 row-cols-l-3 row-cols-md-2 row-cols-sm-1 w-100 rowHeight">
             {currentComms.slice(index, index + 4).map((community, key) => (
               <Community
                 index={(currentPage - 1) * commPerPage + index + key}

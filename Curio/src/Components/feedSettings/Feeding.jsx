@@ -47,7 +47,8 @@ function Feeding () {
     }
     function handleCommRemember(){
         setCommRemember(!rememberContentSort)
-        sendDataToBackend({rememberContentSort: !rememberContentSort})
+        sendDataToBackend({rememberPerCommunity:{rememberContentSort: !rememberContentSort,
+                                                rememberContentView: rememberContentView}})
         Toast()
     }
     function handleCommunityThemes(){
@@ -62,7 +63,8 @@ function Feeding () {
     }
     function handleRememberContentView(){
         setRememberContentView(!rememberContentView)
-        sendDataToBackend({rememberContentView: !rememberContentView})
+        sendDataToBackend({rememberPerCommunity:{rememberContentView: !rememberContentView
+                                                ,rememberContentSort: rememberContentSort}})
         Toast()
     }
     function handleOpenPostsInNewTab(){
@@ -122,9 +124,9 @@ function Feeding () {
                 setIsAuto(data.autoplayMedia);
                 setCommunityThemes(data.communityThemes);
                 setCommunityContentSort(data.communityContentSort);
-                setCommRemember(data.rememberContentSort);
+                setCommRemember(data.rememberPerCommunity.rememberContentSort);
                 setGlobalContentView(data.globalContentView);
-                setRememberContentView(data.rememberContentView);
+                setRememberContentView(data.rememberPerCommunity.rememberContentView);
                 setOpenPostsInNewTab(data.openPostsInNewTab);
             }
         }
