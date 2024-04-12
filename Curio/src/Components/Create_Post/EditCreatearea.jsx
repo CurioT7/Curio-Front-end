@@ -6,7 +6,7 @@ import "./EditCreatearea.css"
 
 function EditCreatearea() {
   return (
-    <div className="EditCreatearea mt-3">
+    <div className="EditCreatearea">
         <div>
             <div className='button-group-edit'>
             <Button 

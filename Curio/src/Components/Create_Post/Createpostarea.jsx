@@ -47,7 +47,7 @@ function Createpostarea() {
   return (
     <div>
       <Post_Methods onMethodSelect={handleMethodSelect} />
-      <div className="container">
+      <div className="container my-3">
         <div className="textarea-container">
           <textarea
             className="custom-textarea"
