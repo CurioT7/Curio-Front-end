@@ -11,11 +11,28 @@ import Upvotes from '../../styles/icons/Upvotes.jsx';
 import Downvotes from '../../styles/icons/Downvotes.jsx';
 import FilledDownvote from '../../styles/icons/FilledDownvote.jsx';
 import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Post.css'
 import PostControl from './PostControl.jsx';
+import axios from 'axios';
+
 function Post(props) {
+    const [subreddit, setSubreddit] = useState([]);
+    useEffect(() => {
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        async function getPostSubreddit() {
+            try {
+                const response = await axios.get(`${hostUrl}/api/subreddit/${props.subredditId}`);
+                if (response.status === 200) {
+                    setSubreddit(response.data);
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+    }, [])
     const navigate = useNavigate();
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
@@ -41,6 +58,7 @@ function Post(props) {
             _id: props._id,
             user: props.user,
             title: props.title,
+            subreddit: props.linkedSubreddit,
             content: props.content,
             image: props.image,
             upvotes: props.upvotes,
@@ -87,7 +105,7 @@ function Post(props) {
                         
                         </Box>
                     </Flex>
-                    <PostControl _id={props._id} />
+                    <PostControl postDetails={false} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
                     </Flex>
                 </CardHeader>
                 <CardBody className='py-0' onClick={handleNavigationToDetails}>

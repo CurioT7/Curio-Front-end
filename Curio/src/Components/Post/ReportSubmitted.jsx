@@ -5,9 +5,87 @@ import Modal from 'react-bootstrap/Modal';
 import CloseButton from '../../styles/icons/CloseButton.jsx';
 import ReportIcon from "../../styles/icons/ReportIcon.jsx";
 import axios from "axios";
+import { useToast } from '@chakra-ui/react'
 import './ReportModals.css';
 
 function ReportSubmitted(props) {
+  const toast = useToast();
+  const handleBlock = async (event) => {
+    const isChecked = event.target.checked;
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    if (isChecked) {
+      try {
+        const response = await axios.post(`${hostUrl}/api/User/block`, {
+          usernameToBlock: props.username
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200) {
+          console.log('Blocked');
+        }
+        if (response.status === 403) {
+          toast({
+            description: "You can't block the user for 24 hours after unblocking them",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+        }
+      }
+      catch (err) {
+        console.log(err);
+        if (err.response.status === 403) {
+          toast({
+            description: "You can't block the user for 24 hours after unblocking them",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+        } else {
+          toast({
+              description: "Server Error. Please try again later.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            })
+        }
+      }
+    } else {
+      try {
+        const response = await axios.post(`${hostUrl}/api/User/unblock`, {
+          usernameToUnblock: props.username
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200) {
+          console.log('Unblocked');
+        }
+      }
+      catch (err) {
+        if (err.response.status === 409) {
+          toast({
+            description: "User already blocked.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+        }
+        else {
+          toast({
+              description: "Server Error. Please try again later.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            })
+        }
+        console.log(err);
+      }
+    }
+  };
   return (
     <Modal
       {...props}
@@ -33,9 +111,9 @@ function ReportSubmitted(props) {
       <Modal.Footer className="d-flex flex-column border-0 mt-5">
         <div className="d-flex w-100 d-flex flex-column">
           <div className="d-flex w-100 mb-3">
-            <h2 style={{fontSize: "1rem"}} className="submit-a-report-header d-flex align-items-center">Block ancient_gate_007</h2>
+            <h2 style={{fontSize: "1rem"}} className="submit-a-report-header d-flex align-items-center">Block {props.username}</h2>
             <div className='form-check form-switch d-flex align-items-center ms-auto'>
-                <input style={{ transform: 'scale(1.5)' }} className='form-check-input ms-auto me-3' type="checkbox" id="mature" role="switch" name="mature" value="mature" />
+                <input style={{ transform: 'scale(1.5)' }} onChange={handleBlock} className='form-check-input ms-auto me-3' type="checkbox" id="mature" role="switch" name="mature" value="mature" />
             </div>
           </div>
           <div>

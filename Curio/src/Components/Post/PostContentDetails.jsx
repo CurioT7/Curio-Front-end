@@ -12,6 +12,7 @@ import FilledUpvote from '../../styles/icons/FilledUpvote';
 import { useNavigate } from 'react-router-dom';
 import PostComments from './PostComments';
 import CommentInputForm from './CommentInputForm';
+import PostControl from './PostControl';
 
 function PostContentDetails(post) {
 
@@ -51,14 +52,9 @@ function PostContentDetails(post) {
                         <a className='community-post-name' style={{fontWeight: "300", fontSize: "0.875rem"}}>{post.user}</a>
                     </div>
                 </div>
-                <IconButton
-                    className='ms-auto'
-                    variant='ghost'
-                    colorScheme='gray'
-                    aria-label='See menu'
-                    borderRadius={"50%"}
-                    icon={<SlOptions />}
-                />
+                <div className='ms-auto'>
+                    <PostControl postDetails={true} username={post.user} _id={post._id} />
+                </div>
             </div>
             <h3 className='post-content-header mb-3'>{post.title}</h3>
             <p className='post-details-content'>{post.content}</p>

@@ -1,7 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Ellipsis from "../../styles/icons/Elippsis";
 import SaveButton from "../../styles/icons/SaveButton";
+import FilledSave from "../../styles/icons/FilledSave";
 import ReportPost from "../../styles/icons/ReportPost";
 import Hide from "../../styles/icons/Hide";
 import ReportReason  from "./ReportReason.jsx";
@@ -19,6 +20,17 @@ function PostControl(props) {
   const [isReportSubmittedModalOpen, setReportSubmittedModalOpen] = useState(false);
   const [isExtraReasonModalOpen, setExtraReasonModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
+  useEffect(() => {
+    console.log(props.savedPosts, props._id, isSaved)
+    if (props.savedPosts && props.savedPosts.some(post => post._id === props._id)) {
+      setIsSaved(true);
+    } else {
+      setIsSaved(false);
+    }
+  }, []);
+
+    
   const handleOpenReportModal = () => {
     setReportReasonModalOpen(true);
   }
@@ -49,7 +61,7 @@ function PostControl(props) {
     try{
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
       const response = await axios.post(`${hostUrl}/api/hide`, {
-        itemId: props.postId
+        itemId: props._id
       },
        {
         headers: {
@@ -57,14 +69,8 @@ function PostControl(props) {
         }
       });
       if (response.status === 200){
-        console.log('Hidden');
-      }
-      if (response.status === 400 || response.status === 404){
-        console.log('Error');
-      }
-      if (response.status === 409){
         toast({
-          description: "Item already hidden.",
+          description: "Post Saved",
           status: 'error',
           duration: 5000,
           isClosable: true,
@@ -73,6 +79,23 @@ function PostControl(props) {
     }
     catch(err){
       console.log(err);
+      if (err.response.status === 409){
+        toast({
+          description: "Item already hidden.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+      else{
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      
+      }
     }
   }
 
@@ -81,7 +104,7 @@ function PostControl(props) {
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
       const response = await axios.post(`${hostUrl}/api/save`, {
         category: "post",
-        id: props.postId
+        id: props._id
       },
        {
         headers: {
@@ -95,8 +118,11 @@ function PostControl(props) {
           duration: 5000,
           isClosable: true,
         })
+        setIsSaved(true);
       }
-      if (response.status === 400 || response.status === 404){
+    }
+    catch(err){
+      if (err.response.status === 400){
         toast({
           description: "post already saved.",
           status: 'error',
@@ -104,38 +130,87 @@ function PostControl(props) {
           isClosable: true,
         })
       }
+      else{
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+  }
+
+  const handleUnsave = async () => {
+    try{
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.post(`${hostUrl}/api/unsave`, {
+        category: "post",
+        id: props._id
+      },
+       {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200){
+        toast({
+          description: "Removed From Save.",
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+        setIsSaved(false);
+      }
     }
     catch(err){
       console.log(err);
+      if (err.response.status === 400){
+        toast({
+          description: "post already unsaved.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
     }
   }
+
+  const handleSaveOrUnsave = () => {
+    if (isSaved) {
+      handleUnsave();
+    } else {
+      handleSave();
+    }
+  }
+
   return (
     <>
       <div>
         <button className="post-dropdown-control d-flex justify-content-center align-items-center" onClick={handleEllipsisClick}>
           <Ellipsis className="ellipsis-img" />
         </button>
-        {showControls && <div className="post-dropdown" style={{ 
+        {showControls && <div style={{ 
                                           display: showControls ? 'flex' : 'none',
                                           flexDirection: 'column',
                                           alignItems: 'flex-start',
                                           position: 'absolute',
-                                          top: '0',
-                                          right: '0',
+                                          top: (props.postDetails == false) ? '0' : '5rem',
+                                          right: (props.postDetails == false) ? '0' : '25rem',
                                           backgroundColor: '#FFFFFF',
                                           borderRadius: '10px',
                                           boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
                                           marginTop: '2.5rem',
                                           marginRight: '1rem',
                                           padding: '0px',
-                                          width: '0.5rem!important',
+                                          width: isSaved ? '2rem !important' : '2.5rem !important',
                                           height: '0.5rem!important',
                                           zIndex: '1'
                                       }}>
                                           <ul className='drop-down-list w-100 px-0'>
-                                              <li onClick={handleSave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
-                                                      <SaveButton />
-                                                      <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>Save</p></div>
+                                              <li onClick={handleSaveOrUnsave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                      {isSaved ? <FilledSave /> : <SaveButton /> }
+                                                      <div className="d-flex align-items-center justify-content-center"><p className='mt-3 me-2 text-text d-flex'>{isSaved ? "Remove from save" : "Save"}</p></div>
                                               </li>
                                               <li onClick={handleHide} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                       <Hide />
@@ -143,14 +218,14 @@ function PostControl(props) {
                                               </li>
                                               <li onClick={handleOpenReportModal} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                       <ReportPost />
-                                                      <div><p className='mt-3 text-text'>Report</p></div>
+                                                      <div><p className='mt-3 me-2 text-text'>Report</p></div>
                                               </li>
                                           </ul>   
                                       </div>
               }
       </div>
       <ReportReason show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
-      <ReportSubmitted show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
+      <ReportSubmitted username={props.username} show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
       <ReportExtraReason showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
     </>
   );
