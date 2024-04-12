@@ -41,6 +41,7 @@ function Post(props) {
             _id: props._id,
             user: props.user,
             title: props.title,
+            content: props.content,
             image: props.image,
             upvotes: props.upvotes,
             downvotes: props.downvotes,
@@ -69,7 +70,7 @@ function Post(props) {
             localStorage.setItem('recentPosts', JSON.stringify([post]));
         }
         window.dispatchEvent(new Event('newRecentPost'));
-        navigate(`/post/post-details/${props._id}`);
+        navigate(`/post/post-details/${props._id}`, { state: { post } });
     }
 
 

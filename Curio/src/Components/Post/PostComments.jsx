@@ -67,6 +67,39 @@ function PostComments(props) {
             setUpvoted(false);
         }
     }
+    const handleSave = async () => {
+    try{
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.post(`${hostUrl}/api/save`, {
+        category: "comment",
+        id: props.postId
+      },
+       {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200){
+        toast({
+          description: "Comment saved.",
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+      if (response.status === 400 || response.status === 404){
+        toast({
+          description: "comment already saved.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
     return (
         <>
@@ -107,7 +140,7 @@ function PostComments(props) {
                                                     zIndex: '1'
                                                 }}>
                                                     <ul className='drop-down-list w-100 px-0'>
-                                                        <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                        <li onClick={handleSave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                                 <SaveButton />
                                                                 <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>Save</p></div>
                                                         </li>

@@ -125,7 +125,7 @@ function NavbarComponent() {
       </ul>
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
-          <Link to={`user/${username}`} className="user-info" onClick={toggleMenu}>
+          <Link to={`user`} className="user-info" onClick={toggleMenu}>
             <img src={profile} alt="logo"/>
             <h6>View Profile</h6>
           </Link>
