@@ -5,6 +5,7 @@ import { Box, Button, Text } from '@chakra-ui/react';
 import NewPostForm from "../../Components/Create_Post/NewPostForm";
 import "./Createpost.css";
 import Community from '../../Components/Create_Post/Community/Community';
+import Posting_rules from "../../Components/Create_Post/Right_Section/Posting_rules";
 
 function Createpost(props) {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ function Createpost(props) {
           </div>
         </div>
         <div className='right-container-post'>
-          wfrefvvbgbgrfbwg
+          <Posting_rules/>
         </div>
     </div>
   );
