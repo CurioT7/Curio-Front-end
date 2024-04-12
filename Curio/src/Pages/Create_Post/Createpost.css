@@ -8,19 +8,20 @@
 .container-create-post {
     display: flex;
     flex: 2 1;
-    background: lightblue;
+    background: #DAE0E6;
     align-items: stretch;
+    height: 100vh;
 }
 
 .container-create-post .left-container-post {
-    background-color: azure;
+    background-color: #DAE0E6;
     align-items: center;
     margin: 20px;
-    width: 70%; /* Adjust width for the left container */
+    width: 70%;
 }
 
 .container-create-post .right-container-post {
-    background-color: azure;
+    background-color: #DAE0E6;
     align-items: center;
     margin: 20px;
     width: 30%; /* Adjust width for the right container */
@@ -29,7 +30,7 @@
 .cont-create-post {
     padding: 4px;
     margin: 16px 0;
-    border-bottom: 1px solid #DAE0E6;
+    border-bottom: 1px solid white;
     display: flex;
 }
 

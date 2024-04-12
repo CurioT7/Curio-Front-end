@@ -4,7 +4,7 @@
     --fourcle: #0079d3;
     --fif:#878a8c;
 }
-.post-methods{
+.button-method{
     display: flex;
     flex-direction: row;
     margin: 0 0 12px;
@@ -19,3 +19,4 @@
 .button-post-method:hover{
     background-color: lightblue;
 }
+  

@@ -1,96 +1,230 @@
-.navbar {
-    height: 56px;
-    padding: 0 16px;
-    justify-content: space-between;
-    box-shadow: 0 0 10px black;
-    background-color: white;
-    position: sticky;
-    top: 0;
-    z-index: 3;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-.navbar .navbar-brand img{
+.curio-logo{
     height: auto;
     width: 50px;
 }
-.navbar .navbar-nav .nav-item a{
-    padding: 15px;
-}
-.navbar .navbar-nav input{
-    border-radius: 25px 25px 25px 25px;
-}
-.navbar .navbar-nav input:hover{
-    background: #edeff1ab;
-}
-.navbar .navbar-nav form{
+.navbar-component{
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
     display: flex;
-    height: 40px;
-    width: 500px;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    box-shadow: 0 0 10px #000;
+    background: white;
 }
-.navbar .navbar-nav img{
-    width: 20px;
+#chk1{
+    display: none;
+}
+.navbar-component .logo{
+    flex: 1;
+    color: #fff;
+    margin-left: 50px;
+    text-transform: uppercase;
+    display: flex;
+}
+.navbar-component .logo .title-platform{
+    font-size: 2.2em;
+    color: #000;
+}
+.navbar-component .search-box{
+    flex: 1;
+    position: relative;
+}
+.search-box input{
+    width: 100%;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: #f2f2f2;
+    border-radius: 30px;
+    color: gray;
+    font-size: 16px;
+    padding-right: 5px;
+    padding-left: 40px;
+}
+.search-box button{
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 30px;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scale(0.9);
+    background: transparent;
+}
+.search-icon{
+    color: #000;
+}
+.navbar-component .right-section-navbar{
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+.navbar-component .right-section-navbar .sub-right-navbar{
+    list-style: none;
+}
+.navbar-component .right-section-navbar .sub-right-navbar a img{
     height: 20px;
 }
-.navbar .navbar-nav a:hover{
+.navbar-component .right-section-navbar .sub-right-navbar a{
+    padding: 10px 10px;
+}
+.navbar-component .right-section-navbar .sub-right-navbar a:hover{
     background-color: #edeff1;
     border-radius: 999px;
 }
-
-.signup-button{
-    background-color: #ffffff!important;
-    border-radius: 999px!important;
+.navbar-component .menu{
+    font-size: 2.5em;
+    display: none;
+}
+.create-icon{
+    text-decoration: none;
+}
+.sub-menu-wrap{
+    position: absolute;
+    top: 100%;
+    right: 1%;
+    width: 256px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.5s;
+}
+.sub-menu-wrap.open-menu{
+    max-height: 400px;
+}
+.sub-menu{
+    background: whitesmoke;
+    padding: 20px;
+    margin: 10px;
+}
+.user-info{
     display: flex;
     align-items: center;
-    border: none;
-    padding: 0px;
 }
-
-.signup-button:hover{
-    border-radius: 999px!important;
+.user-info h3{
+    font-weight: 500;
 }
-
-::after{
-    content: none!important;
+.user-info img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 15px;
 }
-
-.signup-button-item{
-    width: 200px!important;
-    font-size: 0.875rem!important;
-    color: #0F1A1C!important;
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;;
+.sub-menu hr{
+    border: 0;
+    height: 1px;
+    width: 100%;
+    margin: 15px 0 10px;
 }
-
-.signup-button-item:hover{
-    background-color: #f2f4f5!important;
-    border-radius: 0!important;
+.sub-menu-link{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+    width: 100%;
 }
-
-.dropdown-menu{
-    width: 200px!important;
+.sub-menu-link p{
+    position: relative;
+    top: 10px;
+    width: 100%;
 }
-
-.settings:hover{
-    color: #000000!important;
-    background-color: #f2f4f5!important;
+.sub-menu-link img{
+    width: 40px;
+    padding: 8px;
+    margin-right: 15px;
 }
-
-@media (max-width: 1000px){
-    .offcanvas-image{
-        width: 20px;
-        height: 20px;
-        border: none;
+.sub-menu-link:hover p{
+    font-weight: 500;
+}
+@media(max-width:1000px) {
+    .navbar-component .right-section-navbar{
+        background: gray;
     }
-    .search-offcanvas{
-        display: flex;
-        justify-content: start!important;
+    .search-box button{
+        position: absolute;
     }
-    .link-offcanvas{
-        margin-left: auto;
-        margin-right: 0!important;
-        color: #000000!important;
+    .navbar-component ul{
+        position: fixed;
+        top: 35px;
+        right: -100%;
+        /* background: white; */
+        height: 100vh;
+        width: 50%;
+        flex-direction: column;
+        align-items: center;
+        transition: right 0.5s linear;
     }
-    .settings-image{
-        width: 10px!important;
-        height: 10px!important;
-        border: none;
+    .navbar-component .menu{
+        display: block;
+        width: 100px;
+        text-align: center;
     }
+    #chk1:checked ~ ul{
+        right: 0;
+    }
+}
+@media(max-width:600px){
+    .navbar-component .logo{
+        font-size: 10px;
+        margin-left: 8px;
+    }
+    .navbar-component ul{
+        width: 100%;
+    }
+}
+@media(max-width:960px){
+    .navbar-component .logo h1{
+        display: none;
+    }
+}
+
+.dropdown-toggle::after{
+    display: none;
+}
+
+.new-dropdown-signup:hover{
+    cursor: pointer;
+}
+
+.new-dropdown-label:hover{
+    color: #0d6efd;
+}
+
+
+.logged-out-button{
+    border-radius: 50%;
+    padding: 5px;
+}
+.logged-out-button:hover{
+    cursor: pointer;
+    background-color: #E2E7E9;
+}
+
+.signup-focus:active{
+    background-color: #E2E7E9;
+    color: #000;
+}
+
+.logged-out-login-button{
+    background-color: #d93a00;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 20px;
+}
+
+.logged-out-login-button:hover{
+    background-color: #962900;
+    cursor: pointer;
 }
