@@ -30,7 +30,7 @@ function Createpost(props) {
           </div>
         </div>
         <div className='right-container-post'>
-          wfrefvvbgbgrfbwg
+          
         </div>
     </div>
   );
