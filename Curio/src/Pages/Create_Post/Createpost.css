@@ -48,7 +48,16 @@
     white-space: nowrap;
 }
 
-/* .right-container-post{
-    flex: 0 0 312px;
-    width: auto;
-} */
+@media(max-width:960px){
+    .container-create-post {
+        flex: 1 0;
+    }
+    .container-create-post .left-container-post {
+        margin: 0;
+        width: 100%;
+        padding: 20px 24px 20px 24px;
+    }
+    .container-create-post .right-container-post {
+        display: none;
+    }
+}
