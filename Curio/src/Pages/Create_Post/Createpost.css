@@ -49,9 +49,6 @@
 }
 
 @media(max-width:960px){
-    .container-create-post {
-        flex: 1 0;
-    }
     .container-create-post .left-container-post {
         margin: 0;
         width: 100%;
