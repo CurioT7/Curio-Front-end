@@ -12,6 +12,7 @@ import FilledUpvote from '../../styles/icons/FilledUpvote';
 import { useNavigate } from 'react-router-dom';
 import PostComments from './PostComments';
 import CommentInputForm from './CommentInputForm';
+import SortingComments from './SortingComments';
 
 function PostContentDetails() {
 
@@ -82,6 +83,8 @@ function PostContentDetails() {
                 </Button>
             </Box>
             <CommentInputForm />
+            <SortingComments />
+            {console.log("SortingComments")}
             <PostComments username="Glutton_Sea" commentUpvotes={3} comment="How will they (USCIS) know exactly that you are engaged ? It will not be reported anywhere .And he most definitely should never mention this or you in an F1 visa interview. It will be absolutely denied . He needs to show strong ties to home country and no immigrant intent to get an F1. After he’s in the US, he can marry you etc and adjust status ." />
         </div>
     )
