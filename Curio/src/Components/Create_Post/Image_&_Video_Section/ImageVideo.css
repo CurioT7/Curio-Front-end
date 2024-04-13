@@ -1,0 +1,23 @@
+.image-video-container{
+    border-radius: 4px
+}
+.upload-container{
+    position: relative;
+}
+.file-input{
+    display: none;
+}
+.upload-button-container{
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    flex-flow: column nowrap;
+    min-height: 280px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px dashed #edeff1;
+}
+.upload-text{
+    color: #0079d3;
+}
