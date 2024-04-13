@@ -26,14 +26,30 @@ const Google = (props) =>{
     const handleGoogleSignupResponse = async (response) => {
         console.log(response);
         // const hostUrl = import.meta.env.VITE_SERVER_HOST;
-        const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
-          token: response.access_token,
-          password: yourPass
-        },{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+        try{const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
+            token: response.access_token,
+            password: yourPass
+          },{
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`
+              }
+          });
+          setWrongPass(false)
+          clearForm()
+        }catch(error){
+            console.error( error.message);
+            switch (error.response.status) {
+                case 400:
+                    if(error.response.data.message === "Invalid password"){
+                    setWrongPass(true)}
+                    
+                    break;
+                
+                default:
+                    break;
+          }
+          } 
+        
       }
     
       const login = useGoogleLogin({
@@ -66,7 +82,7 @@ const Google = (props) =>{
     }
     function handleSubmit(e){
         e.preventDefault();
-        sendDataToBackend()
+        // sendDataToBackend()
     }
     return(
         <>
