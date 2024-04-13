@@ -11,10 +11,10 @@ import { useToast } from '@chakra-ui/react';
 function Home() {
   const [savedPosts, setSavedPosts] = useState([]);
   const [savedComments, setSavedComments] = useState([]);
+  const [hiddenPosts, setHiddenPosts] = useState([]); 
   const toast = useToast();
-  
-  useEffect(() => {
-    const getSaved = async () => {
+
+  const getSaved = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
         const response = await axios.get(`${hostUrl}/api/saved_categories`, {
@@ -23,8 +23,7 @@ function Home() {
           }
         });
         if (response.status === 200 || response.status === 201){
-          setSavedPosts(response.data.savedPosts)
-;
+          setSavedPosts(response.data.savedPosts);
         }
       }
       catch(err){
@@ -36,7 +35,49 @@ function Home() {
         })
       }
     }
-    getSaved();
+
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          toast({
+            description: "Server Error Occured.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+      }
+    }
+
+  const refetchHiddenSavedPosts = async () => {
+    if(localStorage.getItem('token')){
+      getHidden();
+      getSaved();
+    }
+  }
+
+  
+  useEffect(() => {
+    window.addEventListener('hideOrSave', refetchHiddenSavedPosts);
+    
+    
+    if(localStorage.getItem('token')){
+      getHidden();
+      getSaved();
+    }
+
+    return () => {
+      window.removeEventListener('hideOrSave', refetchHiddenSavedPosts);
+    }
   }, []);
 
   const[posts, setPosts] = React.useState([])
@@ -120,6 +161,7 @@ async function changeSortType(value,time) {
             subReddit={post.linkedSubreddit}
             savedPosts={savedPosts}
             savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
           />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </>
@@ -134,7 +176,6 @@ async function changeSortType(value,time) {
           downvotes={randomPost.post.downvotes}
           comments={randomPost.post.comments}
           content={randomPost.post.content}
-          subReddit={post.linkedSubreddit}
           savedPosts={savedPosts}
           savedComments={savedComments}
         />

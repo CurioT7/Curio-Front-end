@@ -21,14 +21,27 @@ function PostControl(props) {
   const [isExtraReasonModalOpen, setExtraReasonModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState('');
   const [isSaved, setIsSaved] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
-    console.log(props.savedPosts, props._id, isSaved)
     if (props.savedPosts && props.savedPosts.some(post => post._id === props._id)) {
       setIsSaved(true);
     } else {
       setIsSaved(false);
     }
-  }, []);
+    if (props.hiddenPosts && props.hiddenPosts.some(post => post._id === props._id)) {
+      setIsHidden(true);
+    } else {
+      setIsHidden(false);
+    }
+    if (localStorage.getItem('token')){
+      setIsAuthenticated(true);
+    }
+    else{
+      setIsAuthenticated(false);
+    }
+  }, [props.savedPosts, props._id, props.hiddenPosts]);
 
     
   const handleOpenReportModal = () => {
@@ -61,7 +74,7 @@ function PostControl(props) {
     try{
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
       const response = await axios.post(`${hostUrl}/api/hide`, {
-        itemId: props._id
+        postId: props._id
       },
        {
         headers: {
@@ -70,11 +83,13 @@ function PostControl(props) {
       });
       if (response.status === 200){
         toast({
-          description: "Post Saved",
-          status: 'error',
+          description: "Post Hidden",
+          status: 'success',
           duration: 5000,
           isClosable: true,
         })
+        setIsHidden(true);
+        window.dispatchEvent(new Event('hideOrSave'));
       }
     }
     catch(err){
@@ -95,6 +110,48 @@ function PostControl(props) {
           isClosable: true,
         })
       
+      }
+    }
+  }
+
+  const handleUnhide = async () => {
+    try{
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.post(`${hostUrl}/api/unhide`, {
+        postId: props._id
+      },
+       {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200){
+        toast({
+          description: "Post Unhidden",
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+        setIsHidden(false);
+      }
+    }
+    catch(err){
+      console.log(err);
+      if (err.response.status === 409){
+        toast({
+          description: "Item already unhidden.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+      else{
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
       }
     }
   }
@@ -184,6 +241,16 @@ function PostControl(props) {
     }
   }
 
+  const handleHideOrUnhide = () => {
+    if (isHidden) {
+      handleUnhide();
+      props.hidePost();
+    } else {
+      handleHide();
+      props.hidePost();
+    }
+  }
+
   return (
     <>
       <div>
@@ -208,14 +275,18 @@ function PostControl(props) {
                                           zIndex: '1'
                                       }}>
                                           <ul className='drop-down-list w-100 px-0'>
-                                              <li onClick={handleSaveOrUnsave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
-                                                      {isSaved ? <FilledSave /> : <SaveButton /> }
-                                                      <div className="d-flex align-items-center justify-content-center"><p className='mt-3 me-2 text-text d-flex'>{isSaved ? "Remove from save" : "Save"}</p></div>
-                                              </li>
-                                              <li onClick={handleHide} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
-                                                      <Hide />
-                                                      <div><p className='mt-3 text-text'>Hide</p></div>
-                                              </li>
+                                              {isAuthenticated && 
+                                                <li onClick={handleSaveOrUnsave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                        {isSaved ? <FilledSave /> : <SaveButton /> }
+                                                        <div className="d-flex align-items-center justify-content-center"><p className='mt-3 me-2 text-text d-flex'>{isSaved ? "Remove from save" : "Save"}</p></div>
+                                                </li>
+                                              }
+                                              {isAuthenticated && 
+                                                <li onClick={handleHideOrUnhide} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                        <Hide />
+                                                        <div><p className='mt-3 text-text'>Hide</p></div>
+                                                </li>
+                                              }
                                               <li onClick={handleOpenReportModal} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                       <ReportPost />
                                                       <div><p className='mt-3 me-2 text-text'>Report</p></div>
