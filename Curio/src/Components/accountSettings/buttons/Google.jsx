@@ -6,12 +6,23 @@ import PasswordErrorMessage from './PasswordErrorMessage';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { MdMarkEmailUnread } from "react-icons/md";
+import { useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 const Google = (props) =>{
+    const toast = useToast()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")
     const [wrongPass,setWrongPass]=React.useState(false)
-    const pass ="12345678"
     const serverHost = import.meta.env.VITE_SERVER_HOST;
+    const navigate = useNavigate();
+    function Toast(){
+        toast({
+            title: "account connected successfully",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     function handleYourPass(e){
         setYourPass(e.target.value)
     }
@@ -33,9 +44,12 @@ const Google = (props) =>{
               headers: {
                   Authorization: `Bearer ${localStorage.getItem('token')}`
               }
-          });
+          })
           setWrongPass(false)
-          clearForm()
+          Toast()
+          onClose()
+          window.location.reload();
+            
         }catch(error){
             console.error( error.message);
             switch (error.response.status) {
