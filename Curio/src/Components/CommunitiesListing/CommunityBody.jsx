@@ -2,7 +2,7 @@ import Listing from "./Listing";
 import "./CommunityPage.css";
 import Post from "../Post/Post";
 import React from 'react';
-import axios from 'axios';
+import { Button } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
 import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend } from "./CommunityEndPoints";
@@ -36,7 +36,7 @@ React.useEffect(() => {
 
 async function changeSortType(value,time) {
     
-    console.log(`value :${value}`);
+    
     async function SetData() {
         if (value === 'Hot') {
             const data = await fetchDataFromBackend(Community);
@@ -44,12 +44,20 @@ async function changeSortType(value,time) {
                 setPosts(data.posts);
                 setRandomPost({ ...randomPost, isSelected: false });
             }
+            else{
+              setPosts([]);
+              setRandomPost({ ...randomPost, isSelected: false });
+            }
         }
         else if (value === 'New') {
             const data = await fetchNewFromBackend(Community);
             if (data) {
                 setPosts(data.posts);
                 setRandomPost({ ...randomPost, isSelected: false });
+            }
+            else{
+              setPosts([]);
+              setRandomPost({ ...randomPost, isSelected: false });
             }
         }
         else if (value === 'Top') {
@@ -59,12 +67,20 @@ async function changeSortType(value,time) {
               setPosts(data.post);
               setRandomPost({ ...randomPost, isSelected: false });
           }
+          else{
+            setPosts([]);
+            setRandomPost({ ...randomPost, isSelected: false });
+          }
           }
           else{
             const data = await fetchTopTimeFromBackend(Community,time);
             if (data) {
               setPosts(data.post);
               setRandomPost({ ...randomPost, isSelected: false });
+              }
+              else{
+                setPosts([]);
+                setRandomPost({ ...randomPost, isSelected: false });
               }
             }
             
@@ -73,13 +89,16 @@ async function changeSortType(value,time) {
             const data = await fetchRisingFromBackend(Community);
             if (data) {
                 setRandomPost({ post: data.post, isSelected: true });
-                console.log(`this is random post: ${randomPost.post}`);
+                
+            }
+            else{
+              setRandomPost({ post:{}, isSelected: true });
             }
         }
     }
     SetData();
 }
-console.log(posts);
+
   return (
     <div className="community-body">
       <div className=" list mb-3">
@@ -89,6 +108,7 @@ console.log(posts);
 
       <div className="post">
         {randomPost.isSelected==false ? (posts.map((post) => (
+          <>
           <Post
             
             id={post._id}
@@ -100,6 +120,8 @@ console.log(posts);
             comments={post.comments}
             content={post.content}
           />
+          <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
+          </>
         ))):(<Post
             
           id={randomPost.post._id}
@@ -111,7 +133,13 @@ console.log(posts);
           comments={randomPost.post.comments}
           content={randomPost.post.content}
         />)}
-        
+        {(posts.length<1 && randomPost.isSelected==false) ||(!randomPost.post && randomPost.isSelected==true)? (<div className="m-5 row justify-content-center align-items-center">
+          <div className="col text-center">
+          <h4 className="fw-bold" >This community doesn't have any posts yet</h4>
+          <p className="text-muted">Make one and get this feed started.</p>
+          <Button colorScheme="blue" fontSize='sm' fontWeight='bold' style={{borderRadius:'30px'}} >Create a post</Button>
+          </div>
+          </div>):null}
       </div>
       
     </div>
