@@ -34,7 +34,6 @@ function SortingComments(){
                 <button onClick={Sort} className="sortbtn"> {sortValue} <IoIosArrowDown className="arrow-icon"/></button>
                 <div id='sortComments' className='sort-content'>
                     <h6 className='sort-title'>Sort By</h6>
-                    { console.log("o77777777777777777777777")}
                     <p className='sort-item' onClick={()=>ChangeSortValue('Best')}><div><BsRocket className='item-icon'/> <span>Best</span></div></p>
                     <p className='sort-item' onClick={()=>ChangeSortValue('Top')}><div><TbArrowBigUpLines className='item-icon'/> <span>Top</span></div></p>
                     <p className='sort-item' onClick={()=>ChangeSortValue('New')}><div><LuBadge className='item-icon'/><span>New</span></div></p>
