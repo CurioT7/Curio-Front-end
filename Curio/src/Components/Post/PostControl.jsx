@@ -10,6 +10,7 @@ import ReportSubmitted from "./ReportSubmitted.jsx";
 import ReportExtraReason from "./ReportExtraReason.jsx";
 import axios from "axios";
 import {useToast} from '@chakra-ui/react';
+import FilledHide from "../../styles/icons/FilledHide";
 
 
 
@@ -40,6 +41,25 @@ function PostControl(props) {
     }
     else{
       setIsAuthenticated(false);
+    }
+    window.addEventListener('loginOrSignup', () => {
+        if (localStorage.getItem('token')){
+          setIsAuthenticated(true);
+        }
+        else{
+          setIsAuthenticated(false);
+        }
+      }
+    )
+    return () => {
+      window.removeEventListener('loginOrSignup', () => {
+        if (localStorage.getItem('token')){
+          setIsAuthenticated(true);
+        }
+        else{
+          setIsAuthenticated(false);
+        }
+      })
     }
   }, [props.savedPosts, props._id, props.hiddenPosts]);
 
@@ -283,8 +303,8 @@ function PostControl(props) {
                                               }
                                               {isAuthenticated && 
                                                 <li onClick={handleHideOrUnhide} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
-                                                        <Hide />
-                                                        <div><p className='mt-3 text-text'>Hide</p></div>
+                                                        {isHidden ? <FilledHide /> : <Hide />}
+                                                        <div><p className='mt-3 text-text'>{isHidden ? "Remove from hide" : "Hide"}</p></div>
                                                 </li>
                                               }
                                               <li onClick={handleOpenReportModal} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
