@@ -3,22 +3,42 @@ import React from "react"
 import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
 import PasswordErrorMessage from './PasswordErrorMessage'
 import { MdMarkEmailUnread } from "react-icons/md";
-import { FaGhost } from 'react-icons/fa';
+import axios from 'axios';
+import { useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 function Disconnect(props){
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")
     const [wrongPass,setWrongPass]=React.useState(false)
     const serverHost = import.meta.env.VITE_SERVER_HOST;
-
+    const toast = useToast()
+    const navigate = useNavigate();
+    function Toast(){
+        toast({
+            title: "account disconnected successfully",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     async function sendDataToBackend(){
         try{
             const request = await axios.post(`${serverHost}/api/google/disconnect`,{
                 password:yourPass
-            })
+            }, {
+                headers: {
+                  authorization: `Bearer ${localStorage.getItem('token')}` // replace with your token retrieval method
+                }
+              })
+              setWrongPass(false)
+              onClose()
+              Toast()
+              window.location.reload();
+            
         } catch(error){
-            console.log(error)
+           
             switch(error.response.status){
-                case 401:
+                case 400:
                     setWrongPass(true)
                     break;
                 default:
@@ -26,6 +46,7 @@ function Disconnect(props){
             }
         }
 }
+
 
     function handleYourPass(e){
         setYourPass(e.target.value)
@@ -38,6 +59,7 @@ function Disconnect(props){
     function handleSubmit(e){
         e.preventDefault();
         sendDataToBackend();
+        console.log("ddadw")
         
     }
     const buttonStyle ={
@@ -70,7 +92,7 @@ function Disconnect(props){
                 <Button style={buttonStyle} variant='outline' colorScheme='blue' mr={3} onClick={onClose}>
                 CANCEL
                 </Button>
-                <Button isDisabled={!isValid()} style={buttonStyle} colorScheme='blue'>CONTINUE</Button>
+                <Button isDisabled={!isValid()} type='submit' style={buttonStyle} colorScheme='blue'>CONTINUE</Button>
                 </ModalFooter>
                 </form>
             </ModalContent>
