@@ -19,6 +19,7 @@ function EditCreatearea() {
             className='rest-button' 
             variant='ghost' 
             leftIcon={<AddIcon />}>
+                
                 Spoiler
             </Button>
             <Button 
