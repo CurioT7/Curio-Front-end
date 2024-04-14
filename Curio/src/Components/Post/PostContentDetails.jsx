@@ -18,6 +18,7 @@ import { useToast } from '@chakra-ui/react';
 import { fetchCommentsFromBackend } from './CommentsEndPoints';
 import SortingComments from './SortingComments';
 import {useParams} from 'react-router-dom';
+import { set } from 'mongoose';
 
 
 
@@ -38,16 +39,17 @@ function PostContentDetails(post) {
                 }
                 });
                 if (response.status === 200 || response.status === 201){
-                    console.log(response.data.savedPosts);
+                    console.log(response.data.savedComments);
                     setSavedPosts(response.data.savedPosts);
+                    setSavedComments(response.data.savedComments);
                 }
             }
             catch(err){
                 toast({
-                description: "Server Error Occured.",
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
+                    description: "Server Error Occured.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
                 })
             }
         }
@@ -167,11 +169,9 @@ function PostContentDetails(post) {
     const handleBack = () => {
         navigate(-1);
     }
-    console.log("hello world");
     React.useEffect(() => {
-        console.log("hello UseEffect");
         async function fetchAndSetData() {
-            const data = await fetchCommentsFromBackend(postID);
+            const data = await fetchCommentsFromBackend(post._id);
             if (data) {
                 setComments(data.comments);
             }
@@ -179,8 +179,12 @@ function PostContentDetails(post) {
                 Toast();
             }
         }
+        window.addEventListener('deleteComment', fetchAndSetData);
     
         fetchAndSetData();
+        return () => {
+            window.removeEventListener('deleteComment', fetchAndSetData);
+        }
     }, []);
 
     return (
@@ -193,7 +197,7 @@ function PostContentDetails(post) {
                             <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
                             <div className='d-flex flex-column'>
                                 <a className='community-post-name'>r/germany</a>
-                                <a className='community-post-name' style={{fontWeight: "300", fontSize: "0.875rem"}}>{post.user}</a>
+                                <a className='community-post-name' href={`/user/${post.user}`} style={{fontWeight: "300", fontSize: "0.875rem"}}>{post.user}</a>
                             </div>
                         </div>
                         <div className='ms-auto'>
@@ -230,22 +234,10 @@ function PostContentDetails(post) {
                     </div>
                 }
                 <CommentInputForm />
-                <div>
-                    <PostComments username="Glutton_Sea" commentUpvotes={3} comment="How will they (USCIS) know exactly that you are engaged ? It will not be reported anywhere .And he most definitely should never mention this or you in an F1 visa interview. It will be absolutely denied . He needs to show strong ties to home country and no immigrant intent to get an F1. After he’s in the US, he can marry you etc and adjust status ." />
-                </div>
-
-                <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                 <span className='share-post-text'>12</span>
-                </Button>
-                <Button flex='1' className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
-                    <span className='share-post-text'>Share</span>
-                </Button>
-                <CommentInputForm />
-            <   SortingComments />
+                <SortingComments />
             {comments.map((comment, index) => (
-                <PostComments key={comment._id} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
-            <PostComments username="Glutton_Sea" commentUpvotes={3} comment="How will they (USCIS) know exactly that you are engaged ? It will not be reported anywhere .And he most definitely should never mention this or you in an F1 visa interview. It will be absolutely denied . He needs to show strong ties to home country and no immigrant intent to get an F1. After he’s in the US, he can marry you etc and adjust status ." />
         </>
     )
 }

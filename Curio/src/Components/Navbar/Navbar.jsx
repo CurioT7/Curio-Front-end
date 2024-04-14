@@ -135,7 +135,7 @@ function NavbarComponent() {
       </ul>
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
-          <Link to={`user`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
+          <Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
             <img className='profileImg' src={profile} alt="logo"/>
             <div className="d-flex flex-column">
               <span className="drop-down-profile-description">View Profile</span>

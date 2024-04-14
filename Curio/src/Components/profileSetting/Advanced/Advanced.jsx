@@ -67,7 +67,6 @@ function Advanced() {
 
   async function fetchDataFromBackend() {
     const token = localStorage.getItem('token');
-        // console.log(token)
         if (!token) {
         console.error('No token found');
         return;

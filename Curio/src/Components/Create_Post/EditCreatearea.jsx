@@ -1,30 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect  } from "react";
 import "./NewPostForm.css";
 import { Button, Flex, Spacer, Checkbox } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, CheckIcon } from '@chakra-ui/icons';
 import "./EditCreatearea.css"
 
 function EditCreatearea() {
+    const [ocClicked, setOcClicked] = useState(false);
+    const [spoilerClicked, setSpoilerClicked] = useState(false);
+    const [nsfwClicked, setNsfwClicked] = useState(false);
+
+    const handleOcClick = () => {
+        setOcClicked(!ocClicked);
+    };
+
+    const handleSpoilerClick = () => {
+        setSpoilerClicked(!spoilerClicked);
+    };
+
+    const handleNsfwClick = () => {
+        setNsfwClicked(!nsfwClicked);
+    };
+    
   return (
-    <div className="EditCreatearea mt-3">
+    <div className="EditCreatearea">
         <div>
             <div className='button-group-edit'>
             <Button 
             className='rest-button'
             variant='ghost' 
-            leftIcon={<AddIcon />}>
+            leftIcon={ocClicked ? <CheckIcon /> : <AddIcon />}
+            onClick={handleOcClick}
+            style={{
+                color: ocClicked ? 'rgb(255, 255, 255)' : '',
+                fill: ocClicked ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: ocClicked ? 'rgb(255, 69, 0)' : '',
+                borderColor: ocClicked ? 'transparent' : ''
+            }}>
                 OC
             </Button>
             <Button
             className='rest-button' 
             variant='ghost' 
-            leftIcon={<AddIcon />}>
+            leftIcon={spoilerClicked ? <CheckIcon /> : <AddIcon />}
+            onClick={handleSpoilerClick}
+            style={{
+                color: spoilerClicked  ? 'rgb(255, 255, 255)' : '',
+                fill: spoilerClicked  ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: spoilerClicked  ? 'rgb(0, 0, 0)' : '',
+                borderColor: spoilerClicked  ? 'transparent' : ''
+            }}>
                 Spoiler
             </Button>
             <Button 
             className='rest-button'  
             variant='ghost' 
-            leftIcon={<AddIcon />}>
+            leftIcon={nsfwClicked ? <CheckIcon /> : <AddIcon />}
+            onClick={handleNsfwClick}
+            style={{
+                color: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+                fill: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: nsfwClicked ? 'rgb(255, 88, 91)' : '',
+                borderColor: nsfwClicked ? 'transparent' : ''
+            }}>
                 NSFW
             </Button>
             </div>
