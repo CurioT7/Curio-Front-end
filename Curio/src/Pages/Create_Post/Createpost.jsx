@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect } from "react";
+import React, { useState, useEffect  } from "react";
 import {useNavigate} from 'react-router-dom';
 import { Box, Button, Text } from '@chakra-ui/react';
 import NewPostForm from "../../Components/Create_Post/NewPostForm";
