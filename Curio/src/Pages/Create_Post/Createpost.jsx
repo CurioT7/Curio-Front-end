@@ -1,10 +1,10 @@
-import React from 'react';
-import { useEffect } from "react";
+import React, { useState, useEffect  } from "react";
 import {useNavigate} from 'react-router-dom';
 import { Box, Button, Text } from '@chakra-ui/react';
 import NewPostForm from "../../Components/Create_Post/NewPostForm";
 import "./Createpost.css";
 import Community from '../../Components/Create_Post/Community/Community';
+import Posting_Cards from "../../Components/Create_Post/Right_Section/Posting_Cards";
 
 function Createpost(props) {
   const navigate = useNavigate();
@@ -30,7 +30,6 @@ function Createpost(props) {
           </div>
         </div>
         <div className='right-container-post'>
-          
         </div>
     </div>
   );
