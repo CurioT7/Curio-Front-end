@@ -1,23 +1,29 @@
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import { Flex,Avatar,Box,Heading,IconButton,Text,Image,Button } from '@chakra-ui/react'
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiLike } from "react-icons/bi";
-import { BiDownvote } from "react-icons/bi"
-import { BiUpvote } from "react-icons/bi";
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverBody,
+  } from '@chakra-ui/react'
 import { FaRegCommentAlt } from "react-icons/fa";
+import { PiLockSimple } from "react-icons/pi";
 import { LuShare } from "react-icons/lu";
 import { SlOptions } from "react-icons/sl";
 import Upvotes from '../../styles/icons/Upvotes.jsx';
 import Downvotes from '../../styles/icons/Downvotes.jsx';
 import FilledDownvote from '../../styles/icons/FilledDownvote.jsx';
 import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
+import { BsShield } from "react-icons/bs";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PiLockSimpleFill } from "react-icons/pi";
 import './Post.css'
 function Post(props) {
     const navigate = useNavigate();
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
+    const [isLocked, setIsLocked] = useState(false);
     const makePostUpvoted = () => {
         if (upvoted) {
             setUpvoted(false);
@@ -33,6 +39,9 @@ function Post(props) {
             setDownvoted(true);
             setUpvoted(false);
         }
+    }
+    const handleLockComments = () => {
+        setIsLocked(!isLocked);
     }
 
     const handleNavigationToDetails = () => {
@@ -116,7 +125,7 @@ function Post(props) {
                     display='flex'
                     className='py-0 pb-2'
                     flexDirection='row'
-                    justifyContent='flex-start'
+                    justifyContent='space-between'
                     flexWrap='wrap'
                     sx={{
                     '& > button': {
@@ -143,6 +152,24 @@ function Post(props) {
                         <span data-testid="share" className='share-post-text'>Share</span>
                         </Button>
                         
+                    </Box>
+                    <Box display='flex'  justifyContent='end'>
+                        <Popover>
+                            <PopoverTrigger>
+                                <Button
+                                    variant='ghost'
+                                    colorScheme='gray'
+                                    className='moderator-icon'
+                                    
+                                ><BsShield /></Button>
+                            </PopoverTrigger>
+                            <PopoverContent margin={0} padding={0}>
+                                <PopoverBody margin={0} padding={0}>
+                                   {isLocked?(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'><div><PiLockSimpleFill className='moderator-content-icon' /><span>Unlock Comments</span></div></Text>) :(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'> <div> <PiLockSimple className='moderator-content-icon'  /> <span>Lock comments</span></div></Text>)}
+                                    <Text margin={0} padding={3} className='moderator-content'>Hide this post</Text>
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
                     </Box>
                     
                 </CardFooter>
