@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from "react";
 import "./Navbar.css";
 import Signup from "../../styles/icons/Signup";
+import Advertisement from "../../styles/icons/Ad";
 import { NavDropdown } from "react-bootstrap";
 import Dots from "../../styles/icons/Dots";
 import SignupInfo from "../Signup/SignupInfo";
 import UsernameInfo from "../Signup/UsernameInfo";
 import Gender from "../Signup/Gender";
 import Preferences from "../Signup/Preferences";
+import Shop from "../../styles/icons/Shop";
 import { signup } from "../Signup/SignupEndpoints";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
@@ -153,7 +155,19 @@ function LoggedOutHandler() {
   return (
       <>
           <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', width:"20px!important"}} className="link-offcanvas logged-out-button signup-button mt-0 p-0 d-flex justify-content-center" title={<Dots />}>
-              {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-focus signup-button-item px-3"><div className="mt-1"><Signup /></div><span className="ms-1">Login / Register</span></NavDropdown.Item>}
+              {!isAuthenticated && <NavDropdown.Item onClick={handleSignupInfoClick} className="d-flex signup-focus px-3 mt-2">
+                <Signup />
+                <span className="ms-3">
+                  Login / Sign Up
+                  </span>
+                  </NavDropdown.Item>}
+              {!isAuthenticated && <NavDropdown.Item className="d-flex signup-focus px-3 mt-3  ">
+                  <Advertisement />
+                  <span className="ms-3">
+                    Advertise on Curio
+                    </span>
+                </NavDropdown.Item>}
+              {!isAuthenticated && <NavDropdown.Item className="d-flex signup-focus px-3 mt-3 mb-2"><Shop /><span className="ms-3">Shop Collectible Avatars</span></NavDropdown.Item>}
               {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup />
               <span className="ms-3">
                 Logout

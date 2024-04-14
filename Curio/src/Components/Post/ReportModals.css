@@ -1,0 +1,59 @@
+.submit-a-report-header{
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+.report-reason-paragraph{
+    color: #131313;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    font-weight: 400;
+}
+
+.report-reason-buttons{
+    border-radius: 30px;
+    background-color: #eaedef;
+    color: #000000;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.7rem;
+}
+
+.report-reason-buttons:hover{
+    background-color: #e2e7e9;
+}
+
+.alert-div{
+    background-color: #f2f4f5;
+    border-radius: 10px;
+    padding: 0.875rem;
+}
+
+.report-alert-msg{
+    color: #576f76;
+    font-size: 0.875rem;
+}
+
+.report-div-modal{
+    border-radius: 20px;
+}
+
+.report-reason-next-button{
+    background-color: #f2f2f2;
+    color: #00000040;
+    font-size: 1rem;
+    padding: 0.7rem;
+    border-radius: 2rem;
+}
+
+.report-reason-next-button-enabled{
+    background-color: #0045ac;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 0.7rem;
+    border-radius: 2rem;
+    font-weight: 600;
+}
+
+.report-reason-next-button-enabled:hover{
+    background-color: #003584;
+}

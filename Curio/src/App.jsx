@@ -76,7 +76,7 @@ function App() {
           <Route path='/r/:Community/New' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Top' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
-          <Route path='/user' element={<ProfilePage/>}/>
+          <Route path='/profile/:username' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
