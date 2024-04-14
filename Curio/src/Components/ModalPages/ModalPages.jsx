@@ -84,9 +84,6 @@ const MultiPageFormModal = (props) => {
         setStep(step + 1);
         setIsOptionSelected(false);
         setPrevStep(false);
-        console.log(selectedOption)
-        console.log(reportReason)
-        console.log(furtherDetails)
     };
 
     const twoSteps = () => {
