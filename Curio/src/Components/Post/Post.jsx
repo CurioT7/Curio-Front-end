@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
-import { Flex,Avatar,Box,Heading,IconButton,Text,Image,Button } from '@chakra-ui/react'
+import { Flex,Avatar,Box,Heading,IconButton,Text,Image,Button,useToast } from '@chakra-ui/react'
 import {
     Popover,
     PopoverTrigger,
@@ -18,12 +18,22 @@ import { BsShield } from "react-icons/bs";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PiLockSimpleFill } from "react-icons/pi";
+import { SendLockedPost,SendUnlockedPost } from './PostEndPoints.js';
 import './Post.css'
 function Post(props) {
     const navigate = useNavigate();
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
+    const toast = useToast();
+    const Toast = (message,statues) => {
+        toast({
+            description: message,
+            status: statues,
+            duration: 3000,
+            isClosable: true,
+        });
+    }
     const makePostUpvoted = () => {
         if (upvoted) {
             setUpvoted(false);
@@ -41,7 +51,29 @@ function Post(props) {
         }
     }
     const handleLockComments = () => {
-        setIsLocked(!isLocked);
+       
+        const response = SendLockedPost(props.id);
+        if(response.success){
+            setIsLocked(true);
+            console.log("Post locked successfully");
+            Toast("Post locked successfully","success");
+        }
+        else{
+            Toast("Something went wrong, please try again later.","error");
+        }
+
+    }
+    const handleUnlockComments = () => {
+        
+        const response = SendUnlockedPost(props.id);
+        if(response.success){
+            console.log("Post unlocked successfully");
+            setIsLocked(false);
+            Toast("Post unlocked successfully","success");
+        }
+        else{
+            Toast("Something went wrong, please try again later.","error");
+        }
     }
 
     const handleNavigationToDetails = () => {
@@ -153,7 +185,7 @@ function Post(props) {
                         </Button>
                         
                     </Box>
-                    <Box display='flex'  justifyContent='end'>
+                    {props.isMod&&<Box display='flex'  justifyContent='end'>
                         <Popover>
                             <PopoverTrigger>
                                 <Button
@@ -165,12 +197,12 @@ function Post(props) {
                             </PopoverTrigger>
                             <PopoverContent margin={0} padding={0}>
                                 <PopoverBody margin={0} padding={0}>
-                                   {isLocked?(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'><div><PiLockSimpleFill className='moderator-content-icon' /><span>Unlock Comments</span></div></Text>) :(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'> <div> <PiLockSimple className='moderator-content-icon'  /> <span>Lock comments</span></div></Text>)}
+                                   {isLocked?(<Text onClick={handleUnlockComments} margin={0} padding={3} className='moderator-content'><div><PiLockSimpleFill className='moderator-content-icon' /><span>Unlock Comments</span></div></Text>) :(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'> <div> <PiLockSimple className='moderator-content-icon'  /> <span>Lock comments</span></div></Text>)}
                                     <Text margin={0} padding={3} className='moderator-content'>Hide this post</Text>
                                 </PopoverBody>
                             </PopoverContent>
                         </Popover>
-                    </Box>
+                    </Box>}
                     
                 </CardFooter>
             </Card>
