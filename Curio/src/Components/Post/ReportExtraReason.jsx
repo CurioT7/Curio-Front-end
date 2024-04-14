@@ -27,7 +27,7 @@ function ReportExtraReason(props){
           const response = await axios.post(`${hostUrl}/api/report`, {
             reportReason: props.reportReason.toLowerCase(),
             reportExtraReason: reportExtraReason,
-            reportType: "post",
+            reportType: props.reportType,
             itemID: props.postId
           },
            {

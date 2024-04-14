@@ -261,9 +261,9 @@ function PostComments(props) {
                         }
             </div>
         </div>
-        <ReportReason show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
-        <ReportSubmitted show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
-        <ReportExtraReason showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
+        <ReportReason postId={props.id} show={isReportReasonModalOpen} reportType={"comment"} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
+        <ReportSubmitted username={props.username} show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
+        <ReportExtraReason postId={props.id} reportType={"comment"} showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
         </>
         
     );

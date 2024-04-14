@@ -20,7 +20,7 @@ function ReportReason(props) {
           var hostUrl = import.meta.env.VITE_SERVER_HOST;
           const response = await axios.post(`${hostUrl}/api/report`, {
             reportReason: reportReason.toLowerCase(),
-            reportType: "post",
+            reportType: props.reportType,
             itemID: props.postId
           },
            {
