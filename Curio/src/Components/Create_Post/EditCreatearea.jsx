@@ -1,47 +1,140 @@
-import React from 'react';
+import React, { useState, useEffect  } from "react";
 import "./NewPostForm.css";
 import { Button, Flex, Spacer, Checkbox } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
-import "./EditCreatearea.css"
-import { set } from 'mongoose';
-import { useState } from 'react';
+import { AddIcon, CheckIcon } from '@chakra-ui/icons';
+import "./EditCreatearea.css";
+import axios from 'axios';
 
+const serverHost = import.meta.env.VITE_SERVER_HOST;
+function EditCreatearea({ title }) {
+    const [ocClicked, setOcClicked] = useState(false);
+    const [spoilerClicked, setSpoilerClicked] = useState(false);
+    const [nsfwClicked, setNsfwClicked] = useState(false);
 
-function EditCreatearea() {
-    const [isSpoiler,setSpoiler] = useState(false);
+    const handleOcClick = () => {
+        setOcClicked(!ocClicked);
+    };
+
+    const handleSpoilerClick = () => {
+        setSpoilerClicked(!spoilerClicked);
+    };
+
+    const handleNsfwClick = () => {
+        setNsfwClicked(!nsfwClicked);
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post(
+                `${serverHost}/api/submit`,
+                {
+                    title: title, // Use the title prop here
+                    isOC: ocClicked,
+                    isSpoiler: spoilerClicked,
+                    isNSFW: nsfwClicked
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            );
+            // Handle different response status codes
+            switch (response.status) {
+                case 201:
+                    console.log("Post created successfully");
+                    break;
+                case 401:
+                    console.log("Unauthorized: Authentication token is missing or invalid");
+                    break;
+                case 404:
+                    console.log("User not found");
+                    break;
+                case 400:
+                    console.log("Invalid destination");
+                    break;
+                case 500:
+                    console.log("Internal server error");
+                    break;
+                default:
+                    console.log("Unexpected response status:", response.status);
+                    break;
+            }
+        } catch (error) {
+            if (error.response) {
+                const status = error.response.status;
+                switch (status) {
+                    case 401:
+                        console.log("Unauthorized: Authentication token is missing or invalid");
+                        break;
+                    case 404:
+                        console.log("User not found");
+                        break;
+                    case 400:
+                        console.log("Invalid destination");
+                        break;
+                    case 500:
+                        console.log("Internal server error");
+                        break;
+                    default:
+                        console.log("Unexpected error:", error.response.data);
+                        break;
+                }
+            } else {
+                console.error('Error:', error.message);
+            }
+        }
+    };
+    
+    
   return (
-    <div className="EditCreatearea mt-3">
+    <div className="EditCreatearea">
         <div>
             <div className='button-group-edit'>
             <Button 
             className='rest-button'
             variant='ghost' 
-            leftIcon={<AddIcon />}>
+            leftIcon={ocClicked ? <CheckIcon /> : <AddIcon />}
+            onClick={handleOcClick}
+            style={{
+                color: ocClicked ? 'rgb(255, 255, 255)' : '',
+                fill: ocClicked ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: ocClicked ? 'rgb(255, 69, 0)' : '',
+                borderColor: ocClicked ? 'transparent' : ''
+            }}>
                 OC
             </Button>
             <Button
             className='rest-button' 
             variant='ghost' 
-            leftIcon={<AddIcon />}
-            onClick={() => setSpoiler(!isSpoiler)}
+            leftIcon={spoilerClicked ? <CheckIcon /> : <AddIcon />}
+            onClick={handleSpoilerClick}
             style={{
-                backgroundColor: isSpoiler ? 'black' : 'initial',
-                color: isSpoiler ? 'white' : 'initial'
-            }}
-            >
-            Spoiler
+                color: spoilerClicked  ? 'rgb(255, 255, 255)' : '',
+                fill: spoilerClicked  ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: spoilerClicked  ? 'rgb(0, 0, 0)' : '',
+                borderColor: spoilerClicked  ? 'transparent' : ''
+            }}>
+                Spoiler
             </Button>
             <Button 
             className='rest-button'  
             variant='ghost' 
-            leftIcon={<AddIcon />}>
+            leftIcon={nsfwClicked ? <CheckIcon /> : <AddIcon />}
+            onClick={handleNsfwClick}
+            style={{
+                color: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+                fill: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: nsfwClicked ? 'rgb(255, 88, 91)' : '',
+                borderColor: nsfwClicked ? 'transparent' : ''
+            }}>
                 NSFW
             </Button>
             </div>
             <hr className='hr-edit-post' />
             <Flex className='save-buttons' minWidth='max-content' alignItems='center' gap='2'>
                 <Spacer />
-                <Button className="post-button" variant='outline' colorScheme='blue'>Post</Button>
+                <Button className="post-button" variant='outline' colorScheme='blue' onClick={handleSubmit}>Post</Button>
             </Flex>
         </div>
         <div className='reply_notifications'>

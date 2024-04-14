@@ -9,7 +9,6 @@
     box-sizing: border-box;
     min-width: 300px;
     height: 40px;
-    border-radius: 4px;
     transition: box-shadow .2s ease;
     box-shadow: white;
     border: white;
@@ -36,4 +35,20 @@
     cursor: pointer;
     font-size: 22px;
     line-height: 22px;
+}
+.search-icon-community,
+.circle-dot{
+    height: 22px;
+    width: 22px;
+    font-size: 22px;
+    margin: 0;
+}
+.circle-dot{
+    box-sizing: border-box;
+    border-radius: 22px;
+    border: 1px dashed #878a8c;
+}
+.input-container{
+    flex: 1;
+    padding-left: 8px;
 }
