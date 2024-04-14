@@ -5,13 +5,23 @@ import advertise from "../../assets/Advertise_navbar.png";
 import openchat from "../../assets/Chat_navbar.png";
 import plus from "../../assets/Plus_navbar.png";
 import inbox from "../../assets/Inbox_navbar.png";
-import profile from "../../assets/Profile_navbar.png";
+import profile from "../../assets/avatar_default_6.png";
 import setting from "../../assets/Setting_navbar.png";
+import Settings from '../../styles/icons/Settings';
+import EditAvatar from '../../styles/icons/EditAvatar';
+import ContProgram from '../../styles/icons/ContributorProgram';
+import ModMode from '../../styles/icons/ModMode';
+import DarkMode from '../../styles/icons/DarkMode';
+import Advertisement from '../../styles/icons/Ad';
+import Premium from '../../styles/icons/Premium';
+import ContArrow from '../../styles/icons/ContArrow';
 import { Tooltip } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
+import { Switch, Flex, Spacer, Box, useToast, Stack } from '@chakra-ui/react'
+
 
 function NavbarComponent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -66,7 +76,7 @@ function NavbarComponent() {
           <li className='sub-right-navbar'>
             <Tooltip label="Advertise on Curio">
               <a href="#" style={{ display: "flex" }}>
-                <img src={advertise} alt="advertise" />
+                <Advertisement />
               </a>
             </Tooltip>
           </li>
@@ -75,7 +85,7 @@ function NavbarComponent() {
           <li className='sub-right-navbar'>
             <Tooltip label="Open chat">
               <a href="#" style={{ display: "flex" }}>
-                <img src={openchat} alt="logo"/>
+                <img className='navImg' src={openchat} alt="logo"/>
               </a>
             </Tooltip>
           </li>
@@ -84,7 +94,7 @@ function NavbarComponent() {
           <li className='sub-right-navbar'>
             <Tooltip label="Create post">
               <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
-                <img src={plus} alt="profile" style={{ marginRight: "5px" }} />
+                <img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
                 Create
               </Link>
             </Tooltip>
@@ -94,7 +104,7 @@ function NavbarComponent() {
           <li className='sub-right-navbar'>
             <Tooltip label="Open inbox">
               <a href="#" style={{ display: "flex" }}>
-                <img src={inbox} alt="logo"/>
+                <img className='navImg' src={inbox} alt="logo"/>
               </a>
             </Tooltip>
           </li>
@@ -103,7 +113,7 @@ function NavbarComponent() {
           <li className='sub-right-navbar' onClick={toggleMenu}>
             <Tooltip label="Open profile menu">
               <a href="#" style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
-                <img src={profile} alt="logo"/>
+                <img className='profileImg' src={profile} alt="logo"/>
               </a>
             </Tooltip>
           </li>
@@ -115,7 +125,7 @@ function NavbarComponent() {
                 <button className='logged-out-login-button p-2 px-3'>Log in</button>
               </div>
             </Tooltip>
-            <Tooltip label="Open settings menu">
+            <Tooltip>
               <div>
                 <LoggedOutHandler />
               </div>
@@ -125,18 +135,60 @@ function NavbarComponent() {
       </ul>
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
-          <Link to={`user`} className="user-info" onClick={toggleMenu}>
-            <img src={profile} alt="logo"/>
-            <h6>View Profile</h6>
+          <Link to={`user`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
+            <img className='profileImg' src={profile} alt="logo"/>
+            <div className="d-flex flex-column">
+              <span className="drop-down-profile-description">View Profile</span>
+                <div className='d-flex flex-start align-items-center ArrowandNumber'>
+                <span className='usernameText'>u/{username}</span>
+                </div>
+            </div>
           </Link>
-          <hr />
-          <Link to={'settings/account'} className="sub-menu-link" onClick={toggleMenu}> 
-            <img src={setting} alt="setting" />
-            <p>Settings</p>
-          </Link>
-          <hr />
-          <div className="user-info sub-menu-link" onClick={toggleMenu}>
+          <div className="d-flex align-items-center sub-menu-link">
+            <EditAvatar />
+            <span className="drop-down-description">Edit Avatar</span>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link">
+          <ContProgram />
+            <div className="d-flex flex-column">
+            <span className="drop-down-description">Contributor Porgram</span>
+              <div className='d-flex flex-start align-items-center ArrowandNumber'>
+              <ContArrow />
+              <span className='contribNumber'>0</span>
+              </div>
+            </div>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link switchDiv">
+            <ModMode />
+            <span className="drop-down-description">Mod mode</span>
+            <Stack align='center' direction='row' className='switchplacement'>
+              <Switch size='lg' colorScheme='blue' />
+            </Stack>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link switchDiv">
+            <DarkMode />
+            <span className="drop-down-description">Dark mode</span>
+            <Stack align='center' direction='row' className='switchplacement'>
+              <Switch size='lg' colorScheme='blue' />
+            </Stack>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
             <SignupHandler/>
+          </div>
+          <hr />
+          <div className="d-flex align-items-center sub-menu-link">
+            <Advertisement />
+            <span className="drop-down-description"> Advertise on reddit</span>
+          </div>
+          <hr />
+          <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 
+            <Settings />
+            <span className="drop-down-description">Settings</span>
+          </Link>
+          <hr />
+          <div className="d-flex align-items-center last-item1">
+            <Premium />
+            <span className="drop-down-description"> Premium</span>
           </div>
         </div>
       </div>

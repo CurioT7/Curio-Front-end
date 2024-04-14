@@ -149,10 +149,32 @@ function PostContentDetails(post) {
         setIsHidden(!isHidden);
     }
 
+    function Toast(){
+        toast({
+            description: "Something went wrong, please try again later.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+        });
+    }
     const handleBack = () => {
         navigate(-1);
     }
-
+    console.log("hello world");
+    React.useEffect(() => {
+        console.log("hello UseEffect");
+        async function fetchAndSetData() {
+            const data = await fetchCommentsFromBackend(postID);
+            if (data) {
+                setComments(data.comments);
+            }
+            else {
+                Toast();
+            }
+        }
+    
+        fetchAndSetData();
+    }, []);
 
     return (
         <>
@@ -204,6 +226,19 @@ function PostContentDetails(post) {
                 <div>
                     <PostComments username="Glutton_Sea" commentUpvotes={3} comment="How will they (USCIS) know exactly that you are engaged ? It will not be reported anywhere .And he most definitely should never mention this or you in an F1 visa interview. It will be absolutely denied . He needs to show strong ties to home country and no immigrant intent to get an F1. After he’s in the US, he can marry you etc and adjust status ." />
                 </div>
+
+                <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
+                <span className='share-post-text'>12</span>
+                </Button>
+                <Button flex='1' className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
+                <span className='share-post-text'>Share</span>
+                </Button>
+            <CommentInputForm />
+            <SortingComments />
+            {comments.map((comment, index) => (
+                <PostComments key={comment._id} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+            ))}
+            <PostComments username="Glutton_Sea" commentUpvotes={3} comment="How will they (USCIS) know exactly that you are engaged ? It will not be reported anywhere .And he most definitely should never mention this or you in an F1 visa interview. It will be absolutely denied . He needs to show strong ties to home country and no immigrant intent to get an F1. After he’s in the US, he can marry you etc and adjust status ." />
         </>
     )
 }
