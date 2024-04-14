@@ -78,7 +78,8 @@ function App() {
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
           <Route path='/profile/:username' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
-          <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
+          <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/commPopup' element={<CommPopup/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
         </Routes>
       </ChakraProvider>

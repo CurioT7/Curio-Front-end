@@ -30,14 +30,14 @@ function Feeding () {
     function handleIsMature (){
         setIsMature(!adultContent)
         sendDataToBackend({adultContent: !adultContent})
-        Toast()
+        Toast();
         // console.log(isMature)
     }
     // console.log(isMature)
     function handleIsAuto(){
-        setIsAuto(!autoplayMedia)
-        sendDataToBackend({autoplayMedia: !autoplayMedia})
-        Toast()
+        setIsAuto(!autoplayMedia);
+        sendDataToBackend({autoplayMedia: !autoplayMedia});
+        Toast();
     }
 
     function handleCommSort(e){

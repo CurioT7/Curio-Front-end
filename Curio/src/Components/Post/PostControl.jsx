@@ -248,6 +248,7 @@ function PostControl(props) {
           isClosable: true,
         })
         setIsSaved(false);
+        window.dispatchEvent(new Event('hideOrSave'));
       }
     }
     catch(err){

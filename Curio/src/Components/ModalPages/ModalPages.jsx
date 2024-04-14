@@ -219,14 +219,14 @@ const MultiPageFormModal = (props) => {
               className={classes['modal-content']}
               onHide={handleModalClose}
               animation={false}>
-                <Modal.Header closeButton className={classes.Header}>
+                <Modal.Header closeButton className={classes.HeaderModal}>
                     {step === 1 && (
                         <Modal.Title>
                             <h6 className={classes.headertext}>Submit a report</h6>
                         </Modal.Title>
                     )}
                     {step === 2 && (
-                        <Modal.Title>
+                        <Modal.Title className='d-flex'>
                             <div className={classes['back-btn-container']}>
                                 <button onClick={prevStep} className={classes['back-btn']}>
                                     <div className={classes['back-btn-content']}><Back /></div>
@@ -236,7 +236,7 @@ const MultiPageFormModal = (props) => {
                         </Modal.Title>
                     )}
                     {step === 3 && (
-                        <Modal.Title>
+                        <Modal.Title className='d-flex'>
                             <div className={classes['back-btn-container']}>
                                 <button onClick={prevStep} className={classes['back-btn']}>
                                     <div className={classes['back-btn-content']}><Back /></div>
@@ -559,7 +559,7 @@ const MultiPageFormModal = (props) => {
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer className={classes.footer}>
+                <Modal.Footer className={classes.foooter}>
                     {step === 1 && (
                         <button className={classes['next-button']} onClick={nextStep} disabled={!isOptionSelected}>Next</button>
                     )}

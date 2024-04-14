@@ -2,9 +2,10 @@ import React from 'react';
 import "./Posting_rules.css"
 import logo from "../../../assets/Curio_logo.png";
 
+
 function Posting_rules() {
   return (
-    <div className='postingContainer'>
+    <div>
       <div className='curioPostingHeader'>
         <div className='headerContent'>
             <img src={logo} alt="Logo Curio" className='logoImg'/>Posting to Curio

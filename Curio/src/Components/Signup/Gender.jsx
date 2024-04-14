@@ -5,11 +5,11 @@ import { Button } from "react-bootstrap";
 
 function Gender(props){
   
-  const [gender, setGender] = useState(0);
+  const [gender, setGender] = useState("");
 
-  const handleGender = (e) => {
-    const gender = e.target.value;
-    setGender(gender);
+  const handleGender = (gender) => {
+    const genderEntered = gender.toLowerCase();
+    props.handleEnteredGender(genderEntered);
     props.onContinueToPreferences();
   }
 
@@ -40,10 +40,10 @@ function Gender(props){
         </div>
         <div className="d-flex flex-column align-items-center align-content-center justify-content-center mt-4" style={{paddingLeft: '80px', paddingRight: '80px'}}>
             <p className="identify-text">How do you identify?</p>
-            <button className="btn w-100 mb-2 gender-button p-3" onClick={handleGender}>Woman</button>
-            <button className="btn w-100 mb-2 gender-button p-3" onClick={handleGender}>Man</button>
-            <button className="btn w-100 mb-2 gender-button p-3" onClick={handleGender}>Non-binary</button>
-            <button className="btn w-100 mb-2 gender-button p-3" onClick={handleGender}>I prefer not to say</button>
+            <button className="btn w-100 mb-2 gender-button p-3" onClick={(e) => handleGender(e.target.textContent)}>Woman</button>
+            <button className="btn w-100 mb-2 gender-button p-3" onClick={(e) => handleGender(e.target.textContent)}>Man</button>
+            <button className="btn w-100 mb-2 gender-button p-3" onClick={(e) => handleGender(e.target.textContent)}>Non-binary</button>
+            <button className="btn w-100 mb-2 gender-button p-3" onClick={(e) => handleGender(e.target.textContent)}>I prefer not to say</button>
         </div>
       </Modal.Body>
     </Modal>
