@@ -167,7 +167,6 @@ function PostContentDetails(post) {
     const handleBack = () => {
         navigate(-1);
     }
-    console.log("hello world");
     React.useEffect(() => {
         async function fetchAndSetData() {
             const data = await fetchCommentsFromBackend(post._id);
@@ -231,7 +230,7 @@ function PostContentDetails(post) {
                 <CommentInputForm />
                 <SortingComments />
             {comments.map((comment, index) => (
-                <PostComments key={comment._id} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+                <PostComments key={comment._id} id={comment._id} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
         </>
     )

@@ -74,11 +74,12 @@ function Post(props) {
             });
             if (response.status === 200){
                 toast({
-                description: "Post Unhidden",
-                status: 'success',
-                duration: 5000,
-                isClosable: true,
+                    description: "Post Unhidden",
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
                 })
+                window.dispatchEvent(new Event('hideOrSave'));
                 setIsHidden(false);
             }
         }

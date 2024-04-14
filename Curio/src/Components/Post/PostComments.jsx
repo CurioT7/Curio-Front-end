@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Avatar, IconButton, Box, Button } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import { LuShare } from "react-icons/lu";
 import { SlOptions } from "react-icons/sl";
 import Upvotes from "../../styles/icons/Upvotes";
@@ -14,6 +15,8 @@ import Hide from "../../styles/icons/Hide";
 import ReportReason  from "./ReportReason.jsx";
 import ReportSubmitted from "./ReportSubmitted.jsx";
 import ReportExtraReason from "./ReportExtraReason.jsx";
+import axios from "axios";
+import FilledSave from "../../styles/icons/FilledSave";
 
 function PostComments(props) {
     const [upvoted, setUpvoted] = useState(false);
@@ -22,6 +25,8 @@ function PostComments(props) {
     const [isReportSubmittedModalOpen, setReportSubmittedModalOpen] = useState(false);
     const [isExtraReasonModalOpen, setExtraReasonModalOpen] = useState(false);
     const [reportReason, setReportReason] = useState('');
+    const [isSaved, setIsSaved] = useState(false);
+    const toast = useToast();
     const handleOpenReportModal = () => {
         setReportReasonModalOpen(true);
     }
@@ -68,38 +73,92 @@ function PostComments(props) {
         }
     }
     const handleSave = async () => {
-    try{
-      var hostUrl = import.meta.env.VITE_SERVER_HOST;
-      const response = await axios.post(`${hostUrl}/api/save`, {
-        category: "comment",
-        id: props.postId
-      },
-       {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+        console.log(props.key);
+        try{
+            var hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/save`, {
+                category: "comment",
+                id: props.id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200){
+                toast({
+                description: "Comment saved.",
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+                })
+                setIsSaved(true);
+            }
         }
-      });
-      if (response.status === 200){
-        toast({
-          description: "Comment saved.",
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-      if (response.status === 400 || response.status === 404){
-        toast({
-          description: "comment already saved.",
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-    }
-    catch(err){
-      console.log(err);
-    }
+        catch(err){
+            console.log(err);
+            if (err.response.status === 400 || err.response.status === 404){
+                toast({
+                description: "comment already saved.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                })
+            }
+            else{
+                toast({
+                    description: "Server Error Occured.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+        }
   }
+
+    const handleUnsave = async () => {
+        try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.post(`${hostUrl}/api/unsave`, {
+            category: "comment",
+            id: props.id
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (response.status === 200){
+            toast({
+            description: "Removed From Save.",
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+            })
+            setIsSaved(false);
+        }
+        }
+        catch(err){
+            console.log(err);
+            if (err.response.status === 400){
+                toast({
+                description: "post already unsaved.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                })
+            }
+        }
+  }
+
+    const handleSaveOrUnsave = () => {
+        if (isSaved){
+            handleUnsave();
+        }
+        else{
+            handleSave();
+        }
+    }
 
     return (
         <>
@@ -142,9 +201,9 @@ function PostComments(props) {
                                                     zIndex: '1'
                                                 }}>
                                                     <ul className='drop-down-list w-100 px-0'>
-                                                        <li onClick={handleSave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
-                                                                <SaveButton />
-                                                                <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>Save</p></div>
+                                                        <li onClick={handleSaveOrUnsave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                                {isSaved ? <FilledSave /> : <SaveButton /> }
+                                                                <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>{isSaved ? "Remove from save" : "Save"}</p></div>
                                                         </li>
                                                         <li onClick={handleOpenReportModal} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
                                                                 <ReportPost />
