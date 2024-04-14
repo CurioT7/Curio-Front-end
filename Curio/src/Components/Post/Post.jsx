@@ -1,10 +1,13 @@
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import { Flex,Avatar,Box,Heading,IconButton,Text,Image,Button } from '@chakra-ui/react'
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiLike } from "react-icons/bi";
-import { BiDownvote } from "react-icons/bi"
-import { BiUpvote } from "react-icons/bi";
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverBody,
+  } from '@chakra-ui/react'
 import { FaRegCommentAlt } from "react-icons/fa";
+import { PiLockSimple } from "react-icons/pi";
 import { LuShare } from "react-icons/lu";
 import { SlOptions } from "react-icons/sl";
 import Upvotes from '../../styles/icons/Upvotes.jsx';
@@ -14,6 +17,8 @@ import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
+import { BsShield } from "react-icons/bs";
+import { PiLockSimpleFill } from "react-icons/pi";
 import './Post.css'
 import PostControl from './PostControl.jsx';
 import axios from 'axios';
@@ -35,6 +40,7 @@ function Post(props) {
     const navigate = useNavigate();
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
+    const [isLocked, setIsLocked] = useState(false);
     const makePostUpvoted = () => {
         if (upvoted) {
             setUpvoted(false);
@@ -50,6 +56,9 @@ function Post(props) {
             setDownvoted(true);
             setUpvoted(false);
         }
+    }
+    const handleLockComments = () => {
+        setIsLocked(!isLocked);
     }
 
     const handleUnhide = async () => {
@@ -203,8 +212,7 @@ function Post(props) {
                                 </Button>
                                 <Button flex='1' className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
                                 <span data-testid="share" className='share-post-text'>Share</span>
-                                </Button>
-                                
+                                </Button>              
                             </Box>
                             
                         </CardFooter>
