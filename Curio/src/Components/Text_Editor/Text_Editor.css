@@ -10,6 +10,7 @@
 
 .inner-container {
     position: relative;
+    z-index: 0;
 }
 
 .nested-container {
@@ -48,5 +49,4 @@
     font-style: normal; 
     font-weight: normal; 
     color: #aaa; 
-  }
-  
+}

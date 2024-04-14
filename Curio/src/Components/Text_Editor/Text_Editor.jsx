@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Text_Editor.css";
-import Icons from "../Create_Post/Icons";
+import Icons from "./Icons";
 
 function Text_Editor() {
   const [inputText, setInputText] = useState("");
@@ -113,7 +113,8 @@ function Text_Editor() {
                 textDecoration: strikethroughMode ? "line-through" : "none",
                 fontFamily: inlinecodeMode ? "monospace" : "inherit",
                 color: inlinecodeMode ? "#ff006d" : "black",
-                verticalAlign: superscriptMode ? "super" : "baseline"
+                verticalAlign: superscriptMode ? "super" : "baseline",
+                marginTop: "1.5px"
               }}
             />
           </div>
