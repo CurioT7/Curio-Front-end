@@ -23,6 +23,7 @@ function ProfilePage(){
   const [savedComments, setSavedComments] = useState([]);
   const [hiddenPosts, setHiddenPosts] = useState([]);
   const [downvotedPosts, setDownvotedPosts] = useState([]);
+  const [ upvotedComments, setUpvotedComments] = useState([]);
   const [downvotedComments, setDownvotedComments] = useState([]);
   const getSaved = async () => {
       try{
