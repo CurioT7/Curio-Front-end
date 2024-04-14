@@ -35,8 +35,8 @@ function PostComments(props) {
         setReportReasonModalOpen(true);
     }
     const handleShowSubmittedReport = () => {
-    setShowControls(false);
-    setReportSubmittedModalOpen(true);
+        setShowControls(false);
+        setReportSubmittedModalOpen(true);
     }
     const handleSetReportReason = (reason) => {
         console.log(reason)
@@ -165,33 +165,33 @@ function PostComments(props) {
     }
 
     const handleDeleteComment = async () => {
-    try{
-      var hostUrl = import.meta.env.VITE_SERVER_HOST;
-      const response = await axios.delete(`${hostUrl}/api/deletecomments/${props.id}`,
-        {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-      if (response.status === 200){
+        try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.delete(`${hostUrl}/api/deletecomments/${props.id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+        if (response.status === 200){
+            toast({
+            description: "Comment Deleted",
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+            })
+            window.dispatchEvent(new Event('deleteComment'));
+        }
+        }
+        catch(err){
+        console.log(err);
         toast({
-          description: "Comment Deleted",
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
+            description: "Server Error Occured.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
         })
-        window.dispatchEvent(new Event('deleteComment'));
-      }
-    }
-    catch(err){
-      console.log(err);
-      toast({
-        description: "Server Error Occured.",
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      })
-    }
+        }
   }
 
     useEffect(() => {
@@ -201,7 +201,13 @@ function PostComments(props) {
         else{
             setIsCommentAuthor(false);
         }
-    }, [])
+        if (props.savedComments.some(comment => comment._id === props.id)){
+            setIsSaved(true);
+        }
+        else {
+            setIsSaved(false);
+        }
+    }, [props.savedComments, props.id, props.username])
 
     const handleNavigationToUser = () => {
         navigate(`/user/${props.username}`);

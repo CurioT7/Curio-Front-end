@@ -18,6 +18,7 @@ import { useToast } from '@chakra-ui/react';
 import { fetchCommentsFromBackend } from './CommentsEndPoints';
 import SortingComments from './SortingComments';
 import {useParams} from 'react-router-dom';
+import { set } from 'mongoose';
 
 
 
@@ -38,16 +39,17 @@ function PostContentDetails(post) {
                 }
                 });
                 if (response.status === 200 || response.status === 201){
-                    console.log(response.data.savedPosts);
+                    console.log(response.data.savedComments);
                     setSavedPosts(response.data.savedPosts);
+                    setSavedComments(response.data.savedComments);
                 }
             }
             catch(err){
                 toast({
-                description: "Server Error Occured.",
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
+                    description: "Server Error Occured.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
                 })
             }
         }
@@ -234,7 +236,7 @@ function PostContentDetails(post) {
                 <CommentInputForm />
                 <SortingComments />
             {comments.map((comment, index) => (
-                <PostComments key={comment._id} id={comment._id} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
         </>
     )
