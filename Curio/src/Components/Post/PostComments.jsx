@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Avatar, IconButton, Box, Button } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
@@ -17,6 +17,7 @@ import ReportSubmitted from "./ReportSubmitted.jsx";
 import ReportExtraReason from "./ReportExtraReason.jsx";
 import axios from "axios";
 import FilledSave from "../../styles/icons/FilledSave";
+import Delete from "../../styles/icons/Delete";
 
 function PostComments(props) {
     const [upvoted, setUpvoted] = useState(false);
@@ -26,6 +27,7 @@ function PostComments(props) {
     const [isExtraReasonModalOpen, setExtraReasonModalOpen] = useState(false);
     const [reportReason, setReportReason] = useState('');
     const [isSaved, setIsSaved] = useState(false);
+    const [isCommentAuthor, setIsCommentAuthor] = useState(false);
     const toast = useToast();
     const handleOpenReportModal = () => {
         setReportReasonModalOpen(true);
@@ -160,6 +162,45 @@ function PostComments(props) {
         }
     }
 
+    const handleDeleteComment = async () => {
+    try{
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.delete(`${hostUrl}/api/deletecomments/${props.id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+      if (response.status === 200){
+        toast({
+          description: "Comment Deleted",
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+        window.dispatchEvent(new Event('deleteComment'));
+      }
+    }
+    catch(err){
+      console.log(err);
+      toast({
+        description: "Server Error Occured.",
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }
+
+    useEffect(() => {
+        if(localStorage.getItem('username') === props.username){
+            setIsCommentAuthor(true);
+        }
+        else{
+            setIsCommentAuthor(false);
+        }
+    }, [])
+
     return (
         <>
         <div className="d-flex flex-column">
@@ -209,6 +250,12 @@ function PostComments(props) {
                                                                 <ReportPost />
                                                                 <div><p className='mt-3 text-text'>Report</p></div>
                                                         </li>
+                                                        {isCommentAuthor && 
+                                                            <li onClick={handleDeleteComment} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                                <Delete />
+                                                                <div><p className='mt-3 me-2 text-text'>Delete</p></div>
+                                                            </li>
+                                                        }
                                                     </ul>   
                                                 </div>
                         }

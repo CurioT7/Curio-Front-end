@@ -177,8 +177,12 @@ function PostContentDetails(post) {
                 Toast();
             }
         }
+        window.addEventListener('deleteComment', fetchAndSetData);
     
         fetchAndSetData();
+        return () => {
+            window.removeEventListener('deleteComment', fetchAndSetData);
+        }
     }, []);
 
     return (

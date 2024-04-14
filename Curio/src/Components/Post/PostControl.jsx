@@ -11,6 +11,7 @@ import ReportExtraReason from "./ReportExtraReason.jsx";
 import axios from "axios";
 import {useToast} from '@chakra-ui/react';
 import FilledHide from "../../styles/icons/FilledHide";
+import Delete from "../../styles/icons/Delete.jsx";
 
 
 
@@ -24,8 +25,14 @@ function PostControl(props) {
   const [isSaved, setIsSaved] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isPostAuthor, setIsPostAuthor] = useState(false);
 
   useEffect(() => {
+    if (props.username === localStorage.getItem('username')) {
+      setIsPostAuthor(true);
+    } else {
+      setIsPostAuthor(false);
+    }
     if (props.savedPosts && props.savedPosts.some(post => post._id === props._id)) {
       setIsSaved(true);
     } else {
@@ -273,6 +280,31 @@ function PostControl(props) {
     }
   }
 
+  const handleDeletePost = async () => {
+    try{
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.delete(`${hostUrl}/api/deletepost/${props._id}`);
+      if (response.status === 200){
+        toast({
+          description: "Post Deleted",
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+        window.dispatchEvent(new Event('deletePost'));
+      }
+    }
+    catch(err){
+      console.log(err);
+      toast({
+        description: "Server Error Occured.",
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }
+
   return (
     <>
       <div>
@@ -313,6 +345,12 @@ function PostControl(props) {
                                                       <ReportPost />
                                                       <div><p className='mt-3 me-2 text-text'>Report</p></div>
                                               </li>
+                                              {isPostAuthor && 
+                                                <li onClick={handleDeletePost} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                      <Delete />
+                                                      <div><p className='mt-3 me-2 text-text'>Delete</p></div>
+                                                </li>
+                                              }
                                           </ul>   
                                       </div>
               }

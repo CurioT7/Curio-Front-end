@@ -115,8 +115,12 @@ React.useEffect(() => {
           setRandomPost({ ...randomPost, isSelected: false });
       }
   }
+  window.addEventListener('deletePost', fetchAndSetData);
 
   fetchAndSetData();
+  return () => {
+      window.removeEventListener('deletePost', fetchAndSetData);
+  }
 }, []);
 
 console.log(posts);
