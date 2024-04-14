@@ -1,7 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BackButton from '../../styles/icons/BackButton';
-import { Avatar, IconButton, Box, Button } from '@chakra-ui/react';
+import { Avatar, IconButton, Box } from '@chakra-ui/react';
+import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { LuShare } from "react-icons/lu";
@@ -12,11 +13,131 @@ import FilledUpvote from '../../styles/icons/FilledUpvote';
 import { useNavigate } from 'react-router-dom';
 import PostComments from './PostComments';
 import CommentInputForm from './CommentInputForm';
+import PostControl from './PostControl';
+import axios from 'axios';
+import { useToast } from '@chakra-ui/react';
+import { fetchCommentsFromBackend } from './CommentsEndPoints';
+import SortingComments from './SortingComments';
+import {useParams} from 'react-router-dom';
+import { set } from 'mongoose';
 
-function PostContentDetails() {
+
+
+function PostContentDetails(post) {
+    const { postID } = useParams();
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [hiddenPosts, setHiddenPosts] = useState([]);
+    const [isHidden, setIsHidden] = useState(false);
+    const [comments, setComments] = useState([]);
+    const toast = useToast();
+    const postId = post._id;
+    useEffect(() => {
+        const getSaved = async () => {
+            try{
+                var hostUrl = import.meta.env.VITE_SERVER_HOST;
+                const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+                });
+                if (response.status === 200 || response.status === 201){
+                    console.log(response.data.savedComments);
+                    setSavedPosts(response.data.savedPosts);
+                    setSavedComments(response.data.savedComments);
+                }
+            }
+            catch(err){
+                toast({
+                    description: "Server Error Occured.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+        }
+
+        const getHidden = async () => {
+            try{
+                var hostUrl = import.meta.env.VITE_SERVER_HOST;
+                const response = await axios.get(`${hostUrl}/api/hidden`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+                });
+                if (response.status === 200 || response.status === 201){
+                    setHiddenPosts(response.data.hiddenPosts);
+                }
+            }
+            catch(err){
+                toast({
+                    description: "Server Error Occured.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+        }
+        if(localStorage.getItem('token')){
+            getHidden();    
+            getSaved();
+        }
+    }, []);
+
+    const handleUnhide = async () => {
+        try{
+            var hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/unhide`, {
+                postId: post._id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200){
+                toast({
+                    description: "Post Unhidden",
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                })
+                window.dispatchEvent(new Event('hideOrSave'));
+                setIsHidden(false);
+            }
+        }
+        catch(err){
+            console.log(err);
+            if (err.response.status === 409){
+                toast({
+                    description: "Item already unhidden.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+            else{
+                toast({
+                    description: "Server Error Occured.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+    }
+    }
+
+    useEffect(() => {
+        if (hiddenPosts && hiddenPosts.some(post => post._id === post._id)) {
+            setIsHidden(true);
+        }
+        else{
+            setIsHidden(false);
+        }
+    }, [hiddenPosts]);
 
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
+    const [savedComments, setSavedComments] = useState([]);
     const navigate = useNavigate();
     const makePostUpvoted = () => {
         if (upvoted) {
@@ -35,55 +156,108 @@ function PostContentDetails() {
         }
     }
 
+    const handleHidePost = () => {
+        setIsHidden(!isHidden);
+    }
+
+    function Toast(){
+        toast({
+            description: "Something went wrong, please try again later.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+        });
+    }
     const handleBack = () => {
         navigate(-1);
     }
-
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchCommentsFromBackend(post._id);
+            if (data) {
+                setComments(data.comments);
+            }
+            else {
+                Toast();
+            }
+        }
+        window.addEventListener('deleteComment', fetchAndSetData);
+    
+        fetchAndSetData();
+        return () => {
+            window.removeEventListener('deleteComment', fetchAndSetData);
+        }
+    }, []);
 
     return (
-        <div className='d-flex flex-column w-100'>
-            <div className='d-flex'>
-                <div className='d-flex justify-content-start'>
-                    <button onClick={handleBack} style={{backgroundColor: "#EAEDEF", width: "2.1rem", height: "2.1rem"}} className='back-button-post-content signup-back-button me-2 d-flex justify-content-center align-items-center'><BackButton/></button>
-                    <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
-                    <div className='d-flex flex-column'>
-                        <a className='community-post-name'>r/germany</a>
-                        <a className='community-post-name' style={{fontWeight: "300", fontSize: "0.875rem"}}>thisissodamnhard103</a>
+        <>
+            {!isHidden &&
+                <div className='d-flex flex-column w-100'>
+                    <div className='d-flex'>
+                        <div className='d-flex justify-content-start'>
+                            <button onClick={handleBack} style={{backgroundColor: "#EAEDEF", width: "2.1rem", height: "2.1rem"}} className='back-button-post-content signup-back-button me-2 d-flex justify-content-center align-items-center'><BackButton/></button>
+                            <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
+                            <div className='d-flex flex-column'>
+                                <a className='community-post-name'>r/germany</a>
+                                <a className='community-post-name' href={`/user/${post.user}`} style={{fontWeight: "300", fontSize: "0.875rem"}}>{post.user}</a>
+                            </div>
+                        </div>
+                        <div className='ms-auto'>
+                            <PostControl hidePost={handleHidePost} postDetails={true} hiddenPosts={hiddenPosts} savedPosts={savedPosts} savedComments={savedComments} username={post.user} _id={post._id} />
+                        </div>
                     </div>
+                    <h3 className='post-content-header mb-3'>{post.title}</h3>
+                    <p className='post-details-content'>{post.content}</p>
+                    <Box className='col-md-6 mb-5 col-12 col-lg-4' display='flex' justifyContent='start'>
+                        <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
+                            <button className='me-2 upvotes-footer-button' onClick={() => makePostUpvoted()}>
+                                {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
+                            </button>
+                            <div className='me-2'>
+                                <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{post.upvotes - post.downvotes}</span>
+                            </div>
+                            <button className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
+                                {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
+                            </button>
+                        </div>
+                        <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
+                        <span className='share-post-text'>{post.comments.length}</span>
+                        </Button>
+                        <Menu>
+                                <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>
+                                    <span data-testid="share" className='share-post-text'>Share</span>
+                                </MenuButton>
+                                <MenuList>
+                                <MenuItem onClick={async () => {
+                                    console.log('MenuItem clicked');
+                                        console.log('postId:', postId);
+                                        await navigator.clipboard.writeText(`http://localhost:5173/post/post-details/${postId}`);
+                                        alert('Link copied to clipboard');
+        
+                                }}>
+                                <svg rpl="" class="mt-[1px] ml-[4px]" fill="currentColor" height="20" icon-name="link-post-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14.111 12.5a3.701 3.701 0 0 1-1.09 2.41c-.479.47-.928.922-1.378 1.373-.45.45-.894.9-1.368 1.366a3.852 3.852 0 0 1-2.698 1.099 3.852 3.852 0 0 1-2.698-1.099 3.738 3.738 0 0 1-1.116-2.659c0-.997.402-1.953 1.116-2.658.479-.472.928-.923 1.378-1.375.45-.45.893-.9 1.368-1.365A3.936 3.936 0 0 1 9.638 8.59a3.968 3.968 0 0 1 2.24.258c.27-.269.546-.54.812-.806l.131-.13a5.086 5.086 0 0 0-3.182-.624A5.052 5.052 0 0 0 6.732 8.71c-.48.471-.929.922-1.377 1.373-.449.451-.894.9-1.37 1.366A4.982 4.982 0 0 0 2.5 14.992c0 1.328.534 2.602 1.486 3.543A5.13 5.13 0 0 0 7.58 20a5.13 5.13 0 0 0 3.595-1.465c.478-.471.927-.923 1.377-1.374.451-.451.894-.9 1.368-1.366a4.993 4.993 0 0 0 1.263-2.071c.243-.781.288-1.61.132-2.412L14.11 12.5Z"></path>
+                                    <path d="M16.017 1.467A5.123 5.123 0 0 0 12.422 0a5.123 5.123 0 0 0-3.595 1.467c-.478.471-.926.923-1.377 1.374-.45.451-.894.9-1.367 1.366a4.966 4.966 0 0 0-1.106 1.624 4.907 4.907 0 0 0-.291 2.86l1.2-1.19a3.699 3.699 0 0 1 1.092-2.41c.478-.472.928-.923 1.377-1.374.45-.45.894-.9 1.368-1.366a3.844 3.844 0 0 1 2.698-1.101c1.012 0 1.982.396 2.698 1.101a3.736 3.736 0 0 1 1.116 2.66c0 .996-.401 1.953-1.116 2.658-.478.471-.927.922-1.377 1.373-.45.451-.893.9-1.368 1.367a3.933 3.933 0 0 1-2.014 1.003 3.966 3.966 0 0 1-2.24-.26c-.273.274-.551.549-.818.818l-.123.12a5.087 5.087 0 0 0 3.183.624 5.053 5.053 0 0 0 2.906-1.423c.477-.472.926-.923 1.376-1.375.45-.452.894-.9 1.368-1.365A4.977 4.977 0 0 0 17.5 5.008a4.977 4.977 0 0 0-1.488-3.543l.005.002Z"></path>
+                                </svg>
+                                Copy Link
+                            </MenuItem>
+                                </MenuList>
+                                </Menu>
+                    </Box>
                 </div>
-                <IconButton
-                    className='ms-auto'
-                    variant='ghost'
-                    colorScheme='gray'
-                    aria-label='See menu'
-                    borderRadius={"50%"}
-                    icon={<SlOptions />}
-                />
-            </div>
-            <h3 className='post-content-header mb-3'>Is it suspicious to be engaged to a U.S citizen before going to the US on an f1 visa?</h3>
-            <p className='post-details-content'>The twist here is that Im a U.S citizen but I have lived abroad for the past (around) 20 years.. my whole family returned from the US to home country when I was 8, I am 26 now so my whole education has been in my home country. My bf and I want to engaged before he goes to the US so we can get married after his masters. My question is, if we do decide to get married in the US after his masters and apply for his Adjustment of status there from F1 to green card, will his intent while entering the country on an f1 be questioned since he was already emgaged to a US citizen? Even considering the fact that I havent been to the US in almost 20 years so when we got engaged we expected that he would be coming back to the home country and we didnt intend to settle in the U.S at that point? What if we change our mind after he goes there?</p>
-            <Box className='col-md-6 mb-5 col-12 col-lg-4' display='flex' justifyContent='start'>
-                <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
-                    <button className='me-2 upvotes-footer-button' onClick={() => makePostUpvoted()}>
-                        {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
-                    </button>
-                    <div className='me-2'>
-                        <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>10</span>
+                }
+                {isHidden && 
+                    <div className='d-flex justify-content-between hidden-container mb-3'>
+                        <h3 className='d-flex align-items-center post-hidden-content'>Post Hidden</h3>
+                        <button onClick={handleUnhide} className='undo-button'>Undo</button>
                     </div>
-                    <button className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
-                        {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
-                    </button>
-                </div>
-                <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                <span className='share-post-text'>12</span>
-                </Button>
-                <Button flex='1' className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
-                <span className='share-post-text'>Share</span>
-                </Button>
-            </Box>
-            <CommentInputForm />
-            <PostComments username="Glutton_Sea" commentUpvotes={3} comment="How will they (USCIS) know exactly that you are engaged ? It will not be reported anywhere .And he most definitely should never mention this or you in an F1 visa interview. It will be absolutely denied . He needs to show strong ties to home country and no immigrant intent to get an F1. After he’s in the US, he can marry you etc and adjust status ." />
-        </div>
+                }
+                <CommentInputForm />
+                <SortingComments />
+            {comments.map((comment, index) => (
+                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+            ))}
+        </>
     )
 }
 

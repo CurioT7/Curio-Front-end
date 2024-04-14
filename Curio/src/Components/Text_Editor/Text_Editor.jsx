@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Text_Editor.css";
-import Icons from "../Create_Post/Icons";
+import Icons from "./Icons";
 
 function Text_Editor() {
   const [inputText, setInputText] = useState("");

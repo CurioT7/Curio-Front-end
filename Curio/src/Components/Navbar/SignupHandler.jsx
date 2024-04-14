@@ -20,6 +20,7 @@ function SignupHandler() {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [username, setEnteredUsername] = useState('');
   const [password, setEnteredPassword] = useState('');
+  const [enteredGender, setEnteredGender] = useState('');
   const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const toast = useToast();
@@ -78,6 +79,10 @@ function SignupHandler() {
     setEnteredPassword(password);
   }
 
+  const handleSettingGender = (gender) => {
+    setEnteredGender(gender);
+  }
+
   const handleBackToGender = () => {
     setGenderModalOpen(true);
     setPreferencesModalOpen(false);
@@ -90,7 +95,7 @@ function SignupHandler() {
 
   const handleSignup = async () => {
     try{
-      const response = await signup({username, email: enteredEmail, password});
+      const response = await signup({username, email: enteredEmail, password, gender: enteredGender});
       console.log(response);
       if(response.status === 201){
         console.log('Signup successful');
@@ -177,7 +182,7 @@ function SignupHandler() {
           </div>
           {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
           {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
-          {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}
+          {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} handleEnteredGender={handleSettingGender} />}
           {isPreferencesModalOpen && <Preferences show={isPreferencesModalOpen} onHide={() => setPreferencesModalOpen(false)} onBackToGender={handleBackToGender} onSignup={handleSignup} />}
       </>
   );
