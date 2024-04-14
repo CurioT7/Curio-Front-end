@@ -5,12 +5,13 @@ import axios from 'axios';
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
-async function signup({username, email, password}) {
+async function signup({username, email, password, gender}) {
     try {
         const response = await axios.post(`${hostUrl}/api/auth/signup`, {
             username: username,
             email: email,
-            password: password
+            password: password,
+            gender: gender
         });
         return response;
     } catch (error) {

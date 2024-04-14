@@ -5,8 +5,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import RecentPosts from '../RecentPosts/RecentPosts.jsx'
 import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
 import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
+import axios from 'axios';
+import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
-
 
 function ProfilePage(){
 
@@ -17,7 +18,69 @@ function ProfilePage(){
   const [userAbout, setUserAbout] = useState({});
   const [userComments, setUserComments] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
-  const[upvotedPosts, setUpvotedPosts] = useState([]);
+  const [upvotedPosts, setUpvotedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [savedComments, setSavedComments] = useState([]);
+  const [hiddenPosts, setHiddenPosts] = useState([]);
+  const getSaved = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setSavedPosts(response.data.savedPosts);
+          setSavedComments(response.data.savedComments);
+        }
+      }
+      catch(err){
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          toast({
+            description: "Server Error Occured.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+      }
+    }
+
+
+  useEffect(() => {
+    window.addEventListener('hideOrSave', () => {
+        if(localStorage.getItem('token')){
+          getHidden();
+          getSaved();
+        }
+    });
+    if(localStorage.getItem('token')){
+      getHidden();
+      getSaved();
+    }
+  }, [isLoggedIn]);
+
   useEffect(() => {
     getUserOverview(username)
       .then(data => setUserPosts(data.userPosts))
@@ -156,12 +219,51 @@ return(
       )}
     </TabPanel>
 
-    <TabPanel >
-      <p>Looks like you haven't saved anything yet</p>
+    <TabPanel>
+      {(savedPosts && savedPosts.length > 0 && savedPosts.map((post) => (
+          <><div className='d-flex flex-column col-md-11'><Post     
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            subReddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+          />
+          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+          </div>
+          </>
+        )))}
+      {savedPosts.length === 0 ? <p>Looks like you haven't saved anything yet</p> : null}
     </TabPanel>
 
     <TabPanel >
-      <p>Looks like you haven't hidden anything yet</p>
+      {(hiddenPosts && hiddenPosts.length > 0 && hiddenPosts.map((post) => (
+          <><div className='d-flex flex-column col-md-11'><Post     
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            subReddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+            isInProfile={true}
+          />
+          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+          </div>
+          </>
+        )))}
+      {hiddenPosts.length === 0 ? <p>Looks like you haven't saved anything yet</p> : null}
     </TabPanel>
 
     <TabPanel>
