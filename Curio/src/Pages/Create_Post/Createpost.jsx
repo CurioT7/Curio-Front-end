@@ -30,6 +30,7 @@ function Createpost(props) {
           </div>
         </div>
         <div className='right-container-post'>
+          <Posting_Cards/>
         </div>
     </div>
   );
