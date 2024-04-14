@@ -14,7 +14,7 @@ function ProfilePage(){
   const navigate = useNavigate();
   const tabListRef = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState(localStorage.getItem('username'));
   const [userAbout, setUserAbout] = useState({});
   const [userComments, setUserComments] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
@@ -22,6 +22,9 @@ function ProfilePage(){
   const [savedPosts, setSavedPosts] = useState([]);
   const [savedComments, setSavedComments] = useState([]);
   const [hiddenPosts, setHiddenPosts] = useState([]);
+  const [downvotedPosts, setDownvotedPosts] = useState([]);
+  const [ upvotedComments, setUpvotedComments] = useState([]);
+  const [downvotedComments, setDownvotedComments] = useState([]);
   const getSaved = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -81,6 +84,8 @@ function ProfilePage(){
     }
   }, [isLoggedIn]);
 
+
+
   useEffect(() => {
     getUserOverview(username)
       .then(data => setUserPosts(data.userPosts))
@@ -88,11 +93,30 @@ function ProfilePage(){
   }, [username]);
 
 useEffect(() => {
-  getUserUpvoted(username)
-  .then(data => setUpvotedPosts(data))
+  getUserUpvoted()
+  .then(data => setUpvotedPosts(data.votedPosts))
   .catch(error => console.error(error));
   }, [username]);
 
+  useEffect(() => {
+    getUserDownvoted()
+    .then(data => setDownvotedPosts(data.votedPosts))
+    .catch(error => console.error(error));
+    }, [username]);
+
+    useEffect(() => {
+      getUserUpvoted()
+      .then(data => setUpvotedComments(data.votedComments))
+      .catch(error => console.error(error));
+      }, [username]);
+
+      useEffect(() => {
+        getUserDownvoted()
+        .then(data => setDownvotedComments(data.votedComments))
+        .catch(error => console.error(error));
+        }, [username]);
+
+    
   useEffect(() => {
     getUserComments(username)
       .then(data => setUserComments(data))
@@ -266,25 +290,59 @@ return(
       {hiddenPosts.length === 0 ? <p>Looks like you haven't saved anything yet</p> : null}
     </TabPanel>
 
-    <TabPanel>
-      {upvotedPosts.length === 0 ? (
-        <p>Looks like you haven't upvoted anything yet</p>
-      ) : (
-        upvotedPosts.map(post => (
-          <div className='post-card' key={post.id}>
-            <div className='author'>
-              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-              <b>u/{post.authorName}</b>
-            </div>
-            <p>{post.content}</p>
+   <TabPanel>
+  {upvotedPosts.length === 0 ? (
+    <p>Looks like you haven't upvoted anything yet</p>
+  ) : (
+    <>
+      {upvotedPosts.map(post => (
+        <div className='post-card' key={post.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{post.authorName}</b>
           </div>
-        ))
-      )}
-    </TabPanel>
+          <p>{post.content}</p>
+        </div>
+      ))}
+      {upvotedComments.map(comment => (
+        <div className='comment-card' key={comment.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{comment.authorName}</b>
+          </div>
+          <p>{comment.content}</p>
+        </div>
+      ))}
+    </>
+  )}
+</TabPanel>
 
-    <TabPanel  onClick={()=> getUserDownvoted(username)}>
-      { !(getUserDownvoted() || []).length ? <p>Looks like you haven't downvoted anything yet</p> : null }
-    </TabPanel>
+    <TabPanel>
+  {downvotedPosts.length === 0 ? (
+    <p>Looks like you haven't upvoted anything yet</p>
+  ) : (
+    <>
+      {downvotedPosts.map(post => (
+        <div className='post-card' key={post.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{post.authorName}</b>
+          </div>
+          <p>{post.content}</p>
+        </div>
+      ))}
+      {downvotedComments.map(comment => (
+        <div className='comment-card' key={comment.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{comment.authorName}</b>
+          </div>
+          <p>{comment.content}</p>
+        </div>
+      ))}
+    </>
+  )}
+</TabPanel>
     
   </TabPanels>
 </Tabs>
