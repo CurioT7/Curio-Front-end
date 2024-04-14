@@ -3,7 +3,6 @@ import "./NewPostForm.css";
 import { Button, ButtonGroup, Flex, Spacer, Checkbox } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import "./EditCreatearea.css"
-import {setIsSpoiler, isSpoiler} from "./Spoiler.jsx"
 
 function EditCreatearea() {
   return (
@@ -19,9 +18,8 @@ function EditCreatearea() {
             <Button
             className='rest-button' 
             variant='ghost' 
-            leftIcon={<AddIcon />}
-            onClick={()=> setIsSpoiler(!isSpoiler)}
-            >
+            leftIcon={<AddIcon />}>
+                
                 Spoiler
             </Button>
             <Button 
