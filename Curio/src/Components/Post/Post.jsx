@@ -33,6 +33,7 @@ function Post(props) {
     const [subreddit, setSubreddit] = useState([]);
     const [isHidden, setIsHidden] = useState(false);
     const toast = useToast();
+    const postId = props._id;
     const handleHidePost = () => {
         setIsHidden(!isHidden);
     }
