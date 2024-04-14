@@ -39,12 +39,12 @@ function Community({ index, name, category, members, picture }) {
             <div className='container mt-2'>
               <div className='row row-cols-2 powerOverRow'>
                 <div className='col popOverCol text-start'>
-                <h6 className='numbersHeader'>{members}</h6>
-                <p className='membersText'>Members</p>
+                <h6 className='numbersHeader1'>{members}</h6>
+                <p className='membersText1'>Members</p>
                 </div>
                 <div className='col popOverCol text-start'>
-                <h6 className='numbersHeader'> 0</h6>
-                <p className='membersText'>Online</p>
+                <h6 className='numbersHeader1'>0</h6>
+                <p className='membersText1'>Online</p>
                 </div>
               </div>
             </div>
