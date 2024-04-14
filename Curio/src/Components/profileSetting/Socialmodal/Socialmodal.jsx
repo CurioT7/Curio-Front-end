@@ -22,15 +22,14 @@ function Socialmodal(props){
 
     const handleSocialLinkClick = (url, name, iconClass) => {
         if (selectedSocialLinks.length < 5) { 
-            setSelectedSocialLinks([...selectedSocialLinks, { name: name, link: url, icon: iconClass }]);
+            setSelectedSocialLinks([...selectedSocialLinks, { displayName: name, url: url, platform: iconClass }]);
             patchSocialLink(iconClass, name, url);
-            // console.log(iconClass)
         }
     };
     
     const handleRemoveSocialLink = (index) => {
         const linkToRemove = selectedSocialLinks[index];
-        window.open(linkToRemove.link, "_blank"); // Open the link in a new tab
+        window.open(linkToRemove.url, "_blank"); 
         const updatedLinks = [...selectedSocialLinks];
         updatedLinks.splice(index, 1);
         setSelectedSocialLinks(updatedLinks);
@@ -75,10 +74,7 @@ function Socialmodal(props){
             default:
                 platform = "Unknown";
         }
-    
-        // Construct the new social link object
-        // const newLink = { displayName: name, url: url, platform: platform };
-        // console.log(newLink)
+
     
         axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
             socialLinks: [...selectedSocialLinks, { displayName: name, url: url, platform: platform }] // Append the new link to the existing list
@@ -105,11 +101,13 @@ function Socialmodal(props){
                     }
                 });
                 const formattedSocialLinks = response.data.socialLinks.map(link => ({
-                    link: link.url,
-                    name: link.displayName,
-                    icon: `fa-brands fa-${link.platform}`,
+                    url: link.url,
+                    displayName: link.displayName,
+                    platform: `fa-brands fa-${link.platform.toLowerCase()}`,
                 }));
-                setSelectedSocialLinks(formattedSocialLinks || []); 
+                console.log(formattedSocialLinks)
+                console.log("ewdceced")
+                setSelectedSocialLinks(formattedSocialLinks || []);
 
             } catch (error) {
                 if (error.response){
@@ -134,7 +132,7 @@ function Socialmodal(props){
         <>
         {Array.isArray(selectedSocialLinks) && selectedSocialLinks.slice(0, 5).map((link, index) => (
             <div key={index} className="selected-social-link">
-                <i className={link.icon}/> {link.name}
+                <i className={link.platform}/> {link.displayName} 
                 <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
             </div>
         ))}
