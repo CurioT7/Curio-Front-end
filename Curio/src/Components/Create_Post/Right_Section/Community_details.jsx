@@ -2,14 +2,26 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Community_details.css";
 import logo from "../../../assets/Curio_logo.png";
 import coverImage from "../../../assets/cover.png";
-import { FormControl, Switch, FormLabel } from "@chakra-ui/react";
+import { FormControl, Switch, FormLabel, useToast } from "@chakra-ui/react";
 
 function Community_details() {
     const [isSwitch, setIsSwitch] = useState(true);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
+    const toast = useToast();
+
+    function Toast(){
+        toast({
+            
+            description: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
 
     const handleSwitchChange = () => {
         setIsSwitch(!isSwitch);
+        Toast();
     };
 
     const getIcon = () => {

@@ -29,6 +29,7 @@ function Createpostarea() {
     // Set the selected method
     setSelectedMethod(method);
   };
+  
 
   // Render the selected component based on the selected method
   const renderSelectedMethod = () => {
@@ -56,14 +57,15 @@ function Createpostarea() {
             maxLength="300"
             placeholder="Title"
             value={inputTitle}
-            onChange={handleTitleInputChange} />
+            onChange={handleTitleInputChange}
+             />
           <div className="counter-title">
             {inputTitle.length}/300
           </div>
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea />
+      <EditCreatearea title={inputTitle} />
     </div>
   );
 }
