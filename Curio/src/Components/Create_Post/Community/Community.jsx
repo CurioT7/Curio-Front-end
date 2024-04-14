@@ -15,6 +15,7 @@ function Community() {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [showList, setShowList] = useState(false); 
     const [communityNames, setcommunityNames] = useState([]);
+    const [arrowClicked, setArrowClicked] = useState(false);
     const inputRef = useRef(null); 
 
     const handleChange = (event) => {
@@ -47,6 +48,7 @@ function Community() {
         event.stopPropagation();
         setShowList(!showList);
         inputRef.current.focus(); 
+        setArrowClicked(true);
     };
 
     async function fetchDataFromBackend() {
@@ -135,6 +137,7 @@ function Community() {
         if (!inputRef.current.contains(event.target)) {
             setShowSuggestions(false);
             setInputFocused(false);
+            setArrowClicked(false);
         }
     };
 
@@ -163,7 +166,7 @@ function Community() {
                 boxShadow: showList ? '0 0 0 1px #F5f5f5' : 'md'
             }}>
                 <div className="inner-div">
-                    {(inputFocused) ? (
+                    {inputFocused || arrowClicked  ? (
                         <Icon as={FaSearch} className="search-icon-community"/>
                     ) : (
                         <span className="circle-dot" />
