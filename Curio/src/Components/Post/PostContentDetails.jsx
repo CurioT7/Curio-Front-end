@@ -195,7 +195,7 @@ function PostContentDetails(post) {
                             <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
                             <div className='d-flex flex-column'>
                                 <a className='community-post-name'>r/germany</a>
-                                <a className='community-post-name' style={{fontWeight: "300", fontSize: "0.875rem"}}>{post.user}</a>
+                                <a className='community-post-name' href={`/user/${post.user}`} style={{fontWeight: "300", fontSize: "0.875rem"}}>{post.user}</a>
                             </div>
                         </div>
                         <div className='ms-auto'>

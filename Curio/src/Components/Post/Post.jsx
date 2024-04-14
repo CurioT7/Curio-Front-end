@@ -158,7 +158,7 @@ function Post(props) {
                                 <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
 
                                 <Box>
-                                <a className='community-post-name'>{props.user}</a>
+                                <a href={`/user/${props.user}`} className='community-post-name'>{props.user}</a>
                                 
                                 </Box>
                             </Flex>

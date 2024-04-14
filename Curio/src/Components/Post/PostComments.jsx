@@ -18,6 +18,7 @@ import ReportExtraReason from "./ReportExtraReason.jsx";
 import axios from "axios";
 import FilledSave from "../../styles/icons/FilledSave";
 import Delete from "../../styles/icons/Delete";
+import { useNavigate } from "react-router-dom";
 
 function PostComments(props) {
     const [upvoted, setUpvoted] = useState(false);
@@ -29,6 +30,7 @@ function PostComments(props) {
     const [isSaved, setIsSaved] = useState(false);
     const [isCommentAuthor, setIsCommentAuthor] = useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
     const handleOpenReportModal = () => {
         setReportReasonModalOpen(true);
     }
@@ -201,13 +203,17 @@ function PostComments(props) {
         }
     }, [])
 
+    const handleNavigationToUser = () => {
+        navigate(`/user/${props.username}`);
+    }
+
     return (
         <>
         <div className="d-flex flex-column">
             <div className="d-flex mb-3">
                 <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://preview.redd.it/snoovatar/avatars/nftv2_bmZ0X2VpcDE1NToxMzdfZWI5NTlhNzE1ZGZmZmU2ZjgyZjQ2MDU1MzM5ODJjNDg1OWNiMTRmZV8yNjYyMzA1MA_rare_fece1052-efb7-4ff4-be96-0aabece1e0fa-headshot.png?width=64&height=64&crop=smart&auto=webp&s=523c745b5c559087b4577764c49f60ad3af2c0c6' />
                 <div className="d-flex align-items-center">
-                    <p className="username-comments-section m-0">{props.username}</p>
+                    <p onClick={handleNavigationToUser} className="username-comments-section m-0">{props.username}</p>
                 </div>
             </div>
             <div className="d-flex">
