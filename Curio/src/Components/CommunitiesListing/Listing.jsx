@@ -38,6 +38,7 @@ function Listing(props) {
 
   React.useEffect(() => {
     const savedListValue = localStorage.getItem('listValue');
+    
     if (props.isHome) {
       setListValue(savedListValue);
       if (savedListValue === null) {
@@ -67,9 +68,7 @@ function Listing(props) {
       setCommunity(Community);
     }, [Community]);
   }
-  console.log(listValue);
-  
-  console.log(community);
+ 
   function changeListValue(value) {
     setListValue(value);
     handleListValueChange(value);
