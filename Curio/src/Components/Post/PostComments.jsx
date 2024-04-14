@@ -121,10 +121,12 @@ function PostComments(props) {
                 <div className="votes-hover-effect d-flex justify-content-center align-items-center p-3">
                     <button onClick={makeCommentDownvoted} className=" downvotes-footer-button d-flex justify-content-center align-items-center">{!downvoted && <Downvotes />}{downvoted && <FilledDownvote colorFill="#6A5CFF"/>}</button>
                 </div>
-                <Button flex='1' style={{backgroundColor: "#ffffff"}} className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
-                    <span className='share-post-text'>Share</span>
-                </Button>
-                <button className="post-dropdown-control d-flex justify-content-center align-items-center" onClick={handleEllipsisClick}>
+                <div>
+                    <Button flex='1' style={{backgroundColor: "#ffffff"}} className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
+                        <span className='share-post-text'>Share</span>
+                    </Button>
+                </div>
+                <button className="post-dropdown-control d-flex justify-content-center align-items-center p-2" onClick={handleEllipsisClick}>
                     <Ellipsis className="ellipsis-img" />
                 </button>
                 {showControls && <div className="post-dropdown" style={{ 

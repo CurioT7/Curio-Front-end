@@ -68,7 +68,16 @@ function Home() {
   
   useEffect(() => {
     window.addEventListener('hideOrSave', refetchHiddenSavedPosts);
-    
+    window.addEventListener('loginOrSignup', async () => {
+      if (localStorage.getItem('token')) {
+        getHidden();
+        getSaved();
+      }
+      else{
+        setHiddenPosts([]);
+        setSavedPosts([]);
+      }
+    })
     
     if(localStorage.getItem('token')){
       getHidden();
@@ -77,6 +86,16 @@ function Home() {
 
     return () => {
       window.removeEventListener('hideOrSave', refetchHiddenSavedPosts);
+      window.removeEventListener('loginOrSignup', async () => {
+        if (localStorage.getItem('token')) {
+          getHidden();
+          getSaved();
+        }
+        else{
+          setHiddenPosts([]);
+          setSavedPosts([]);
+        }
+      })
     }
   }, []);
 
