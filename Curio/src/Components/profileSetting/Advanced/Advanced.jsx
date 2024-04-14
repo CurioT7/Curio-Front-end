@@ -58,10 +58,29 @@ function Advanced() {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(response)
+        switch (response.status) {
+          case 200:
+            console.log("User preferences updated successfully");
+            break;
+          case 404:
+            console.log("User preferences not found");
+            break;
+          default:
+            console.log("Unexpected response status:", response.status);
+            break;
+        }
         return response;
     } catch (error) {
-        console.error('Error sending data to backend:', error);
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 500) {
+          console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
+        } else {
+          console.error("Error sending data to backend:", error.response.data);
+        }
+      } else {
+        console.error('Error sending data to backend:', error.message);
+      }
     }
   }
 
@@ -78,9 +97,28 @@ function Advanced() {
                 authorization: `Bearer ${localStorage.getItem('token')}`
               }
           });
+            // Handle different response status codes
+          switch (response.status) {
+            case 404:
+              console.log("User preferences not found");
+              break;
+            default:
+              console.log("Unexpected response status:", response.status);
+              break;
+          }
           return response.data;
       } catch (error) {
-          console.error('Error fetching data from backend:', error);
+        if (error.response) {
+          // Handle error response here
+          const status = error.response.status;
+          if (status === 500) {
+            console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
+          } else {
+            console.error("Error fetching data from backend:", error.response.data);
+          }
+        } else {
+          console.error('Error fetching data from backend:', error.message);
+        }
       }
   }
   useEffect(() => {
