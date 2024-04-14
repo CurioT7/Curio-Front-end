@@ -3,8 +3,12 @@ import "./NewPostForm.css";
 import { Button, Flex, Spacer, Checkbox } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import "./EditCreatearea.css"
+import { set } from 'mongoose';
+import { useState } from 'react';
+
 
 function EditCreatearea() {
+    const [isSpoiler,setSpoiler] = useState(false);
   return (
     <div className="EditCreatearea mt-3">
         <div>
@@ -18,9 +22,14 @@ function EditCreatearea() {
             <Button
             className='rest-button' 
             variant='ghost' 
-            leftIcon={<AddIcon />}>
-                
-                Spoiler
+            leftIcon={<AddIcon />}
+            onClick={() => setSpoiler(!isSpoiler)}
+            style={{
+                backgroundColor: isSpoiler ? 'black' : 'initial',
+                color: isSpoiler ? 'white' : 'initial'
+            }}
+            >
+            Spoiler
             </Button>
             <Button 
             className='rest-button'  

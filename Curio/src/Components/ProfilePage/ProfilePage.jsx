@@ -5,6 +5,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import RecentPosts from '../RecentPosts/RecentPosts.jsx'
 import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
 import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
+import profile from "../../assets/avatar_default_6.png";
+
+
 function ProfilePage(){
 
   const navigate = useNavigate();
@@ -99,7 +102,7 @@ return(
           {userPosts.map(post => (
             <div className='post-card' key={post.id}>
               <div className='author'>
-              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img className="profileAvatar" src={profile}  alt="profile picture"/>
               <b>u/{post.authorName}</b>
               </div>
               <p>{post.content}</p>
@@ -109,7 +112,7 @@ return(
             <div className='comment-card' key={comment.id}>
               <h6>u/author    •   title</h6>
               <div className='author'>
-              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+              <img className="profileAvatar" src={profile}  alt="profile picture"/>
               <b>u/{comment.authorName}</b>
               </div>
               <p>{comment.content}</p>
@@ -126,7 +129,7 @@ return(
     userPosts.map(post => (
       <div className='post-card' key={post.id}>
         <div className='author'>
-        <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+        <img className="profileAvatar" src={profile}  alt="profile picture"/>
         <b>u/{post.authorName}</b>
         </div>
         <p>{post.content}</p>
@@ -143,7 +146,7 @@ return(
           <div className='comment-card' key={comment.id}>
            <h6>u/author    •   title</h6>
            <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img className="profileAvatar" src={profile}  alt="profile picture"/>
             <b>u/{comment.authorName}</b>
             </div>
             <p>{comment.content}</p>
@@ -165,16 +168,15 @@ return(
       {upvotedPosts.length === 0 ? (
         <p>Looks like you haven't upvoted anything yet</p>
       ) : (
-        // upvotedPosts.map(post => (
-        //   <div className='post-card' key={post.id}>
-        //     <div className='author'>
-        //       <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-        //       <b>u/{post.authorName}</b>
-        //     </div>
-        //     <p>{post.content}</p>
-        //   </div>
-        // ))
-        <h6>upvoted</h6>
+        upvotedPosts.map(post => (
+          <div className='post-card' key={post.id}>
+            <div className='author'>
+              <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+              <b>u/{post.authorName}</b>
+            </div>
+            <p>{post.content}</p>
+          </div>
+        ))
       )}
     </TabPanel>
 
