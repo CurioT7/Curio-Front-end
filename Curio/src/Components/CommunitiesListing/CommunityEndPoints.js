@@ -63,3 +63,29 @@ export async function fetchRisingFromBackend(subreddit) {
         console.error('Error fetching data from backend:', error);
     }
 }
+
+export async function fetchSubCurioInfo(subreddit) {
+    try {
+        
+        const request = await axios.get(`${serverHost}/api/r/${subreddit}`,{
+            Subreddit: subreddit
+        });
+        return request.data;
+    } catch (error) {
+        console.error('Error fetching data from backend:', error);
+    }
+}
+
+export async function fetchUserName() {
+    try {
+        
+        const request = await axios.get(`${serverHost}/api/settings/v1/me`,{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return request.data;
+    } catch (error) {
+        console.error('Error fetching data from backend:', error);
+    }
+}

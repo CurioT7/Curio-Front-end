@@ -5,7 +5,7 @@ import React from 'react';
 import { Button } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
-import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend } from "./CommunityEndPoints";
+import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo,fetchUserName } from "./CommunityEndPoints";
 function CommunityBody({ props }) {
   
   const[posts, setPosts] = React.useState([])
@@ -16,7 +16,7 @@ function CommunityBody({ props }) {
     isSelected: false
   })
   const { Community } = useParams();
-  
+  const[isMod,setIsMod] = React.useState(false);
 
 
 
@@ -30,6 +30,23 @@ React.useEffect(() => {
     }
 
     fetchAndSetData();
+}, [Community]);
+
+React.useEffect(() => {
+  async function fetchAndSetData() {
+      const subCurioData = await fetchSubCurioInfo(Community);
+      const userData = await fetchUserName();
+      if (subCurioData && userData) {
+          subCurioData.subreddit.moderators.map((mod)=>{
+            console.log(mod.username);
+            if(mod.username===userData.username){
+              setIsMod(true);
+            }
+          })
+      }
+  }
+
+  fetchAndSetData();
 }, [Community]);
 
 
@@ -119,6 +136,7 @@ async function changeSortType(value,time) {
             downvotes={post.downvotes}
             comments={post.comments}
             content={post.content}
+            isMod={isMod}
           />
           <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
           </>
@@ -132,6 +150,7 @@ async function changeSortType(value,time) {
           downvotes={randomPost.post.downvotes}
           comments={randomPost.post.comments}
           content={randomPost.post.content}
+          isMod={isMod}
         />)}
         {(posts.length<1 && randomPost.isSelected==false) ||(!randomPost.post && randomPost.isSelected==true)? (<div className="m-5 row justify-content-center align-items-center">
           <div className="col text-center">
