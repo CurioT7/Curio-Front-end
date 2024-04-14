@@ -214,6 +214,25 @@ function Post(props) {
                                 <span data-testid="share" className='share-post-text'>Share</span>
                                 </Button>              
                             </Box>
+
+                             <Box display='flex'  justifyContent='end'>
+                                <Popover>
+                                    <PopoverTrigger>
+                                        <Button
+                                            variant='ghost'
+                                            colorScheme='gray'
+                                            className='moderator-icon'
+                                            
+                                        ><BsShield /></Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent margin={0} padding={0}>
+                                        <PopoverBody margin={0} padding={0}>
+                                        {isLocked?(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'><div><PiLockSimpleFill className='moderator-content-icon' /><span>Unlock Comments</span></div></Text>) :(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'> <div> <PiLockSimple className='moderator-content-icon'  /> <span>Lock comments</span></div></Text>)}
+                                            <Text margin={0} padding={3} className='moderator-content'>Hide this post</Text>
+                                        </PopoverBody>
+                                    </PopoverContent>
+                                </Popover>
+                            </Box>
                             
                         </CardFooter>
                     </Card>
