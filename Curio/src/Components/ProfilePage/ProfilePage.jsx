@@ -22,6 +22,8 @@ function ProfilePage(){
   const [savedPosts, setSavedPosts] = useState([]);
   const [savedComments, setSavedComments] = useState([]);
   const [hiddenPosts, setHiddenPosts] = useState([]);
+  const [downvotedPosts, setDownvotedPosts] = useState([]);
+  const [downvotedComments, setDownvotedComments] = useState([]);
   const getSaved = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -81,9 +83,7 @@ function ProfilePage(){
     }
   }, [isLoggedIn]);
 
-  const [downvotedPosts, setDownvotedPosts] = useState([]);
-  const [ upvotedComments, setUpvotedComments] = useState([]);
-  const [downvotedComments, setDownvotedComments] = useState([]);
+
 
   useEffect(() => {
     getUserOverview(username)
