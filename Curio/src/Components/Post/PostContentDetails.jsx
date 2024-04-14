@@ -15,11 +15,18 @@ import CommentInputForm from './CommentInputForm';
 import PostControl from './PostControl';
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
+import { fetchCommentsFromBackend } from './CommentsEndPoints';
+import SortingComments from './SortingComments';
+import {useParams} from 'react-router-dom';
+
+
 
 function PostContentDetails(post) {
+    const { postID } = useParams();
     const [savedPosts, setSavedPosts] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]);
     const [isHidden, setIsHidden] = useState(false);
+    const [comments, setComments] = useState([]);
     const toast = useToast();
     useEffect(() => {
         const getSaved = async () => {
@@ -228,13 +235,13 @@ function PostContentDetails(post) {
                 </div>
 
                 <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                <span className='share-post-text'>12</span>
+                 <span className='share-post-text'>12</span>
                 </Button>
                 <Button flex='1' className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
-                <span className='share-post-text'>Share</span>
+                    <span className='share-post-text'>Share</span>
                 </Button>
-            <CommentInputForm />
-            <SortingComments />
+                <CommentInputForm />
+            <   SortingComments />
             {comments.map((comment, index) => (
                 <PostComments key={comment._id} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
