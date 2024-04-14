@@ -6,7 +6,79 @@ import Post from '../../Components/Post/Post'
 import BackToTheTopButton from "./BackToTopButton.jsx";
 import Listing from '../../Components/CommunitiesListing/Listing.jsx'
 import { fetchPostsFromBackend,fetchHotFromBackend,fetchNewFromBackend,fetchTopFromBackend,fetchRandomFromBackend } from './HomeEndPoints.js'
+import axios from 'axios';
+import { useToast } from '@chakra-ui/react';
 function Home() {
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [savedComments, setSavedComments] = useState([]);
+  const [hiddenPosts, setHiddenPosts] = useState([]); 
+  const toast = useToast();
+
+  const getSaved = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setSavedPosts(response.data.savedPosts);
+        }
+      }
+      catch(err){
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          toast({
+            description: "Server Error Occured.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+      }
+    }
+
+  const refetchHiddenSavedPosts = async () => {
+    if(localStorage.getItem('token')){
+      getHidden();
+      getSaved();
+    }
+  }
+
+  
+  useEffect(() => {
+    window.addEventListener('hideOrSave', refetchHiddenSavedPosts);
+    
+    
+    if(localStorage.getItem('token')){
+      getHidden();
+      getSaved();
+    }
+
+    return () => {
+      window.removeEventListener('hideOrSave', refetchHiddenSavedPosts);
+    }
+  }, []);
 
   const[posts, setPosts] = React.useState([])
   const[randomPost, setRandomPost] = React.useState({
@@ -75,7 +147,7 @@ async function changeSortType(value,time) {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {(randomPost.isSelected==false) ? (posts.map((post) => (
+        {((randomPost.isSelected==false) && posts) ? (posts.map((post) => (
           <><Post
             
             _id={post._id}
@@ -86,6 +158,10 @@ async function changeSortType(value,time) {
             downvotes={post.downvotes}
             comments={post.comments}
             content={post.content}
+            subReddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
           />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </>
@@ -100,38 +176,11 @@ async function changeSortType(value,time) {
           downvotes={randomPost.post.downvotes}
           comments={randomPost.post.comments}
           content={randomPost.post.content}
+          savedPosts={savedPosts}
+          savedComments={savedComments}
         />
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </>)}
-         <Post
-            _id={1}
-            user="r/germany"
-            title="First Post"
-            content="Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla facilisi. Vivamus id enim odio. Aliquam volutpat urna ac est pulvinar rhoncus."
-            upvotes={10}
-            downvotes={1}
-            comments={[4, 5]} // Dummy array for comments
-          />
-          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
-          <Post
-            _id={2}
-            user="r/netherlands"
-            title="Second Post"
-            image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
-            upvotes={10}
-            downvotes={1}
-            comments={[4, 5]} // Dummy array for comments
-          />
-          <Post
-            _id={3}
-            user="r/PS5"
-            title="Third Post"
-            image="https://preview.redd.it/rate-my-cars-1-10-v0-8j3ibwziwlrc1.jpg?width=640&crop=smart&auto=webp&s=5a58a6861581152a2cd2eb9f8ea2671b56c5e640"
-            upvotes={10}
-            downvotes={1}
-            comments={[4, 5]} // Dummy array for comments
-          />
-        
       </div>
       <div className='d-flex justify-content-end ms-auto mb-4 fixed-container' style={{marginRight: "3rem", paddingTop: "1.2rem", height: "100vh", overflowY: "auto", width: "20%"}}>
           <RecentPosts />

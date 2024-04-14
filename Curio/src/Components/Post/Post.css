@@ -159,3 +159,51 @@
 .ql-toolbar.ql-snow{
     border: none!important;
 }
+
+.post-dropdown-control{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+
+.post-dropdown-control:hover{
+    background-color: #E2E7E9;
+}
+
+.dropdown-list-post-control:hover{
+    background-color: #E2E7E9;
+}
+
+.post-dropdown{
+    width: 7rem!important;
+}
+
+.block-warning-secondary{
+    font-size: 0.75rem;
+    color: #2a3c42;
+}
+
+.hidden-container{
+    background-color: #F2F4F5;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.post-hidden-content{
+    color: #0f1a1c;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.undo-button{
+    background-color: #eaedef;
+    color: #000000;
+    font-size: 0.875rem;
+    border-radius: 20px;
+    padding: 10px;
+    font-weight: 600;
+}
+
+.undo-button:hover{
+    background-color: #E2E7E9;
+}

@@ -1,0 +1,14 @@
+.url-input__input{
+    background-color: transparent;
+    border: 1px solid #edeff1;
+    margin-top: 8px;
+    min-height: 66px;
+    padding: 8px 16px;
+    resize: none;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    outline: none;
+    border-radius: 4px;
+}

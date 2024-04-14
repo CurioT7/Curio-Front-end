@@ -11,13 +11,12 @@ import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 
 
-const AccountPreferences = () => {
+const AccountPreferences = (props) => {
     const serverHost = import.meta.env.VITE_SERVER_HOST;
-    const [email, setEmail] = React.useState("example@gamil.com");
-    const [username,setUsername] = React.useState("example")
+   
     const [gender, setGender] = React.useState("MAN")
     const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
-    const [findPass, setFindPassword] = React.useState(false)
+   
 
     const toast = useToast()
     function Toast(){
@@ -35,7 +34,7 @@ const AccountPreferences = () => {
     
     const handleGender = (event) => {
         setGender(event.target.value);
-        sendDataToBackend({gender: gender})
+        sendDataToBackend({gender: event.target.value})
         Toast()
       };
     
@@ -64,20 +63,7 @@ const AccountPreferences = () => {
             console.error('Error config:', error.config);
         }
     }
-    async function FindUserInformation(){
-        try{
-            const request = await axios.get(`${serverHost}/api/settings/v1/me`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                
-                }});
-                
-                return request.data;
-        }
-        catch(error){
-
-        }
-    }
+    
 
     async function sendDataToBackend(data) {
         try {
@@ -103,16 +89,11 @@ const AccountPreferences = () => {
     React.useEffect(() => {
         async function fetchAndSetData() {
             const data = await fetchDataFromBackend();
-            const UserData = await FindUserInformation();
             if (data) {
                 setGender(data.gender);
                 setIP(data.locationCustomization);
             }
-            if(UserData){
-                setEmail(UserData.email);
-                setUsername(UserData.username);
-                setFindPassword(UserData.createdPassword);
-            }
+           
         }
 
         fetchAndSetData();
@@ -123,18 +104,18 @@ const AccountPreferences = () => {
     
       return(
         <Box mb={10}>
-            {findPass==false &&  <Flex mb={5} wrap='wrap'>
-                    <Titles title='Email Address' description={email}/>
+            {props.findPass==false &&  <Flex mb={5} wrap='wrap'>
+                    <Titles title='Email Address' description={props.email}/>
                 
                     <Spacer />
                     <>
-                    <GeneratePass email={email} username={username} buttonStyle={buttonStyle}/>
+                    <GeneratePass isDelete={false} isGoogle={false} isEmail={true} title="Change your email address" context="To change your email address" email={props.email} username={props.username} buttonStyle={buttonStyle}/>
                     </>
                 </Flex>}
            
-           {findPass===true&& <Box>
+           {props.findPass===true&& <Box>
                 <Flex mb={5} wrap='wrap'>
-                    <Titles title='Email Address' description={email}/>
+                    <Titles title='Email Address' description={props.email}/>
                 
                     <Spacer />
                     <>

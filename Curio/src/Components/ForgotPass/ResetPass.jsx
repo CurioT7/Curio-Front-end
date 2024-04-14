@@ -4,12 +4,14 @@ import  './ResetPass.css'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import logo from "../../assets/Curio_logo.png";
 import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
+import { useParams } from 'react-router-dom';
 
 function ResetPass(props) {
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [checked, setChecked] = useState(false);
     const [match, setMatch] = useState(true);
+    const {token} = useParams();
 
     useEffect(() => {
         if(password !== newPassword){

@@ -63,23 +63,24 @@ function Safety() {
   };
 
   
-  const postBlockUser = (username) => {
-    axios.post(`${serverHost}/api/User/block`, {
-      usernameToBlock: username
-    },{
-      headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}` 
-      }
-    }).then(response => {
+  const postBlockUser = async (username) => {
+    try {
+      const response = await axios.post(`${serverHost}/api/User/block`, {
+        usernameToBlock: username
+      }, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       if (response.status === 200) {
-        Toast(`${username} in now blocked.`); 
+        Toast(`${username} is now blocked.`);
+        return true;
       }
-    })
-    .catch(error => {
+    } catch (error) {
       if (error.response) {
         switch (error.response.status) {
           case 403:
-            Toast(`${username} successfully blocked`);
+            Toast(`${username} can't be blocked after 24 hours of unblocking`);
             break;
           case 404:
             Toast(`${username} to block not found`);
@@ -87,26 +88,28 @@ function Safety() {
           case 409:
             Toast(`${username} already blocked`);
             break;
-            case 500:
+          case 500:
             Toast(`An unexpected error occurred on the server. Please try again later.`);
             break;
           default:
             break;
         }
       }
-    });
-  };
-
-  
-  const handleAddBlockedUser = () => {
-    if (blockedUserInput.trim() != ''){
-      postBlockUser(blockedUserInput);
-      patchBlockUser(blockedUserInput);
-      const newUser = { username: blockedUserInput};
-      setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-      setBlockedUserInput('');
+      return false;
     }
-};
+  };
+  
+  const handleAddBlockedUser = async () => {
+    if (blockedUserInput.trim() !== '') {
+      const blockResult = await postBlockUser(blockedUserInput);
+      if (blockResult === true) {
+        patchBlockUser(blockedUserInput);
+        const newUser = { username: blockedUserInput };
+        setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
+        setBlockedUserInput('');
+      }
+    }
+  };
 //////////////////////////////////// Unblock /////////////////////////////////
     const postunBlockUser = (username) => {
         axios.post(`${serverHost}/api/User/unblock`, {
@@ -135,10 +138,26 @@ function Safety() {
         }
         });
     };
+
+    const patchUnblockUser = (name) => {
+      const updatedBlockedUsers = blockedUsers.filter(user => user.username !== name);
+      axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
+        viewBlockedPeople: updatedBlockedUsers
+      }, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }).then(response => {
+      }).catch(error => {
+      });
+    };
+
+
     const handleRemoveBlockedUser = index => {
         const updatedBlockedUsers = [...blockedUsers];
         const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].username;
         setBlockedUsers(updatedBlockedUsers);
+        patchUnblockUser(unblockedUser);
         // Call postunBlockUser here after removing the user
         postunBlockUser(unblockedUser);
     };

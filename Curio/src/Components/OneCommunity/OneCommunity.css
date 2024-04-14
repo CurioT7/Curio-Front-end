@@ -12,10 +12,6 @@
   line-height: 16px;
 }
 
-.columnBack, .columnBack1{
-  /* margin: 0;
-  padding: 0; */
-}
 
 .columnBack1{
   background-color: #F9FAFA;;
@@ -57,15 +53,27 @@
   color: rgb(19, 19, 19);
   width: 300px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
-  opacity: 100%;
+  opacity: 100%;  
+  max-width: 300px;
 }
 
+#overlay-example .tooltip-outer {
+  border-radius: 99px;
+  opacity: 1;
+}
+
+.tooltip.show {
+  opacity: 1;
+}
 
 .viewCommButton{
   background-color: #0045AC;
   border-radius: 99px;
+  height: 32px;
   color: white;
   justify-content: center;
+  font-weight: 500;
+  font-family: sans-serif;
 }
 
 .viewCommButton:hover{
@@ -81,18 +89,30 @@
 
 }
 
-.popo44{
+.popOverMenu{
   width: 300px;
+  font-family: BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  opacity: 1;
 }
 
 .popOverCol{
   height: 50px;
+
 }
 
 .powerOverRow{
   height: 50px;
 }
 
-.membersText{
+.membersText1{
   color: rgb(172, 172, 172);
+  margin-top: 10px;
+}
+
+.numbersHeader1{
+  margin-bottom: 0px;
+}
+
+.commuDescription{
+  font-size: 12px;
 }

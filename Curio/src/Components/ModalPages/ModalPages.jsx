@@ -5,7 +5,11 @@ import ExclamationMark from '../../styles/icons/ExclamationIcon';
 import classes from './ModalPages.module.css';
 import Back from '../../styles/icons/Back'
 import axios from "axios";
-import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
+import { userBlock , userUnblock, handleUserBlock, handleUserUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
+import { useToast } from '@chakra-ui/react';
+
+
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 const MultiPageFormModal = (props) => {
     const [step, setStep] = useState(1);
@@ -13,25 +17,46 @@ const MultiPageFormModal = (props) => {
     const [reportReason, setReportReason] = useState(' ');
     const [description, setDescription] = useState(' ');
     const [explanation, setExplanation] = useState(' ');
-    const [reportType, setReportType] = useState(' ');
     const [furtherDetails, setFurtherDetails] = useState('');
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isSecondStep, setSecondStep] = useState(false);
     const[isPrevStep, setPrevStep] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const [isBlockedError, setIsBlockedError] = useState(false);
 
+    const [blockedUsers, setBlockedUsers] = useState([]);
 
-    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const token = localStorage.getItem('token');
+
+    const toastError = useToast();
+
+    function ToastError() {
+        toastError({
+            description: "You can't block somebody again within 24 hours of blocking them",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
+    const toastsuccess = useToast()
+    function ToastSuccess() {
+        toastsuccess({
+            description: "User Blocked successfully",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
 
     useEffect(() => {
         if (!props.show) {
             setStep(1);
         }
     }, [props.show]);
-
-    const handleReportType = (repType) => {
-        setReportType(repType);
-    };
 
     const handleDescriptionChange = (description) => {
         setDescription(description);
@@ -49,10 +74,8 @@ const MultiPageFormModal = (props) => {
     const handleOptionClick = (reason, explanation) => {
         if (reportReason === reason) {
             setReportReason('');
-            setExplanation('');
         } else {
             setReportReason(reason);
-            setExplanation(explanation);
         }
         setSecondStep(true);
     };
@@ -87,7 +110,6 @@ const MultiPageFormModal = (props) => {
     };
 
     const reportUser = async (reportedUsername, reportType, reportReason ,reportDetails ) => {
-        console.log(localStorage.getItem('token'));
         try {
             const response = await axios.post(`${hostUrl}/api/report_user`, {
                 reportedUsername: reportedUsername,
@@ -96,7 +118,7 @@ const MultiPageFormModal = (props) => {
                 reportDetails
             }, {
                 headers: {
-                    authorization : `Bearer ${localStorage.getItem('token')}`
+                    authorization : `Bearer ${token}`
                 }
             });
     
@@ -106,13 +128,88 @@ const MultiPageFormModal = (props) => {
         }
     };
 
-    const handleBlockToggle = () => {
-        if (!isBlocked) {
-            userBlock(props.username);
-        } else {
-            userUnblock(props.username);
+    async function getBlocked(username) {
+        try {
+            const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setBlockedUsers(response.data.viewBlockedPeople || []);
+            return response.data
+        } catch (error) {
+            console.error('Error:', error);
         }
-        setIsBlocked(!isBlocked);
+    }
+
+    const patchBlockUser = async (name) => {
+        const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
+          viewBlockedPeople: [...blockedUsers, { username: name}]
+        },{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        if(response.status === 200){
+            const newUser = { username: name};
+            setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
+        }
+      };
+
+      const handleUserBlock = async (username) => {
+            const result = await userBlock(username);
+            if(result.success){
+                await getBlocked(username);
+                patchBlockUser(username);
+                ToastSuccess();
+            }
+            if (!result.success) {
+                ToastError();
+                setIsBlockedError(true);
+            }
+        }
+
+    const handleUserUnblock = async (username) => {
+            try {
+                const index = blockedUsers.findIndex((user) => user.username === username);
+                if (index === -1) {
+                    console.error('User not found');
+                    return;
+                }
+        
+                const updatedBlockedUsers = [...blockedUsers];
+                updatedBlockedUsers.splice(index, 1);
+        
+
+                const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
+                    viewBlockedPeople: updatedBlockedUsers
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+        
+                if (response.status === 200) {
+                    setBlockedUsers(updatedBlockedUsers);
+                    userUnblock(username);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+    };
+
+
+    const handleBlockToggle = async (username) => {
+        if (!isBlocked) {
+            handleUserBlock(username);
+            }
+            else{
+                handleUserUnblock(username);
+            }
+            setIsBlocked(!isBlocked);
     }
 
 
@@ -497,7 +594,7 @@ const MultiPageFormModal = (props) => {
                                   <p className={` m-0' ${classes['block']}`}>You won't be able to send direct messages or chat requests to each other.</p>
                                 </div>
                                 <div className='form-check form-switch d-flex align-items-center'>
-                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" id="block" role="switch" name="block" value="block" onChange={handleBlockToggle} />
+                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" id="block" role="switch" name="block" value="block" onChange={() => {handleBlockToggle(props.username)}} />
                                 </div>
                             </div>
                             <div className="d-flex justify-content-end">

@@ -7,10 +7,49 @@ import Upvotes from "../../styles/icons/Upvotes";
 import Downvotes from "../../styles/icons/Downvotes";
 import FilledUpvote from "../../styles/icons/FilledUpvote";
 import FilledDownvote from "../../styles/icons/FilledDownvote";
+import Ellipsis from "../../styles/icons/Elippsis";
+import SaveButton from "../../styles/icons/SaveButton";
+import ReportPost from "../../styles/icons/ReportPost";
+import Hide from "../../styles/icons/Hide";
+import ReportReason  from "./ReportReason.jsx";
+import ReportSubmitted from "./ReportSubmitted.jsx";
+import ReportExtraReason from "./ReportExtraReason.jsx";
 
 function PostComments(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
+    const [isReportReasonModalOpen, setReportReasonModalOpen] = useState(false);
+    const [isReportSubmittedModalOpen, setReportSubmittedModalOpen] = useState(false);
+    const [isExtraReasonModalOpen, setExtraReasonModalOpen] = useState(false);
+    const [reportReason, setReportReason] = useState('');
+    const handleOpenReportModal = () => {
+        setReportReasonModalOpen(true);
+    }
+    const handleShowSubmittedReport = () => {
+    setShowControls(false);
+    setReportSubmittedModalOpen(true);
+    }
+    const handleSetReportReason = (reason) => {
+        console.log(reason)
+        setReportReason(reason);
+    }
+    const handleShowExtraReasons = () => {
+        setShowControls(false);
+        setExtraReasonModalOpen(true);
+    }
+    const handleBackToReasonModal = () => {
+        setExtraReasonModalOpen(false);
+        setReportReasonModalOpen(true);
+    }
+    const showSubmittedFinalReport = () => {
+        setExtraReasonModalOpen(false);
+        setReportSubmittedModalOpen(true);
+    }
+
+    const [showControls, setShowControls] = useState(false);
+    const handleEllipsisClick = () => {
+        setShowControls(!showControls);
+    };
 
     const makeCommentUpvoted = () => {
         if (upvoted) {
@@ -28,8 +67,42 @@ function PostComments(props) {
             setUpvoted(false);
         }
     }
+    const handleSave = async () => {
+    try{
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.post(`${hostUrl}/api/save`, {
+        category: "comment",
+        id: props.postId
+      },
+       {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200){
+        toast({
+          description: "Comment saved.",
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+      if (response.status === 400 || response.status === 404){
+        toast({
+          description: "comment already saved.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
     return (
+        <>
         <div className="d-flex flex-column">
             <div className="d-flex mb-3">
                 <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://preview.redd.it/snoovatar/avatars/nftv2_bmZ0X2VpcDE1NToxMzdfZWI5NTlhNzE1ZGZmZmU2ZjgyZjQ2MDU1MzM5ODJjNDg1OWNiMTRmZV8yNjYyMzA1MA_rare_fece1052-efb7-4ff4-be96-0aabece1e0fa-headshot.png?width=64&height=64&crop=smart&auto=webp&s=523c745b5c559087b4577764c49f60ad3af2c0c6' />
@@ -51,16 +124,40 @@ function PostComments(props) {
                 <Button flex='1' style={{backgroundColor: "#ffffff"}} className='post-footer-button me-2 px-3' variant='ghost'  leftIcon={<LuShare />}>
                     <span className='share-post-text'>Share</span>
                 </Button>
-                <IconButton
-                    className='ms-auto'
-                    variant='ghost'
-                    colorScheme='gray'
-                    aria-label='See menu'
-                    borderRadius={"50%"}
-                    icon={<SlOptions />}
-                />
+                <button className="post-dropdown-control d-flex justify-content-center align-items-center" onClick={handleEllipsisClick}>
+                    <Ellipsis className="ellipsis-img" />
+                </button>
+                {showControls && <div className="post-dropdown" style={{ 
+                                                    display: showControls ? 'flex' : 'none',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'flex-start',
+                                                    position: 'absolute',
+                                                    backgroundColor: '#FFFFFF',
+                                                    borderRadius: '10px',
+                                                    boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
+                                                    marginTop: '9.5rem',
+                                                    marginLeft: '9rem',
+                                                    zIndex: '1'
+                                                }}>
+                                                    <ul className='drop-down-list w-100 px-0'>
+                                                        <li onClick={handleSave} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                                <SaveButton />
+                                                                <div className="d-flex align-items-center justify-content-center"><p className='mt-3 text-text d-flex'>Save</p></div>
+                                                        </li>
+                                                        <li onClick={handleOpenReportModal} className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center">
+                                                                <ReportPost />
+                                                                <div><p className='mt-3 text-text'>Report</p></div>
+                                                        </li>
+                                                    </ul>   
+                                                </div>
+                        }
             </div>
         </div>
+        <ReportReason show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
+        <ReportSubmitted show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
+        <ReportExtraReason showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
+        </>
+        
     );
 }
 
