@@ -50,9 +50,9 @@ function Post(props) {
             setUpvoted(false);
         }
     }
-    const handleLockComments = () => {
+    const handleLockComments = async () => {
        
-        const response = SendLockedPost(props.id);
+        const response = await SendLockedPost(props.id);
         if(response.success){
             setIsLocked(true);
             console.log("Post locked successfully");
@@ -63,9 +63,9 @@ function Post(props) {
         }
 
     }
-    const handleUnlockComments = () => {
+    const handleUnlockComments = async () => {
         
-        const response = SendUnlockedPost(props.id);
+        const response = await SendUnlockedPost(props.id);
         if(response.success){
             console.log("Post unlocked successfully");
             setIsLocked(false);
