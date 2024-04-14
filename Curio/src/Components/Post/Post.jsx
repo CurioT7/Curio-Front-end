@@ -8,6 +8,7 @@ import {
   } from '@chakra-ui/react'
 import { FaRegCommentAlt } from "react-icons/fa";
 import { PiLockSimple } from "react-icons/pi";
+import { FcLock } from "react-icons/fc";
 import { LuShare } from "react-icons/lu";
 import { SlOptions } from "react-icons/sl";
 import Upvotes from '../../styles/icons/Upvotes.jsx';
@@ -193,6 +194,7 @@ function Post(props) {
                                 
                                 </Box>
                             </Flex>
+                            {isLocked && <FcLock className='lock-icon' />}
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
                             </Flex>
                         </CardHeader>
