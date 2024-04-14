@@ -1,0 +1,77 @@
+.sorting-comments{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.sorting-comments > span{
+    font-size: 12px;
+    font-weight: 500;
+    color: rgb(90, 111, 118);
+}
+
+.sortbtn{
+    background-color:none;
+    color:rgb(90, 111, 118);
+    padding: 0.4rem;
+    margin-left: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.sortbtn:hover, .sortbtn:focus {
+    background-color: rgb(210, 216, 219);
+  }
+.sort-content{
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: fit-content;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.sort-content .sort-item {
+    color: black;
+    padding: 10px 50px 12px 10px;
+    margin-bottom: 0px;
+    font-size: 15px;
+    text-decoration: none;
+    display: block;
+  }
+  .sort-content .sort-title {
+    padding: 10px 12px 0px 10px;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    display: block;
+  }
+
+  .sorting-comments .sort-item:hover {background-color: #ddd;}
+  
+  .show {display: block;}
+  .arrow-icon{
+    margin-left: 0.5rem;
+  }
+
+  .sort-item div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .item-icon{
+    margin-right: 1rem;
+    font-size: 1.6rem;
+  }

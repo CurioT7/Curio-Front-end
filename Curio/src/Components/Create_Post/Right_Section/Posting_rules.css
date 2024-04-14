@@ -1,0 +1,52 @@
+.curioPostingHeader{
+    background-color: white;
+    border-radius: 4px;
+    margin-top: 15px;
+    padding: 12px;
+}
+.headerContent{
+    font-size: 16px;
+    line-height: 20px;
+    align-items: center;
+    border-bottom: 1px solid #edeff1;
+    color: #1c1c1c;
+    display: flex;
+    font-weight: 500;
+}
+.logoImg{
+    height: 40px;
+    margin-right: 8px;
+    padding-bottom: 5px;
+    width: 40px;
+}
+.rulesList{
+    padding: 0;
+    margin: 0;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    list-style: decimal;
+    list-style-position: inside;
+}
+.ruleItem{
+    border-bottom: 1px solid #edeff1;
+    color: #1c1c1c;
+    padding: 10px 5px;
+}
+.blank-div-rule{
+    margin-top: 16px;
+    width: 312px;
+}
+.redditNotice{
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: #7c7c7c;
+    margin: 10px auto 10px 0;
+    max-width: 250px;
+}
+.contentPolicyLink,
+.reddiquetteLink{
+    color: #0079d3;
+    text-decoration: none;
+}

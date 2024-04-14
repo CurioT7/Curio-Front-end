@@ -7,24 +7,19 @@
 
 .container-create-post {
     display: flex;
-    flex: 2 1;
     background: #DAE0E6;
-    align-items: stretch;
-    height: 100vh;
 }
 
 .container-create-post .left-container-post {
-    background-color: #DAE0E6;
     align-items: center;
-    margin: 20px;
     width: 70%;
 }
 
 .container-create-post .right-container-post {
-    background-color: #DAE0E6;
-    align-items: center;
-    margin: 20px;
-    width: 30%; /* Adjust width for the right container */
+    flex: 0 0 312px;
+    width: auto; 
+    display: block;
+    margin-left: 24px;
 }
 
 .cont-create-post {
@@ -46,4 +41,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+@media(max-width:960px){
+    .container-create-post .left-container-post {
+        margin: 0;
+        width: 100%;
+        padding: 20px 24px 20px 24px;
+    }
+    .container-create-post .right-container-post {
+        display: none;
+    }
 }
