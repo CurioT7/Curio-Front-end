@@ -22,41 +22,49 @@ function ReportExtraReason(props){
     const handleSubmitReport = async () => {
         props.showSubmittedFinalReport();
         props.onHide();
-        // try{
-        //   var hostUrl = import.meta.env.VITE_SERVER_HOST;
-        //   const response = await axios.post(`${hostUrl}/api/report`, {
-        //     reportReason: props.reportReason,
-        //     reportExtraReason: reportExtraReason,
-        //     itemId: props.postId
-        //   },
-        //    {
-        //     headers: {
-        //         Authorization: `Bearer ${localStorage.getItem('token')}`
-        //     }
-        //   });
-        //   if (response.status === 200){
-        //     props.showSubmittedFinalReport();
-        //     props.onHide();
-        //   }
-        //   if (response.status === 400 || response.status === 404){
-        //     toast({
-        //       description: "Invalid reason chosen.",
-        //       status: 'error',
-        //       duration: 5000,
-        //       isClosable: true,
-        //       backgroundColor: '#EB001F',
-        //     })
-        //   }
-        // }
-        // catch(err){
-        //   toast({
-        //     description: "Server Error. Please try again later.",
-        //     status: 'error',
-        //     duration: 5000,
-        //     isClosable: true,
-        //   })
-        //   console.log(err);
-        // }
+        try{
+          var hostUrl = import.meta.env.VITE_SERVER_HOST;
+          const response = await axios.post(`${hostUrl}/api/report`, {
+            reportReason: props.reportReason.toLowerCase(),
+            reportExtraReason: reportExtraReason,
+            reportType: "post",
+            itemID: props.postId
+          },
+           {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+          if (response.status === 200 || response.status === 201){
+            toast({
+              description: "Report Submitted Successfully",
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+              backgroundColor: '#EB001F',
+            })
+            props.showSubmittedFinalReport();
+            props.onHide();
+          }
+          if (response.status === 400 || response.status === 404){
+            toast({
+              description: "Invalid reason chosen.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+              backgroundColor: '#EB001F',
+            })
+          }
+        }
+        catch(err){
+          toast({
+            description: "Server Error. Please try again later.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+          console.log(err);
+        }
     }
     return (
         <Modal

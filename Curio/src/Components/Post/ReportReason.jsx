@@ -19,17 +19,24 @@ function ReportReason(props) {
       try{
           var hostUrl = import.meta.env.VITE_SERVER_HOST;
           const response = await axios.post(`${hostUrl}/api/report`, {
-            reportReason: props.reportReason,
-            reportExtraReason: reportExtraReason,
-            itemId: props.postId
+            reportReason: reportReason.toLowerCase(),
+            reportType: "post",
+            itemID: props.postId
           },
            {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
           });
-          if (response.status === 200){
-            props.showSubmittedFinalReport();
+          if (response.status === 200 || response.status === 201){
+            toast({
+              description: "Report Submitted",
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+              backgroundColor: '#EB001F',
+            })
+            props.showSubmittedReport();
             props.onHide();
           }
           if (response.status === 400 || response.status === 404){

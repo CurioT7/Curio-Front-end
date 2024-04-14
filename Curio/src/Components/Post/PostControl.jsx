@@ -81,6 +81,7 @@ function PostControl(props) {
   };
   const handleShowSubmittedReport = () => {
     setShowControls(false);
+    setReportReasonModalOpen(false);
     setReportSubmittedModalOpen(true);
   }
   const handleSetReportReason = (reason) => {
@@ -355,9 +356,9 @@ function PostControl(props) {
                                       </div>
               }
       </div>
-      <ReportReason show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
+      <ReportReason postId={props._id} show={isReportReasonModalOpen} showExtraReasons={handleShowExtraReasons} setReportReason={handleSetReportReason} showSubmittedReport={handleShowSubmittedReport} onHide={() => setReportReasonModalOpen(false)} />
       <ReportSubmitted username={props.username} show={isReportSubmittedModalOpen} onHide={() => setReportSubmittedModalOpen(false)} />
-      <ReportExtraReason showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
+      <ReportExtraReason postId={props._id} showSubmittedFinalReport={showSubmittedFinalReport} backToReasonModal={handleBackToReasonModal} show={isExtraReasonModalOpen} reportReason={reportReason} onHide={() => setExtraReasonModalOpen(false)} />
     </>
   );
 }
