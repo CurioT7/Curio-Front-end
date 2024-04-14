@@ -1,12 +1,12 @@
 import React from 'react';
 import "./NewPostForm.css";
-import { Button, ButtonGroup, Flex, Spacer, Checkbox } from '@chakra-ui/react';
+import { Button, Flex, Spacer, Checkbox } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import "./EditCreatearea.css"
 
 function EditCreatearea() {
   return (
-    <div>
+    <div className="EditCreatearea mt-3">
         <div>
             <div className='button-group-edit'>
             <Button 

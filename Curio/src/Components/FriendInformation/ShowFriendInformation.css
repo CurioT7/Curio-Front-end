@@ -224,7 +224,7 @@
     border: none;
 }
 
-.dropdown-menu{
+.dropdown-menu1{
     width: 70px;
 }
 
@@ -361,5 +361,15 @@
 .dropdown-hover-effect:hover{
     background-color: #f2f4f5;
     cursor: pointer;
+}
+
+.blockprofileImage{
+    width: 60px;
+    height: 90px;
+}
+
+.blockText{
+    font-weight: 700;
+    font-size: 18px;
 }
 

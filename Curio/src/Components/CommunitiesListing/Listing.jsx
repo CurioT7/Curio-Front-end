@@ -38,8 +38,13 @@ function Listing(props) {
 
   React.useEffect(() => {
     const savedListValue = localStorage.getItem('listValue');
+    
     if (props.isHome) {
       setListValue(savedListValue);
+      if (savedListValue === null) {
+        localStorage.setItem('listValue', 'Best');
+       
+      }
     } 
      else if (props.isProfile) {
       setListValue(savedListValue);
@@ -63,9 +68,7 @@ function Listing(props) {
       setCommunity(Community);
     }, [Community]);
   }
-  console.log(listValue);
-  
-  console.log(community);
+ 
   function changeListValue(value) {
     setListValue(value);
     handleListValueChange(value);
@@ -73,8 +76,26 @@ function Listing(props) {
   }
   function changeSortTop(value) {
     setSortTop(value);
-    props.onChangeSort("Top",value);
-   console.log(sortTop);
+    if(value==="Today"){
+      props.onChangeSort("Top","0");
+    }
+    else if(value==="This Week"){
+      props.onChangeSort("Top","7");
+    }
+    else if(value==="This Month"){
+      props.onChangeSort("Top","30");
+    }
+    else if(value==="This Year"){
+      props.onChangeSort("Top","365");
+    }
+    else if(value==="Now"){
+      props.onChangeSort("Top","now");
+    }
+    else{
+      props.onChangeSort("Top",value);
+    }
+    
+   
   }
   return (
     <div className="dropdown">

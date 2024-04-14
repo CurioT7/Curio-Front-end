@@ -2,8 +2,9 @@ import React from 'react';
 import { useEffect } from "react";
 import {useNavigate} from 'react-router-dom';
 import { Box, Button, Text } from '@chakra-ui/react';
-import NewPostForm from "../../Components/Posts/NewPostForm"
-import "./Createpost.css"
+import NewPostForm from "../../Components/Create_Post/NewPostForm";
+import "./Createpost.css";
+import Community from '../../Components/Create_Post/Community/Community';
 
 function Createpost(props) {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Createpost(props) {
           <Box className="cont-create-post">
             <Text className='create-post-title'>Create Post</Text>
           </Box>
+          <Community/>
           <div className='new-post-form'>
             <NewPostForm/>
           </div>
