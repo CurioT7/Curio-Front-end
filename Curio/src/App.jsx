@@ -79,7 +79,6 @@ function App() {
           <Route path='/user' element={<ProfilePage/>}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar}/>} />
-          <Route path='/commPopup' element={<CommPopup/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
         </Routes>
       </ChakraProvider>

@@ -113,7 +113,8 @@ function Text_Editor() {
                 textDecoration: strikethroughMode ? "line-through" : "none",
                 fontFamily: inlinecodeMode ? "monospace" : "inherit",
                 color: inlinecodeMode ? "#ff006d" : "black",
-                verticalAlign: superscriptMode ? "super" : "baseline"
+                verticalAlign: superscriptMode ? "super" : "baseline",
+                marginTop: "1.5px"
               }}
             />
           </div>
