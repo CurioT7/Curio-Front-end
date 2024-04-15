@@ -42,29 +42,31 @@
   font-size: 12px;
   margin: 2px;
   color: rgb(87, 111, 118);
+  margin-bottom: 1.5rem;
 }
 
-#overlay-example .tooltip-arrow {
+#overlay-example .popover-arrow {
   display: none;
 }
 
-#overlay-example .tooltip-inner {
+
+#overlay-example {
   background: rgba(248, 248, 248, 1);
   color: rgb(19, 19, 19);
   width: 300px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
-  opacity: 100%;  
   max-width: 300px;
+  padding: 5px;
 }
 
-#overlay-example .tooltip-outer {
+/* #overlay-example .popover-outer {
   border-radius: 99px;
   opacity: 1;
-}
+} */
 
-.tooltip.show {
+/* .tooltip.show {
   opacity: 1;
-}
+} */
 
 .viewCommButton{
   background-color: #0045AC;
@@ -106,7 +108,7 @@
 
 .membersText{
   color: rgb(172, 172, 172);
-  margin-top: 0px;
+  margin-top: 10px;
 }
 
 .numbersHeader{
