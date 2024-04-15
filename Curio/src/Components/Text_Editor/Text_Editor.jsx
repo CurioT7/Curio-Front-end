@@ -19,7 +19,12 @@ function Text_Editor() {
   };
 
   return (
-    <ReactQuill modules={module} theme="snow" value={inputText} onChange={handleTextInputChange}/>
+    <ReactQuill
+    modules={module} 
+    theme="snow" 
+    value={inputText} 
+    onChange={handleTextInputChange}
+    placeholder="Text(optional)"/>
   );
 }
 
