@@ -16,7 +16,7 @@ import CommentInputForm from './CommentInputForm';
 import PostControl from './PostControl';
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
-import { fetchCommentsFromBackend } from './CommentsEndPoints';
+import { fetchCommentsFromBackend,GetSortedComments } from './CommentsEndPoints';
 import SortingComments from './SortingComments';
 import {useParams} from 'react-router-dom';
 import PostLock from './PostLock';
@@ -26,6 +26,7 @@ import { set } from 'mongoose';
 
 function PostContentDetails(post) {
     const { postID } = useParams();
+    const subreddit = "Art error";
     const [savedPosts, setSavedPosts] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]);
     const [isHidden, setIsHidden] = useState(false);
@@ -177,7 +178,7 @@ function PostContentDetails(post) {
     const handleBack = () => {
         navigate(-1);
     }
-    React.useEffect(() => {
+    useEffect(() => {
         async function fetchAndSetData() {
             const data = await fetchCommentsFromBackend(post._id);
             if (data) {
@@ -194,6 +195,16 @@ function PostContentDetails(post) {
             window.removeEventListener('deleteComment', fetchAndSetData);
         }
     }, []);
+
+    const handleChangedSort = async (value) => {
+        const data = await GetSortedComments(post._id, value,subreddit);
+        if (data) {
+            setComments(data.comments);
+        }
+        else {
+            Toast();
+        }
+    }
 
     return (
         <>
@@ -269,7 +280,7 @@ function PostContentDetails(post) {
                     </div>
                 }
                 <CommentInputForm />
-                <SortingComments />
+                <SortingComments onChangeSort={handleChangedSort} />
             {comments.map((comment, index) => (
                 <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
