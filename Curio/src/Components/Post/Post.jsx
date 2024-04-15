@@ -240,7 +240,7 @@ function Post(props) {
                             </Box>
 
                             {props.isMod&& <Box display='flex'  justifyContent='end'>
-                               <PostLock id={props.id} onChangeLock={handleIsLocked} />
+                               <PostLock id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             
                         </CardFooter>

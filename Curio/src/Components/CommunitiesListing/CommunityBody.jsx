@@ -54,7 +54,7 @@ React.useEffect(() => {
 async function changeSortType(value,time) {
     
     
-    async function SetData() {
+    
         if (value === 'Hot') {
             const data = await fetchDataFromBackend(Community);
             if (data) {
@@ -112,8 +112,7 @@ async function changeSortType(value,time) {
               setRandomPost({ post:{}, isSelected: true });
             }
         }
-    }
-    SetData();
+    
 }
 
   return (
@@ -128,7 +127,7 @@ async function changeSortType(value,time) {
           <>
           <Post
             
-            id={post._id}
+            _id={post._id}
             title={post.title}
             body={post.body}
             user={post.authorName}
@@ -142,7 +141,7 @@ async function changeSortType(value,time) {
           </>
         ))):(<Post
             
-          id={randomPost.post._id}
+          _id={randomPost.post._id}
           title={randomPost.post.title}
           body={randomPost.post.body}
           user={randomPost.post.authorName}
