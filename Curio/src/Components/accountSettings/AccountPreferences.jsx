@@ -109,7 +109,7 @@ const AccountPreferences = (props) => {
                 
                     <Spacer />
                     <>
-                    <GeneratePass isDelete={false} isGoogle={false} isEmail={true} title="Change your email address" context="To change your email address" email={props.email} username={props.username} buttonStyle={buttonStyle}/>
+                    <GeneratePass isEmail={true} title="Change your email address" context="To change your email address" email={props.email} username={props.username} buttonStyle={buttonStyle}/>
                     </>
                 </Flex>}
            

@@ -3,13 +3,13 @@
   padding-bottom: 0px;
 }
 
-.HeaderModal{
+.Header{
     border-bottom: none; 
     padding-top: 10px; 
     padding-bottom: 0px;
   }
 
-.foooter{
+.footer{
   border-top: none;
   height: 8rem;
 }
@@ -27,7 +27,7 @@
   display: inline-block;
 }
 
-.headertext1{
+.header-text1{
   margin-left: 1rem;
 }
 
@@ -35,10 +35,6 @@
   font-weight:600;
   font-size: 18px;
   margin-bottom: 0px;
-}
-
-.body-text{
-  margin-bottom: 1.5rem;
 }
 
 .closeButton{
@@ -201,7 +197,6 @@
 
 .report-thank{
   margin-bottom: 2rem;
-  margin-top: 1rem;
 }
 
 .main-button, .done-button, .next-button, .submit-button{

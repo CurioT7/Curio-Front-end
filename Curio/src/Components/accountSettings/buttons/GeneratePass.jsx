@@ -42,9 +42,8 @@ function GeneratePass(props){
     }
     return(
         <Box>
-                {props.isEmail &&<Button onClick={onOpen} style={props.buttonStyle} variant='outline' colorScheme='blue'>Change</Button>}
-                {props.isDelete &&<Button color='red' onClick={onOpen} variant='unstyled' leftIcon={<FaTrashAlt />} > Delete Account</Button>}
-                {props.isGoogle && <Button className='fs-6 text-decoration-underline' variant='ghost'  onClick={onOpen} style={{borderRadius:'30px'}} colorScheme='blue' color='red'  size='sm'>(Disconnect)</Button>}
+                {props.isEmail ?(<Button onClick={onOpen} style={props.buttonStyle} variant='outline' colorScheme='blue'>Change</Button>):<Button color='red' onClick={onOpen} variant='unstyled' leftIcon={<FaTrashAlt />} > Delete Account</Button>}
+
                 <Modal isCentered size='md' isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
                     <ModalContent>

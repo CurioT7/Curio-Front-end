@@ -7,7 +7,6 @@ Welcome to CURIO. CURIO is built with React JSX, Chakra UI, and Bootstrap, aimin
 - [Tools Used](#tools-used)
 - [Features](#features)
 - [Installation](#installation)
-- [Environment Variables](#environment-variables)
 - [Usage](#usage)
 - [Screenshots](#screenshots)
 - [Authors](#authors)
@@ -53,11 +52,6 @@ To set up CURIO locally, follow these steps:
    npm run dev
    # or
    yarn dev
-
-## Environment Variables
-- **VITE_SERVER_HOST**: Host URL for the server.
-- **VITE_CLIENT_ID**: Client ID for authentication purposes.
-- **VITE_CLIENT_SECRET**: Client secret associated with the provided client ID.
    
 ## Usage
 

@@ -267,7 +267,7 @@ function ShowFriendInformation(props) {
                                         <button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick}>
                                         <Ellipsis className="ellipsis-img" />
                                     </button>
-                                    <div className="dropdown-menu1" style={{ 
+                                    <div className="dropdown-menu" style={{ 
                                         display: showDropdown ? 'flex' : 'none',
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',

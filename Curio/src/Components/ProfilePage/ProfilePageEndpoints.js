@@ -92,15 +92,13 @@ const getUserComments = async (username) => {
     return userComments;
 };
 
-const getUserDownvoted = async () => {
-    const url = `${VITE_SERVER_HOST}/user/downvoted`;
-    const token = localStorage.getItem('token');
+const getUserDownvoted = async (username) => {
+    const url = `${VITE_SERVER_HOST}/user/${username}/downvoted`;
 
     const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
         },
     });
 
@@ -145,15 +143,13 @@ const getUserDownvoted = async () => {
     return { votedPosts, votedComments };
 };
 
-const getUserUpvoted = async () => {
-    const url = `${VITE_SERVER_HOST}/user/upvoted`;
-    const token = localStorage.getItem('token');
+const getUserUpvoted = async (username) => {
+    const url = `${VITE_SERVER_HOST}/user/${username}/upvoted`;
 
     const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
         },
     });
 
@@ -244,13 +240,11 @@ const getUserSubmitted = async (username) => {
 
 const getUserAbout = async (username) => {
     const url = `${VITE_SERVER_HOST}/user/${username}/about`;
-    const token = localStorage.getItem('token')
 
     const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
         },
     });
 
@@ -298,7 +292,7 @@ const getUserAbout = async (username) => {
     return {
         followersCount: responseData.followersCount,
         followingCount: responseData.followingCount,
-        goldRecieved: responseData.goldReceived,
+        goldRecieved: responseData.goldRecieved,
         cakeDay: responseData.cakeDay,
         postKarma: responseData.postKarma,
         commentKarma: responseData.commentKarma,

@@ -7,7 +7,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SignupHandlerForLogin from './SignupHandlerForLogin.jsx';
-import { useToast } from '@chakra-ui/react';
 
 
 function Login({
@@ -26,7 +25,6 @@ function Login({
   const formRef = useRef();
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const navigate = useNavigate();
-  const toast = useToast();
 
   useEffect(() => {
     if (password.length < 8) {
@@ -65,33 +63,10 @@ function Login({
       token: response.access_token
     });
     if(serverResponse.status === 200){
-      const getUsername = await axios.get(`${hostUrl}/api/settings/v1/me`, {
-          headers: {  
-            Authorization: `Bearer ${serverResponse.data.accessToken}`
-          }
-      });
-      if(getUsername.status === 200){
-        localStorage.setItem('username', getUsername.data.username);
-      }
       const token = serverResponse.data.accessToken;
       localStorage.setItem('token', token);
       window.dispatchEvent(new Event('loginOrSignup'));
-      
-      toast({
-          description: "Connection succeeded",
-          status: "success",
-          position: "bottom",
-          isClosable: true,
-          backgroundColor: "#55BD46",
-          containerStyle: {
-            width: "500px",
-            backgroundColor: "#55BD46",
-            fontWeight: "300",
-            borderRadius: "20px",
-          },
-          height: "100%",
-          duration: 3000
-        });
+      props.onHide();
       navigate('/');
     }
   }

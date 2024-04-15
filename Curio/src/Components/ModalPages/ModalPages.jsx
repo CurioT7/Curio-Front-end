@@ -84,6 +84,9 @@ const MultiPageFormModal = (props) => {
         setStep(step + 1);
         setIsOptionSelected(false);
         setPrevStep(false);
+        console.log(selectedOption)
+        console.log(reportReason)
+        console.log(furtherDetails)
     };
 
     const twoSteps = () => {
@@ -219,14 +222,14 @@ const MultiPageFormModal = (props) => {
               className={classes['modal-content']}
               onHide={handleModalClose}
               animation={false}>
-                <Modal.Header closeButton className={classes.HeaderModal}>
+                <Modal.Header closeButton className={classes.Header}>
                     {step === 1 && (
                         <Modal.Title>
                             <h6 className={classes.headertext}>Submit a report</h6>
                         </Modal.Title>
                     )}
                     {step === 2 && (
-                        <Modal.Title className='d-flex'>
+                        <Modal.Title>
                             <div className={classes['back-btn-container']}>
                                 <button onClick={prevStep} className={classes['back-btn']}>
                                     <div className={classes['back-btn-content']}><Back /></div>
@@ -236,7 +239,7 @@ const MultiPageFormModal = (props) => {
                         </Modal.Title>
                     )}
                     {step === 3 && (
-                        <Modal.Title className='d-flex'>
+                        <Modal.Title>
                             <div className={classes['back-btn-container']}>
                                 <button onClick={prevStep} className={classes['back-btn']}>
                                     <div className={classes['back-btn-content']}><Back /></div>
@@ -559,7 +562,7 @@ const MultiPageFormModal = (props) => {
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer className={classes.foooter}>
+                <Modal.Footer className={classes.footer}>
                     {step === 1 && (
                         <button className={classes['next-button']} onClick={nextStep} disabled={!isOptionSelected}>Next</button>
                     )}

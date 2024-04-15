@@ -20,7 +20,6 @@ function SignupHandler() {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [username, setEnteredUsername] = useState('');
   const [password, setEnteredPassword] = useState('');
-  const [enteredGender, setEnteredGender] = useState('');
   const [isPreferencesModalOpen, setPreferencesModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const toast = useToast();
@@ -79,10 +78,6 @@ function SignupHandler() {
     setEnteredPassword(password);
   }
 
-  const handleSettingGender = (gender) => {
-    setEnteredGender(gender);
-  }
-
   const handleBackToGender = () => {
     setGenderModalOpen(true);
     setPreferencesModalOpen(false);
@@ -95,7 +90,7 @@ function SignupHandler() {
 
   const handleSignup = async () => {
     try{
-      const response = await signup({username, email: enteredEmail, password, gender: enteredGender});
+      const response = await signup({username, email: enteredEmail, password});
       console.log(response);
       if(response.status === 201){
         console.log('Signup successful');
@@ -173,16 +168,16 @@ function SignupHandler() {
   return (
       <>
           <div style={{borderRadius: '999px!important', color: "#000000!important"}} className="link-offcanvas signup-button new-dropdown-signup mt-0 p-0 d-flex justify-content-center">
-              {!isAuthenticated && <div onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><div className="col-2 me-2 pe-0 d-flex align-items-center"><Signup /></div><span className="ms-1 new-dropdown-label col-12">Login / Sign Up</span></div>}
-              {isAuthenticated && <div onClick={handleLogout} className="d-flex signup-button-item"><Signup />
+              {!isAuthenticated && <div onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><div className="col-2 me-2 pe-0 d-flex align-items-center"><Signup /></div><span className="ms-1 new-dropdown-label col-12">Login / Register</span></div>}
+              {isAuthenticated && <div onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup />
               <span className="ms-3 new-dropdown-label">
-                Log Out
+                Logout
                 </span>
               </div>}
           </div>
           {isSignupInfoModalOpen && <SignupInfo show={isSignupInfoModalOpen} onHide={() => setSignupInfoModalOpen(false)} onContinue={handleOpenUsernameInfo} onEnteredEmail={handleEnteredEmail} enteredEmail={enteredEmail} />}
           {isUsernameInfoModalOpen && <UsernameInfo show={isUsernameInfoModalOpen} onHide={() => setUsernameInfoModalOpen(false)} onContinueToGender={handleContinueToGender} onEnteredUsername={handleEnteredUsername} onEnteredPassword={handleEnteredPassword} enteredUsername={username} enteredPassword={password} onBack={handleBackToSignupInfo} />}
-          {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} handleEnteredGender={handleSettingGender} />}
+          {isGenderModal && <Gender show={isGenderModal} onHide={() => setGenderModalOpen(false)} onContinueToPreferences={handleContinueToPreferences} />}
           {isPreferencesModalOpen && <Preferences show={isPreferencesModalOpen} onHide={() => setPreferencesModalOpen(false)} onBackToGender={handleBackToGender} onSignup={handleSignup} />}
       </>
   );
