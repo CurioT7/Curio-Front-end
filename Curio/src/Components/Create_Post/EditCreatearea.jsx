@@ -30,7 +30,7 @@ function EditCreatearea({ title, content, community }) {
         {
           title: title, 
           content: content,
-          linkedSubreddit: community.community || community,
+          subreddit: community.community || community,
           isOC: ocClicked,
           isSpoiler: spoilerClicked,
           isNSFW: nsfwClicked,
