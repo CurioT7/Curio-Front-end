@@ -1,4 +1,4 @@
-.Text-optional-textarea {
+/* .Text-optional-textarea {
     min-height: 122px;
     padding: 8px 16px;
     resize: vertical;
@@ -50,4 +50,22 @@
     font-weight: normal; 
     color: #aaa; 
   }
-  
+   */
+.quill {
+    border-radius: 4px;
+    background: white;
+    position: relative;
+    border: 1px solid #edeff1;
+}
+.ql-editor {
+    min-height: 122px;
+    padding: 8px 16px;
+    resize: vertical;
+    overflow: hidden;
+    font-family: Noto Sans, Arial, sans-serif;
+    color: #1c1c1c;
+    caret-color: #0079d3;
+}
+.ql-toolbar.ql-snow{
+    background: #f6f7f8;
+}
