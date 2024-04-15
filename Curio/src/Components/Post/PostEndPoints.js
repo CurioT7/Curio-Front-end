@@ -32,3 +32,20 @@ export async function SendUnlockedPost(postID) {
         return false;
     }
 }
+
+export async function FetchPostLockStatus(postID) {
+    try{
+        const request = await axios.get(`${serverHost}/api/info`,{
+            objectID: postID,
+            objectType: 'post'
+        } ,{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return request.data;
+    }catch(error){
+        console.error('Error fetching data from backend:', error);
+        
+    }
+}

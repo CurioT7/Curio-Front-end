@@ -59,7 +59,7 @@ function Disconnect(props){
     function handleSubmit(e){
         e.preventDefault();
         sendDataToBackend();
-        console.log("ddadw")
+        
         
     }
     const buttonStyle ={
