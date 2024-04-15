@@ -6,12 +6,23 @@ import PasswordErrorMessage from './PasswordErrorMessage';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { MdMarkEmailUnread } from "react-icons/md";
+import { useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 const Google = (props) =>{
+    const toast = useToast()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")
     const [wrongPass,setWrongPass]=React.useState(false)
-    const pass ="12345678"
     const serverHost = import.meta.env.VITE_SERVER_HOST;
+    const navigate = useNavigate();
+    function Toast(){
+        toast({
+            title: "account connected successfully",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
     function handleYourPass(e){
         setYourPass(e.target.value)
     }
@@ -26,14 +37,33 @@ const Google = (props) =>{
     const handleGoogleSignupResponse = async (response) => {
         console.log(response);
         // const hostUrl = import.meta.env.VITE_SERVER_HOST;
-        const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
-          token: response.access_token,
-          password: yourPass
-        },{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+        try{const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
+            token: response.access_token,
+            password: yourPass
+          },{
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`
+              }
+          })
+          setWrongPass(false)
+          Toast()
+          onClose()
+          window.location.reload();
+            
+        }catch(error){
+            console.error( error.message);
+            switch (error.response.status) {
+                case 400:
+                    if(error.response.data.message === "Invalid password"){
+                    setWrongPass(true)}
+                    
+                    break;
+                
+                default:
+                    break;
+          }
+          } 
+        
       }
     
       const login = useGoogleLogin({
@@ -66,7 +96,7 @@ const Google = (props) =>{
     }
     function handleSubmit(e){
         e.preventDefault();
-        sendDataToBackend()
+        // sendDataToBackend()
     }
     return(
         <>

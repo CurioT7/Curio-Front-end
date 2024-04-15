@@ -8,7 +8,7 @@ function Text_Editor() {
   const [inputText, setInputText] = useState("");
 
   const toolbarOptions = [['bold', 'italic','link','strike',{ 'script': 'super' }],
-   [ { 'header': [1, 2, 3, 4, 5, 6, false] },{ 'list': 'bullet' },{ 'list': 'ordered'},'blockquote','code-block']];
+  [ { 'header': [1, 2, 3, 4, 5, 6, false] },{ 'list': 'bullet' },{ 'list': 'ordered'},'blockquote','code-block']];
 
   const module = {
     toolbar: toolbarOptions,
@@ -25,7 +25,8 @@ function Text_Editor() {
     value={inputText} 
     onChange={handleTextInputChange}
     placeholder="Text(optional)"/>
+
   );
 }
 
-export default Text_Editor;
+export default Text_Editor

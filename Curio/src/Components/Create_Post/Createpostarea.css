@@ -12,6 +12,8 @@
     width: 100%;
     outline: none;
     margin-bottom: 8px;
+    font-family: Noto Sans, Arial, sans-serif;
+    color: #1c1c1c;
     caret-color: #0079d3;
 }
 .counter-title{

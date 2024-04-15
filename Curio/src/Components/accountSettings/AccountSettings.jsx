@@ -14,6 +14,7 @@ const AccountSettings = () =>{
     const [email, setEmail] = React.useState("example@gamil.com");
     const [username,setUsername] = React.useState("example")
     const [findPass, setFindPassword] = React.useState(false)
+    const [connectedToGoogle, setConnectedToGoogle] = React.useState(false)
 
     async function FindUserInformation(){
         try{
@@ -36,6 +37,7 @@ const AccountSettings = () =>{
                 setEmail(UserData.email);
                 setUsername(UserData.username);
                 setFindPassword(UserData.createdPassword);
+                setConnectedToGoogle(UserData.connectedToGoogle);
             }
         }
 
@@ -50,10 +52,10 @@ const AccountSettings = () =>{
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">account preferences</h3>
                     <AccountPreferences email={email} username={username} findPass={findPass}/>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">CONNECTED ACCOUNTS</h3>
-                    <ConnectedAccounts/>
+                    <ConnectedAccounts findPass={findPass} isConnected={connectedToGoogle}/>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">delete ACCOUNTS</h3>
                     <Flex justifyContent='flex-end' className="mb-5">
-                    {findPass?(<DeleteButton/>) : (<GeneratePass title="Deactivate account" context="To deactivate your Reddit account" isEmail={false} email={email} username={username}/>)}
+                    {findPass?(<DeleteButton/>) : (<GeneratePass title="Deactivate account" context="To deactivate your Reddit account" isEmail={false} isDelete={true} isGoogle={false} email={email} username={username}/>)}
                     </Flex>
                 </div>
 

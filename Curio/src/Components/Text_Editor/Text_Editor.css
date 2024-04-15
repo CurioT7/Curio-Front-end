@@ -8,8 +8,6 @@
     min-height: 122px;
     padding: 8px 16px;
     resize: vertical;
-    overflow: hidden;
-    font-family: Noto Sans, Arial, sans-serif;
     color: #1c1c1c;
     caret-color: #0079d3;
 }
