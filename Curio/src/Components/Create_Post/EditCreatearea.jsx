@@ -6,7 +6,7 @@ import "./EditCreatearea.css";
 import axios from "axios";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
-function EditCreatearea({ title, content }) {
+function EditCreatearea({ title, content, community }) {
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
@@ -30,6 +30,7 @@ function EditCreatearea({ title, content }) {
         {
           title: title, 
           content: content,
+          linkedSubreddit: community.community || community,
           isOC: ocClicked,
           isSpoiler: spoilerClicked,
           isNSFW: nsfwClicked,
@@ -40,6 +41,7 @@ function EditCreatearea({ title, content }) {
           },
         }
       );
+
       // Handle different response status codes
       switch (response.status) {
         case 201:

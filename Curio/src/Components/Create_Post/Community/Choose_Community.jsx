@@ -9,7 +9,7 @@ import CreateCommunity from '../../Sidebar/CreateCommunity.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function Community() {
+function Choose_Community({ onSelect }) { // Receive onSelect prop
     const [inputValue, setInputValue] = useState('');
     const [username, setUsername] = useState(null);
     const [userCommunities, setUserCommunities] = useState([]);
@@ -50,9 +50,12 @@ function Community() {
 
     const handleItemClick = (item) => {
         setChosenItem(item); // Set chosen item when an item is clicked
-        setInputValue(item);
+        setInputValue(item.community || item); // Ensure that the selected item is either a community object or a string
         setDropdownVisible(false);
+        onSelect(item.community ? item.community : item); // Pass the selected item without modifications if it's a string, or extract the community name if it's an object
     };
+    
+    
 
     useEffect(() => {
         document.addEventListener('click', handleClick);
@@ -169,7 +172,7 @@ function Community() {
                                             </Button>
                                         </div>
                                         {userCommunities.map(community => (
-                                            <div key={community._id} className='dropdown-user' onClick={() => handleItemClick(community.name)}>
+                                            <div key={community._id} className='dropdown-user' onClick={() => handleItemClick({ community: `r/${community.name}` })}>
                                                 <img 
                                                     src={profile} 
                                                     alt="Community Picture" 
@@ -198,4 +201,4 @@ function Community() {
     );
 }
 
-export default Community;
+export default Choose_Community;
