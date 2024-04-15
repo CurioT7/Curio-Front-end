@@ -286,7 +286,7 @@ function Post(props) {
                                     <PopoverContent margin={0} padding={0}>
                                         <PopoverBody margin={0} padding={0}>
                                         {isLocked?(<Text onClick={handleUnlockComments} margin={0} padding={3} className='moderator-content'><div><PiLockSimpleFill className='moderator-content-icon' /><span>Unlock Comments</span></div></Text>) :(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'> <div> <PiLockSimple className='moderator-content-icon'  /> <span>Lock comments</span></div></Text>)}
-                                            <Text margin={0} padding={3} className='moderator-content'>Hide this post</Text>
+                                            
                                         </PopoverBody>
                                     </PopoverContent>
                                 </Popover>
