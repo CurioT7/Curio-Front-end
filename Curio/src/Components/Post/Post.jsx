@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import { BsShield } from "react-icons/bs";
 import { PiLockSimpleFill } from "react-icons/pi";
-import { SendLockedPost,SendUnlockedPost } from './PostEndPoints.js';
+import { SendLockedPost,SendUnlockedPost,FetchPostLockStatus } from './PostEndPoints.js';
 import './Post.css'
 import PostControl from './PostControl.jsx';
 import axios from 'axios';
@@ -72,6 +72,15 @@ function Post(props) {
             setUpvoted(false);
         }
     }
+    useEffect(() => {
+        const fetchPostLockStatus = async () => {
+            const response = await FetchPostLockStatus(props.id);
+            if(response){
+                setIsLocked(response.item.isLocked);
+            }
+        }
+        fetchPostLockStatus();
+    },[])
     const handleLockComments = async () => {
        
         const response = await SendLockedPost(props.id);
