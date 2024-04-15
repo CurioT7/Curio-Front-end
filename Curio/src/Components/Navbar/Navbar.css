@@ -65,18 +65,23 @@
 .search-icon{
     color: #000;
 }
+
+.sub-right-navbar{
+    display: flex;
+    align-items: center;
+}
 .navbar-component .right-section-navbar{
     flex: 1;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     margin-top: 20px;
 }
 .navbar-component .right-section-navbar .sub-right-navbar{
     list-style: none;
 }
-.navbar-component .right-section-navbar .sub-right-navbar a img{
-    height: 20px;
-}
+/* .navbar-component .right-section-navbar .sub-right-navbar a img{
+    height: 32px;
+} */
 .navbar-component .right-section-navbar .sub-right-navbar a{
     padding: 10px 10px;
 }
@@ -99,15 +104,17 @@
     max-height: 0px;
     overflow: hidden;
     transition: max-height 0.5s;
+    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
 }
 .sub-menu-wrap.open-menu{
-    max-height: 400px;
+    max-height: 800px;
 }
 .sub-menu{
-    background: whitesmoke;
-    padding: 20px;
-    margin: 10px;
+    background: white;
 }
+
+
 .user-info{
     display: flex;
     align-items: center;
@@ -125,29 +132,78 @@
     border: 0;
     height: 1px;
     width: 100%;
-    margin: 15px 0 10px;
+    margin-bottom: 7px;
+    background-color: gray;
 }
 .sub-menu-link{
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #525252;
-    margin: 12px 0;
+    color: rgb(19, 19, 19);
+    font-size: 14px;
+    padding-left: 20px;
+    height: 50px;
     width: 100%;
 }
-.sub-menu-link p{
+
+.sub-menu-link:hover{
+    background-color: #edeff1;
+}
+
+.sub-menu-link p,h6{
     position: relative;
     top: 10px;
     width: 100%;
 }
 .sub-menu-link img{
-    width: 40px;
-    padding: 8px;
-    margin-right: 15px;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
 }
 .sub-menu-link:hover p{
     font-weight: 500;
 }
+
+.viewProfile{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgb(19, 19, 19);
+    font-size: 14px;
+    padding-left: 15px;
+    height: 60px;
+    padding-bottom: 5px;
+    margin-top : .5px;
+    width: 100%;
+}
+
+.viewProfile:hover{
+    background-color: #edeff1;
+}
+
+.profileImg{
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+    display: inline-block;
+}
+
+.last-item1{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgb(19, 19, 19);
+    font-size: 14px;
+    padding-left: 20px;
+    height: 60px;
+    padding-bottom : 20px;
+    width: 100%;
+}
+
+.last-item1:hover{
+    background-color: #edeff1;
+}
+
 @media(max-width:1000px) {
     .navbar-component .right-section-navbar{
         background: gray;
@@ -209,11 +265,9 @@
 }
 .logged-out-button:hover{
     cursor: pointer;
-    background-color: #E2E7E9;
 }
 
 .signup-focus:active{
-    background-color: #E2E7E9;
     color: #000;
 }
 
@@ -227,4 +281,47 @@
 .logged-out-login-button:hover{
     background-color: #962900;
     cursor: pointer;
+}
+
+.drop-down-description{
+    margin-left: 1rem;
+}
+
+.drop-down-profile-description{
+    margin-left: 10px;
+
+}
+
+.contribNumber{
+    margin-left: 5px;
+}
+
+.ArrowandNumber{
+    color: rgb(87, 111, 118);
+    font-size: 12px;
+}
+
+.switchDiv{
+    position: relative;
+}
+
+.switchplacement{
+    position: absolute;
+    right: 1rem;
+}
+
+.navImg{
+    height: 20px;
+    width: 20px;
+}
+
+.usernameText{
+    margin-left: 10px;
+}
+
+.link-offcanvas .dropdown-menu{
+    width: 256px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    font-size: 14px;
 }

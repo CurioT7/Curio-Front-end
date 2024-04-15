@@ -46,7 +46,7 @@ function Createpostarea() {
   };
 
   return (
-    <div>
+    <div className='create-post-region'>
       <Post_Methods onMethodSelect={handleMethodSelect} />
       <div className="container my-3">
         <div className="textarea-container">
