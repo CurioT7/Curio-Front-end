@@ -5,6 +5,7 @@ import "./Choose_Community.css";
 import profile from "../../../assets/Profile_navbar.png";
 import axios from 'axios';
 import { Button } from '@chakra-ui/react';
+import CreateCommunity from '../../Sidebar/CreateCommunity.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -17,6 +18,11 @@ function Community() {
     const [chosenItem, setChosenItem] = useState(null); 
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
+    const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
+
+    const handleCreateCommunityClick = () => {
+        setCreateCommunityModalOpen(true);
+    };
 
     const handleClick = (event) => {
         if (inputRef.current && inputRef.current.contains(event.target)) {
@@ -98,93 +104,97 @@ function Community() {
     }, []);
     
     return (
-        <div className="outer-div">
-            <div className="middle-div">
-                <div className="inner-div">
-                    {inputFocused ? (
-                        <Icon as={FaSearch} className="search-icon-community"/>
-                    ) : (
-                        chosenItem ? (
-                            <img src={profile} alt="Profile Picture" className="username-image" />
+        <>
+            <div className="outer-div">
+                <div className="middle-div">
+                    <div className="inner-div">
+                        {inputFocused ? (
+                            <Icon as={FaSearch} className="search-icon-community"/>
                         ) : (
-                            <span className="circle-dot" />
-                        )
-                    )}
-                    <div className="input-container">
-                        <Input 
-                            ref={inputRef}
-                            variant='unstyled' 
-                            placeholder='Choose a community'
-                            spellCheck={false}
-                            value={inputValue}
-                            onChange={handleChange}
-                            onFocus={handleInputFocus}
-                            style={{caretColor: '#0079d3'}} />
-                        {dropdownVisible && (
-                            <div ref={dropdownRef} className='dropdown-list-choose-community'>
-                                <div className='dropdown-content-username container mt-2'>
-                                    <p className='title-username container'>Your Profile</p>
-                                    <div className='dropdown-user'>
-                                        <img 
-                                            src={profile} 
-                                            alt="Profile Picture" 
-                                            className='username-image'
-                                            onClick={() => handleItemClick(`u/${username}`)} />
-                                        <div className='username-section'>
-                                            <p 
-                                                className='dropdown-username'
-                                                onClick={() => handleItemClick(`u/${username}`)}>
-                                                u/{username}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='dropdown-content-community container mt-2'>
-                                    <div 
-                                    className='heading-content-community' 
-                                    style={{
-                                        display:'flex', 
-                                        alignItems: 'center', 
-                                        marginBottom:''
-                                        }}
-                                    >
-                                        <p className='title-community container' style={{ marginBottom: '0' }}>Your Communities</p>
-                                        <Button
-                                        className="post-button" 
-                                        size='xs' 
-                                        variant='outline'
-                                        color='blue'
-                                        border='transparent' 
-                                        padding='0 20px'
-                                        borderRadius='25px'>
-                                        Create New
-                                        </Button>
-                                    </div>
-                                    {userCommunities.map(community => (
-                                        <div key={community._id} className='dropdown-user' onClick={() => handleItemClick(community.name)}>
+                            chosenItem ? (
+                                <img src={profile} alt="Profile Picture" className="username-image" />
+                            ) : (
+                                <span className="circle-dot" />
+                            )
+                        )}
+                        <div className="input-container">
+                            <Input 
+                                ref={inputRef}
+                                variant='unstyled' 
+                                placeholder='Choose a community'
+                                spellCheck={false}
+                                value={inputValue}
+                                onChange={handleChange}
+                                onFocus={handleInputFocus}
+                                style={{caretColor: '#0079d3'}} />
+                            {dropdownVisible && (
+                                <div ref={dropdownRef} className='dropdown-list-choose-community'>
+                                    <div className='dropdown-content-username container mt-2'>
+                                        <p className='title-username container'>Your Profile</p>
+                                        <div className='dropdown-user'>
                                             <img 
                                                 src={profile} 
-                                                alt="Community Picture" 
-                                                className='community-image' />
+                                                alt="Profile Picture" 
+                                                className='username-image'
+                                                onClick={() => handleItemClick(`u/${username}`)} />
                                             <div className='username-section'>
                                                 <p 
-                                                    className='dropdown-community'
-                                                    onClick={() => handleItemClick(community.name)}>
-                                                    r/{community.name}
+                                                    className='dropdown-username'
+                                                    onClick={() => handleItemClick(`u/${username}`)}>
+                                                    u/{username}
                                                 </p>
                                             </div>
                                         </div>
-                                    ))}
+                                    </div>
+                                    <div className='dropdown-content-community container mt-2'>
+                                        <div 
+                                        className='heading-content-community' 
+                                        style={{
+                                            display:'flex', 
+                                            alignItems: 'center', 
+                                            marginBottom:''
+                                            }}
+                                        >
+                                            <p className='title-community container' style={{ marginBottom: '0' }}>Your Communities</p>
+                                            <Button
+                                            onClick={handleCreateCommunityClick}
+                                            className="post-button" 
+                                            size='xs' 
+                                            variant='outline'
+                                            color='blue'
+                                            border='transparent' 
+                                            padding='0 20px'
+                                            borderRadius='25px'>
+                                            Create New
+                                            </Button>
+                                        </div>
+                                        {userCommunities.map(community => (
+                                            <div key={community._id} className='dropdown-user' onClick={() => handleItemClick(community.name)}>
+                                                <img 
+                                                    src={profile} 
+                                                    alt="Community Picture" 
+                                                    className='community-image' />
+                                                <div className='username-section'>
+                                                    <p 
+                                                        className='dropdown-community'
+                                                        onClick={() => handleItemClick(community.name)}>
+                                                        r/{community.name}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                    <div className="icon-container">
-                        <i className="community-arrow fa-solid fa-angle-down"></i>
+                            )}
+                        </div>
+                        <div className="icon-container">
+                            <i className="community-arrow fa-solid fa-angle-down"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />
+        </>
     );
 }
 

@@ -168,8 +168,8 @@ function CreateCommunity(props) {
         <hr className='w-100'></hr>
         <div className="d-flex p-3 px-4 radio-menu-item" onClick={handleMatureChange}>
             <Mature />
-            <div className="mx-3 d-flex flex-column">
-              <h6 style={{ color: '#000000', fontSize: '0.875rem' }} className='mb-0'>Mature (18+)</h6>
+            <div className="mx-3 d-flex flex-column justify-items-start align-items-start">
+              <h6 style={{ color: '#000000', fontSize: '0.875rem', position: "static" }} className='mt-0 mb-2'>Mature (18+)</h6>
               <p className='create-community-muted-secondary m-0'>Must be over 18 to view and contribute</p>
             </div>
             <div className='form-check form-switch ms-auto d-flex align-items-center'>
