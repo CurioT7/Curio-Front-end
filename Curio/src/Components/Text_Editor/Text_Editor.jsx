@@ -4,7 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"
 
 
-function Text_Editor() {
+function Text_Editor({ onContentChange }) { // Receive onContentChange as prop
   const [inputText, setInputText] = useState("");
 
   const toolbarOptions = [['bold', 'italic','link','strike',{ 'script': 'super' }],
@@ -14,8 +14,9 @@ function Text_Editor() {
     toolbar: toolbarOptions,
   }
 
-  const handleTextInputChange = (event) => {
-    setInputText(event.target.value);
+  const handleTextInputChange = (newContent) => { // Update the content state
+    setInputText(newContent);
+    onContentChange(newContent); // Call the function passed down from Post
   };
 
   return (
@@ -29,4 +30,4 @@ function Text_Editor() {
   );
 }
 
-export default Text_Editor
+export default Text_Editor;

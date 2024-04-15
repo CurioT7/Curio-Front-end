@@ -6,10 +6,12 @@ import EditCreatearea from "./EditCreatearea";
 import ImageVideo from "./Image_&_Video_Section/ImageVideo";
 import Link from "./Link_Section/Link";
 import Polls from "./Polls_Section/Polls";
+import Post from "./Post_Section/Post";
 
 function Createpostarea() {
   const [inputTitle, setInputTitle] = useState('');
   const [selectedMethod, setSelectedMethod] = useState("Post");
+  const [content, setContent] = useState(''); // State to hold content from Text_Editor
   const textareaRef = useRef(null);
 
   const handleTitleInputChange = (event) => {
@@ -29,13 +31,17 @@ function Createpostarea() {
     // Set the selected method
     setSelectedMethod(method);
   };
-  
+
+  // Pass this function down to Post
+  const handleContentChange = (newContent) => {
+    setContent(newContent);
+  };
 
   // Render the selected component based on the selected method
   const renderSelectedMethod = () => {
     switch (selectedMethod) {
       case "Post":
-        return <Text_Editor />;
+        return <Post onContentChange={handleContentChange} />; // Pass the function as a prop to Post
       case "Image & Video":
         return <ImageVideo />;
       case "Link":
@@ -65,7 +71,7 @@ function Createpostarea() {
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea title={inputTitle} />
+      <EditCreatearea title={inputTitle} content={content} /> {/* Pass content as a prop */}
     </div>
   );
 }
