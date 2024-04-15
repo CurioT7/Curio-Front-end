@@ -101,7 +101,7 @@ function ChangePass(props){
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response)
+            
             // If the response is successful, set isCorrect for both to be true
             setOldPass({...oldPassword, isCorrect: true});
             setNewPass({...password, isCorrect: true});

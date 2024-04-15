@@ -35,7 +35,7 @@ const Google = (props) =>{
         
     }
     const handleGoogleSignupResponse = async (response) => {
-        console.log(response);
+        
         // const hostUrl = import.meta.env.VITE_SERVER_HOST;
         try{const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
             token: response.access_token,
@@ -69,31 +69,7 @@ const Google = (props) =>{
       const login = useGoogleLogin({
         onSuccess: codeResponse => handleGoogleSignupResponse(codeResponse),
       });
-    async function sendDataToBackend(){
-        console.log(`Bearer ${localStorage.getItem('token')}`)
-        try {
-            const response = await axios.post(`${serverHost}/api/google/connect`, {
-                token:`Bearer ${localStorage.getItem('token')}`,
-                password: yourPass
-            },{
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }});
-            setWrongPass(false)
-            clearForm()
-        }
-        catch(error){
-            console.error( error.message);
-            switch (error.response.status) {
-                case 400:
-                    setWrongPass(true)
-                    break;
-                
-                default:
-                    break;
-          }
-        }
-    }
+   
     function handleSubmit(e){
         e.preventDefault();
         // sendDataToBackend()

@@ -44,7 +44,7 @@ function PostLock(props){
         if(response.success){
             setIsLocked(true);
             props.handleIsLocked(true);
-            console.log("Post locked successfully");
+            
             Toast("Post locked successfully","success");
         }
         else{
@@ -56,7 +56,7 @@ function PostLock(props){
         
         const response = await SendUnlockedPost(props.id);
         if(response.success){
-            console.log("Post unlocked successfully");
+            
             setIsLocked(false);
             props.handleIsLocked(false);
             Toast("Post unlocked successfully","success");

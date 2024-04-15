@@ -38,7 +38,7 @@ React.useEffect(() => {
       const userData = await fetchUserName();
       if (subCurioData && userData) {
           subCurioData.subreddit.moderators.map((mod)=>{
-            console.log(mod.username);
+            
             if(mod.username===userData.username){
               setIsMod(true);
             }
