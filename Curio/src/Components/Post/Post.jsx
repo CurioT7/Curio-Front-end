@@ -120,6 +120,7 @@ function Post(props) {
             savedPosts: props.savedPosts,
             savedComments: props.savedComments,
             hiddenPosts: props.hiddenPosts,
+            isMod: props.isMod,
             dateViewed: new Date().toISOString()
         }
         const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
