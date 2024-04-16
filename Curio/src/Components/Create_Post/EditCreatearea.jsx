@@ -6,7 +6,7 @@ import "./EditCreatearea.css";
 import axios from 'axios';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
-function EditCreatearea({ title }) {
+function EditCreatearea({ title, content, community }) {
     const [ocClicked, setOcClicked] = useState(false);
     const [spoilerClicked, setSpoilerClicked] = useState(false);
     const [nsfwClicked, setNsfwClicked] = useState(false);
@@ -29,6 +29,8 @@ function EditCreatearea({ title }) {
                 `${serverHost}/api/submit`,
                 {
                     title: title, // Use the title prop here
+                    content: content,
+                    subreddit: community.community || community,
                     isOC: ocClicked,
                     isSpoiler: spoilerClicked,
                     isNSFW: nsfwClicked

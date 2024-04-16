@@ -15,8 +15,7 @@ function UserPage( props ) {
   const [isNextPage, setIsNextPage] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [friendInfo, setFriendInfo] = useState({});
-  const token = localStorage.getItem('token');
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     showFriendInformation(username);
@@ -41,12 +40,12 @@ function UserPage( props ) {
   }
 
   const handleBlockPage = () => {
-    setIsNextPage(!isNextPage);
+    setIsNextPage(true);
     props.hideSidebar();
   }
   const handleBlock = () => {
-    setIsBlocked(!isBlocked);
-    setIsNextPage(!isNextPage);
+    setIsBlocked(true);
+    setIsNextPage(false);
     props.showSidebar();
   }
 

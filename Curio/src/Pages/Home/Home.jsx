@@ -5,6 +5,7 @@ import RecentPosts from '../../Components/RecentPosts/RecentPosts'
 import Post from '../../Components/Post/Post'
 import BackToTheTopButton from "./BackToTopButton.jsx";
 import Listing from '../../Components/CommunitiesListing/Listing.jsx'
+import Poll from '../../Components/Poll/ShowPoll.jsx'
 import { fetchPostsFromBackend,fetchHotFromBackend,fetchNewFromBackend,fetchTopFromBackend,fetchRandomFromBackend } from './HomeEndPoints.js'
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
