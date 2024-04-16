@@ -124,12 +124,12 @@ React.useEffect(() => {
   }
 }, []);
 
-console.log(posts);
+
 
 
 async function changeSortType(value,time) {
   
-  console.log(`value :${value}`);
+  
   async function SetData() {
       if (value === 'Hot') {
           const data = await fetchHotFromBackend();
@@ -156,7 +156,7 @@ async function changeSortType(value,time) {
           // const data = await fetchRandomFromBackend();
           // if (data) {
           //     setRandomPost({ post: data, isSelected: true });
-          //     console.log(`this is random post: ${randomPost.post}`);
+          //     
           // }
       }
   }

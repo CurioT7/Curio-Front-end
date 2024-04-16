@@ -4,14 +4,9 @@ import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
-import {
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverBody,
-  } from '@chakra-ui/react'
+
 import { FaRegCommentAlt } from "react-icons/fa";
-import { PiLockSimple } from "react-icons/pi";
+import PostLock from './PostLock.jsx';
 import { FcLock } from "react-icons/fc";
 import { LuShare } from "react-icons/lu";
 import { SlOptions } from "react-icons/sl";
@@ -22,9 +17,8 @@ import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
-import { BsShield } from "react-icons/bs";
-import { PiLockSimpleFill } from "react-icons/pi";
-import { SendLockedPost,SendUnlockedPost } from './PostEndPoints.js';
+
+import { FetchPostLockStatus } from './PostEndPoints.js';
 import './Post.css'
 import PostControl from './PostControl.jsx';
 import axios from 'axios';
@@ -48,14 +42,7 @@ function Post(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
-    const Toast = (message,statues) => {
-        toast({
-            description: message,
-            status: statues,
-            duration: 3000,
-            isClosable: true,
-        });
-    }
+    
     const makePostUpvoted = () => {
         if (upvoted) {
             setUpvoted(false);
@@ -72,32 +59,10 @@ function Post(props) {
             setUpvoted(false);
         }
     }
-    const handleLockComments = async () => {
-       
-        const response = await SendLockedPost(props.id);
-        if(response.success){
-            setIsLocked(true);
-            console.log("Post locked successfully");
-            Toast("Post locked successfully","success");
-        }
-        else{
-            Toast("Something went wrong, please try again later.","error");
-        }
-
+    
+    const handleIsLocked = (value) => {
+        setIsLocked(value);
     }
-    const handleUnlockComments = async () => {
-        
-        const response = await SendUnlockedPost(props.id);
-        if(response.success){
-            console.log("Post unlocked successfully");
-            setIsLocked(false);
-            Toast("Post unlocked successfully","success");
-        }
-        else{
-            Toast("Something went wrong, please try again later.","error");
-        }
-    }
-
     const handleUnhide = async () => {
         try{
             var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -155,6 +120,7 @@ function Post(props) {
             savedPosts: props.savedPosts,
             savedComments: props.savedComments,
             hiddenPosts: props.hiddenPosts,
+            isMod: props.isMod,
             dateViewed: new Date().toISOString()
         }
         const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
@@ -274,22 +240,7 @@ function Post(props) {
                             </Box>
 
                             {props.isMod&& <Box display='flex'  justifyContent='end'>
-                                <Popover>
-                                    <PopoverTrigger>
-                                        <Button
-                                            variant='ghost'
-                                            colorScheme='gray'
-                                            className='moderator-icon'
-                                            
-                                        ><BsShield /></Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent margin={0} padding={0}>
-                                        <PopoverBody margin={0} padding={0}>
-                                        {isLocked?(<Text onClick={handleUnlockComments} margin={0} padding={3} className='moderator-content'><div><PiLockSimpleFill className='moderator-content-icon' /><span>Unlock Comments</span></div></Text>) :(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'> <div> <PiLockSimple className='moderator-content-icon'  /> <span>Lock comments</span></div></Text>)}
-                                            <Text margin={0} padding={3} className='moderator-content'>Hide this post</Text>
-                                        </PopoverBody>
-                                    </PopoverContent>
-                                </Popover>
+                               <PostLock id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             
                         </CardFooter>
