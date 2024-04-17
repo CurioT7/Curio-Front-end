@@ -161,7 +161,7 @@ function ProfileImageUpload() {
             </Box>
           </Box>
         </Box>
-        <button type="button" onClick={uploadImages}>Upload Images</button> {/* Button to trigger image upload */}
+        <button type="button" onClick={uploadImages}>Upload Images</button> 
       </Box>
     </form>
   );
