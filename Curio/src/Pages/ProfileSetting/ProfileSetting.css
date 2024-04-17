@@ -80,7 +80,6 @@ cursor: pointer;
     cursor: pointer;
 }
 @media screen and (max-width: 730px) {
-
     .customize-profile-section{
         width: 100%;
     }
