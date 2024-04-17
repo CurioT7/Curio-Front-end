@@ -26,19 +26,21 @@ function Createpost(props) {
       }
     }, []);
   return (
-    <div className='container-create-post container'>
+    <div className='container-create-post'>
+      <div className="container" style={{display:'flex'}}>
         <div className='left-container-post'>
-          <Box className="cont-create-post">
-            <Text className='create-post-title'>Create Post</Text>
-          </Box>
-          <Community onSelect={handleCommunitySelect}/>
-          <div className='new-post-form'>
-            <NewPostForm community={selectedCommunity ? selectedCommunity.replace(/^r\//, '').replace(/^u\//, '') : null} />
+            <Box className="cont-create-post">
+              <Text className='create-post-title'>Create Post</Text>
+            </Box>
+            <Community onSelect={handleCommunitySelect}/>
+            <div className='new-post-form'>
+              <NewPostForm community={selectedCommunity ? selectedCommunity.replace(/^r\//, '').replace(/^u\//, '') : null} />
+            </div>
           </div>
-        </div>
-        <div className='right-container-post'>
-          <Posting_Cards/>
-        </div>
+          <div className='right-container-post'>
+            <Posting_Cards/>
+          </div>
+      </div>
     </div>
   );
 }
