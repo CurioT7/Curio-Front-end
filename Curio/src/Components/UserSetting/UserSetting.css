@@ -29,3 +29,9 @@
 .user-settings-links .setting-link:hover{
     color: black;
 }
+
+.setting-link.active{
+    color: black;
+    border-bottom-color: #0079d3;
+    border-width: 0 0 2px 0;
+}
