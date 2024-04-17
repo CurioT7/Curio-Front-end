@@ -1,12 +1,41 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Text } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import "./ProfileImageUpload.css";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
 function ProfileImageUpload() {
   const [profileImage, setProfileImage] = useState(null);
   const [bannerImage, setBannerImage] = useState(null);
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  const fetchImages = async () => {
+    try {
+      const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+        headers: {
+          'authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setProfileImage(response.data.profileImage);
+      setBannerImage(response.data.bannerImage);
+    } catch (error) {
+      if (error.response) {
+        // Handle error response here
+        const status = error.response.status;
+        if (status === 500) {
+          console.error("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
+        } else {
+          console.error("Error fetching data from backend:", error.response.data);
+        }
+      } else {
+        console.error('Error fetching data from backend:', error.message);
+      }
+    }
+  };
 
   const handleProfileImageChange = (event) => {
     const file = event.target.files[0];
@@ -29,6 +58,23 @@ function ProfileImageUpload() {
       reader.readAsDataURL(file);
     }
   };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event, setImage) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(file);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const uploadImages = async () => {
     const formData = new FormData();
@@ -81,17 +127,16 @@ function ProfileImageUpload() {
         <Text className="headings-description" fontWeight="normal" color="gray.500">
           Images must be .png or .jpg format
         </Text>
-
-        <Box className="image-upload-container" display="flex" flexDirection="column" alignItems="start" mt="3" mb="4">
-          <Box className="row">
-            <Box className="col">
-              <Box className="upload-profile-image h-100 ms-3 me-0 card text-center" data-testid="profile-image" style={{ backgroundImage: `url(${profileImage ? URL.createObjectURL(profileImage) : ''})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <Box className="image-upload-container" mt="3" mb="4">
+          <Box className="row-images">
+            <Box className="column-profile-image" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, setProfileImage)}>
+              <Box className="upload-profile-image h-100 ms-3 me-0 card text-center" data-testid="profile-image" style={{ backgroundImage: `url(${profileImage ? URL.createObjectURL(profileImage) : ''})`}}>
                 <label htmlFor="profile-upload">
-                  <Box className='upload-icon-profile'>
-                    <i className="fa-solid fa-upload"></i>
+                  <Box className='upload-profile'>
+                    {profileImage ? <i className="fa fa-camera upload-image-icon-appear" aria-hidden="true"/> : <i className="fa fa-plus upload-image-icon" aria-hidden="true"/>}
                   </Box>
-                  <Box>
-                    <span>Drag and Drop or Upload <span aria-label="Profile Image">Profile</span> Image</span>
+                  <Box className='image-text'>
+                    {profileImage ? "" : <span>Drag and Drop or Upload <span aria-label="Profile Image" style={{fontWeight:"700"}}>Profile</span> Image</span>}
                   </Box>
                   <Box className='upload-file-profile'>
                     <input type="file" role='img' name="profileIcon" id="profile-upload" accept="image/x-png,image/jpg" onChange={handleProfileImageChange} style={{ display: 'none' }} />
@@ -99,14 +144,14 @@ function ProfileImageUpload() {
                 </label>
               </Box>
             </Box>
-            <Box className="col">
-              <Box className="banner-upload h-100 ms-3 me-0 card text-center" style={{ backgroundImage: `url(${bannerImage ? URL.createObjectURL(bannerImage) : ''})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+            <Box className="column-banner-image" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, setBannerImage)}>
+              <Box className="banner-upload  ms-3 me-0 card text-center" style={{ backgroundImage: `url(${bannerImage ? URL.createObjectURL(bannerImage) : ''})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <label htmlFor="banner-upload">
-                  <Box className='upload-icon-profile'>
-                    <i className="fa-solid fa-upload"></i>
+                  <Box className='upload-profile'>
+                    {bannerImage  ? <i className="fa fa-camera upload-image-icon-appear" aria-hidden="true"/> : <i className="fa fa-plus upload-image-icon" aria-hidden="true"/>}
                   </Box>
-                  <Box>
-                    <span>Drag and Drop or Upload <span>Banner</span> Image</span>
+                  <Box className='image-text'>
+                    {bannerImage  ? '' : <span>Drag and Drop or Upload <span aria-label="Banner Image" style={{fontWeight:"700"}}>Banner</span> Image</span>}
                   </Box>
                   <Box className='upload-file-profile'>
                     <input type="file" name="profileBanner" id="banner-upload" accept="image/x-png,image/jpg" onChange={handleBannerImageChange} style={{ display: 'none' }} />
