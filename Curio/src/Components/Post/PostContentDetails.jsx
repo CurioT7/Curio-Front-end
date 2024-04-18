@@ -49,7 +49,6 @@ function PostContentDetails(post) {
                 }
                 });
                 if (response.status === 200 || response.status === 201){
-                    console.log(response.data.savedComments);
                     setSavedPosts(response.data.savedPosts);
                     setSavedComments(response.data.savedComments);
                 }
@@ -135,11 +134,13 @@ function PostContentDetails(post) {
     }
 
     useEffect(() => {
-        if (hiddenPosts && hiddenPosts.some(post => post._id === post._id)) {
-            setIsHidden(true);
-        }
-        else{
-            setIsHidden(false);
+        if(localStorage.getItem('token')){
+            if (hiddenPosts && hiddenPosts.some(hiddenPost => hiddenPost._id === post._id)) {
+                setIsHidden(true);
+            }
+            else{
+                setIsHidden(false);
+            }
         }
     }, [hiddenPosts]);
 
