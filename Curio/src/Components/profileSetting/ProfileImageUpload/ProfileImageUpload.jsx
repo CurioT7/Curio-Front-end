@@ -103,7 +103,6 @@ function ProfileImageUpload() {
           console.log("Unexpected response status:", response.status);
           break;
       }
-      // Handle successful upload
     } catch (error) {
       if (error.response) {
         const status = error.response.status;
