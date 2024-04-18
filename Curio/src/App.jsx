@@ -26,8 +26,8 @@ import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
 import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 
-import CommPopup from './Components/CommunityPopup/CommunityPopup.jsx';
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
+import Postsfooter from "./Components/Post/Postsfooter.jsx";
 
 
 function App() {
@@ -81,7 +81,7 @@ function App() {
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
-          <Route path='/polls' element={<ShowPoll/>} />
+
         </Routes>
       </ChakraProvider>
     </div>

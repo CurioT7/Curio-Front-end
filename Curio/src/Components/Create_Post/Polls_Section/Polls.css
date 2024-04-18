@@ -41,7 +41,7 @@
   background-color: #d9e0e3;
 }
 
-.btn-time-container{
+/* .btn-time-container{
   position: relative;
 }
 
@@ -51,7 +51,7 @@
   top: 0;
   font-size: 13px;
   font-family: "IBM Plex Sans", Arial, sans-serif;
-}
+} */
 
 .votingLength{
   color: rgb(135, 138, 140);
@@ -62,9 +62,7 @@
   margin-left: 1rem;
 }
 
-.pollPage{
-  margin-bottom: 15rem;
-}
+
 
 .inputText {
   position: relative;

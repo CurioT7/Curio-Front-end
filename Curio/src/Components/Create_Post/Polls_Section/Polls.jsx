@@ -8,7 +8,7 @@ import Remove from "../../../styles/icons/Remove";
 
 function Polls() {
   const [options, setOptions] = useState([]);
-  const [dayNumber, setDayNumber] = useState('');
+  const [dayNumber, setDayNumber] = useState(null);
   const [optionsText, setoptionsText] = useState(['', '']);
   const maxOptions = 4;
 
@@ -16,7 +16,6 @@ function Polls() {
   const handleDayChange = (event) => {
     setDayNumber(event.target.value);
   };
-
 
   const handleAddOption = () => {
     if (options.length < maxOptions) {
@@ -37,10 +36,10 @@ function Polls() {
   };
 
   return (
-    <div className="pollPage">
+    <div className="flex-wrap pollPage">
       <Text_Editor />
-      <div className="container">
-        <div className="row row-cols-2">
+      <div className="container flex-wrap cont-div">
+        <div className="row row-cols-2" style={{height: 'fit-content'}}>
           <div className="col-8">
           <div className="d-flex align-items-center mt-2">
             <SixDots />
@@ -77,25 +76,31 @@ function Polls() {
                 </div>
               </div>
             ))}
-            <div className="btn-time-container">
+            <div className="container btn-time-container">
+              <div className="row row-cols-md-2">
+                <div className='col mt-2'>
               <button className="addOptionBtn" onClick={handleAddOption}>Add Option</button>
+              </div>
+              <div className="col">
               <div className="d-flex align-items-center mt-1 votingLengthContainer">
                 <div className="votingLength">Voting Length:</div>
                 <div>
                   <select name="cars" id="cars" className="daysDropDown" onChange={handleDayChange}>
-                    <option value="1 Day">1 Day</option>
-                    <option value="2 Days">2 Days</option>
-                    <option value="3 Days">3 Days</option>
-                    <option value="4 Days">4 Days</option>
-                    <option value="5 Days">5 Days</option>
-                    <option value="6 Days">6 Days</option>
-                    <option value="7 Days">7 Days</option>
+                    <option value="1">1 Day</option>
+                    <option value="2">2 Days</option>
+                    <option value="3">3 Days</option>
+                    <option value="4">4 Days</option>
+                    <option value="5">5 Days</option>
+                    <option value="6">6 Days</option>
+                    <option value="7">7 Days</option>
                   </select>
+                  </div>
                 </div>
+              </div>
               </div>
             </div>
           </div>
-          <div className="col-4">
+          <div className="col-4 col-sm-1">
             <div className="d-flex mt-3 p-0 mb-0">
               <InfoIcon />
               <p className="pollTips ms-1">Tips on Better Polls</p>

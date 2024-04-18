@@ -58,7 +58,7 @@
   margin-left: 1rem;
 }
 
-.voteButton{
+.voteButton-enabled, .voteButton-disabled{
   font-size: 12px;
   background-color: #e5e8eb;
   padding: 10px 12px;
@@ -66,8 +66,35 @@
   font-weight: 700;
 }
 
+.voteButton-disabled{
+  color: rgb(130, 130, 130);
+}
+
+.voteButton-enabled{
+  color: black;
+}
+
+.voteButton-enabled:hover{
+  background-color: #dee2e5;
+}
+
+.voteButton-enabled:active{
+  background-color: #cfd5da;
+}
+
+
 .closesIn{
   font-size: 12px;
   color: rgb(97, 104, 110);
   margin-top: 10px;
+}
+
+.updownVotes-container{
+  background-color: #e5e8eb;
+  border-radius: 20px;
+}
+
+.upvoteNumber{
+  font-size: 12px;
+  font-weight: 600;
 }
