@@ -21,6 +21,7 @@ import SortingComments from './SortingComments';
 import {useParams} from 'react-router-dom';
 import PostLock from './PostLock';
 import { set } from 'mongoose';
+import { FetchSubredditName } from './PostEndPoints';
 
 
 
@@ -180,12 +181,16 @@ function PostContentDetails(post) {
     }
     useEffect(() => {
         async function fetchAndSetData() {
-            const data = await fetchCommentsFromBackend(post._id);
-            if (data) {
-                setComments(data.comments);
+            const postData = await fetchCommentsFromBackend(post._id);
+            if (postData) {
+                setComments(postData.comments);
             }
             else {
                 Toast();
+            }
+            const subredditName = await FetchSubredditName(post.subreddit);
+            if (subredditName) {
+                console.log(subredditName);
             }
         }
         window.addEventListener('deleteComment', fetchAndSetData);
