@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css"; 
 import logo from "../../assets/Profile_navbar.png";
 import { Popover, PopoverTrigger, PopoverContent, PopoverBody, Text, Button } from '@chakra-ui/react';
-import { BsShield } from 'react-icons/bs';
-import { PiLockSimpleFill } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
+import {
+    PopoverHeader,
+    PopoverFooter,
+    PopoverArrow,
+    PopoverCloseButton,
+    PopoverAnchor,
+  } from '@chakra-ui/react'
+import { SlOptions } from "react-icons/sl";
 
 
 function Notifications() {
@@ -44,7 +50,7 @@ function Notifications() {
               </div>
           </div>
           <div className="notifications-item">
-              <a href="" className="notifications-item-link">
+              <div className="notifications-item-link" style={{cursor:'pointer'}}>
                   <div className="notifications-item-content">
                       <div className="notifications-item-avatar">
                           <div className="avatar">
@@ -69,27 +75,20 @@ function Notifications() {
                           </div>
                       </div>
                       <div className="notifications-item-options">
-                          <Popover className="popover">
-                              <PopoverTrigger>
-                                  <Button
-                                      variant='ghost'
-                                      colorScheme='gray'
-                                      className='moderator-icon'
-                                  ><BsShield /></Button>
-                              </PopoverTrigger>
-                              <PopoverContent margin={0} padding={0} className="popover-content">
-                                  <PopoverBody margin={0} padding={0} className="popover-body">
-                                      <Text  margin={0} padding={3} className='moderator-content'>
-                                          <div><PiLockSimpleFill className='moderator-content-icon' /><span>Hide Notification</span></div>
-                                          <div><PiLockSimpleFill className='moderator-content-icon' /><span>Disable updates for community</span></div>
-                                          <div><PiLockSimpleFill className='moderator-content-icon' /><span>Suggest Community when he doesn't have notifications</span></div>
-                                      </Text>
-                                  </PopoverBody>
-                              </PopoverContent>
-                          </Popover>
+                      <Popover placement='bottom-start'>
+                        <PopoverTrigger>
+                            <Button 
+                            variant='ghost'
+                            colorScheme='gray'><SlOptions /></Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+                        </PopoverContent>
+                    </Popover>
                       </div>
                   </div>
-              </a>
+              </div>
             </div>
         </div>
         <div className="notifications-see-all">
