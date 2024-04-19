@@ -136,6 +136,7 @@ async function changeSortType(value,time) {
             comments={post.comments}
             content={post.content}
             isMod={isMod}
+            linkedSubreddit={post.linkedSubreddit}
           />
           <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
           </>
@@ -150,6 +151,7 @@ async function changeSortType(value,time) {
           comments={randomPost.post.comments}
           content={randomPost.post.content}
           isMod={isMod}
+          linkedSubreddit={randomPost.linkedSubreddit}
         />)}
         {(posts.length<1 && randomPost.isSelected==false) ||(!randomPost.post && randomPost.isSelected==true)? (<div className="m-5 row justify-content-center align-items-center">
           <div className="col text-center">
