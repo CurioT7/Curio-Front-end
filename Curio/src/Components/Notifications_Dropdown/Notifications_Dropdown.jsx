@@ -12,9 +12,15 @@ import {
     PopoverAnchor,
   } from '@chakra-ui/react'
 import { SlOptions } from "react-icons/sl";
+import"../Notification_Messages/Notification_Messages.jsx"
 
 
 function Notifications() {
+const[messages, setMessages] = useState(false);
+const handleMessageNotification = () => {
+    setMessages(true);
+
+ }
 
   return (
     <div className="notifications-container">
@@ -25,7 +31,7 @@ function Notifications() {
           <a href="#" className="notifications-messages-link">
               <div className="notifications-messages">
                   <div className="notifications-messages-title">
-                      <span className="notifications-messages-text">Messages</span>
+                      <span className="notifications-messages-text" onClick={handleMessageNotification}>Messages</span>
                   </div>
               </div>
           </a>
