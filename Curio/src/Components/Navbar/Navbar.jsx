@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
-import advertise from "../../assets/Advertise_navbar.png";
 import openchat from "../../assets/Chat_navbar.png";
 import plus from "../../assets/Plus_navbar.png";
 import inbox from "../../assets/Inbox_navbar.png";
 import profile from "../../assets/avatar_default_6.png";
-import setting from "../../assets/Setting_navbar.png";
 import Settings from '../../styles/icons/Settings';
 import EditAvatar from '../../styles/icons/EditAvatar';
 import ContProgram from '../../styles/icons/ContributorProgram';
@@ -15,16 +13,27 @@ import DarkMode from '../../styles/icons/DarkMode';
 import Advertisement from '../../styles/icons/Ad';
 import Premium from '../../styles/icons/Premium';
 import ContArrow from '../../styles/icons/ContArrow';
-import { Tooltip } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
-import { Switch, Flex, Spacer, Box, useToast, Stack } from '@chakra-ui/react'
+import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
+import { BsArrowUpRightCircle } from "react-icons/bs";
+import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+} from '@chakra-ui/react'
+import { getTrending } from './SearchingEndPoints';
+
+import Trending from './Trending';
 
 
 function NavbarComponent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [trending, setTrending] = React.useState([]);
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -39,6 +48,14 @@ function NavbarComponent() {
     navigate('/login');
   }
 
+  const inputRef = useRef();
+  const popoverRef = useRef();
+  
+  useEffect(() => {
+    if (inputRef.current && popoverRef.current) {
+      popoverRef.current.style.width = `${inputRef.current.offsetWidth}px`;
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -56,6 +73,40 @@ function NavbarComponent() {
     subMenu.classList.toggle("open-menu");
   }
 
+  
+  React.useEffect(() => {
+      async function fetchData() {
+          const trendingData = await getTrending();
+          setTrending(trendingData.posts);
+          console.log(trendingData.posts);
+      }
+      fetchData();
+  }, []);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        inputRef.current !== event.target && 
+        !popoverRef.current?.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+ useEffect(() => {
+  if (isOpen) {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 0);
+  }
+}, [isOpen]);
   return (
     <nav className='navbar-component'>
       <input type="checkbox" name="" id="chk1"/>
@@ -67,7 +118,25 @@ function NavbarComponent() {
       </div>
       <div className="search-box">
         <form action="">
-          <input type="text" name="search" id="srch" placeholder="Search Curio"/>
+            <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
+              <PopoverTrigger>
+                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+              </PopoverTrigger>
+              <PopoverContent borderRadius='20px' ref={popoverRef}>
+                <PopoverBody margin={0} padding={0} className="search-list">
+                  <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
+                  { trending.map((trend) => (
+                    <Trending
+                      key={trend._id}
+                      title={trend.authorName}
+                      description={trend.title}
+                      subreddit={trend.subreddit}
+                    />
+                    ))
+                  }
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
           <button type="submit"><i className="search-icon fa fa-search" aria-hidden="true"></i></button>
         </form>
       </div>
@@ -75,7 +144,7 @@ function NavbarComponent() {
         {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Advertise on Curio">
-              <a href="#" style={{ display: "flex" }}>
+              <a href="#" style={{ display: "flex" }} className='right-item-option'>
                 <Advertisement />
               </a>
             </Tooltip>
@@ -84,7 +153,7 @@ function NavbarComponent() {
         {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Open chat">
-              <a href="#" style={{ display: "flex" }}>
+              <a href="#" className='right-item-option' style={{ display: "flex" }}>
                 <img className='navImg' src={openchat} alt="logo"/>
               </a>
             </Tooltip>
@@ -103,16 +172,28 @@ function NavbarComponent() {
         {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Open inbox">
-              <a href="#" style={{ display: "flex" }}>
-                <img className='navImg' src={inbox} alt="logo"/>
+              <a style={{ display: "flex" }} className='right-item-option'>
+              <Menu>
+                <MenuButton>
+                  <img className='navImg notificimg' src={inbox} alt="logo"/>
+                </MenuButton>
+                <MenuList 
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  boxShadow: 'none', 
+                }}>
+                  <Notifications_Dropdown/>
+                </MenuList>
+              </Menu>
               </a>
             </Tooltip>
           </li>
         }
         {isAuthenticated && 
-          <li className='sub-right-navbar' onClick={toggleMenu}>
+          <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
             <Tooltip label="Open profile menu">
-              <a href="#" style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
+              <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
                 <img className='profileImg' src={profile} alt="logo"/>
               </a>
             </Tooltip>

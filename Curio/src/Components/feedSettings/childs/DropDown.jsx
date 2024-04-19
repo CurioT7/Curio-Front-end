@@ -7,14 +7,15 @@ function DropDown (props){
     
 return(
     <Box >
-        <Flex className='col'  mb={5}  alignItems='center'>
+        <Box >
+        <Flex wrap='wrap' mb={5}  alignItems='center'>
         {props.isSort &&  <Titles title="Community content sort"
                     description="Choose how you would like content organized in communities you visit. This will not affect global feeds such as Home, or Popular."/> }
         {props.isGlobal &&  <Titles title="Global content view"
                     description="Choose how you would like content displayed in feeds. This control is also found above your feed."/> }
            
             <Spacer/>
-            <Select className="fw-bold " textAlign={[ 'left', 'center' ]}  variant='unstyled' onChange={props.onChangeSort} value={props.value} size='xs' width='fit-content'  textTransform="uppercase" >
+            <Select  display='flex' flexDirection='row' alignItems='end' className="fw-bold feeding-select" textAlign={[ 'left', 'center' ]}  variant='unstyled' onChange={props.onChangeSort} value={props.value} size='xs' width='fit-content'  textTransform="uppercase" >
                
                     {props.isSort && <>
                         <option className='fw-bold' value='Hot' >Hot</option>
@@ -33,8 +34,9 @@ return(
             </Select>
                         
         </Flex>
+        </Box>
 
-        <Flex ms={5} className='col'  mb={5}  alignItems='center'>
+        <Flex className='col ms-md-5 remember-switch'  mb={5}  alignItems='center'>
           <Titles title="Remember per community"
                     description="Enable if you would like each community to remember and use the last content sort you selected for that community."/>
             <Spacer/>

@@ -31,9 +31,9 @@ function Feeding () {
         setIsMature(!adultContent)
         sendDataToBackend({adultContent: !adultContent})
         Toast();
-        // console.log(isMature)
+        
     }
-    // console.log(isMature)
+    
     function handleIsAuto(){
         setIsAuto(!autoplayMedia);
         sendDataToBackend({autoplayMedia: !autoplayMedia});
@@ -74,7 +74,7 @@ function Feeding () {
     }
     //send and get data from backend//
     async function sendDataToBackend(data) {
-    // console.log(localStorage.getItem('token'));
+    
 
         // Validate data
         if (!data || typeof data !== 'object') {
@@ -88,7 +88,7 @@ function Feeding () {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            // console.log(response)
+            
             // Handle response if needed
             return response;
         } catch (error) {
@@ -99,7 +99,7 @@ function Feeding () {
 
     async function fetchDataFromBackend() {
         const token = localStorage.getItem('token');
-        // console.log(token)
+        
         if (!token) {
         console.error('No token found');
         return;
@@ -133,20 +133,11 @@ function Feeding () {
 
         fetchAndSetData();
     }, []);
-    // Test Section
-    // console.log(adultContent)
-    // console.log(autoplayMedia)
-    // console.log(communityContentSort)
-    // console.log(rememberContentSort)
-    // console.log(globalContentView)
-    // console.log(rememberContentView)
-    // console.log(communityThemes)
-    // console.log(openPostsInNewTab)
-    //----------------------------------//
+    
     return(
         <div className='container'>
             <div className='customize-account'>
-                <div className='settings-section col'>
+                <div className='feeding-settings-section col'>
                     <h2 className="settings-heading ">Feeding settings</h2>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">content preferences</h3>
                     <Box>

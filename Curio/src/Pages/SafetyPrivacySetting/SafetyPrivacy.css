@@ -53,3 +53,8 @@
 .btn{
     z-index: 0;
 }
+@media screen and (max-width: 730px) {
+    .customize-privacy-section{
+        width: 100%;
+    }
+}
