@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
 import advertise from "../../assets/Advertise_navbar.png";
@@ -21,6 +21,14 @@ import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
 import { Switch, Flex, Spacer, Box, useToast, Stack } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+} from '@chakra-ui/react'
+
+import Trending from './Trending';
 
 
 function NavbarComponent() {
@@ -39,6 +47,14 @@ function NavbarComponent() {
     navigate('/login');
   }
 
+  const inputRef = useRef();
+  const popoverRef = useRef();
+  
+  useEffect(() => {
+    if (inputRef.current && popoverRef.current) {
+      popoverRef.current.style.width = `${inputRef.current.offsetWidth}px`;
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -67,7 +83,16 @@ function NavbarComponent() {
       </div>
       <div className="search-box">
         <form action="">
-          <input type="text" name="search" id="srch" placeholder="Search Curio"/>
+            <Popover >
+              <PopoverTrigger>
+                <input ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+              </PopoverTrigger>
+              <PopoverContent ref={popoverRef}>
+                <PopoverBody margin={0} padding={0} className="search-list">
+                  <Trending/>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
           <button type="submit"><i className="search-icon fa fa-search" aria-hidden="true"></i></button>
         </form>
       </div>

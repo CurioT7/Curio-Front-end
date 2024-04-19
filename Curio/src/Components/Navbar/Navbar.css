@@ -325,3 +325,12 @@
     border-radius: 10px;
     font-size: 14px;
 }
+
+
+.search-list{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    overflow-y: auto;
+}
