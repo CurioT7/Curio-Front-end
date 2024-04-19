@@ -23,6 +23,7 @@ import PostLock from './PostLock';
 import { set } from 'mongoose';
 import UserPopover from '../UserPopover.css/UserPopover.jsx';
 import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import { FetchSubredditName } from './PostEndPoints';
 
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -188,12 +189,16 @@ function PostContentDetails(post) {
     }
     useEffect(() => {
         async function fetchAndSetData() {
-            const data = await fetchCommentsFromBackend(post._id);
-            if (data) {
-                setComments(data.comments);
+            const postData = await fetchCommentsFromBackend(post._id);
+            if (postData) {
+                setComments(postData.comments);
             }
             else {
                 Toast();
+            }
+            const subredditName = await FetchSubredditName(post.subreddit);
+            if (subredditName) {
+                console.log(subredditName);
             }
         }
         window.addEventListener('deleteComment', fetchAndSetData);

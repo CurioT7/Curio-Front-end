@@ -1,25 +1,50 @@
-import { render, screen } from '@testing-library/react';
-import Post from '../../Components/Post/Post';
-import React from 'react';
+// PostLock.test.jsx
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import PostLock from '../../Components/Post/PostLock.jsx';
+import { FetchPostLockStatus, SendLockedPost, SendUnlockedPost } from '../../Components/Post/PostEndPoints.js';
 import '@testing-library/jest-dom';
 
+jest.mock('../../Components/Post/PostEndPoints.js',() => ({
+    __esModule: true,
+    default: jest.fn(),
+    FetchPostLockStatus: jest.fn(),
+    SendLockedPost: jest.fn(),
+    SendUnlockedPost: jest.fn(),
+  }));
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: jest.fn(),
+  }));
+describe('PostLock', () => {
+  let mockHandleIsLocked;
+  let mockOnChangeLock;
 
-describe('Post component', () => {
-  test('renders moderator tools when isMod is true', () => {
-    render(<Post isMod={true} />);
-    const modTools = screen.getByRole('button', { name: /BsShield/i });
-    expect(modTools).toBeInTheDocument();
+  beforeEach(() => {
+    mockHandleIsLocked = jest.fn();
+    mockOnChangeLock = jest.fn();
+    FetchPostLockStatus.mockResolvedValue({ item: { isLocked: false } });
+    SendLockedPost.mockResolvedValue({ success: true });
+    SendUnlockedPost.mockResolvedValue({ success: true });
   });
 
-  test('renders PiLockSimpleFill icon when isLocked is true', () => {
-    render(<Post isMod={true} isLocked={true} />);
-    const lockIcon = screen.getByRole('img', { name: /PiLockSimpleFill/i });
-    expect(lockIcon).toBeInTheDocument();
+  it('fetches post lock status on mount', async () => {
+    render(<PostLock id="1" handleIsLocked={mockHandleIsLocked} onChangeLock={mockOnChangeLock} />);
+    await waitFor(() => expect(FetchPostLockStatus).toHaveBeenCalledWith("1"));
+    expect(mockHandleIsLocked).toHaveBeenCalledWith(false);
   });
 
-  test('renders PiLockSimple icon when isLocked is false', () => {
-    render(<Post isMod={true} isLocked={false} />);
-    const unlockIcon = screen.getByRole('img', { name: /PiLockSimple/i });
-    expect(unlockIcon).toBeInTheDocument();
+  it('locks post when lock button is clicked', async () => {
+    render(<PostLock id="1" handleIsLocked={mockHandleIsLocked} onChangeLock={mockOnChangeLock} />);
+    fireEvent.click(screen.getByText('Lock comments'));
+    await waitFor(() => expect(SendLockedPost).toHaveBeenCalledWith("1"));
+    expect(mockOnChangeLock).toHaveBeenCalledWith(true);
+  });
+
+  it('unlocks post when unlock button is clicked', async () => {
+    FetchPostLockStatus.mockResolvedValueOnce({ item: { isLocked: true } });
+    render(<PostLock id="1" handleIsLocked={mockHandleIsLocked} onChangeLock={mockOnChangeLock} />);
+    fireEvent.click(screen.getByText('Unlock Comments'));
+    await waitFor(() => expect(SendUnlockedPost).toHaveBeenCalledWith("1"));
+    expect(mockOnChangeLock).toHaveBeenCalledWith(false);
   });
 });
