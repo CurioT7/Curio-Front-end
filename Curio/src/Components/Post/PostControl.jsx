@@ -285,7 +285,12 @@ function PostControl(props) {
   const handleDeletePost = async () => {
     try{
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
-      const response = await axios.delete(`${hostUrl}/api/deletepost/${props._id}`);
+      const response = await axios.delete(`${hostUrl}/api/deletepost/${props._id}`,
+       {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       if (response.status === 200){
         toast({
           description: "Post Deleted",

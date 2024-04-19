@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import '../CommunityPopup/CommunityPopup.jsx';
+import '../UserPopover.css/UserPopover.jsx';
 import "./OneCommunity.css";
 import Button from 'react-bootstrap/Button';
 import Overlay from 'react-bootstrap/Overlay';
