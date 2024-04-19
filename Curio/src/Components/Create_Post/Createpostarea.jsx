@@ -11,7 +11,27 @@ function Createpostarea({ community }) {
   const [inputTitle, setInputTitle] = useState('');
   const [selectedMethod, setSelectedMethod] = useState("Post");
   const [content, setContent] = useState(''); // State to hold content from Text_Editor
+  const [dayNumber, setDayNumber] = useState(3);
+  const [optionsText, setoptionsText] = useState([]);
   const textareaRef = useRef(null);
+
+  const handleDayChange = (event) => {
+    console.log("Selected day:", event.target.value);
+    setDayNumber(parseInt(event.target.value));
+    console.log("Day number state:", dayNumber);
+  };
+
+  const handleOptionChange = (index, event) => {
+    const newOptionsText = [...optionsText];
+    newOptionsText[index] = event.target.value;
+    setoptionsText(newOptionsText);
+    console.log("Options text:", optionsText);
+  };
+
+  const handleSecondOptionChange = (event) => {
+    setoptionsText([optionsText[0], event.target.value]);
+  };
+
 
   const handleTitleInputChange = (event) => {
     setInputTitle(event.target.value);
@@ -46,7 +66,7 @@ function Createpostarea({ community }) {
       case "Link":
         return <Link />;
       case "Polls":
-        return <Polls />;
+        return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} />;
     }
   };
 
@@ -70,7 +90,7 @@ function Createpostarea({ community }) {
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea title={inputTitle} content={content} community={community}/> 
+      <EditCreatearea title={inputTitle} content={content} community={community} days={dayNumber} options={optionsText}/> 
     </div>
   );
 }
