@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
-import advertise from "../../assets/Advertise_navbar.png";
 import openchat from "../../assets/Chat_navbar.png";
 import plus from "../../assets/Plus_navbar.png";
 import inbox from "../../assets/Inbox_navbar.png";
 import profile from "../../assets/avatar_default_6.png";
-import setting from "../../assets/Setting_navbar.png";
 import Settings from '../../styles/icons/Settings';
 import EditAvatar from '../../styles/icons/EditAvatar';
 import ContProgram from '../../styles/icons/ContributorProgram';
@@ -15,12 +13,12 @@ import DarkMode from '../../styles/icons/DarkMode';
 import Advertisement from '../../styles/icons/Ad';
 import Premium from '../../styles/icons/Premium';
 import ContArrow from '../../styles/icons/ContArrow';
-import { Tooltip } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
-import { Switch, Flex, Spacer, Box, useToast, Stack } from '@chakra-ui/react'
+import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
+import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
 
 
 function NavbarComponent() {
@@ -75,7 +73,7 @@ function NavbarComponent() {
         {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Advertise on Curio">
-              <a href="#" style={{ display: "flex" }}>
+              <a href="#" style={{ display: "flex" }} className='right-item-option'>
                 <Advertisement />
               </a>
             </Tooltip>
@@ -84,7 +82,7 @@ function NavbarComponent() {
         {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Open chat">
-              <a href="#" style={{ display: "flex" }}>
+              <a href="#" className='right-item-option' style={{ display: "flex" }}>
                 <img className='navImg' src={openchat} alt="logo"/>
               </a>
             </Tooltip>
@@ -103,16 +101,28 @@ function NavbarComponent() {
         {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Open inbox">
-              <a href="#" style={{ display: "flex" }}>
-                <img className='navImg' src={inbox} alt="logo"/>
+              <a style={{ display: "flex" }} className='right-item-option'>
+              <Menu>
+                <MenuButton>
+                  <img className='navImg notificimg' src={inbox} alt="logo"/>
+                </MenuButton>
+                <MenuList 
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  boxShadow: 'none', 
+                }}>
+                  <Notifications_Dropdown/>
+                </MenuList>
+              </Menu>
               </a>
             </Tooltip>
           </li>
         }
         {isAuthenticated && 
-          <li className='sub-right-navbar' onClick={toggleMenu}>
+          <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
             <Tooltip label="Open profile menu">
-              <a href="#" style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
+              <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
                 <img className='profileImg' src={profile} alt="logo"/>
               </a>
             </Tooltip>
