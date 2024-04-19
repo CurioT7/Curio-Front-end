@@ -79,13 +79,11 @@
 .navbar-component .right-section-navbar .sub-right-navbar{
     list-style: none;
 }
-/* .navbar-component .right-section-navbar .sub-right-navbar a img{
-    height: 32px;
-} */
 .navbar-component .right-section-navbar .sub-right-navbar a{
     padding: 10px 10px;
 }
-.navbar-component .right-section-navbar .sub-right-navbar a:hover{
+.navbar-component .right-section-navbar .sub-right-navbar .right-item-option:hover,
+.create-icon:hover{
     background-color: #edeff1;
     border-radius: 999px;
 }
