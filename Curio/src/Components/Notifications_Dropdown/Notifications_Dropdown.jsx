@@ -83,7 +83,9 @@ function Notifications() {
                         </PopoverTrigger>
                         <PopoverContent>
                             <PopoverArrow />
-                            <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+                            <PopoverBody>Hide this notification</PopoverBody>
+                            <PopoverBody>Disable updates from this community</PopoverBody>
+                            <PopoverBody>Turn off this notification type</PopoverBody>
                         </PopoverContent>
                     </Popover>
                       </div>
