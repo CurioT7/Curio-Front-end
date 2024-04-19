@@ -1,0 +1,100 @@
+.pollDiv:hover{
+  background-color:rgb(241, 243, 244);
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.postPhoto{
+  width: 24px;
+  height: 24px;
+}
+
+.profileName{
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pollCard{
+  border-radius: 5px 5px 20px 20px;
+}
+
+.middleDot{
+  font-size: 30px;
+  color: rgb(97, 104, 110);
+}
+
+.middleDot1{
+  font-size: 15px;
+}
+
+.postTime{
+  font-size: 12px;
+  color: rgb(97, 104, 110);
+}
+
+.pollTitle{
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pollText{
+  font-size: 14px;
+  color: rgb(42, 60, 66);
+}
+
+.openorClose{
+  font-size: 12px;
+}
+
+.cardheaderDiv{
+  background-color: white;
+}
+
+.voteRadio{
+  margin-bottom: 1rem;
+}
+
+.voteText{
+  margin-left: 1rem;
+}
+
+.voteButton-enabled, .voteButton-disabled{
+  font-size: 12px;
+  background-color: #e5e8eb;
+  padding: 10px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+
+.voteButton-disabled{
+  color: rgb(130, 130, 130);
+}
+
+.voteButton-enabled{
+  color: black;
+}
+
+.voteButton-enabled:hover{
+  background-color: #dee2e5;
+}
+
+.voteButton-enabled:active{
+  background-color: #cfd5da;
+}
+
+
+.closesIn{
+  font-size: 12px;
+  color: rgb(97, 104, 110);
+  margin-top: 10px;
+}
+
+.updownVotes-container{
+  background-color: #e5e8eb;
+  border-radius: 20px;
+}
+
+.upvoteNumber{
+  font-size: 12px;
+  font-weight: 600;
+}
