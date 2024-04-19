@@ -21,8 +21,13 @@ import SortingComments from './SortingComments';
 import {useParams} from 'react-router-dom';
 import PostLock from './PostLock';
 import { set } from 'mongoose';
+import UserPopover from '../UserPopover.css/UserPopover.jsx';
+import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 
 
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
+
+const token = localStorage.getItem('token');
 
 function PostContentDetails(post) {
     const { postID } = useParams();
@@ -32,6 +37,8 @@ function PostContentDetails(post) {
     const [isHidden, setIsHidden] = useState(false);
     const [comments, setComments] = useState([]);
     const [isLocked, setIsLocked] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [friendInfo, setFriendInfo] = useState({});
     const toast = useToast();
     const postId = post._id;
 
@@ -207,6 +214,43 @@ function PostContentDetails(post) {
         }
     }
 
+    function handleFollowToggle(username) {
+        if (!token) {
+         navigate('/login');
+        }
+        else{
+        if (isFollowing) {
+            userUnfollow(username);
+        } else {
+            userFollow(username);
+        }
+        setIsFollowing(!isFollowing);
+    }
+    }
+
+    async function handleGetFollower(username) {
+        try {
+            const result = await getFollower(username);
+            if (result.success) {
+                setIsFollowing(true);
+            } else {
+                console.error('Error:', result.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function showFriendInformation(username) {
+        try {
+            const response = await axios.get(`${hostUrl}/user/${username}/about`);
+            setFriendInfo(response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+
     return (
         <>
             {!isHidden &&
@@ -217,7 +261,8 @@ function PostContentDetails(post) {
                             <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
                             <div className='d-flex flex-column'>
                                 <a className='community-post-name'>r/germany</a>
-                                <a className='community-post-name' href={`/user/${post.user}`} style={{fontWeight: "300", fontSize: "0.875rem"}}>{post.user}</a>
+                                <UserPopover user={post.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
+                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInformation} classname="userPosting" />
                             </div>
                         </div>
                         <div className='ms-auto d-flex flex-direction-row'>

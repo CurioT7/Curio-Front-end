@@ -1,0 +1,56 @@
+.popoverAvatar{
+  margin-top: 20px;
+}
+
+#overlay2 .popover-arrow {
+  display: none;
+}
+
+#overlay2 {
+  background-color: rgb(249, 250, 251);
+  color: rgb(19, 19, 19);
+  width: 288px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+  height: 220px;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.popOverUsername{
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.numberHeader{
+  font-size: 12px;
+}
+
+.membersText{
+  font-size: 12px;
+}
+
+.popOverCake{
+  font-size: 12px;
+  color: rgb(90, 105, 118);
+}
+
+.popoverFollow{
+  border-radius: 99px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.karmaText{
+  color: #0045AC;
+  font-size: 12px;
+}
+
+.popoverChat{
+  background-color: #eaedef;
+  border: none;    
+  border-radius: 99px;
+  color: black;
+  font-weight: 600;
+  font-size: 12px;
+  
+}

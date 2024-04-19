@@ -77,7 +77,7 @@ function Polls() {
               </div>
             ))}
             <div className="container btn-time-container">
-              <div className="row row-cols-md-2">
+              <div className="row row-cols-md-2" style={{height: 'fit-content'}}>
                 <div className='col mt-2'>
               <button className="addOptionBtn" onClick={handleAddOption}>Add Option</button>
               </div>
@@ -100,16 +100,16 @@ function Polls() {
               </div>
             </div>
           </div>
-          <div className="col-4 col-sm-1">
+          <div className="col-lg-4 tipsDiv">
             <div className="d-flex mt-3 p-0 mb-0">
               <InfoIcon />
               <p className="pollTips ms-1">Tips on Better Polls</p>
             </div>
-            <ol className="orderedTips">
+            <ol className="d-flex flex-column orderedTips">
               <li>Suggest short clear options</li>
               <li>The more options, the better</li>
               <li>Choose the poll duration</li>
-              <li>Options can't be edited after post creation</li>
+              <li className="lastTip">Options can't be edited after post creation</li>
             </ol>
           </div>
         </div>

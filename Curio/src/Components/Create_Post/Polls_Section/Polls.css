@@ -41,18 +41,6 @@
   background-color: #d9e0e3;
 }
 
-/* .btn-time-container{
-  position: relative;
-}
-
-.votingLengthContainer{
-  position: absolute;
-  right: 4rem;
-  top: 0;
-  font-size: 13px;
-  font-family: "IBM Plex Sans", Arial, sans-serif;
-} */
-
 .votingLength{
   color: rgb(135, 138, 140);
 }
@@ -62,8 +50,19 @@
   margin-left: 1rem;
 }
 
-
-
 .inputText {
   position: relative;
 }
+
+@media (max-width: 1500px) {
+  .orderedTips {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 1500px) {
+  .pollTips {
+    font-size: 10px;
+  }
+}
+

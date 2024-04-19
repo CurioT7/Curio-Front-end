@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import StatsLayout from "../../Components/FollowUser/FollowUser.jsx"
 import FriendInformation from "../../Components/FriendInformation/ShowFriendInformation.jsx"
 import './UserProfile.css'
 import Picture from "../../styles/icons/BlockPic.png"
