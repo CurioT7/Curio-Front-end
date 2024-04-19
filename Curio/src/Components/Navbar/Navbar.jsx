@@ -82,7 +82,31 @@ function NavbarComponent() {
       }
       fetchData();
   }, []);
+  const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        inputRef.current !== event.target && 
+        !popoverRef.current?.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+ useEffect(() => {
+  if (isOpen) {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 0);
+  }
+}, [isOpen]);
   return (
     <nav className='navbar-component'>
       <input type="checkbox" name="" id="chk1"/>
@@ -94,11 +118,11 @@ function NavbarComponent() {
       </div>
       <div className="search-box">
         <form action="">
-            <Popover >
+            <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
               <PopoverTrigger>
-                <input ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
-              <PopoverContent ref={popoverRef}>
+              <PopoverContent borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
                   <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
                   { trending.map((trend) => (

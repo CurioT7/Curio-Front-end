@@ -17,6 +17,7 @@ h5{
 .card-body{
     margin: 0px;
     padding: 0px;
+    border-radius: 20px;
 }
 .card-body :hover{
     background-color: #edeff1;
@@ -28,6 +29,7 @@ h5{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border-radius: 20px;
 }
 .trending-img{
    width: 96px;
