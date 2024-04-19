@@ -6,16 +6,13 @@ import InfoIcon from "../../../styles/icons/InfoIcon";
 import SixDots from "../../../styles/icons/SixDots";
 import Remove from "../../../styles/icons/Remove";
 
-function Polls() {
+function Polls( {handleDayChange, handleOptionChange }) {
   const [options, setOptions] = useState([]);
-  const [dayNumber, setDayNumber] = useState(null);
-  const [optionsText, setoptionsText] = useState(['', '']);
+  const [optionsText, setoptionsText] = useState([]);
   const maxOptions = 4;
 
 
-  const handleDayChange = (event) => {
-    setDayNumber(event.target.value);
-  };
+
 
   const handleAddOption = () => {
     if (options.length < maxOptions) {
@@ -27,13 +24,11 @@ function Polls() {
       setOptions(options.slice(0, options.length - 1));
   };
 
-  const handleFirstOptionChange = (event) => {
-    setoptionsText([event.target.value, optionsText[1]]);
-  };
-
-  const handleSecondOptionChange = (event) => {
-    setoptionsText([optionsText[0], event.target.value]);
-  };
+  // const handleOptionChange = (index, event) => {
+  //   const newOptionsText = [...optionsText];
+  //   newOptionsText[index] = event.target.value;
+  //   setoptionsText(newOptionsText);
+  // };
 
   return (
     <div className="flex-wrap pollPage">
@@ -47,8 +42,7 @@ function Polls() {
               type="text"
               className="pollOption"
               placeholder='Option 1'
-              value={optionsText[0]}
-              onChange={handleFirstOptionChange}
+              onChange={(event) => handleOptionChange(0,event)}
             />
           </div>
           <div className="d-flex align-items-center mt-2">
@@ -57,18 +51,18 @@ function Polls() {
               type="text"
               className="pollOption"
               placeholder='Option 2'
-              value={optionsText[1]}
-              onChange={handleSecondOptionChange}
+              onChange={(event) => handleOptionChange(1, event)}
             />
           </div>
           {options.map((option, index) => (
-              <div className="d-flex align-items-center mt-2" key={index}>
+              <div className="d-flex align-items-center mt-2" key={index + 2}>
                 <SixDots />
                 <div className="d-flex w-100 inputText">
                 <input
                   type="text"
                   className="pollOption"
-                  placeholder={option}
+                  placeholder={option} 
+                  onChange={(event) => handleOptionChange(index + 2, event)}
                 />
                 <button onClick={handleRemoveOption}>
                   <Remove className='removeIcon' />
@@ -85,7 +79,7 @@ function Polls() {
               <div className="d-flex align-items-center mt-1 votingLengthContainer">
                 <div className="votingLength">Voting Length:</div>
                 <div>
-                  <select name="cars" id="cars" className="daysDropDown" onChange={handleDayChange}>
+                  <select name="cars" id="cars" className="daysDropDown" defaultValue="3" onChange={handleDayChange}>
                     <option value="1">1 Day</option>
                     <option value="2">2 Days</option>
                     <option value="3">3 Days</option>
