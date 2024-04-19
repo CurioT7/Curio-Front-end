@@ -103,7 +103,6 @@ function ProfileImageUpload() {
           console.log("Unexpected response status:", response.status);
           break;
       }
-      // Handle successful upload
     } catch (error) {
       if (error.response) {
         const status = error.response.status;
@@ -161,7 +160,7 @@ function ProfileImageUpload() {
             </Box>
           </Box>
         </Box>
-        <button type="button" onClick={uploadImages}>Upload Images</button> {/* Button to trigger image upload */}
+        <button type="button" onClick={uploadImages}>Upload Images</button> 
       </Box>
     </form>
   );
