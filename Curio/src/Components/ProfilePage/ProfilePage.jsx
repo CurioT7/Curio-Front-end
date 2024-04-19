@@ -366,7 +366,7 @@ return(
      Share 
  </button>
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-  <div className="profilevalue">{userAbout.postKarma || '1'}</div>
+  <div className="profilevalue">{userAbout.postKarma || '0 '}</div>
   <div className="profilevalue">{userAbout.commentKarma || '0'}</div>
   <div className="profileItem">Post Karma</div>
   <div className="profileItem">Comment Karma</div>

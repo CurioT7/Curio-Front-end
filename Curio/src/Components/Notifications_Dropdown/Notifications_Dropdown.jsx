@@ -92,6 +92,133 @@ function Notifications() {
                   </div>
               </div>
             </div>
+            <div className="notifications-item">
+              <div className="notifications-item-link" style={{cursor:'pointer'}}>
+                  <div className="notifications-item-content">
+                      <div className="notifications-item-avatar">
+                          <div className="avatar">
+                              <span className="avatar-image">
+                                  <img src={logo} alt="avatar for notification" style={{marginBottom:"0"}}/>
+                              </span>
+                              <div className="notifications-item-icon">
+                              <i className="fa-solid fa-message"/>
+                          </div>
+                          </div>
+                      </div>
+                      <div className="notifications-item-details">
+                          <div className="notifications-item-info">
+                              <span className="notifications-item-info-text">u/Commentor replied to your post in u/Username</span>&nbsp;
+                              <span className="notifications-item-info-date">Apr 7</span>
+                          </div>
+                          <div className="notifications-item-message">
+                              <span className="notifications-item-message-text">
+                                  Comment Content
+                              </span>
+                          </div>
+                      </div>
+                      <div className="notifications-item-options">
+                      <Popover placement='bottom-start'>
+                        <PopoverTrigger>
+                            <Button 
+                            variant='ghost'
+                            colorScheme='gray'><SlOptions /></Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverBody>Hide this notification</PopoverBody>
+                            <PopoverBody>Disable updates from this community</PopoverBody>
+                            <PopoverBody>Turn off this notification type</PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+                      </div>
+                  </div>
+              </div>
+              </div>
+              <div className="notifications-item">
+              <div className="notifications-item-link" style={{cursor:'pointer'}}>
+                  <div className="notifications-item-content">
+                      <div className="notifications-item-avatar">
+                          <div className="avatar">
+                              <span className="avatar-image">
+                                  <img src={logo} alt="avatar for notification" style={{marginBottom:"0"}}/>
+                              </span>
+                              <div className="notifications-item-icon">
+                              <i className="fa-solid fa-message"/>
+                          </div>
+                          </div>
+                      </div>
+                      <div className="notifications-item-details">
+                          <div className="notifications-item-info">
+                              <span className="notifications-item-info-text">25 Upvotes on your post on u/Username</span>&nbsp;
+                              <span className="notifications-item-info-date">Apr 10</span>
+                          </div>
+                          <div className="notifications-item-message">
+                              <span className="notifications-item-message-text">
+                                Your karma is now 673
+                              </span>
+                          </div>
+                      </div>
+                      <div className="notifications-item-options">
+                      <Popover placement='bottom-start'>
+                        <PopoverTrigger>
+                            <Button 
+                            variant='ghost'
+                            colorScheme='gray'><SlOptions /></Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverBody>Hide this notification</PopoverBody>
+                            <PopoverBody>Disable updates from this community</PopoverBody>
+                            <PopoverBody>Turn off this notification type</PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+                      </div>
+                  </div>
+              </div>
+              </div>
+              <div className="notifications-item">
+              <div className="notifications-item-link" style={{cursor:'pointer'}}>
+                  <div className="notifications-item-content">
+                      <div className="notifications-item-avatar">
+                          <div className="avatar">
+                              <span className="avatar-image">
+                                  <img src={logo} alt="avatar for notification" style={{marginBottom:"0"}}/>
+                              </span>
+                              <div className="notifications-item-icon">
+                              <i className="fa-solid fa-message"/>
+                          </div>
+                          </div>
+                      </div>
+                      <div className="notifications-item-details">
+                          <div className="notifications-item-info">
+                              <span className="notifications-item-info-text">12 Downvotes on your post on u/Username</span>&nbsp;
+                              <span className="notifications-item-info-date">Apr 16</span>
+                          </div>
+                          <div className="notifications-item-message">
+                              <span className="notifications-item-message-text">
+                                Your karma is now 72
+                              </span>
+                          </div>
+                      </div>
+                      <div className="notifications-item-options">
+                      <Popover placement='bottom-start'>
+                        <PopoverTrigger>
+                            <Button 
+                            variant='ghost'
+                            colorScheme='gray'><SlOptions /></Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverBody>Hide this notification</PopoverBody>
+                            <PopoverBody>Disable updates from this community</PopoverBody>
+                            <PopoverBody>Turn off this notification type</PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+                      </div>
+                  </div>
+              </div>
+              </div>
+
         </div>
         <div className="notifications-see-all">
             <a href="" type="button" className="see-all-button">
