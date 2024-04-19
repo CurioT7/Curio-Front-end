@@ -16,6 +16,61 @@ async function showFriendInformation({username}) {
     }
 }
 
+async function userFollow(friendUsername) {
+
+    try {
+        await axios.post(`${hostUrl}/api/me/friends`, {
+            friendUsername
+        },{
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+        });
+    
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+    async function userUnfollow(friendUsername) {
+    try {
+        await axios.patch(`${hostUrl}/api/me/friends`, {
+            friendUsername
+        },{
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+        });
+
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+async function getFollower(username) {
+    try {
+        if (!token) {
+            console.error('Error:', error);
+            return;
+        }
+
+        const response = await axios.get(`${hostUrl}/api/me/friends/${username}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+        });
+        return { success: true, response };
+    } catch (error) {
+        console.error('Error:', error);
+        return { success: false, error };
+    }
+}
+
 async function userBlock(usernameToBlock) {
     try {
         const response = await axios.post(`${hostUrl}/api/User/block`, {
@@ -116,4 +171,4 @@ const handleUserUnblock = async (username) => {
 
 
 
-export {userBlock, userUnblock, showFriendInformation, handleUserBlock, handleUserUnblock};
+export {userBlock, userUnblock, showFriendInformation, userFollow, userUnfollow, getFollower, handleUserBlock, handleUserUnblock};

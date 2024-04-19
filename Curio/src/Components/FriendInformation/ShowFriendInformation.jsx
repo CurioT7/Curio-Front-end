@@ -13,7 +13,7 @@ import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {userBlock , userUnblock} from "./ShowFriendInformationEndpoints.js";
+import {userBlock , userUnblock, userFollow, userUnfollow, getFollower} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
@@ -82,66 +82,24 @@ function ShowFriendInformation(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getFollower(props.username);
+        handleGetFollower(props.username);
         getBlocked(props.username);
     }, [props.username]);
 
 
-    async function getFollower(username) {
+    async function handleGetFollower(username) {
         try {
-            if (!token) {
-                console.error('Error:', error);
-                return;
+            const result = await getFollower(username);
+            if (result.success) {
+                setIsFollowing(true);
+            } else {
+                console.error('Error:', result.error);
             }
-    
-            await axios.get(`${hostUrl}/api/me/friends/${username}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                }
-            });
-            setIsFollowing(true);
         } catch (error) {
             console.error('Error:', error);
         }
     }
     
-
-    async function userFollow(friendUsername) {
-
-        try {
-            await axios.post(`${hostUrl}/api/me/friends`, {
-                friendUsername
-            },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                }
-            });
-        
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-
-        async function userUnfollow(friendUsername) {
-        try {
-            await axios.patch(`${hostUrl}/api/me/friends`, {
-                friendUsername
-            },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                }
-            });
-    
-    
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
 
     const handleFollowToggle = () => {
         if (!token) {
