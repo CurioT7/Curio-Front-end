@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
 import openchat from "../../assets/Chat_navbar.png";
@@ -18,11 +18,22 @@ import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
+import { BsArrowUpRightCircle } from "react-icons/bs";
 import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+} from '@chakra-ui/react'
+import { getTrending } from './SearchingEndPoints';
+
+import Trending from './Trending';
 
 
 function NavbarComponent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [trending, setTrending] = React.useState([]);
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -37,6 +48,14 @@ function NavbarComponent() {
     navigate('/login');
   }
 
+  const inputRef = useRef();
+  const popoverRef = useRef();
+  
+  useEffect(() => {
+    if (inputRef.current && popoverRef.current) {
+      popoverRef.current.style.width = `${inputRef.current.offsetWidth}px`;
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -54,6 +73,40 @@ function NavbarComponent() {
     subMenu.classList.toggle("open-menu");
   }
 
+  
+  React.useEffect(() => {
+      async function fetchData() {
+          const trendingData = await getTrending();
+          setTrending(trendingData.posts);
+          console.log(trendingData.posts);
+      }
+      fetchData();
+  }, []);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        inputRef.current !== event.target && 
+        !popoverRef.current?.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+ useEffect(() => {
+  if (isOpen) {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 0);
+  }
+}, [isOpen]);
   return (
     <nav className='navbar-component'>
       <input type="checkbox" name="" id="chk1"/>
@@ -65,7 +118,25 @@ function NavbarComponent() {
       </div>
       <div className="search-box">
         <form action="">
-          <input type="text" name="search" id="srch" placeholder="Search Curio"/>
+            <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
+              <PopoverTrigger>
+                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+              </PopoverTrigger>
+              <PopoverContent borderRadius='20px' ref={popoverRef}>
+                <PopoverBody margin={0} padding={0} className="search-list">
+                  <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
+                  { trending.map((trend) => (
+                    <Trending
+                      key={trend._id}
+                      title={trend.authorName}
+                      description={trend.title}
+                      subreddit={trend.subreddit}
+                    />
+                    ))
+                  }
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
           <button type="submit"><i className="search-icon fa fa-search" aria-hidden="true"></i></button>
         </form>
       </div>
