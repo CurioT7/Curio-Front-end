@@ -18,6 +18,7 @@ import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
+import { BsArrowUpRightCircle } from "react-icons/bs";
 import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
 import {
   Popover,
@@ -25,12 +26,14 @@ import {
   PopoverContent,
   PopoverBody,
 } from '@chakra-ui/react'
+import { getTrending } from './SearchingEndPoints';
 
 import Trending from './Trending';
 
 
 function NavbarComponent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [trending, setTrending] = React.useState([]);
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -70,6 +73,16 @@ function NavbarComponent() {
     subMenu.classList.toggle("open-menu");
   }
 
+  
+  React.useEffect(() => {
+      async function fetchData() {
+          const trendingData = await getTrending();
+          setTrending(trendingData.posts);
+          console.log(trendingData.posts);
+      }
+      fetchData();
+  }, []);
+
   return (
     <nav className='navbar-component'>
       <input type="checkbox" name="" id="chk1"/>
@@ -87,7 +100,16 @@ function NavbarComponent() {
               </PopoverTrigger>
               <PopoverContent ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
-                  <Trending/>
+                  <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
+                  { trending.map((trend) => (
+                    <Trending
+                      key={trend._id}
+                      title={trend.authorName}
+                      description={trend.title}
+                      subreddit={trend.subreddit}
+                    />
+                    ))
+                  }
                 </PopoverBody>
               </PopoverContent>
             </Popover>

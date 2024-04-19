@@ -332,3 +332,13 @@
     max-height: 90vh;
     overflow-y: auto;
 }
+
+.trending-header{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding-left:12px;
+    padding-top: 12px;
+    color: rgb(100, 114, 120);
+}

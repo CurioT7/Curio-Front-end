@@ -1,10 +1,4 @@
-.trending-header{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    color: rgb(100, 114, 120);
-}
+
 h5{
     font-size: 15px;
     font-weight: 500;
@@ -48,7 +42,7 @@ h5{
 }
 .break-line-trending{
     
-    
+    margin-bottom: 0px;
     border-bottom: #edeff1 2px solid;
     color: rgb(44, 60, 66);
 }
