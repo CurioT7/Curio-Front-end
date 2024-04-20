@@ -21,7 +21,7 @@ function Community({ index, name, category, members, picture }) {
   const backgroundColor = Math.floor(index / 4) % 2 === 0 ? 'columnBack' : 'columnBack1';
 
   return (
-    <div className={`col d-flex justify-content-start align-items-center ${backgroundColor}`}>
+    <div className={`col col-12 col-fixed-width d-flex justify-content-start align-items-center ${backgroundColor}`}>
       <div className="d-flex p-2 me-3 align-items-center number">
         {index + 1}
       </div>

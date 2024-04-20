@@ -5,7 +5,7 @@ import ExclamationMark from '../../styles/icons/ExclamationIcon';
 import classes from './ModalPages.module.css';
 import Back from '../../styles/icons/Back'
 import axios from "axios";
-import { userBlock , userUnblock, handleUserBlock, handleUserUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
+import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
 import { useToast } from '@chakra-ui/react';
 
 
@@ -13,16 +13,15 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 const MultiPageFormModal = (props) => {
     const [step, setStep] = useState(1);
-    const [selectedOption, setSelectedOption] = useState(' ');
-    const [reportReason, setReportReason] = useState(' ');
-    const [description, setDescription] = useState(' ');
-    const [explanation, setExplanation] = useState(' ');
+    const [selectedOption, setSelectedOption] = useState('');
+    const [reportReason, setReportReason] = useState('');
+    const [description, setDescription] = useState('');
+    const [explanation, setExplanation] = useState('');
     const [furtherDetails, setFurtherDetails] = useState('');
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isSecondStep, setSecondStep] = useState(false);
-    const[isPrevStep, setPrevStep] = useState(false);
+    const [isPrevStep, setPrevStep] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
-    const [isBlockedError, setIsBlockedError] = useState(false);
 
     const [blockedUsers, setBlockedUsers] = useState([]);
 
@@ -71,7 +70,7 @@ const MultiPageFormModal = (props) => {
         setIsOptionSelected(true);
     };
 
-    const handleOptionClick = (reason, explanation) => {
+    const handleOptionClick = (reason) => {
         if (reportReason === reason) {
             setReportReason('');
         } else {
@@ -112,7 +111,7 @@ const MultiPageFormModal = (props) => {
                 reportedUsername: reportedUsername,
                 reportType: reportType,
                 reportReason: reportReason,
-                reportDetails
+                reportDetails: reportDetails
             }, {
                 headers: {
                     authorization : `Bearer ${token}`
@@ -125,7 +124,7 @@ const MultiPageFormModal = (props) => {
         }
     };
 
-    async function getBlocked(username) {
+    async function getBlocked() {
         try {
             const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
                 headers: {
@@ -140,7 +139,7 @@ const MultiPageFormModal = (props) => {
         }
     }
 
-    const patchBlockUser = async (name) => {
+    async function patchBlockUser(name) {
         const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
           viewBlockedPeople: [...blockedUsers, { username: name}]
         },{
@@ -155,7 +154,7 @@ const MultiPageFormModal = (props) => {
         }
       };
 
-      const handleUserBlock = async (username) => {
+      async function handleUserBlock(username){
             const result = await userBlock(username);
             if(result.success){
                 await getBlocked(username);
@@ -164,11 +163,10 @@ const MultiPageFormModal = (props) => {
             }
             if (!result.success) {
                 ToastError();
-                setIsBlockedError(true);
             }
         }
 
-    const handleUserUnblock = async (username) => {
+    async function handleUserUnblock(username){
             try {
                 const index = blockedUsers.findIndex((user) => user.username === username);
                 if (index === -1) {
@@ -207,7 +205,7 @@ const MultiPageFormModal = (props) => {
                 handleUserUnblock(username);
             }
             setIsBlocked(!isBlocked);
-    }
+        }
 
 
     return (
@@ -448,7 +446,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="abuse"
-                                                value="username"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Sexual or suggestive content')}}
                                             />
@@ -458,7 +455,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="abuse"
-                                                value="avatar"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Predatory or inappropriate behavior')}}
                                             />
@@ -468,7 +464,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="abuse"
-                                                value="avatar"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Content involving physical or emotional abuse or neglect')}}
                                             />
@@ -485,7 +480,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="spam"
-                                                value="Link farming"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Link farming')}}
                                             />
@@ -495,7 +489,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="spam"
-                                                value="Unsolicited messaging"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Unsolicited messaging')}}
                                             />
@@ -505,7 +498,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="spam"
-                                                value="Excessive posts or comments in a community"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Excessive posts or comments in a community')}}
                                             />
@@ -515,7 +507,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="spam"
-                                                value="Posting harmful links (malware)"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Posting harmful links (malware)')}}
                                             />
@@ -525,7 +516,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="spam"
-                                                value="Harmful bots"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Harmful bots')}}
                                             />
@@ -535,7 +525,6 @@ const MultiPageFormModal = (props) => {
                                             <input
                                                 type="radio"
                                                 name="spam"
-                                                value="Other"
                                                 className={classes.input}
                                                 onChange={() => {handleFurtherDetailsChange('Other')}}
                                             />
@@ -566,10 +555,10 @@ const MultiPageFormModal = (props) => {
                     {step === 2 && (
                         <div className={classes["flex-foot-container"]}>
                             <div className={classes.description}>
-                                {description && <p className={classes['description-text']}>{description}</p>}
+                              <p className={classes['description-text']}>{description}</p>
                             </div>
                             <div className={classes["explanation-container"]}>
-                                {explanation && <p className={classes['explanation-text']}>{explanation}</p>}
+                              <p className={classes['explanation-text']}>{explanation}</p>
                             </div>
                             <div className={classes['submit-btn-container']}>
                                 {reportReason === 'hate' || reportReason === 'prohibited transaction' || reportReason === 'self-harm or suicide' ? (
@@ -591,7 +580,7 @@ const MultiPageFormModal = (props) => {
                                   <p className={` m-0' ${classes['block']}`}>You won't be able to send direct messages or chat requests to each other.</p>
                                 </div>
                                 <div className='form-check form-switch d-flex align-items-center'>
-                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" id="block" role="switch" name="block" value="block" onChange={() => {handleBlockToggle(props.username)}} />
+                                    <input style={{ transform: 'scale(1.5)' }} className={`form-check-input ms-auto mr-5 ${classes['check-button']}`} type="checkbox" role="switch" name="block" value="block" onChange={() => {handleBlockToggle(props.username)}} />
                                 </div>
                             </div>
                             <div className="d-flex justify-content-end">

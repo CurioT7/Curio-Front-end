@@ -62,12 +62,10 @@ function TopCommunities(props) {
       <h1 className="text-center best-of-reddit">Best of Curio</h1>
       <h2 className="top-communities">Top Communities</h2>
       <h2 className="browse">Browse Reddit's largest communities</h2>
-      {currentComms.map((_, index) => {
-        return index % 4 === 0 ? (
-          <div className="row rows-cols-1 row-cols-xl-4 row-cols-l-3 row-cols-md-2 row-cols-sm-1 w-100 rowHeight">
-            {currentComms.slice(index, index + 4).map((community, key) => (
+          <div className="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-xs-1 w-100 rowHeight" style={{height: 'fit-content'}}>
+            {currentComms.map((community, index) => (
               <Community
-                index={(currentPage - 1) * commPerPage + index + key}
+                index={index}
                 name={community.name}
                 category={community.category}
                 members={community.members}
@@ -75,8 +73,6 @@ function TopCommunities(props) {
               />
             ))}
           </div>
-        ) : null;
-      })}
       <div className="pagination">
       <div className="d-flex align-items-xl-end justify-content-evenly mx-auto w-50">
         {pages.map((page, index) => {

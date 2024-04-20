@@ -71,6 +71,7 @@ function NavbarComponent() {
       </div>
       <ul className='right-section-navbar'>
         {isAuthenticated && 
+        <>
           <li className='sub-right-navbar'>
             <Tooltip label="Advertise on Curio">
               <a href="#" style={{ display: "flex" }} className='right-item-option'>
@@ -78,18 +79,14 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
-        }
-        {isAuthenticated && 
           <li className='sub-right-navbar'>
-            <Tooltip label="Open chat">
-              <a href="#" className='right-item-option' style={{ display: "flex" }}>
-                <img className='navImg' src={openchat} alt="logo"/>
-              </a>
-            </Tooltip>
-          </li>
-        }
-        {isAuthenticated && 
-          <li className='sub-right-navbar'>
+          <Tooltip label="Open chat">
+            <a href="#" className='right-item-option' style={{ display: "flex" }}>
+              <img className='navImg' src={openchat} alt="logo"/>
+            </a>
+          </Tooltip>
+        </li>
+        <li className='sub-right-navbar'>
             <Tooltip label="Create post">
               <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
                 <img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
@@ -97,8 +94,6 @@ function NavbarComponent() {
               </Link>
             </Tooltip>
           </li>
-        }
-        {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Open inbox">
               <a style={{ display: "flex" }} className='right-item-option'>
@@ -118,15 +113,14 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
-        }
-        {isAuthenticated && 
-          <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
+          <li className='sub-right-navbar' id='openProfileIcon' onClick={toggleMenu}>
             <Tooltip label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
                 <img className='profileImg' src={profile} alt="logo"/>
               </a>
             </Tooltip>
           </li>
+        </>
         }
         {!isAuthenticated &&
           <div className='d-flex ms-auto'>
