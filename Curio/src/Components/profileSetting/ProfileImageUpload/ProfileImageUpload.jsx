@@ -42,6 +42,7 @@ function ProfileImageUpload() {
     const reader = new FileReader();
     reader.onloadend = () => {
       setProfileImage(file); // Store the file object, not the base64 data
+      uploadImages(); // Call uploadImages when profile image changes
     };
     if (file) {
       reader.readAsDataURL(file);
@@ -53,6 +54,7 @@ function ProfileImageUpload() {
     const reader = new FileReader();
     reader.onloadend = () => {
       setBannerImage(file); // Store the file object, not the base64 data
+      uploadImages(); // Call uploadImages when profile image changes
     };
     if (file) {
       reader.readAsDataURL(file);
@@ -118,7 +120,7 @@ function ProfileImageUpload() {
   };
 
   return (
-    <form onSubmit={(e) => e.preventDefault()} encType="multipart/form-data" style={{ width: 650 }}>
+    <form onSubmit={(e) => e.preventDefault()} encType="multipart/form-data" style={{ width: 650 }} className='profile-banner-images-section'>
       <Box className="profile-banner-images mb-3" data-testid="profile-banner-images">
         <h3 className="headings-settings" fontWeight="500" mb="1">
           Profile and banner image
@@ -160,7 +162,6 @@ function ProfileImageUpload() {
             </Box>
           </Box>
         </Box>
-        <button type="button" onClick={uploadImages}>Upload Images</button> 
       </Box>
     </form>
   );
