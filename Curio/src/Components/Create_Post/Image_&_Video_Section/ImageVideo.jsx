@@ -1,7 +1,5 @@
-// ImageVideo.jsx
-
 import React, { useState, useRef } from 'react';
-import "./ImageVideo.css";
+import './ImageVideo.css';
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
@@ -15,10 +13,10 @@ function ImageVideo({ onImageUpload }) {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       if (selectedFile.type && selectedFile.type.includes('image')) {
-        setFile({ type: 'image', file: selectedFile }); // Set the image file
+        setFile({ type: 'image', file: selectedFile }); 
         handleUpload();
       } else if (selectedFile.type && selectedFile.type.includes('video')) {
-        setFile({ type: 'video', file: selectedFile }); 
+        setFile({ type: 'video', file: selectedFile });
         handleUpload();
       } else {
         console.error('Unsupported file type');
@@ -50,8 +48,40 @@ function ImageVideo({ onImageUpload }) {
     }
   };
 
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const droppedFile = event.dataTransfer.files[0];
+    if (droppedFile) {
+      if (droppedFile.type.includes('image')) {
+        setFile({ type: 'image', file: droppedFile });
+        handleUpload();
+      } else if (droppedFile.type.includes('video')) {
+        setFile({ type: 'video', file: droppedFile });
+        handleUpload();
+      } else {
+        console.error('Unsupported file type');
+      }
+    }
+  };
+
   return (
-    <div className='image-video-container'>
+    <div className='image-video-container' onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={handleDrop}>
       <div className='file-input-container'>
         <div className='upload-container'>
           <input
@@ -63,45 +93,45 @@ function ImageVideo({ onImageUpload }) {
             style={{ display: 'none' }}
           />
           <div className='upload-button-container'>
-          {file ? (
-  <div className="uploaded-content">
-    {file.type === 'image' ? (
-      <img src={URL.createObjectURL(file.file)} alt="Uploaded File" className="uploaded-image" />
-      ) : (
-        <video controls className="uploaded-video">
-          <source src={URL.createObjectURL(file.file)} type={file.file.type} />
-          Your browser does not support the video tag.
-        </video>
-      )}
-      <div className="delete-button-container">
-        <button role="button" tabIndex="-1" aria-label="Remove" className='delete-button' onClick={onOpen}>
-          <i className="fa-solid fa-trash"/>
-        </button>
-      </div>
-    </div>
-    ) : (
-      <p className='upload-text'>
-        Drag and drop images or videos 
-        <Button
-          className="upload-button"
-          variant='outline'
-          colorScheme='blue'
-          style={{
-            borderRadius: '9999px',
-            display: 'inline-block',
-            margin: '10px 8px',
-            lineHeight: '18px',
-            position: 'relative',
-            boxSizing: 'border-box',
-            fontFamily: 'Noto Sans, Arial, sans-serif',
-            fontSize: '14px',
-          }}
-          onClick={handleButtonClick}
-        >
-          Upload
-        </Button>
-      </p>
-    )}
+            {file ? (
+              <div className="uploaded-content">
+                {file.type === 'image' ? (
+                  <img src={URL.createObjectURL(file.file)} alt="Uploaded File" className="uploaded-image" />
+                ) : (
+                  <video controls className="uploaded-video">
+                    <source src={URL.createObjectURL(file.file)} type={file.file.type} />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+                <div className="delete-button-container">
+                  <button role="button" tabIndex="-1" aria-label="Remove" className='delete-button' onClick={onOpen}>
+                    <i className="fa-solid fa-trash" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className='upload-text'>
+                Drag and drop images or videos
+                <Button
+                  className="upload-button"
+                  variant='outline'
+                  colorScheme='blue'
+                  style={{
+                    borderRadius: '9999px',
+                    display: 'inline-block',
+                    margin: '10px 8px',
+                    lineHeight: '18px',
+                    position: 'relative',
+                    boxSizing: 'border-box',
+                    fontFamily: 'Noto Sans, Arial, sans-serif',
+                    fontSize: '14px',
+                  }}
+                  onClick={handleButtonClick}
+                >
+                  Upload
+                </Button>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -113,22 +143,22 @@ function ImageVideo({ onImageUpload }) {
             Are you sure you want to remove your image?
           </ModalBody>
           <ModalFooter>
-            <Button 
-            variant='outline'
-            colorScheme='blue'
-            mr={3} 
-            onClick={onClose}
-            style={{
-              borderRadius: '9999px',
-            }}>
+            <Button
+              variant='outline'
+              colorScheme='blue'
+              mr={3}
+              onClick={onClose}
+              style={{
+                borderRadius: '9999px',
+              }}>
               Keep
             </Button>
-            <Button 
-            colorScheme='blue'
-            onClick={handleDelete}
-            style={{
-              borderRadius: '9999px',
-            }}>
+            <Button
+              colorScheme='blue'
+              onClick={handleDelete}
+              style={{
+                borderRadius: '9999px',
+              }}>
               Remove
             </Button>
           </ModalFooter>
