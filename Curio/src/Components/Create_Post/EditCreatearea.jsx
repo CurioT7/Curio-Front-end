@@ -20,7 +20,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
     if (community && community.community) {
       setSpoilerClicked(!spoilerClicked);
     }
-  };
+  };  
 
   const handleNsfwClick = () => {
     setNsfwClicked(!nsfwClicked);
@@ -129,7 +129,9 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
               color: spoilerClicked ? 'rgb(255, 255, 255)' : '',
               fill: spoilerClicked ? 'rgb(255, 255, 255)' : '',
               backgroundColor: spoilerClicked ? 'rgb(0, 0, 0)' : '',
-              borderColor: spoilerClicked ? 'transparent' : ''
+              borderColor: spoilerClicked ? 'transparent' : '',
+              cursor: !community || !community.community ? 'not-allowed' : 'pointer',
+              background: !community || !community.community ? '#cccccc' : '',
             }}
           >
             Spoiler
