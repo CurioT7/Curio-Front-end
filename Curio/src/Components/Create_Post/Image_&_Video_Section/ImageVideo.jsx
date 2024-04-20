@@ -18,7 +18,8 @@ function ImageVideo({ onImageUpload }) {
         setFile({ type: 'image', file: selectedFile }); // Set the image file
         handleUpload();
       } else if (selectedFile.type && selectedFile.type.includes('video')) {
-        // Handle video upload separately if needed
+        setFile({ type: 'video', file: selectedFile }); 
+        handleUpload();
       } else {
         console.error('Unsupported file type');
       }
@@ -62,38 +63,45 @@ function ImageVideo({ onImageUpload }) {
             style={{ display: 'none' }}
           />
           <div className='upload-button-container'>
-            {file ? (
-              <div className="uploaded-content">
-                <img src={URL.createObjectURL(file.file)} alt="Uploaded File" className="uploaded-image" />
-                <div className="delete-button-container">
-                  <button role="button" tabIndex="-1" aria-label="Remove" className='delete-button' onClick={onOpen}>
-                    <i className="fa-solid fa-trash"/>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <p className='upload-text'>
-                Drag and drop images or videos 
-                <Button
-                  className="upload-button"
-                  variant='outline'
-                  colorScheme='blue'
-                  style={{
-                    borderRadius: '9999px',
-                    display: 'inline-block',
-                    margin: '10px 8px',
-                    lineHeight: '18px',
-                    position: 'relative',
-                    boxSizing: 'border-box',
-                    fontFamily: 'Noto Sans, Arial, sans-serif',
-                    fontSize: '14px',
-                  }}
-                  onClick={handleButtonClick}
-                >
-                  Upload
-                </Button>
-              </p>
-            )}
+          {file ? (
+  <div className="uploaded-content">
+    {file.type === 'image' ? (
+      <img src={URL.createObjectURL(file.file)} alt="Uploaded File" className="uploaded-image" />
+      ) : (
+        <video controls className="uploaded-video">
+          <source src={URL.createObjectURL(file.file)} type={file.file.type} />
+          Your browser does not support the video tag.
+        </video>
+      )}
+      <div className="delete-button-container">
+        <button role="button" tabIndex="-1" aria-label="Remove" className='delete-button' onClick={onOpen}>
+          <i className="fa-solid fa-trash"/>
+        </button>
+      </div>
+    </div>
+    ) : (
+      <p className='upload-text'>
+        Drag and drop images or videos 
+        <Button
+          className="upload-button"
+          variant='outline'
+          colorScheme='blue'
+          style={{
+            borderRadius: '9999px',
+            display: 'inline-block',
+            margin: '10px 8px',
+            lineHeight: '18px',
+            position: 'relative',
+            boxSizing: 'border-box',
+            fontFamily: 'Noto Sans, Arial, sans-serif',
+            fontSize: '14px',
+          }}
+          onClick={handleButtonClick}
+        >
+          Upload
+        </Button>
+      </p>
+    )}
           </div>
         </div>
       </div>
