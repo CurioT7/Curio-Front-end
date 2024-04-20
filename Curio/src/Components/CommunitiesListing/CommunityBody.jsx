@@ -38,7 +38,7 @@ React.useEffect(() => {
       const userData = await fetchUserName();
       if (subCurioData && userData) {
           subCurioData.subreddit.moderators.map((mod)=>{
-            console.log(mod.username);
+            
             if(mod.username===userData.username){
               setIsMod(true);
             }
@@ -54,7 +54,7 @@ React.useEffect(() => {
 async function changeSortType(value,time) {
     
     
-    async function SetData() {
+    
         if (value === 'Hot') {
             const data = await fetchDataFromBackend(Community);
             if (data) {
@@ -112,8 +112,7 @@ async function changeSortType(value,time) {
               setRandomPost({ post:{}, isSelected: true });
             }
         }
-    }
-    SetData();
+    
 }
 
   return (
@@ -128,7 +127,7 @@ async function changeSortType(value,time) {
           <>
           <Post
             
-            id={post._id}
+            _id={post._id}
             title={post.title}
             body={post.body}
             user={post.authorName}
@@ -137,12 +136,13 @@ async function changeSortType(value,time) {
             comments={post.comments}
             content={post.content}
             isMod={isMod}
+            linkedSubreddit={post.linkedSubreddit}
           />
           <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
           </>
         ))):(<Post
             
-          id={randomPost.post._id}
+          _id={randomPost.post._id}
           title={randomPost.post.title}
           body={randomPost.post.body}
           user={randomPost.post.authorName}
@@ -151,6 +151,7 @@ async function changeSortType(value,time) {
           comments={randomPost.post.comments}
           content={randomPost.post.content}
           isMod={isMod}
+          linkedSubreddit={randomPost.linkedSubreddit}
         />)}
         {(posts.length<1 && randomPost.isSelected==false) ||(!randomPost.post && randomPost.isSelected==true)? (<div className="m-5 row justify-content-center align-items-center">
           <div className="col text-center">

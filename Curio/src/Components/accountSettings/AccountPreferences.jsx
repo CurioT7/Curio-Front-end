@@ -1,6 +1,5 @@
 import "./AccountSettings.css"
-import { Flex, Spacer,Box, Center } from '@chakra-ui/react'
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Flex, Spacer,Box } from '@chakra-ui/react'
 import { Select } from '@chakra-ui/react'
 import React from "react"
 import Titles from "../feedSettings/childs/Titles"
@@ -108,48 +107,48 @@ const AccountPreferences = (props) => {
                     <Titles title='Email Address' description={props.email}/>
                 
                     <Spacer />
-                    <>
-                    <GeneratePass isDelete={false} isGoogle={false} isEmail={true} title="Change your email address" context="To change your email address" email={props.email} username={props.username} buttonStyle={buttonStyle}/>
-                    </>
+                    <Box className='account-button'>
+                    <GeneratePass  isDelete={false} isGoogle={false} isEmail={true} title="Change your email address" context="To change your email address" email={props.email} username={props.username} buttonStyle={buttonStyle}/>
+                    </Box>
                 </Flex>}
            
            {props.findPass===true&& <Box>
-                <Flex mb={5} wrap='wrap'>
+                <Flex mb={5} justifyContent='space-between'  wrap='wrap'>
                     <Titles title='Email Address' description={props.email}/>
                 
                     <Spacer />
-                    <>
-                    <EmailButton buttonStyle={buttonStyle}/>
-                    </>
+                    <Box className='account-button'>
+                    <EmailButton  buttonStyle={buttonStyle}/>
+                    </Box>
                 </Flex>
 
-                <Flex mb={5}>
+                <Flex mb={5} wrap='wrap'>
                     <Titles title='Change password' description='Password must be at least 8 characters long'/>
                     {/* <div>
                         <h3 className="headings-settings d-flex fw-500 mb-1">Change password</h3> 
                         <p className="headings-description fw-normal text-muted">Password must be at least 8 characters long</p>
                     </div> */}
                     <Spacer />
-                    <>
-                    <ChangePass buttonStyle={buttonStyle}/>
-                    </>
+                    <Box className='account-button'>
+                    <ChangePass  buttonStyle={buttonStyle}/>
+                    </Box>
                 </Flex>
             </Box>}
-            <Flex mb={5}>
+            <Flex mb={5} wrap='wrap'>
                 <Titles title='Gender' description='This information may be used to improve your recommendations and ads.'/>
                 
                 <Spacer />
-                <Select textAlign={[ 'left', 'center' ]} className="fw-bold "  variant='unstyled' onChange={handleGender} value={gender} size='xs' width="fit-content" justifyItems='center'                       
+                <Select  textAlign={[ 'left', 'center' ]} className="fw-bold account-button"  variant='unstyled' onChange={handleGender} value={gender} size='xs' width="fit-content" justifyItems='center'                       
                 >
                     <option value='MAN' >MAN</option>
                     <option value='WOMAN'  >WOMAN</option>
                 </Select>
             </Flex>
-            <Flex flexDirection='column' mb={5} >
+            <Flex flexDirection='column' mb={5} wrap='wrap'>
                 <Titles title='Location customization' description='Specify a location to customize your recommendations and feed. Reddit does not track your precise geolocation data.'/>
                 
                 <Box display='flex' ms={10}>
-                    <Select textAlign={[ 'left', 'center' ]}  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={locationCustomization} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
+                    <Select  textAlign={[ 'left', 'center' ]}  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={locationCustomization} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
                         <option value='Egypt' >Egypt</option>
                         <option value='Germany' >Germany</option>
                     </Select>

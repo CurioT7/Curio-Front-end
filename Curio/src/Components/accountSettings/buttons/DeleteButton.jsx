@@ -58,7 +58,7 @@ function DeleteButton(){
         onClose
     }
     async function sendDataToBackend(){
-        console.log(`Bearer ${localStorage.getItem('token')}`)
+        
         try {
             const response = await axios.delete(`${serverHost}/api/settings/delete_account`,{data: {
                 username: userName,
