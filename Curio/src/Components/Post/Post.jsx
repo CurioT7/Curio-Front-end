@@ -1,6 +1,16 @@
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import { Flex,Avatar,Box,Heading,IconButton,Text,Image } from '@chakra-ui/react'
 import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import Popover from 'react-bootstrap/Popover';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import picture from "../../styles/icons/commPic.png";
+import Minus from "../../styles/icons/Minus";
+import PlusIcon from "../../styles/icons/PlusIcon";
+import Chat from "../../styles/icons/Chat";
+import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import UserPopover from '../UserPopover.css/UserPopover.jsx';
+
+
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
@@ -22,10 +32,17 @@ import { FetchPostLockStatus } from './PostEndPoints.js';
 import './Post.css'
 import PostControl from './PostControl.jsx';
 import axios from 'axios';
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
+const token = localStorage.getItem('token');
+
+
 
 function Post(props) {
     const [subreddit, setSubreddit] = useState([]);
     const [isHidden, setIsHidden] = useState(false);
+    const [showPopover, setShowPopover] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [friendInfo, setFriendInfo] = useState({});
     const toast = useToast();
     const postId = props._id;
     const handleHidePost = () => {
@@ -148,6 +165,43 @@ function Post(props) {
         navigate(`/post/post-details/${props._id}`, { state: { post } });
     }
 
+
+    function handleFollowToggle(username) {
+        if (!token) {
+         navigate('/login');
+        }
+        else{
+        if (isFollowing) {
+            userUnfollow(username);
+        } else {
+            userFollow(username);
+        }
+        setIsFollowing(!isFollowing);
+    }
+    }
+
+    async function handleGetFollower(username) {
+        try {
+            const result = await getFollower(username);
+            if (result.success) {
+                setIsFollowing(true);
+            } else {
+                console.error('Error:', result.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function showFriendInformation(username) {
+        try {
+            const response = await axios.get(`${hostUrl}/user/${username}/about`);
+            setFriendInfo(response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
  
 
     return (
@@ -160,11 +214,8 @@ function Post(props) {
                             <Flex spacing='4'>
                             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                                 <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-
-                                <Box>
-                                <a href={`/user/${props.user}`} className='community-post-name'>{props.user}</a>
-                                
-                                </Box>
+                               <UserPopover user={props.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
+                               handleGetFollower={handleGetFollower} showFriendInformation={showFriendInformation} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
