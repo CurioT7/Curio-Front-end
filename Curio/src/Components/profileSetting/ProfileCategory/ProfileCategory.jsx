@@ -8,13 +8,13 @@ function ProfileCategory() {
   
   const serverHost = import.meta.env.VITE_SERVER_HOST;
   const toast = useToast();
-  const [isChecked, setIsChecked] = useState(false); 
+  const [NSFW, setIsChecked] = useState(false); 
   const [isModalOpen, setIsModalOpen] = useState(false);
 //   const [pendingChange, setPendingChange] = useState(false);
 
   const handleSwitchChange = () => {
     // setPendingChange(!isChecked);
-    if (isChecked) { // Only open the modal if isChecked is true
+    if (NSFW) { // Only open the modal if isChecked is true
       setIsModalOpen(true);
     } else {
       confirmChange();
@@ -22,15 +22,14 @@ function ProfileCategory() {
   };
 
   const confirmChange = () => {
-    setIsChecked(!isChecked);
-    console.log(!isChecked)
-    sendDataToBackend({NSFW: !isChecked});
+    setIsChecked(!NSFW);
+    sendDataToBackend({NSFW: !NSFW});
     setIsModalOpen(false);
     Toast();
   };  
   
 
-  function Toast(){
+  function Toast(){ 
     toast({   
         description: "Changes Saved",
         status: 'info',
@@ -52,31 +51,76 @@ function ProfileCategory() {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(response)
+        // Handle different response status codes
+        switch (response.status) {
+          case 200:
+            console.log("User preferences updated successfully");
+            break;
+          case 404:
+            console.log("User preferences not found");
+            break;
+          default:
+            console.log("Unexpected response status:", response.status);
+            break;
+        }
         return response;
     } catch (error) {
-        console.error('Error sending data to backend:', error);
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 500) {
+          console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
+        } else {
+          console.error("Error sending data to backend:", error.response.data);
+        }
+      } else {
+        console.error('Error sending data to backend:', error.message);
+      }
     }
   }
 
   async function fetchDataFromBackend() {
+    const token = localStorage.getItem('token');
+        // console.log(token)
+        if (!token) {
+        console.error('No token found');
+        return;
+        }
       try {
           
           const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
               headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
               }
           });
+            // Handle different response status codes
+          switch (response.status) {
+            case 404:
+              console.log("User preferences not found");
+              break;
+            default:
+              console.log("Unexpected response status:", response.status);
+              break;
+          }
           return response.data;
       } catch (error) {
-          console.error('Error fetching data from backend:', error);
+        if (error.response) {
+          // Handle error response here
+          const status = error.response.status;
+          if (status === 500) {
+            console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
+          } else {
+            console.error("Error fetching data from backend:", error.response.data);
+          }
+        } else {
+          console.error('Error fetching data from backend:', error.message);
+        }
       }
   }
   useEffect(() => {
       async function fetchAndSetData() {
           const data = await fetchDataFromBackend();
           if (data) {
-            setIsChecked(data.isChecked);
+            setIsChecked(data.NSFW);
           }
       }
       fetchAndSetData();
@@ -88,7 +132,7 @@ function ProfileCategory() {
           <Titles title='NSFW'
           description="This content is NSFW (may contain nudity, pornography, profanity, or inappropriate content for those under 18)"/>
           <Spacer/>
-          <Switch size='lg' isChecked={isChecked} onChange={handleSwitchChange}/>
+          <Switch size='lg' isChecked={NSFW} onChange={handleSwitchChange}/>
       </Flex>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />

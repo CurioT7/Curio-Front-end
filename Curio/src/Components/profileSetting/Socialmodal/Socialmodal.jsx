@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import axios from 'axios';
 import { Button, useDisclosure } from '@chakra-ui/react';
 import "./Socialmodal.css";
@@ -16,27 +16,123 @@ import SocialUsernameModal from "./SocialUsernameModal";
 import CurioInput from "./CurioInput";
 
 function Socialmodal(props){
+    const serverHost = import.meta.env.VITE_SERVER_HOST;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedSocialLinks, setSelectedSocialLinks] = useState([]);
 
-    const handleSocialLinkClick = (socialLink, iconClass) => {
-        // event.stopPropagation();
+    const handleSocialLinkClick = (url, name, iconClass) => {
         if (selectedSocialLinks.length < 5) { 
-            setSelectedSocialLinks([...selectedSocialLinks, { link: socialLink, icon: iconClass }]);
+            setSelectedSocialLinks([...selectedSocialLinks, { displayName: name, url: url, platform: iconClass }]);
+            patchSocialLink(iconClass, name, url);
         }
     };
-
+    
     const handleRemoveSocialLink = (index) => {
+        const linkToRemove = selectedSocialLinks[index];
+        window.open(linkToRemove.url, "_blank"); 
         const updatedLinks = [...selectedSocialLinks];
         updatedLinks.splice(index, 1);
         setSelectedSocialLinks(updatedLinks);
     };
 
+    const patchSocialLink = (iconClass, name, url) => {
+        let platform;
+        switch(iconClass) {
+            case "fa-solid fa-link":
+                platform = "Custom URL";
+                break;
+            case "fa-brands fa-instagram":
+                platform = "Instagram";
+                break;
+            case "fa-brands fa-twitter":
+                platform = "Twitter";
+                break;
+            case "fa-brands fa-tiktok":
+                platform = "TikTok";
+                break;
+            case "fa-brands fa-twitch":
+                platform = "Twitch";
+                break;
+            case "fa-brands fa-facebook":
+                platform = "Facebook";
+                break;
+            case "fa-brands fa-youtube":
+                platform = "Youtube";
+                break;
+            case "fa-brands fa-tumblr":
+                platform = "Tumblr";
+                break;
+            case "fa-brands fa-spotify":
+                platform = "Spotify";
+                break;
+            case "fa-brands fa-soundcloud":
+                platform = "SoundCloud";
+                break;
+            case "fa-brands fa-paypal":
+                platform = "PayPal";
+                break;
+            default:
+                platform = "Unknown";
+        }
+
+    
+        axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
+            socialLinks: [...selectedSocialLinks, { displayName: name, url: url, platform: platform }] // Append the new link to the existing list
+        },{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}` 
+            }
+        }).then(response => {
+            // Handle successful patching if needed
+        }).catch(error => {
+            // Handle error if needed
+        });
+
+        // console.log(socialLinks)
+    };
+    
+    // Fetch Function
+    useEffect(() => {
+        async function fetchsocialLinks() {
+            try {
+                const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}` 
+                    }
+                });
+                const formattedSocialLinks = response.data.socialLinks.map(link => ({
+                    url: link.url,
+                    displayName: link.displayName,
+                    platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+                }));
+                console.log(formattedSocialLinks)
+                console.log("ewdceced")
+                setSelectedSocialLinks(formattedSocialLinks || []);
+
+            } catch (error) {
+                if (error.response){
+                    switch (error.response.status) {
+                        case 404:
+                            console.error("User preferences not found.");
+                            break;    
+                        case 500:
+                            console.error("An unexpected error occurred on the server. Please try again later.");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        fetchsocialLinks();
+    }, []);
+    
+
     return(
         <>
-        {selectedSocialLinks.slice(0, 5).map((link, index) => (
+        {Array.isArray(selectedSocialLinks) && selectedSocialLinks.slice(0, 5).map((link, index) => (
             <div key={index} className="selected-social-link">
-                <i className={link.icon}/> {link.link}
+                <i className={link.platform}/> {link.displayName} 
                 <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
             </div>
         ))}

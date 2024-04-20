@@ -30,14 +30,14 @@ function Feeding () {
     function handleIsMature (){
         setIsMature(!adultContent)
         sendDataToBackend({adultContent: !adultContent})
-        Toast()
+        Toast();
         // console.log(isMature)
     }
     // console.log(isMature)
     function handleIsAuto(){
-        setIsAuto(!autoplayMedia)
-        sendDataToBackend({autoplayMedia: !autoplayMedia})
-        Toast()
+        setIsAuto(!autoplayMedia);
+        sendDataToBackend({autoplayMedia: !autoplayMedia});
+        Toast();
     }
 
     function handleCommSort(e){
@@ -47,7 +47,8 @@ function Feeding () {
     }
     function handleCommRemember(){
         setCommRemember(!rememberContentSort)
-        sendDataToBackend({rememberContentSort: !rememberContentSort})
+        sendDataToBackend({rememberPerCommunity:{rememberContentSort: !rememberContentSort,
+                                                rememberContentView: rememberContentView}})
         Toast()
     }
     function handleCommunityThemes(){
@@ -62,7 +63,8 @@ function Feeding () {
     }
     function handleRememberContentView(){
         setRememberContentView(!rememberContentView)
-        sendDataToBackend({rememberContentView: !rememberContentView})
+        sendDataToBackend({rememberPerCommunity:{rememberContentView: !rememberContentView
+                                                ,rememberContentSort: rememberContentSort}})
         Toast()
     }
     function handleOpenPostsInNewTab(){
@@ -72,7 +74,7 @@ function Feeding () {
     }
     //send and get data from backend//
     async function sendDataToBackend(data) {
-    console.log(localStorage.getItem('token'));
+    // console.log(localStorage.getItem('token'));
 
         // Validate data
         if (!data || typeof data !== 'object') {
@@ -86,7 +88,7 @@ function Feeding () {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response)
+            // console.log(response)
             // Handle response if needed
             return response;
         } catch (error) {
@@ -97,7 +99,7 @@ function Feeding () {
 
     async function fetchDataFromBackend() {
         const token = localStorage.getItem('token');
-        console.log(token)
+        // console.log(token)
         if (!token) {
         console.error('No token found');
         return;
@@ -122,9 +124,9 @@ function Feeding () {
                 setIsAuto(data.autoplayMedia);
                 setCommunityThemes(data.communityThemes);
                 setCommunityContentSort(data.communityContentSort);
-                setCommRemember(data.rememberContentSort);
+                setCommRemember(data.rememberPerCommunity.rememberContentSort);
                 setGlobalContentView(data.globalContentView);
-                setRememberContentView(data.rememberContentView);
+                setRememberContentView(data.rememberPerCommunity.rememberContentView);
                 setOpenPostsInNewTab(data.openPostsInNewTab);
             }
         }

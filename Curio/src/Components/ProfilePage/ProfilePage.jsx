@@ -2,25 +2,140 @@ import './ProfilePage.css';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
 import {useNavigate} from 'react-router-dom';
 import React, { useRef, useEffect, useState } from 'react';
-import RecentPosts from '../RecentPosts/RecentPosts.jsx';
+import RecentPosts from '../RecentPosts/RecentPosts.jsx'
 import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
 import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
+import axios from 'axios';
+import Post from '../Post/Post.jsx';
+import profile from "../../assets/avatar_default_6.png";
+
 function ProfilePage(){
 
   const navigate = useNavigate();
   const tabListRef = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [userAbout, setUserAbout] = useState({});
+  const [userComments, setUserComments] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const [upvotedPosts, setUpvotedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [savedComments, setSavedComments] = useState([]);
+  const [hiddenPosts, setHiddenPosts] = useState([]);
+  const [downvotedPosts, setDownvotedPosts] = useState([]);
+  const [ upvotedComments, setUpvotedComments] = useState([]);
+  const [downvotedComments, setDownvotedComments] = useState([]);
+  const getSaved = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setSavedPosts(response.data.savedPosts);
+          setSavedComments(response.data.savedComments);
+        }
+      }
+      catch(err){
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
 
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          toast({
+            description: "Server Error Occured.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+      }
+    }
+
+
+  useEffect(() => {
+    window.addEventListener('hideOrSave', () => {
+        if(localStorage.getItem('token')){
+          getHidden();
+          getSaved();
+        }
+    });
+    if(localStorage.getItem('token')){
+      getHidden();
+      getSaved();
+    }
+  }, [isLoggedIn]);
+
+
+
+  useEffect(() => {
+    getUserOverview(username)
+      .then(data => setUserPosts(data.userPosts))
+      .catch(error => console.error(error));
+  }, [username]);
+
+useEffect(() => {
+  getUserUpvoted()
+  .then(data => setUpvotedPosts(data.votedPosts))
+  .catch(error => console.error(error));
+  }, [username]);
+
+  useEffect(() => {
+    getUserDownvoted()
+    .then(data => setDownvotedPosts(data.votedPosts))
+    .catch(error => console.error(error));
+    }, [username]);
+
+    useEffect(() => {
+      getUserUpvoted()
+      .then(data => setUpvotedComments(data.votedComments))
+      .catch(error => console.error(error));
+      }, [username]);
+
+      useEffect(() => {
+        getUserDownvoted()
+        .then(data => setDownvotedComments(data.votedComments))
+        .catch(error => console.error(error));
+        }, [username]);
+
+    
+  useEffect(() => {
+    getUserComments(username)
+      .then(data => setUserComments(data))
+      .catch(error => console.error(error));
+  }, [username]);
   
   useEffect(() => {
     const token = localStorage.getItem('token');
     const StoredUsername = localStorage.getItem('username');
     if (!token) {
-     navigate('/login');
+      navigate('/login');
     }
     setIsLoggedIn(true);
     setUsername(StoredUsername);
+
+    if (StoredUsername) {
+      getUserAbout(StoredUsername).then(data => setUserAbout(data));
+    }
+    console.log(userAbout);
   }, []);
 
   const scrollLeft = () => {
@@ -37,9 +152,10 @@ return(
 <div className="profileContainer">
 <div className="mainComponent">
 <div className="userInfo">
-<img src="./src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-<h3 className="profileName">User</h3>
-<h5 className="userName"> u/sad_p0tat0o </h5>
+<img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+{/* //C:\Users\Developer\Desktop\Curio-Front-end\Curio\src\assets\Curio_logo.png */}
+<h3 className="profileName">{username}</h3>
+<h5 className="userName"> u/{username} </h5>
 </div>
 
 <div className="tableList">
@@ -64,33 +180,169 @@ return(
   </div>
   <hr style={{width: "90%"}} />  
   <TabPanels className="profilePannels">
-    <TabPanel  onClick={() => getUserOverview(username)}>
-      <RecentPosts />
+    <TabPanel>
+      {/* overview */}
+      {userPosts.length === 0 && userComments.length === 0 ? (
+        <p>u/{username} hasn't posted or commented yet</p>
+      ) : (
+        <>
+          {userPosts.map(post => (
+            <div className='post-card' key={post.id}>
+              <div className='author'>
+            <img className="profileAvatar" src={profile}  alt="profile picture"/>
+              <b>u/{post.authorName}</b>
+              </div>
+              <p>{post.content}</p>
+            </div>
+          ))}
+          {userComments.map(comment => (
+            <div className='comment-card' key={comment.id}>
+              <h6>u/author    •   title</h6>
+              <div className='author'>
+              <img className="profileAvatar" src={profile}  alt="profile picture"/>
+              <b>u/{comment.authorName}</b>
+              </div>
+              <p>{comment.content}</p>
+            </div>
+          ))}
+        </>
+      )}
     </TabPanel>
 
     <TabPanel>
-       <RecentPosts />
+  {userPosts.length === 0 ? (
+    <p>u/{username} hasn't posted yet</p>
+  ) : (
+    userPosts.map(post => (
+      <div className='post-card' key={post.id}>
+        <div className='author'>
+        <img className="profileAvatar" src={profile}  alt="profile picture"/>
+        <b>u/{post.authorName}</b>
+        </div>
+        <p>{post.content}</p>
+      </div>
+    ))
+  )}
+</TabPanel>
+
+    <TabPanel>
+      {userComments.length === 0 ? (
+        <p>u/{username} hasn't commented yet</p>
+      ) : (
+        userComments.map(comment => (
+          <div className='comment-card' key={comment.id}>
+           <h6>u/author    •   title</h6>
+           <div className='author'>
+            <img className="profileAvatar" src={profile}  alt="profile picture"/>
+            <b>u/{comment.authorName}</b>
+            </div>
+            <p>{comment.content}</p>
+          </div>
+        ))
+    
+      )}
     </TabPanel>
 
-    <TabPanel onClick={()=> getUserComments(username)}>
-      <p>u/sad_p0tat0o hasn't commented yet</p>
+    <TabPanel>
+      {(savedPosts && savedPosts.length > 0 && savedPosts.map((post) => (
+          <><div className='d-flex flex-column col-md-11'><Post     
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            subReddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+          />
+          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+          </div>
+          </>
+        )))}
+      {savedPosts.length === 0 ? <p>Looks like you haven't saved anything yet</p> : null}
     </TabPanel>
 
     <TabPanel >
-      <p>Looks like you haven't saved anything yet</p>
+      {(hiddenPosts && hiddenPosts.length > 0 && hiddenPosts.map((post) => (
+          <><div className='d-flex flex-column col-md-11'><Post     
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            subReddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+            isInProfile={true}
+          />
+          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+          </div>
+          </>
+        )))}
+      {hiddenPosts.length === 0 ? <p>Looks like you haven't saved anything yet</p> : null}
     </TabPanel>
 
-    <TabPanel >
-      <p>Looks like you haven't hidden anything yet</p>
-    </TabPanel>
+   <TabPanel>
+  {upvotedPosts.length === 0 ? (
+    <p>Looks like you haven't upvoted anything yet</p>
+  ) : (
+    <>
+      {upvotedPosts.map(post => (
+        <div className='post-card' key={post.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{post.authorName}</b>
+          </div>
+          <p>{post.content}</p>
+        </div>
+      ))}
+      {upvotedComments.map(comment => (
+        <div className='comment-card' key={comment.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{comment.authorName}</b>
+          </div>
+          <p>{comment.content}</p>
+        </div>
+      ))}
+    </>
+  )}
+</TabPanel>
 
-    <TabPanel  onClick={()=> getUserUpvoted(username)}>
-      <p>Looks like you haven't upvoted anything yet</p>
-    </TabPanel>
-
-    <TabPanel  onClick={()=> getUserDownvoted(username)}>
-      <p>Looks like you haven't downvoted anything yet</p>
-    </TabPanel>
+    <TabPanel>
+  {downvotedPosts.length === 0 ? (
+    <p>Looks like you haven't upvoted anything yet</p>
+  ) : (
+    <>
+      {downvotedPosts.map(post => (
+        <div className='post-card' key={post.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{post.authorName}</b>
+          </div>
+          <p>{post.content}</p>
+        </div>
+      ))}
+      {downvotedComments.map(comment => (
+        <div className='comment-card' key={comment.id}>
+          <div className='author'>
+            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <b>u/{comment.authorName}</b>
+          </div>
+          <p>{comment.content}</p>
+        </div>
+      ))}
+    </>
+  )}
+</TabPanel>
     
   </TabPanels>
 </Tabs>
@@ -114,16 +366,16 @@ return(
      Share 
  </button>
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-  <div className="profilevalue">1</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.postKarma || '1'}</div>
+  <div className="profilevalue">{userAbout.commentKarma || '0'}</div>
   <div className="profileItem">Post Karma</div>
   <div className="profileItem">Comment Karma</div>
 </div>
 <br />
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 0.5fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
 
-  <div className="profilevalue">Mar 3, 2024</div>
-  <div className="profilevalue">0</div>
+  <div className="profilevalue">{userAbout.cakeDay || 'Mar 3, 2023'} </div> 
+   <div className="profilevalue">{userAbout.goldRecieved || '0'}</div>
   <div className="profileItem">Cake day</div>
   <div className="profileItem">Gold Received</div>
 </div>
@@ -131,7 +383,7 @@ return(
 
  <p>Settings</p>
  <div className="profileSettings">
-<img src="./src/assets/Curio_logo.png" alt="profile" />
+<img src="../src/assets/Curio_logo.png" alt="profile" />
 <div className="textContainer">
         <h5>Profile</h5>
         <h6>Customise your profile</h6>

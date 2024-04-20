@@ -6,15 +6,17 @@ import React from "react"
 import Titles from "../feedSettings/childs/Titles"
 import ChangePass from "./buttons/ChangePass"
 import EmailButton from "./buttons/EmailButton"
+import GeneratePass from "./buttons/GeneratePass"
 import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 
 
-const AccountPreferences = () => {
+const AccountPreferences = (props) => {
     const serverHost = import.meta.env.VITE_SERVER_HOST;
-    const [email, setEmail] = React.useState("example@gamil.com");
+   
     const [gender, setGender] = React.useState("MAN")
     const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
+   
 
     const toast = useToast()
     function Toast(){
@@ -32,7 +34,7 @@ const AccountPreferences = () => {
     
     const handleGender = (event) => {
         setGender(event.target.value);
-        sendDataToBackend({gender: gender})
+        sendDataToBackend({gender: event.target.value})
         Toast()
       };
     
@@ -44,7 +46,6 @@ const AccountPreferences = () => {
     
     async function fetchDataFromBackend() {
         try {
-            const token = 'your_token_here'; // replace with your actual token
             const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
@@ -62,16 +63,16 @@ const AccountPreferences = () => {
             console.error('Error config:', error.config);
         }
     }
+    
 
     async function sendDataToBackend(data) {
         try {
-            const token = 'your_token_here'; // replace with your actual token
             const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response);
+            
             return response;
         } catch (error) {
             if (error.response) {
@@ -92,6 +93,7 @@ const AccountPreferences = () => {
                 setGender(data.gender);
                 setIP(data.locationCustomization);
             }
+           
         }
 
         fetchAndSetData();
@@ -99,30 +101,40 @@ const AccountPreferences = () => {
 
     // Update data when gender or ip changes
     
-
+    
       return(
         <Box mb={10}>
-            <Flex mb={5} wrap='wrap'>
-                <Titles title='Email Address' description={email}/>
-              
-                <Spacer />
-                <>
-                <EmailButton buttonStyle={buttonStyle}/>
-                </>
-            </Flex>
+            {props.findPass==false &&  <Flex mb={5} wrap='wrap'>
+                    <Titles title='Email Address' description={props.email}/>
+                
+                    <Spacer />
+                    <>
+                    <GeneratePass isDelete={false} isGoogle={false} isEmail={true} title="Change your email address" context="To change your email address" email={props.email} username={props.username} buttonStyle={buttonStyle}/>
+                    </>
+                </Flex>}
+           
+           {props.findPass===true&& <Box>
+                <Flex mb={5} wrap='wrap'>
+                    <Titles title='Email Address' description={props.email}/>
+                
+                    <Spacer />
+                    <>
+                    <EmailButton buttonStyle={buttonStyle}/>
+                    </>
+                </Flex>
 
-            <Flex mb={5}>
-                <Titles title='Change password' description='Password must be at least 8 characters long'/>
-                {/* <div>
-                    <h3 className="headings-settings d-flex fw-500 mb-1">Change password</h3> 
-                    <p className="headings-description fw-normal text-muted">Password must be at least 8 characters long</p>
-                </div> */}
-                <Spacer />
-                <>
-                <ChangePass buttonStyle={buttonStyle}/>
-                </>
-            </Flex>
-
+                <Flex mb={5}>
+                    <Titles title='Change password' description='Password must be at least 8 characters long'/>
+                    {/* <div>
+                        <h3 className="headings-settings d-flex fw-500 mb-1">Change password</h3> 
+                        <p className="headings-description fw-normal text-muted">Password must be at least 8 characters long</p>
+                    </div> */}
+                    <Spacer />
+                    <>
+                    <ChangePass buttonStyle={buttonStyle}/>
+                    </>
+                </Flex>
+            </Box>}
             <Flex mb={5}>
                 <Titles title='Gender' description='This information may be used to improve your recommendations and ads.'/>
                 

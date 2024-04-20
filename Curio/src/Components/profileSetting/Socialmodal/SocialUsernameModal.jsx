@@ -13,26 +13,32 @@ function SocialUsernameModal(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [displayText, setDisplayText] = useState(""); 
     const [isSaveEnabled, setIsSaveEnabled] = useState(false);
-    const [warningMessage, setWarningMessage] = useState("");
+    const [handleMessage, sethandleMessage] = useState(""); // State to manage error message
 
     const handleSave = () => {
         if (displayText === "@") {
-            setWarningMessage("Handle attribute must be provided for " + props.name.toUpperCase()  + " link type.");
-            return;
+            // Display error message here
+            sethandleMessage('"handle"attribute must be provided for INSTAGRAM link type');
+            return; // Do not proceed further
         }
-
+    
         if (displayText) {
-            let username = displayText.startsWith("@") ?displayText.substring(1):displayText;
+            let username = displayText.startsWith("@") ? displayText.substring(1) : displayText;
             const usernameUrl = `${props.urlPrefix}${username}`;
-            console.log("Username URL:", usernameUrl);
-            props.handleSocialLinkClick(displayText, props.icon);
+            // console.log("Username URL:", usernameUrl);
+    
+            // Pass URL, displayText, and icon when calling handleSocialLinkClick
+            props.handleSocialLinkClick(usernameUrl, displayText, props.icon);
+    
             setDisplayText(""); 
             setIsSaveEnabled(false);
-            setWarningMessage("");
-
+    
             onClose();
         }
     };
+    
+    
+    
 
     const handleInputChange = (e) => {
         let { value } = e.target;
@@ -40,15 +46,20 @@ function SocialUsernameModal(props) {
         if (value.length === 0) {
             value = "@";
         }
-
+    
         if (!value.startsWith("@")) {
             value = "@" + value.substring(1);
         }
-
+    
         setDisplayText(value);
         setIsSaveEnabled(value.length > 1); 
-        setWarningMessage(""); 
+    
+        // Reset error message when user starts typing again
+        if (handleMessage) {
+            sethandleMessage("");
+        }
     };
+    
 
     const handleClose = () => {
         if (!displayText || displayText === "@") { 
@@ -88,7 +99,7 @@ function SocialUsernameModal(props) {
                         <div className="custom-container">
                             <li className="custom-url-li list-inline-item mb-2 mx-1"><i className={props.icon}/> {props.name} </li>
                             <input type="text" placeholder="@username" className="display_text" value={displayText} onChange={handleInputChange} required/>
-                            {warningMessage && <p style={{ color: 'red', fontSize: '12px' }}>{warningMessage}</p>}
+                            {handleMessage && <p style={{ color: 'red', fontSize: '12px' }}>{handleMessage}</p>}
                         </div>
                     </ModalBody>
                 </ModalContent>

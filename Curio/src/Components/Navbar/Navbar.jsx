@@ -1,66 +1,203 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
 import advertise from "../../assets/Advertise_navbar.png";
 import openchat from "../../assets/Chat_navbar.png";
 import plus from "../../assets/Plus_navbar.png";
 import inbox from "../../assets/Inbox_navbar.png";
-import profile from "../../assets/Profile_navbar.png";
+import profile from "../../assets/avatar_default_6.png";
 import setting from "../../assets/Setting_navbar.png";
-import search_icon from "../../assets/search_icon.png"
+import Settings from '../../styles/icons/Settings';
+import EditAvatar from '../../styles/icons/EditAvatar';
+import ContProgram from '../../styles/icons/ContributorProgram';
+import ModMode from '../../styles/icons/ModMode';
+import DarkMode from '../../styles/icons/DarkMode';
+import Advertisement from '../../styles/icons/Ad';
+import Premium from '../../styles/icons/Premium';
+import ContArrow from '../../styles/icons/ContArrow';
+import { Tooltip } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
-import { Navbar, Container, Nav, NavDropdown, Form, Button, Offcanvas } from 'react-bootstrap';
-import Avatar from '../../styles/icons/Avatar';
-import SearchInput from "./SearchInput"
+import LoggedOutHandler from './LoggedOutHandler';
+import { useNavigate } from 'react-router-dom';
+import { Switch, Flex, Spacer, Box, useToast, Stack } from '@chakra-ui/react'
+
 
 function NavbarComponent() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+  const checkAuthentication = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  };
+
+  const navigateToLogin = () => {
+    navigate('/login');
+  }
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    window.addEventListener("loginOrSignup", checkAuthentication);
+    setIsAuthenticated(!!token);
+    return () => {
+      window.removeEventListener("loginOrSignup", checkAuthentication);
+    };
+  }, []);
+
+  const username = localStorage.getItem('username');
+  
+  function toggleMenu(){
+    let subMenu = document.getElementById("subMenu");
+    subMenu.classList.toggle("open-menu");
+  }
+
   return (
-    <>
-      {['lg'].map((expand) => (
-        <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" style={{zIndex:"1000"}}>
-          <Container fluid>
-            <Navbar.Brand href="/"><img src={logo} alt="logo" className="d-inline-block align-text-middle"/> Curio</Navbar.Brand>
-            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-            <Navbar.Offcanvas
-              id={`offcanvasNavbar-expand-${expand}`}
-              aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-              placement="end"
-            >
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Offcanvas
-                </Offcanvas.Title>
-              </Offcanvas.Header>
-              <Offcanvas.Body className='d-flex justify-content-center'>
-                <Nav className='d-flex justify-content-end search-offcanvas w-100'>
-                    <Form className="d-flex mt-1">
-                      <SearchInput/>
-                    </Form>
-                </Nav>
-                <Nav className="d-flex ms-auto flex-grow-1 w-50">
-                  <Nav.Link style={{height: "30px", marginTop: "10px"}} className='ms-auto d-flex align-items-center me-2 link-offcanvas' href="#action3"><img src={openchat} alt="profile" className='inbox-icon' /></Nav.Link>
-                  <Nav.Link style={{height: "40px"}} className='mt-2 me-2 link-offcanvas' href="#action3"><img src={inbox} alt="profile" className='inbox-icon' /></Nav.Link>
-                  <Nav.Link style={{ height: "40px", display: "flex", alignItems: "center" }} className='mt-2 me-2 link-offcanvas'>
-                      <Link to={'user/CreatePost/'} style={{ display: "flex", alignItems: "center" }}>
-                          <img src={plus} alt="profile" className='inbox-icon' style={{ marginRight: "5px" }} />
-                          Create
-                      </Link>
-                  </Nav.Link>
-                  <NavDropdown align={{ lg: 'end' }} style={{borderRadius: '999px!important', backgroundColor: "#ffffff!important", color:"#000000!important"}} className="signup-button px-2 me-4 ms-3 d-flex justify-content-center col-md-1 col-xs-1 link-offcanvas" title="Profile">
-                    <NavDropdown.Item className="d-flex signup-button-item px-3"><span className="ms-3"> <Link style={{color: "#000000!important"}} className='settings' to={'user'} > View Profile </Link> </span></NavDropdown.Item>
-                    <NavDropdown.Item style={{height: "50px", color: "#000000!important"}} className="d-flex align-items-center signup-button-item px-2 link-offcanvas"><Link style={{color: "#000000!important"}} className='settings' to={'settings/account'}><div style={{backgroundColor: "#f2f4f5!important"}} className='d-flex'><img style={{height: "20px"}} src={setting} alt="setting" className="settings-offcanvas align-text-middle mx-2"/><span>View Settings</span></div></Link></NavDropdown.Item>
-                  </NavDropdown>
-                  <div className='d-flex align-items-center'>
-                    <SignupHandler/>
-                  </div>
-                </Nav>         
-              </Offcanvas.Body>
-            </Navbar.Offcanvas>
-          </Container>
-        </Navbar>
-      ))}
-    </>
+    <nav className='navbar-component'>
+      <input type="checkbox" name="" id="chk1"/>
+      <div className="logo">
+        <Link to={'/'} style={{ display: "flex" }}>
+          <img src={logo} alt="logo" className="curio-logo"/>
+          <h1 className='title-platform'>Curio</h1>
+        </Link>
+      </div>
+      <div className="search-box">
+        <form action="">
+          <input type="text" name="search" id="srch" placeholder="Search Curio"/>
+          <button type="submit"><i className="search-icon fa fa-search" aria-hidden="true"></i></button>
+        </form>
+      </div>
+      <ul className='right-section-navbar'>
+        {isAuthenticated && 
+          <li className='sub-right-navbar'>
+            <Tooltip label="Advertise on Curio">
+              <a href="#" style={{ display: "flex" }}>
+                <Advertisement />
+              </a>
+            </Tooltip>
+          </li>
+        }
+        {isAuthenticated && 
+          <li className='sub-right-navbar'>
+            <Tooltip label="Open chat">
+              <a href="#" style={{ display: "flex" }}>
+                <img className='navImg' src={openchat} alt="logo"/>
+              </a>
+            </Tooltip>
+          </li>
+        }
+        {isAuthenticated && 
+          <li className='sub-right-navbar'>
+            <Tooltip label="Create post">
+              <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
+                <img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
+                Create
+              </Link>
+            </Tooltip>
+          </li>
+        }
+        {isAuthenticated && 
+          <li className='sub-right-navbar'>
+            <Tooltip label="Open inbox">
+              <a href="#" style={{ display: "flex" }}>
+                <img className='navImg' src={inbox} alt="logo"/>
+              </a>
+            </Tooltip>
+          </li>
+        }
+        {isAuthenticated && 
+          <li className='sub-right-navbar' onClick={toggleMenu}>
+            <Tooltip label="Open profile menu">
+              <a href="#" style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
+                <img className='profileImg' src={profile} alt="logo"/>
+              </a>
+            </Tooltip>
+          </li>
+        }
+        {!isAuthenticated &&
+          <div className='d-flex ms-auto'>
+            <Tooltip label="Log in to Reddit">
+              <div onClick={navigateToLogin} className='d-flex align-items-center me-2 mt-0'>
+                <button className='logged-out-login-button p-2 px-3'>Log in</button>
+              </div>
+            </Tooltip>
+            <Tooltip>
+              <div>
+                <LoggedOutHandler />
+              </div>
+            </Tooltip>
+          </div>
+        }
+      </ul>
+      <div className="sub-menu-wrap" id='subMenu'>
+        <div className="sub-menu">
+          <Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
+            <img className='profileImg' src={profile} alt="logo"/>
+            <div className="d-flex flex-column">
+              <span className="drop-down-profile-description">View Profile</span>
+                <div className='d-flex flex-start align-items-center ArrowandNumber'>
+                <span className='usernameText'>u/{username}</span>
+                </div>
+            </div>
+          </Link>
+          <div className="d-flex align-items-center sub-menu-link">
+            <EditAvatar />
+            <span className="drop-down-description">Edit Avatar</span>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link">
+          <ContProgram />
+            <div className="d-flex flex-column">
+            <span className="drop-down-description">Contributor Porgram</span>
+              <div className='d-flex flex-start align-items-center ArrowandNumber'>
+              <ContArrow />
+              <span className='contribNumber'>0</span>
+              </div>
+            </div>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link switchDiv">
+            <ModMode />
+            <span className="drop-down-description">Mod mode</span>
+            <Stack align='center' direction='row' className='switchplacement'>
+              <Switch size='lg' colorScheme='blue' />
+            </Stack>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link switchDiv">
+            <DarkMode />
+            <span className="drop-down-description">Dark mode</span>
+            <Stack align='center' direction='row' className='switchplacement'>
+              <Switch size='lg' colorScheme='blue' />
+            </Stack>
+          </div>
+          <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
+            <SignupHandler/>
+          </div>
+          <hr />
+          <div className="d-flex align-items-center sub-menu-link">
+            <Advertisement />
+            <span className="drop-down-description"> Advertise on reddit</span>
+          </div>
+          <hr />
+          <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 
+            <Settings />
+            <span className="drop-down-description">Settings</span>
+          </Link>
+          <hr />
+          <div className="d-flex align-items-center last-item1">
+            <Premium />
+            <span className="drop-down-description"> Premium</span>
+          </div>
+        </div>
+      </div>
+      <div className="menu">
+        <label htmlFor="chk1">
+          <i className="fa fa-bars" aria-hidden="true"></i>
+        </label>
+      </div>
+    </nav>
   );
 }
 

@@ -5,7 +5,7 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
 const getUserOverview = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/overview`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/overview`;
 
     const response = await fetch(url, {
         method: 'GET',
@@ -57,7 +57,9 @@ const getUserOverview = async (username) => {
 };
 
 const getUserComments = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/comments`;
+    
+    const url = `${VITE_SERVER_HOST}/user/${localStorage.getItem('username')}/comments`;
+    const token = localStorage.getItem('token')
 
     const response = await fetch(url, {
         method: 'GET',
@@ -65,6 +67,7 @@ const getUserComments = async (username) => {
             'Content-Type': 'application/json',
         },
     });
+    console.log(response);
 
     if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -85,16 +88,19 @@ const getUserComments = async (username) => {
         linkedSubreddit: comment.linkedSubreddit
     }));
 
+
     return userComments;
 };
 
-const getUserDownvoted = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/downvoted`;
+const getUserDownvoted = async () => {
+    const url = `${VITE_SERVER_HOST}/user/downvoted`;
+    const token = localStorage.getItem('token');
 
     const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
         },
     });
 
@@ -139,13 +145,15 @@ const getUserDownvoted = async (username) => {
     return { votedPosts, votedComments };
 };
 
-const getUserUpvoted = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/upvoted`;
+const getUserUpvoted = async () => {
+    const url = `${VITE_SERVER_HOST}/user/upvoted`;
+    const token = localStorage.getItem('token');
 
     const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
         },
     });
 
@@ -194,7 +202,7 @@ const getUserUpvoted = async (username) => {
 };
 
 const getUserSubmitted = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/submitted`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/submitted`;
 
     const response = await fetch(url, {
         method: 'GET',
@@ -235,12 +243,14 @@ const getUserSubmitted = async (username) => {
 };
 
 const getUserAbout = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/about`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/about`;
+    const token = localStorage.getItem('token')
 
     const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
         },
     });
 
@@ -288,7 +298,7 @@ const getUserAbout = async (username) => {
     return {
         followersCount: responseData.followersCount,
         followingCount: responseData.followingCount,
-        goldRecieved: responseData.goldRecieved,
+        goldRecieved: responseData.goldReceived,
         cakeDay: responseData.cakeDay,
         postKarma: responseData.postKarma,
         commentKarma: responseData.commentKarma,

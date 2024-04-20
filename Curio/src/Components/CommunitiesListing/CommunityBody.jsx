@@ -2,10 +2,10 @@ import Listing from "./Listing";
 import "./CommunityPage.css";
 import Post from "../Post/Post";
 import React from 'react';
-import axios from 'axios';
+import { Button } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
-import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend } from "./CommunityEndPoints";
+import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo,fetchUserName } from "./CommunityEndPoints";
 function CommunityBody({ props }) {
   
   const[posts, setPosts] = React.useState([])
@@ -16,7 +16,7 @@ function CommunityBody({ props }) {
     isSelected: false
   })
   const { Community } = useParams();
-  
+  const[isMod,setIsMod] = React.useState(false);
 
 
 
@@ -32,17 +32,38 @@ React.useEffect(() => {
     fetchAndSetData();
 }, [Community]);
 
+React.useEffect(() => {
+  async function fetchAndSetData() {
+      const subCurioData = await fetchSubCurioInfo(Community);
+      const userData = await fetchUserName();
+      if (subCurioData && userData) {
+          subCurioData.subreddit.moderators.map((mod)=>{
+            console.log(mod.username);
+            if(mod.username===userData.username){
+              setIsMod(true);
+            }
+          })
+      }
+  }
+
+  fetchAndSetData();
+}, [Community]);
+
 
 
 async function changeSortType(value,time) {
     
-    console.log(`value :${value}`);
+    
     async function SetData() {
         if (value === 'Hot') {
             const data = await fetchDataFromBackend(Community);
             if (data) {
                 setPosts(data.posts);
                 setRandomPost({ ...randomPost, isSelected: false });
+            }
+            else{
+              setPosts([]);
+              setRandomPost({ ...randomPost, isSelected: false });
             }
         }
         else if (value === 'New') {
@@ -51,25 +72,50 @@ async function changeSortType(value,time) {
                 setPosts(data.posts);
                 setRandomPost({ ...randomPost, isSelected: false });
             }
+            else{
+              setPosts([]);
+              setRandomPost({ ...randomPost, isSelected: false });
+            }
         }
         else if (value === 'Top') {
-            const data = await fetchTopFromBackend(Community,time);
+          if(time==="All Time"){
+            const data = await fetchTopFromBackend(Community);
             if (data) {
-                setPosts(data.post);
+              setPosts(data.post);
+              setRandomPost({ ...randomPost, isSelected: false });
+          }
+          else{
+            setPosts([]);
+            setRandomPost({ ...randomPost, isSelected: false });
+          }
+          }
+          else{
+            const data = await fetchTopTimeFromBackend(Community,time);
+            if (data) {
+              setPosts(data.post);
+              setRandomPost({ ...randomPost, isSelected: false });
+              }
+              else{
+                setPosts([]);
                 setRandomPost({ ...randomPost, isSelected: false });
+              }
             }
+            
         }
         else if (value === 'Random') {
             const data = await fetchRisingFromBackend(Community);
             if (data) {
                 setRandomPost({ post: data.post, isSelected: true });
-                console.log(`this is random post: ${randomPost.post}`);
+                
+            }
+            else{
+              setRandomPost({ post:{}, isSelected: true });
             }
         }
     }
     SetData();
 }
-console.log(posts);
+
   return (
     <div className="community-body">
       <div className=" list mb-3">
@@ -79,6 +125,7 @@ console.log(posts);
 
       <div className="post">
         {randomPost.isSelected==false ? (posts.map((post) => (
+          <>
           <Post
             
             id={post._id}
@@ -89,7 +136,10 @@ console.log(posts);
             downvotes={post.downvotes}
             comments={post.comments}
             content={post.content}
+            isMod={isMod}
           />
+          <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
+          </>
         ))):(<Post
             
           id={randomPost.post._id}
@@ -100,8 +150,15 @@ console.log(posts);
           downvotes={randomPost.post.downvotes}
           comments={randomPost.post.comments}
           content={randomPost.post.content}
+          isMod={isMod}
         />)}
-        
+        {(posts.length<1 && randomPost.isSelected==false) ||(!randomPost.post && randomPost.isSelected==true)? (<div className="m-5 row justify-content-center align-items-center">
+          <div className="col text-center">
+          <h4 className="fw-bold" >This community doesn't have any posts yet</h4>
+          <p className="text-muted">Make one and get this feed started.</p>
+          <Button colorScheme="blue" fontSize='sm' fontWeight='bold' style={{borderRadius:'30px'}} >Create a post</Button>
+          </div>
+          </div>):null}
       </div>
       
     </div>
