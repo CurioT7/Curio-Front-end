@@ -1,11 +1,12 @@
+// ImageVideo.jsx
+
 import React, { useState, useRef } from 'react';
 import "./ImageVideo.css";
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
-import axios from 'axios';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function ImageVideo() {
+function ImageVideo({ onImageUpload }) {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -14,24 +15,10 @@ function ImageVideo() {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       if (selectedFile.type && selectedFile.type.includes('image')) {
-        // Create a FormData object
-        const formData = new FormData();
-        formData.append('media', selectedFile);
-        try {
-          // Make a POST request to the backend
-          const response = await axios.post(`${serverHost}/api/submit`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-          });
-          console.log('File uploaded successfully:', response.data);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-        }
-        setFile({ type: 'image', url: URL.createObjectURL(selectedFile) });
+        setFile({ type: 'image', file: selectedFile }); // Set the image file
+        handleUpload();
       } else if (selectedFile.type && selectedFile.type.includes('video')) {
-        setFile({ type: 'video', file: selectedFile });
+        // Handle video upload separately if needed
       } else {
         console.error('Unsupported file type');
       }
@@ -45,6 +32,21 @@ function ImageVideo() {
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleUpload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('media', file.file);
+
+      // Pass image data to the parent component
+      onImageUpload(formData);
+
+      // Clear file state
+      setFile(null);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
   };
 
   return (
@@ -62,14 +64,7 @@ function ImageVideo() {
           <div className='upload-button-container'>
             {file ? (
               <div className="uploaded-content">
-                {file.type === 'video' ? (
-                  <video className="uploaded-video" controls>
-                    <source src={URL.createObjectURL(file.file)} type={file.file.type} />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : (
-                  <img src={file.url} alt="Uploaded File" className="uploaded-image" />
-                )}
+                <img src={URL.createObjectURL(file.file)} alt="Uploaded File" className="uploaded-image" />
                 <div className="delete-button-container">
                   <button role="button" tabIndex="-1" aria-label="Remove" className='delete-button' onClick={onOpen}>
                     <i className="fa-solid fa-trash"/>
@@ -102,13 +97,12 @@ function ImageVideo() {
           </div>
         </div>
       </div>
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Remove {file && file.type === 'image' ? 'image' : 'video'}?</ModalHeader>
+          <ModalHeader>Remove image?</ModalHeader>
           <ModalBody>
-            Are you sure you want to remove your {file && file.type === 'image' ? 'image' : 'video'}?
+            Are you sure you want to remove your image?
           </ModalBody>
           <ModalFooter>
             <Button 
