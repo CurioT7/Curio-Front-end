@@ -12,9 +12,12 @@ import {
     PopoverAnchor,
   } from '@chakra-ui/react'
 import { SlOptions } from "react-icons/sl";
-
+import"../Notification_Messages/Notification_Messages.jsx"
+import {useNavigate} from 'react-router-dom';
 
 function Notifications() {
+const[messages, setMessages] = useState(false);
+const navigate = useNavigate();
 
   return (
     <div className="notifications-container">
@@ -25,7 +28,7 @@ function Notifications() {
           <a href="#" className="notifications-messages-link">
               <div className="notifications-messages">
                   <div className="notifications-messages-title">
-                      <span className="notifications-messages-text">Messages</span>
+                      <span className="notifications-messages-text"onClick={navigate('/messages')}>Messages</span>
                   </div>
               </div>
           </a>
@@ -223,7 +226,7 @@ function Notifications() {
         <div className="notifications-see-all">
             <a href="" type="button" className="see-all-button">
                 <span className="see-all-text">
-                    <span className="see-all-text-inner">See All</span>
+                    <span className="see-all-text-inner" onClick={navigate('/notifications')}>See All</span>
                 </span>
             </a>
         </div>
