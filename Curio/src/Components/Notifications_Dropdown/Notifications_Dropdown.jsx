@@ -28,8 +28,7 @@ const navigate = useNavigate();
           <a href="#" className="notifications-messages-link">
               <div className="notifications-messages">
                   <div className="notifications-messages-title">
-                      <span className="notifications-messages-text"onClick={() => navigate('/messages')}>Messages</span>
-                  </div>
+                      <span className="notifications-messages-text">Messages</span>
               </div>
           </a>
           <div className="notifications-extra"></div>
@@ -226,7 +225,7 @@ const navigate = useNavigate();
         <div className="notifications-see-all">
             <a href="" type="button" className="see-all-button">
                 <span className="see-all-text">
-                    <span className="see-all-text-inner" onClick={() => navigate('/notifications')}>See All</span>
+                    <span className="see-all-text-inner" >See All</span>
                 </span>
             </a>
         </div>

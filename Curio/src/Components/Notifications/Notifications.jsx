@@ -23,7 +23,7 @@ function Notifications() {
   return (
     <> 
     <div className="notification-page">
-      <div className="notification-content">
+      {/* <div className="notification-content">
         <h5>Notifications</h5>
         <div className="notification-list"> 
           <Tabs position='relative' variant='unstyled'>
@@ -80,7 +80,7 @@ function Notifications() {
             </TabPanels>
           </Tabs>
         </div>
-      </div>
+      </div> */}
     </div>
     </>
   );

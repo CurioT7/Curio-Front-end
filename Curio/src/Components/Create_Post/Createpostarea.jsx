@@ -10,59 +10,53 @@ import Post from "./Post_Section/Post";
 function Createpostarea({ community }) {
   const [inputTitle, setInputTitle] = useState('');
   const [selectedMethod, setSelectedMethod] = useState("Post");
-  const [content, setContent] = useState(''); // State to hold content from Text_Editor
+  const [content, setContent] = useState('');
   const [dayNumber, setDayNumber] = useState(3);
   const [optionsText, setoptionsText] = useState([]);
+  const [imageFormData, setImageFormData] = useState(null);
   const textareaRef = useRef(null);
 
   const handleDayChange = (event) => {
-    console.log("Selected day:", event.target.value);
     setDayNumber(parseInt(event.target.value));
-    console.log("Day number state:", dayNumber);
   };
 
   const handleOptionChange = (index, event) => {
     const newOptionsText = [...optionsText];
     newOptionsText[index] = event.target.value;
     setoptionsText(newOptionsText);
-    console.log("Options text:", optionsText);
   };
-
-  const handleSecondOptionChange = (event) => {
-    setoptionsText([optionsText[0], event.target.value]);
-  };
-
 
   const handleTitleInputChange = (event) => {
     setInputTitle(event.target.value);
-    adjustTextareaHeight(); // Adjust textarea height when text changes
+    adjustTextareaHeight();
   };
 
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto'; // Reset height to auto to calculate new height
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set height to match scroll height
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
 
   const handleMethodSelect = (method) => {
-    // Set the selected method
     setSelectedMethod(method);
   };
 
-  // Pass this function down to Post
   const handleContentChange = (newContent) => {
     setContent(newContent);
   };
 
-  // Render the selected component based on the selected method
+  const handleImageUpload = (formData) => {
+    setImageFormData(formData);
+  };
+
   const renderSelectedMethod = () => {
     switch (selectedMethod) {
       case "Post":
-        return <Post onContentChange={handleContentChange} />; 
+        return <Post onContentChange={handleContentChange} />;
       case "Image & Video":
-        return <ImageVideo />;
+        return <ImageVideo onImageUpload={handleImageUpload} />;
       case "Link":
         return <Link />;
       case "Polls":
@@ -90,7 +84,7 @@ function Createpostarea({ community }) {
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea title={inputTitle} content={content} community={community} days={dayNumber} options={optionsText}/> 
+      <EditCreatearea title={inputTitle} content={content} community={community} days={dayNumber} options={optionsText} imageFormData={imageFormData} />
     </div>
   );
 }
