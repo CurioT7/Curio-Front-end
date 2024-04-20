@@ -7,11 +7,14 @@ import Card from 'react-bootstrap/Card';
 import Popover from 'react-bootstrap/Popover';
 import "./RecentPosts.css";
 import { width } from "@mui/system";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function RecentPosts() {
     const [recentPosts, setRecentPosts] = useState([]);
     const [isClear, setIsClear] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const navigate = useNavigate();
     const handleClear = () => {
         setRecentPosts([]);
         localStorage.removeItem('recentPosts');
@@ -42,13 +45,32 @@ function RecentPosts() {
     }, []);
 
     useEffect(() => {
-        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
-        setRecentPosts(recentPosts);
+        const getRecentPosts = async () => {
+            try {
+                const hostUrl = import.meta.env.VITE_SERVER_HOST;
+                const response = await axios.get(`${hostUrl}/api/getHistory`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200) {
+                    setRecentPosts(response.data.recentPosts.reverse());
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }   
+        getRecentPosts();
         window.addEventListener('newRecentPost', handleUpdateRecentPosts);
         return () => {
             window.removeEventListener('newRecentPost', handleUpdateRecentPosts);
         }
     }, []);
+
+    const handleNavigationToUserInformation = (authorName) => {
+        navigate(`/user/${authorName}`);
+    }
 
     const renderTooltip = (props) => (
         <Tooltip className="col-md-3 p-0 border-radius-set" bsPrefix="card" id="button-tooltip" {...props}>
@@ -110,7 +132,7 @@ function RecentPosts() {
                                         <img className="rounded-circle" src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="reddit" />
                                     </OverlayTrigger>
                                 </div>
-                                <p className="d-flex align-items-center sub-recent-name">{post.user}</p>
+                                <p onClick={() => handleNavigationToUserInformation(post.authorName)} className="d-flex align-items-center sub-recent-name">{post.authorName}</p>
                             </div>
                             <div className="col-md-12 mb-0">
                                 <p className="post-header">{post.title}</p>
