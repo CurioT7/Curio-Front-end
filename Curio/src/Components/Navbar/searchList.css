@@ -14,22 +14,22 @@ h5{
     color: rgb(100, 114, 120);
     margin-bottom: 0px;
 }
-.card-body{
+.search-body{
     margin: 0px;
     padding: 0px;
-    border-radius: 20px;
+   
 }
-.card-body :hover{
+.search-body :hover{
     background-color: #edeff1;
     cursor: pointer;
 }
 
-.card-body-content{
+.trending-body-content{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-radius: 20px;
+    
 }
 .trending-img{
    width: 96px;

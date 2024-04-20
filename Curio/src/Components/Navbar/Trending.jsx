@@ -1,6 +1,6 @@
 import { Card, CardBody} from '@chakra-ui/react'
 import React from 'react';
-import './Trending.css';
+import './searchList.css';
 import { Avatar } from '@chakra-ui/react';
 import cover from "../../assets/cover.png";
 
@@ -12,8 +12,8 @@ function Trending(props) {
             {/* <CardHeader paddingBottom={1} className='trending-header'>
             <BsArrowUpRightCircle/> <span>TRENDING TODAY</span>
             </CardHeader> */}
-            <div className=' card-body'>
-            <CardBody padding={3} paddingTop={3} marginTop={0} className=' card-body-content'>
+            <div className=' search-body'>
+            <CardBody padding={3} paddingTop={3} marginTop={0} className=' trending-body-content'>
                 <div>
                     <h5>  {props.title} </h5>
                     <p className='trending-post-description'>{props.description}</p>
