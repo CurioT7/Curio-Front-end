@@ -21,7 +21,7 @@ import SortingComments from './SortingComments';
 import {useParams} from 'react-router-dom';
 import PostLock from './PostLock';
 import { set } from 'mongoose';
-import UserPopover from '../UserPopover.css/UserPopover.jsx';
+import UserPopover from '../UserPopover/UserPopover.jsx';
 import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import { FetchSubredditName } from './PostEndPoints';
 

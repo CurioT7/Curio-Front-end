@@ -36,9 +36,9 @@ function ShowFriendInformation(props) {
     const token = localStorage.getItem('token');
     const toastError = useToast();
 
-    function ToastError() {
+    function ToastError(message) {
         toastError({
-            description: "You can't block somebody again within 24 hours of blocking them",
+            description: message,
             status: 'error',
             duration: 3000,
             isClosable: true,
@@ -46,16 +46,6 @@ function ShowFriendInformation(props) {
         });
     }
 
-    const toastsuccess = useToast()
-    function ToastSuccess() {
-        toastsuccess({
-            description: "User Blocked successfully",
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-            position: 'top',
-        });
-    }
 
 
     const handleEllipsisClick = () => {
@@ -69,7 +59,6 @@ function ShowFriendInformation(props) {
     const handleReportClick = () => {
         if (!token) {
          navigate('/login');
-        setShowReportMenu(false);
         }
         else
         setShowReportMenu(true);
@@ -99,21 +88,51 @@ function ShowFriendInformation(props) {
             console.error('Error:', error);
         }
     }
-    
 
-    const handleFollowToggle = () => {
+
+    async function handleFollowToggle() {
         if (!token) {
-         navigate('/login');
+            navigate('/login');
         }
-        else{
-        if (isFollowing) {
-            userUnfollow(props.username);
-        } else {
-            userFollow(props.username);
+        else {
+            if (!isFollowing) {
+                const result = await userFollow(props.username);
+                if(result === 200){
+                    setIsFollowing(true);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+                else{
+                    ToastError("Something is wrong, please try again later.");
+                }
+            } else {
+                const result = await userUnfollow(props.username);
+                if(result){
+                    setIsFollowing(false);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+                else{
+                    ToastError("Something is wrong, please try again later.");
+                }
+            }
         }
-        setIsFollowing(!isFollowing);
     }
-    }
+    
 
     async function getBlocked(username) {
         try {
@@ -138,7 +157,7 @@ function ShowFriendInformation(props) {
         }
     }
 
-    const patchBlockUser = (name) => {
+    async function patchBlockUser(name){
         const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
           viewBlockedPeople: [...blockedUsers, { username: name}]
         },{
@@ -153,7 +172,7 @@ function ShowFriendInformation(props) {
         }
       };
 
-      const handleUserBlock = async (username) => {
+      async function handleUserBlock(username){
         if (!token) {
             navigate('/login');
         } else {
@@ -164,12 +183,12 @@ function ShowFriendInformation(props) {
                 ToastSuccess();
             }
             if (!result.success) {
-                ToastError();
+                ToastError("You can't block somebody again within 24 hours of blocking them");
             }
         }
     }
 
-    const handleUserUnblock = async (username) => {
+    async function handleUserUnblock(username){
         try {
             const index = blockedUsers.findIndex((user) => user.username === username);
             if (index === -1) {

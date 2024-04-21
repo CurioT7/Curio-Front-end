@@ -40,20 +40,21 @@ function Choose_Community({ onSelect }) {
         setInputValue(event.target.value);
     };
 
+    const handleUsernameClick = () => {
+        setInputValue(`u/${username}`);
+    };
+
     const handleInputFocus = () => {
         setInputFocused(true);
     };
 
     const handleItemClick = (item) => {
-        setChosenItem(item); 
-        setInputValue(item.community || item); 
+        setChosenItem(item); // Set chosen item when an item is clicked
+        setInputValue(item.community || item); // Ensure that the selected item is either a community object or a string
         setDropdownVisible(false);
-        if (item == `u/${username}`){
-            onSelect(item.community = null);
-        }else{
-            onSelect(item.community ? item.community : item);
-        }    
+        onSelect(item.community ? item.community : item); // Pass the selected item without modifications if it's a string, or extract the community name if it's an object
     };
+    
     
 
     useEffect(() => {

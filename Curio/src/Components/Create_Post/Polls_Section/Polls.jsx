@@ -11,24 +11,16 @@ function Polls( {handleDayChange, handleOptionChange }) {
   const [optionsText, setoptionsText] = useState([]);
   const maxOptions = 4;
 
-
-
-
   const handleAddOption = () => {
     if (options.length < maxOptions) {
       setOptions([...options, `Option ${options.length + 3}`]);
     }
   };
 
-  const handleRemoveOption = () => {
-      setOptions(options.slice(0, options.length - 1));
-  };
-
-  // const handleOptionChange = (index, event) => {
-  //   const newOptionsText = [...optionsText];
-  //   newOptionsText[index] = event.target.value;
-  //   setoptionsText(newOptionsText);
-  // };
+  const handleRemoveOption = (indextoremove) => {
+    removedElement = options.splice(indextoremove, 1);
+    setOptions(options);
+    };
 
   return (
     <div className="flex-wrap pollPage">
@@ -64,7 +56,7 @@ function Polls( {handleDayChange, handleOptionChange }) {
                   placeholder={option} 
                   onChange={(event) => handleOptionChange(index + 2, event)}
                 />
-                <button onClick={handleRemoveOption}>
+                <button onClick={() => handleRemoveOption(index)}>
                   <Remove className='removeIcon' />
                 </button>
                 </div>
