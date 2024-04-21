@@ -8,7 +8,7 @@ import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
 import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
-import UserPopover from '../UserPopover/UserPopover.jsx';
+import UserPopover from '../UserPopover.css/UserPopover.jsx';
 
 
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
