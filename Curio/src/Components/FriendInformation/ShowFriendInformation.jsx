@@ -46,16 +46,6 @@ function ShowFriendInformation(props) {
         });
     }
 
-    const toastsuccess = useToast()
-    function ToastSuccess() {
-        toastsuccess({
-            description: "User Blocked successfully",
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-            position: 'top',
-        });
-    }
 
 
     const handleEllipsisClick = () => {
