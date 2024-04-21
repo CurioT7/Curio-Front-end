@@ -9,7 +9,7 @@ import CreateCommunity from '../../Sidebar/CreateCommunity.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function Choose_Community({ onSelect }) { // Receive onSelect prop
+function Choose_Community({ onSelect }) {
     const [inputValue, setInputValue] = useState('');
     const [username, setUsername] = useState(null);
     const [userCommunities, setUserCommunities] = useState([]);

@@ -1,33 +1,10 @@
-import { useState, useEffect } from 'react'; 
 import { useToast, Flex, Switch, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 import "./ProfileCategory.css"
 import Titles from "../../feedSettings/childs/Titles";
-import axios from 'axios';
 
-function ProfileCategory() {
+function ProfileCategory({ NSFW, handleSwitchChange, isModalOpen, setIsModalOpen, confirmChange }) {
   
-  const serverHost = import.meta.env.VITE_SERVER_HOST;
   const toast = useToast();
-  const [NSFW, setIsChecked] = useState(false); 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [pendingChange, setPendingChange] = useState(false);
-
-  const handleSwitchChange = () => {
-    // setPendingChange(!isChecked);
-    if (NSFW) { // Only open the modal if isChecked is true
-      setIsModalOpen(true);
-    } else {
-      confirmChange();
-    }
-  };
-
-  const confirmChange = () => {
-    setIsChecked(!NSFW);
-    sendDataToBackend({NSFW: !NSFW});
-    setIsModalOpen(false);
-    Toast();
-  };  
-  
 
   function Toast(){ 
     toast({   
@@ -37,94 +14,6 @@ function ProfileCategory() {
         isClosable: true,
       })
   }
-
-  async function sendDataToBackend(data) {
-    // Validate data
-    if (!data || typeof data !== 'object') {
-        console.error('Invalid data:', data);
-        return;
-    }
-    try {
-        
-        const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        // Handle different response status codes
-        switch (response.status) {
-          case 200:
-            console.log("User preferences updated successfully");
-            break;
-          case 404:
-            console.log("User preferences not found");
-            break;
-          default:
-            console.log("Unexpected response status:", response.status);
-            break;
-        }
-        return response;
-    } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
-        if (status === 500) {
-          console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
-        } else {
-          console.error("Error sending data to backend:", error.response.data);
-        }
-      } else {
-        console.error('Error sending data to backend:', error.message);
-      }
-    }
-  }
-
-  async function fetchDataFromBackend() {
-    const token = localStorage.getItem('token');
-        // console.log(token)
-        if (!token) {
-        console.error('No token found');
-        return;
-        }
-      try {
-          
-          const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
-              headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-              }
-          });
-            // Handle different response status codes
-          switch (response.status) {
-            case 404:
-              console.log("User preferences not found");
-              break;
-            default:
-              console.log("Unexpected response status:", response.status);
-              break;
-          }
-          return response.data;
-      } catch (error) {
-        if (error.response) {
-          // Handle error response here
-          const status = error.response.status;
-          if (status === 500) {
-            console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
-          } else {
-            console.error("Error fetching data from backend:", error.response.data);
-          }
-        } else {
-          console.error('Error fetching data from backend:', error.message);
-        }
-      }
-  }
-  useEffect(() => {
-      async function fetchAndSetData() {
-          const data = await fetchDataFromBackend();
-          if (data) {
-            setIsChecked(data.NSFW);
-          }
-      }
-      fetchAndSetData();
-  }, []);
 
   return (
     <>
@@ -138,7 +27,7 @@ function ProfileCategory() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>SWITCH ACCOUNT TO SFW</ModalHeader>
-          <ModalCloseButton onClick={() => setIsChecked(true)} />
+          <ModalCloseButton onClick={() => setIsModalOpen(false)} />
           <ModalBody>
             If your account contains <a href="#">NSFW content</a> (contains nudity, pornography, profanity or inappropriate content for those under 18) 
             and it’s not set to NSFW, this will result in actions up to and including suspension of your account.
