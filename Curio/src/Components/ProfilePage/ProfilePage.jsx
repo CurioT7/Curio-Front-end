@@ -8,6 +8,8 @@ import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
 import axios from 'axios';
 import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
+import { useToast } from "@chakra-ui/react";
+import PostComments from '../Post/PostComments.jsx';
 
 function ProfilePage(){
 
@@ -264,7 +266,21 @@ return(
           </div>
           </>
         )))}
-      {savedPosts.length === 0 ? <p>Looks like you haven't saved anything yet</p> : null}
+
+        {(savedComments && savedComments.length > 0 && savedComments.map((comment) => (
+          <><div className='d-flex flex-column col-md-11'><PostComments     
+            id={comment._id}
+            key={comment._id}
+            username={comment.authorName}
+            commentUpvotes={comment.upvotes - comment.downvotes}
+            comment={comment.content}
+            savedComments={savedComments}
+          />
+          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+          </div>
+          </>
+        )))}
+      {(savedPosts.length === 0 && savedComments.length === 0) ? <p>Looks like you haven't saved anything yet</p> : null}
     </TabPanel>
 
     <TabPanel >
@@ -367,7 +383,7 @@ return(
      Share 
  </button>
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-  <div className="profilevalue">{userAbout.postKarma || '1'}</div>
+  <div className="profilevalue">{userAbout.postKarma || '0 '}</div>
   <div className="profilevalue">{userAbout.commentKarma || '0'}</div>
   <div className="profileItem">Post Karma</div>
   <div className="profileItem">Comment Karma</div>
