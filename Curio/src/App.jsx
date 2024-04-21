@@ -82,7 +82,7 @@ function App() {
           <Route path='/communities/best' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/polls' element={<ShowPoll/>} />
-          <Route path="user/:username/followers" element={<FollowersPage/>} />
+          <Route path="user/:username/followers" element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
         </Routes>
       </ChakraProvider>
     </div>

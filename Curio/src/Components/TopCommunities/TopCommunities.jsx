@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import DropdownIcon from "../../styles/icons/DropdownIcon.svg";
 import UpwardsIcon from "../../styles/icons/Upwards.svg";
+import SearchIcon from "../../styles/SearchIcon";
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 

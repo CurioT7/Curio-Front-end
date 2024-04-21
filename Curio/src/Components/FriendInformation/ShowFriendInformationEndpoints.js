@@ -9,10 +9,9 @@ const token = localStorage.getItem('token');
 
 
 
-async function showFriendInformation({username}) {
+async function showFriendInformation(username) {
     try {
-        const response = await axios.get(`${hostUrl}/user/userTwo/about`);
-        console.log(response);
+        const response = await axios.get(`${hostUrl}/user/${username}/about`);
         return response;
     } catch (error) {
         console.error('Error:', error);
