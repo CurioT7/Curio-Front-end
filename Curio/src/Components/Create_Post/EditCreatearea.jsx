@@ -6,8 +6,7 @@ import "./EditCreatearea.css";
 import axios from "axios";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
-
-function EditCreatearea({ title, content, community, days, options, imageFormData }) {
+function EditCreatearea({ title, content, community, days, options }) {
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
@@ -17,10 +16,8 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
   };
 
   const handleSpoilerClick = () => {
-    if (community && community.community) {
-      setSpoilerClicked(!spoilerClicked);
-    }
-  };  
+    setSpoilerClicked(!spoilerClicked);
+  };
 
   const handleNsfwClick = () => {
     setNsfwClicked(!nsfwClicked);
@@ -28,25 +25,18 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
 
   const handleSubmit = async () => {
     try {
-      const postData = {
-        title: title, 
-        content: content,
-        subreddit: community.community && community.community,
-        isOC: ocClicked,
-        isSpoiler: spoilerClicked,
-        isNSFW: nsfwClicked,
-        voteLength: days,
-        options: options
-      };
-
-      // If imageFormData is available, append it to postData
-      if (imageFormData) {
-        postData.image = imageFormData;
-      }
-
       const response = await axios.post(
         `${serverHost}/api/submit`,
-        postData,
+        {
+          title: title, 
+          content: content,
+          subreddit: community.community || community,
+          isOC: ocClicked,
+          isSpoiler: spoilerClicked,
+          isNSFW: nsfwClicked,
+          voteLength: days,
+          options: options
+        },
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -102,70 +92,63 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
   };
 
   return (
-    <div className="EditCreatearea">
-      <div>
-        <div className='button-group-edit'>
-          <Button 
+      <div className="EditCreatearea">
+        <div>
+            <div className='button-group-edit'>
+            <Button 
             className='rest-button'
             variant='ghost' 
             leftIcon={ocClicked ? <CheckIcon /> : <AddIcon />}
             onClick={handleOcClick}
             style={{
-              color: ocClicked ? 'rgb(255, 255, 255)' : '',
-              fill: ocClicked ? 'rgb(255, 255, 255)' : '',
-              backgroundColor: ocClicked ? 'rgb(255, 69, 0)' : '',
-              borderColor: ocClicked ? 'transparent' : ''
-            }}
-          >
-            OC
-          </Button>
-          <Button 
+                color: ocClicked ? 'rgb(255, 255, 255)' : '',
+                fill: ocClicked ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: ocClicked ? 'rgb(255, 69, 0)' : '',
+                borderColor: ocClicked ? 'transparent' : ''
+            }}>
+                OC
+            </Button>
+            <Button
             className='rest-button' 
             variant='ghost' 
             leftIcon={spoilerClicked ? <CheckIcon /> : <AddIcon />}
             onClick={handleSpoilerClick}
-            disabled={!community || !community.community}
             style={{
-              color: spoilerClicked ? 'rgb(255, 255, 255)' : '',
-              fill: spoilerClicked ? 'rgb(255, 255, 255)' : '',
-              backgroundColor: spoilerClicked ? 'rgb(0, 0, 0)' : '',
-              borderColor: spoilerClicked ? 'transparent' : '',
-              cursor: !community || !community.community ? 'not-allowed' : 'pointer',
-              background: !community || !community.community ? '#cccccc' : '',
-            }}
-          >
-            Spoiler
-          </Button>
-          <Button 
+                color: spoilerClicked  ? 'rgb(255, 255, 255)' : '',
+                fill: spoilerClicked  ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: spoilerClicked  ? 'rgb(0, 0, 0)' : '',
+                borderColor: spoilerClicked  ? 'transparent' : ''
+            }}>
+                Spoiler
+            </Button>
+            <Button 
             className='rest-button'  
             variant='ghost' 
             leftIcon={nsfwClicked ? <CheckIcon /> : <AddIcon />}
             onClick={handleNsfwClick}
             style={{
-              color: nsfwClicked ? 'rgb(255, 255, 255)' : '',
-              fill: nsfwClicked ? 'rgb(255, 255, 255)' : '',
-              backgroundColor: nsfwClicked ? 'rgb(255, 88, 91)' : '',
-              borderColor: nsfwClicked ? 'transparent' : ''
-            }}
-          >
-            NSFW
-          </Button>
+                color: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+                fill: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+                backgroundColor: nsfwClicked ? 'rgb(255, 88, 91)' : '',
+                borderColor: nsfwClicked ? 'transparent' : ''
+            }}>
+                NSFW
+            </Button>
+            </div>
+            <hr className='hr-edit-post' />
+            <Flex className='save-buttons' minWidth='max-content' alignItems='center' gap='2'>
+                <Spacer />
+                <Button className="post-button" variant='outline' colorScheme='blue' onClick={handleSubmit}>Post</Button>
+            </Flex>
         </div>
-        <hr className='hr-edit-post' />
-        <Flex className='save-buttons' minWidth='max-content' alignItems='center' gap='2'>
-          <Spacer />
-          <Button className="post-button" variant='outline' colorScheme='blue' onClick={handleSubmit}>Post</Button>
-        </Flex>
-      </div>
-      <div className='reply_notifications'>
-        <Checkbox  value='reply_notifications' size='md'>Send me post reply notifications</Checkbox>
-        <div className='container-share-account'>
-          <a className='share-account' href="#">
-            Connect accounts to share your post
-          </a>
-          <i class="fa fa-info-circle" aria-hidden="true"/>
+        <div className='reply_notifications'>
+            <Checkbox  value='reply_notifications' size='md'>Send me post reply notifications</Checkbox>
+            <div className='container-share-account'><a className='share-account' href="#">
+                Connect accounts to share your post
+                </a>
+                <i class="fa fa-info-circle" aria-hidden="true"/>
+            </div>
         </div>
-      </div>
     </div>
   );
 }
