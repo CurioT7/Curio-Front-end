@@ -29,6 +29,7 @@ const navigate = useNavigate();
               <div className="notifications-messages">
                   <div className="notifications-messages-title">
                       <span className="notifications-messages-text">Messages</span>
+                   </div>
               </div>
           </a>
           <div className="notifications-extra"></div>

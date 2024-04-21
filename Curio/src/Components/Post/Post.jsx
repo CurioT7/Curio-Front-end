@@ -224,8 +224,7 @@ function Post(props) {
                         </CardHeader>
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
-                            {props.content && <Text className='text-body'>
-                            {props.content}
+                            {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
                             </Text>}
                             {props.image && <Image
                                 objectFit='cover'
