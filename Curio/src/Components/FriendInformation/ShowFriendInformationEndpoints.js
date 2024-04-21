@@ -2,14 +2,16 @@ import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 
+
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 const token = localStorage.getItem('token');
 
-async function showFriendInformation({username}) {
+
+
+async function showFriendInformation(username) {
     try {
-        const response = await axios.get(`${hostUrl}/user/userTwo/about`);
-        console.log(response);
+        const response = await axios.get(`${hostUrl}/user/${username}/about`);
         return response;
     } catch (error) {
         console.error('Error:', error);
@@ -27,11 +29,24 @@ async function userFollow(friendUsername) {
                 'authorization': `Bearer ${token}`
             }
         });
-    
+        return 200;
     } catch (error) {
-        console.error('Error:', error);
-    }
-}
+        if (error.response) {
+            switch (error.response.status) {
+              case 404:
+                console.error('User is not found');
+                return 404;
+              case 500:
+                console.error('An unexpected error occurred on the server. Please try again later.');
+                return 500;
+                case 401:
+                    return 401;
+              default:
+                break;
+            }
+          }
+        }   
+    }   
 
 
     async function userUnfollow(friendUsername) {
@@ -44,12 +59,22 @@ async function userFollow(friendUsername) {
                 'authorization': `Bearer ${token}`
             }
         });
-
-
+        return 200;
     } catch (error) {
-        console.error('Error:', error);
-    }
-};
+        if (error.response) {
+            switch (error.response.status) {
+              case 404:
+                return 404;
+              case 500:
+                return 500;; 
+              case 401:
+                return 401;
+              default:
+                break;
+                }   
+            }
+        }
+    };
 
 async function getFollower(username) {
     try {

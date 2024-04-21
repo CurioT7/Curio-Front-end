@@ -118,3 +118,9 @@
   font-size: 12px;
 }
 
+/* @media (max-width: 550px) {
+  .col-fixed-width{
+    width: 100%;
+  }
+} */
+

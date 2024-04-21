@@ -8,7 +8,7 @@ import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
 import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
-import UserPopover from '../UserPopover.css/UserPopover.jsx';
+import UserPopover from '../UserPopover/UserPopover.jsx';
 
 
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
@@ -123,47 +123,46 @@ function Post(props) {
     }
   }
 
-    const handleNavigationToDetails = async () => {
-        try{
-            const post = {
-                _id: props._id,
-                user: props.user,
-                title: props.title,
-                subreddit: props.linkedSubreddit,
-                content: props.content,
-                image: props.image,
-                upvotes: props.upvotes,
-                downvotes: props.downvotes,
-                comments: props.comments,
-                savedPosts: props.savedPosts,
-                savedComments: props.savedComments,
-                hiddenPosts: props.hiddenPosts,
-                isMod: props.isMod,
-                dateViewed: new Date().toISOString()
-            }
-            const hostUrl = import.meta.env.VITE_SERVER_HOST;
-            const response = await axios.post(`${hostUrl}/api/history`, {
-                postID: props._id
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            if (response.status === 200 || response.status === 201){
-                window.dispatchEvent(new Event('newRecentPost'));
-                navigate(`/post/post-details/${props._id}`, { state: { post } });
+    const handleNavigationToDetails = () => {
+        const post = {
+            _id: props._id,
+            user: props.user,
+            title: props.title,
+            subreddit: props.linkedSubreddit,
+            content: props.content,
+            image: props.image,
+            upvotes: props.upvotes,
+            downvotes: props.downvotes,
+            comments: props.comments,
+            savedPosts: props.savedPosts,
+            savedComments: props.savedComments,
+            hiddenPosts: props.hiddenPosts,
+            isMod: props.isMod,
+            dateViewed: new Date().toISOString()
+        }
+        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
+        console.log(post);
+
+
+        if (recentPosts && Array.isArray(recentPosts)) {
+
+            const postExists = recentPosts.find((recentPost) => recentPost._id === post._id);
+            if (!postExists) {
+
+                recentPosts.unshift(post);
+                recentPosts.slice(0,10);
+                localStorage.setItem('recentPosts', JSON.stringify(recentPosts));
             }
         }
-        catch(err){
-            console.log(err);
-            toast({
-                description: "Server Error Occured.",               
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            })
+        else {
+            localStorage.setItem('recentPosts', JSON.stringify([post]));
         }
+
+        if (recentPosts && recentPosts.length === 0) {
+            localStorage.setItem('recentPosts', JSON.stringify([post]));
+        }
+        window.dispatchEvent(new Event('newRecentPost'));
+        navigate(`/post/post-details/${props._id}`, { state: { post } });
     }
 
 
