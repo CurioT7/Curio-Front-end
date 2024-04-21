@@ -49,11 +49,22 @@ function NavbarComponent() {
 
   const username = localStorage.getItem('username');
   
-  function toggleMenu(){
+  function toggleMenu(event) {
     let subMenu = document.getElementById("subMenu");
     subMenu.classList.toggle("open-menu");
+    event.stopPropagation();
   }
-
+  
+  let subMenu = document.getElementById('subMenu');
+  
+  document.addEventListener('click', function(event) {
+    if(subMenu){
+    if (!subMenu.contains(event.target)) {
+      subMenu.classList.remove("open-menu");
+    }
+  }
+  });
+    
   return (
     <nav className='navbar-component'>
       <input type="checkbox" name="" id="chk1"/>
@@ -113,7 +124,7 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
-          <li className='sub-right-navbar' id='openProfileIcon' onClick={toggleMenu}>
+          <li className='sub-right-navbar' id='openProfileIcon' onClick={(event) => toggleMenu(event)}>
             <Tooltip label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
                 <img className='profileImg' src={profile} alt="logo"/>
@@ -148,52 +159,14 @@ function NavbarComponent() {
                 </div>
             </div>
           </Link>
-          <div className="d-flex align-items-center sub-menu-link">
-            <EditAvatar />
-            <span className="drop-down-description">Edit Avatar</span>
-          </div>
-          <div className="d-flex align-items-center sub-menu-link">
-          <ContProgram />
-            <div className="d-flex flex-column">
-            <span className="drop-down-description">Contributor Porgram</span>
-              <div className='d-flex flex-start align-items-center ArrowandNumber'>
-              <ContArrow />
-              <span className='contribNumber'>0</span>
-              </div>
-            </div>
-          </div>
-          <div className="d-flex align-items-center sub-menu-link switchDiv">
-            <ModMode />
-            <span className="drop-down-description">Mod mode</span>
-            <Stack align='center' direction='row' className='switchplacement'>
-              <Switch size='lg' colorScheme='blue' />
-            </Stack>
-          </div>
-          <div className="d-flex align-items-center sub-menu-link switchDiv">
-            <DarkMode />
-            <span className="drop-down-description">Dark mode</span>
-            <Stack align='center' direction='row' className='switchplacement'>
-              <Switch size='lg' colorScheme='blue' />
-            </Stack>
-          </div>
           <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
             <SignupHandler/>
-          </div>
-          <hr />
-          <div className="d-flex align-items-center sub-menu-link">
-            <Advertisement />
-            <span className="drop-down-description"> Advertise on reddit</span>
           </div>
           <hr />
           <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 
             <Settings />
             <span className="drop-down-description">Settings</span>
-          </Link>
-          <hr />
-          <div className="d-flex align-items-center last-item1">
-            <Premium />
-            <span className="drop-down-description"> Premium</span>
-          </div>
+          </Link> 
         </div>
       </div>
       <div className="menu">

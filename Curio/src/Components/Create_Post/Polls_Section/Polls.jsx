@@ -11,9 +11,6 @@ function Polls( {handleDayChange, handleOptionChange }) {
   const [optionsText, setoptionsText] = useState([]);
   const maxOptions = 4;
 
-
-
-
   const handleAddOption = () => {
     if (options.length < maxOptions) {
       setOptions([...options, `Option ${options.length + 3}`]);

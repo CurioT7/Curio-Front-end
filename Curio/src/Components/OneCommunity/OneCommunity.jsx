@@ -18,14 +18,20 @@ function Community({ index, name, category, members, picture }) {
 
   const navigate = useNavigate();
 
-  const backgroundColor = Math.floor(index / 4) % 2 === 0 ? 'columnBack' : 'columnBack1';
+  const getBackgroundColor = (index) => {
+    if ((index + 1) % 10 >= 5 && (index + 1) % 10 <= 8) {
+      return 'columnBack1';
+    } else {
+      return 'columnBack';
+    }
+  };
 
   return (
-    <div className={`col col-12 col-fixed-width d-flex justify-content-start align-items-center ${backgroundColor}`}>
-      <div className="d-flex p-2 me-3 align-items-center number">
+    <div className={`col col-12 col-fixed-width d-flex justify-content-start align-items-center ${getBackgroundColor(index)}`}>
+      <div className="d-flex p-1 align-items-center number">
         {index + 1}
       </div>
-      <div className="d-flex p-2 align-items-center">
+      <div className="d-flex p-1 align-items-center">
         <img src={picture} alt="reddit figure" className="reddit-figure" />
       </div>
       <div className="d-flex flex-column">
