@@ -3,10 +3,8 @@ import "./Community_details.css";
 import logo from "../../../assets/Curio_logo.png";
 import { FormControl, Switch, FormLabel, useToast } from "@chakra-ui/react";
 import axios from "axios"; 
-import io from "socket.io-client";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
-const socket = io(serverHost); 
 function Community_details({ community }) {
     console.log(community.community);
     const [subredditData, setSubredditData] = useState(null);
@@ -26,20 +24,9 @@ function Community_details({ community }) {
     }
 
     useEffect(() => {
-        // Listen for 'subredditUpdate' event from WebSocket server
-        socket.on('subredditUpdate', (updatedData) => {
-            if (updatedData.community === community.community) {
-                setSubredditData(updatedData);
-            }
-        });
-
-        // Fetch initial subreddit data
-        fetchSubredditData();
-
-        // Clean up WebSocket connection on unmount
-        return () => {
-            socket.off('subredditUpdate');
-        };
+        if (community.community !== null) {
+            fetchSubredditData();
+        }
     }, [community]);
 
     const fetchSubredditData = async () => {

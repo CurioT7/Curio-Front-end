@@ -71,7 +71,7 @@ function Createpostarea({ community }) {
       case "Post":
         return <Post onContentChange={handleContentChange} />; 
       case "Image & Video":
-        return <ImageVideo />;
+        return <ImageVideo onImageUpload={handleImageUpload}/>;
       case "Link":
         return <Link onLinkChange={handleLinkChange} />;
       case "Polls":
@@ -99,7 +99,14 @@ function Createpostarea({ community }) {
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea title={inputTitle} content={content || linkUrl} community={community} days={dayNumber} options={optionsText} imageFormData={imageFormData} />
+      <EditCreatearea 
+      title={inputTitle} 
+      content={content || linkUrl} 
+      community={community} 
+      days={dayNumber} 
+      options={optionsText} 
+      imageFormData={imageFormData} 
+      />
     </div>
   );
 }

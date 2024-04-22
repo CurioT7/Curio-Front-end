@@ -63,6 +63,8 @@
 }
 
 .dropdown-list-choose-community {
+    max-height: 250px; 
+    overflow-y: auto; 
     position: absolute;
     top: calc(100% + 5px); 
     left: 0;
