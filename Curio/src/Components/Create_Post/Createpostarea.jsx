@@ -14,6 +14,7 @@ function Createpostarea({ community }) {
   const [dayNumber, setDayNumber] = useState(3);
   const [optionsText, setoptionsText] = useState([]);
   const [imageFormData, setImageFormData] = useState(null);
+  const [linkUrl, setLinkUrl] = useState(''); 
   const textareaRef = useRef(null);
 
   const handleDayChange = (event) => {
@@ -51,6 +52,9 @@ function Createpostarea({ community }) {
     setImageFormData(formData);
   };
 
+  const handleLinkChange = (url) => {
+    setLinkUrl(url);
+  };
   const renderSelectedMethod = () => {
     switch (selectedMethod) {
       case "Post":
@@ -58,7 +62,7 @@ function Createpostarea({ community }) {
       case "Image & Video":
         return <ImageVideo onImageUpload={handleImageUpload} />;
       case "Link":
-        return <Link />;
+        return <Link onLinkChange={handleLinkChange} />;
       case "Polls":
         return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} />;
     }
@@ -84,7 +88,7 @@ function Createpostarea({ community }) {
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea title={inputTitle} content={content} community={community} days={dayNumber} options={optionsText} imageFormData={imageFormData} />
+      <EditCreatearea title={inputTitle} content={content || linkUrl} community={community} days={dayNumber} options={optionsText} imageFormData={imageFormData} />
     </div>
   );
 }

@@ -122,7 +122,7 @@ function NavbarComponent() {
               <PopoverTrigger>
                 <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
-              <PopoverContent borderRadius='20px' ref={popoverRef}>
+              <PopoverContent borderBottomRadius='5px' borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
                   <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
                   { trending.map((trend) => (

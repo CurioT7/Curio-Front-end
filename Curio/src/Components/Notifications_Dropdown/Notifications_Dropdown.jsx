@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css"; 
 import logo from "../../assets/Profile_navbar.png";
-import { Popover, PopoverTrigger, PopoverContent, PopoverBody, Text, Button } from '@chakra-ui/react';
+import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
-import {
-    PopoverHeader,
-    PopoverFooter,
-    PopoverArrow,
-    PopoverCloseButton,
-    PopoverAnchor,
-  } from '@chakra-ui/react'
 import { SlOptions } from "react-icons/sl";
 import"../Notification_Messages/Notification_Messages.jsx"
 import {useNavigate} from 'react-router-dom';
@@ -26,11 +19,9 @@ const navigate = useNavigate();
               <span className="notifications-title-text">Notifications</span>
           </div>
           <a href="#" className="notifications-messages-link">
-              <div className="notifications-messages">
                   <div className="notifications-messages-title">
                       <span className="notifications-messages-text">Messages</span>
                    </div>
-              </div>
           </a>
           <div className="notifications-extra"></div>
           <div className="messages-extra"></div>
