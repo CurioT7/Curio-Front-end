@@ -50,7 +50,7 @@ function SidebarComponent(props) {
   const getJoinedCommunities = async () => {
       try{
         const hostUrl = import.meta.env.VITE_SERVER_HOST;
-        const response = await axios.get(`${hostUrl}/user/${localStorage.getItem("username")}/communities`);
+        const response = await axios.get(`${hostUrl}/api/user/${localStorage.getItem("username")}/communities`);
         setJoinedCommunities(response.data.communities);
       }
       catch(error){
