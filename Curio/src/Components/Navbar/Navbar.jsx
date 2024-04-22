@@ -76,7 +76,25 @@ function NavbarComponent() {
       </div>
       <div className="search-box">
         <form action="">
-          <input type="text" name="search" id="srch" placeholder="Search Curio"/>
+            <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
+              <PopoverTrigger>
+                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+              </PopoverTrigger>
+              <PopoverContent borderBottomRadius='5px' borderRadius='20px' ref={popoverRef}>
+                <PopoverBody margin={0} padding={0} className="search-list">
+                  <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
+                  { trending.map((trend) => (
+                    <Trending
+                      key={trend._id}
+                      title={trend.authorName}
+                      description={trend.title}
+                      subreddit={trend.subreddit}
+                    />
+                    ))
+                  }
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
           <button type="submit"><i className="search-icon fa fa-search" aria-hidden="true"></i></button>
         </form>
       </div>
