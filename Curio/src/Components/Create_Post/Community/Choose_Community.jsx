@@ -9,7 +9,7 @@ import CreateCommunity from '../../Sidebar/CreateCommunity.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function Choose_Community({ onSelect }) { // Receive onSelect prop
+function Choose_Community({ onSelect }) {
     const [inputValue, setInputValue] = useState('');
     const [username, setUsername] = useState(null);
     const [userCommunities, setUserCommunities] = useState([]);
@@ -40,21 +40,20 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
         setInputValue(event.target.value);
     };
 
-    const handleUsernameClick = () => {
-        setInputValue(`u/${username}`);
-    };
-
     const handleInputFocus = () => {
         setInputFocused(true);
     };
 
     const handleItemClick = (item) => {
-        setChosenItem(item); // Set chosen item when an item is clicked
-        setInputValue(item.community || item); // Ensure that the selected item is either a community object or a string
+        setChosenItem(item); 
+        setInputValue(item.community || item); 
         setDropdownVisible(false);
-        onSelect(item.community ? item.community : item); // Pass the selected item without modifications if it's a string, or extract the community name if it's an object
+        if (item == `u/${username}`){
+            onSelect(item.community = null);
+        }else{
+            onSelect(item.community ? item.community : item);
+        }    
     };
-    
     
 
     useEffect(() => {
@@ -77,7 +76,7 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
                 }
             );
             const communityDataResponse = await axios.get(
-                `${serverHost}/user/${userDataResponse.data.username}/communities`
+                `${serverHost}/api/user/${userDataResponse.data.username}/communities`
             );
             return { userData: userDataResponse.data, communityData: communityDataResponse.data };
         } catch (error) {
