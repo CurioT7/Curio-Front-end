@@ -201,7 +201,7 @@ async function changeSortType(value,time) {
     <>
     
       {/* Insert posts here (above recent posts) */}
-      <div className='col-md-6 d-flex p-3 posts-container flex-column'>
+      <div className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
         <div className='my-1'>
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
