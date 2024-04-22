@@ -25,8 +25,6 @@ import TopCommunities from './Components/TopCommunities/TopCommunities.jsx';
 import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
 import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
-
-import CommPopup from './Components/CommunityPopup/CommunityPopup.jsx';
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Pages/Notifications/Notifications.jsx";
 
