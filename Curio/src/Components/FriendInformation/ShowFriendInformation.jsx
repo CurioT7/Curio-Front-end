@@ -36,9 +36,9 @@ function ShowFriendInformation(props) {
     const token = localStorage.getItem('token');
     const toastError = useToast();
 
-    function ToastError(message) {
+    function ToastError() {
         toastError({
-            description: message,
+            description: "You can't block somebody again within 24 hours of blocking them",
             status: 'error',
             duration: 3000,
             isClosable: true,
@@ -57,6 +57,7 @@ function ShowFriendInformation(props) {
         });
     }
 
+
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
     };
@@ -68,6 +69,7 @@ function ShowFriendInformation(props) {
     const handleReportClick = () => {
         if (!token) {
          navigate('/login');
+        setShowReportMenu(false);
         }
         else
         setShowReportMenu(true);
@@ -97,9 +99,9 @@ function ShowFriendInformation(props) {
             console.error('Error:', error);
         }
     }
+    
 
-
-    async function handleFollowToggle() {
+    const handleFollowToggle = () => {
         if (!token) {
             navigate('/login');
         }
@@ -163,7 +165,7 @@ function ShowFriendInformation(props) {
         }
     }
 
-    async function patchBlockUser(name){
+    const patchBlockUser = (name) => {
         const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
           viewBlockedPeople: [...blockedUsers, { username: name}]
         },{
@@ -178,7 +180,7 @@ function ShowFriendInformation(props) {
         }
       };
 
-      async function handleUserBlock(username){
+      const handleUserBlock = async (username) => {
         if (!token) {
             navigate('/login');
         } else {
@@ -203,7 +205,7 @@ function ShowFriendInformation(props) {
         }
     }
 
-    async function handleUserUnblock(username){
+    const handleUserUnblock = async (username) => {
         try {
             const index = blockedUsers.findIndex((user) => user.username === username);
             if (index === -1) {

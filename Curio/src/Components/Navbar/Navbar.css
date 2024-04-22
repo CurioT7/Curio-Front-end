@@ -211,12 +211,12 @@
     }
     .navbar-component ul{
         position: fixed;
-        top: 30px;
+        top: 35px;
         right: -100%;
         /* background: white; */
-        height: 80vh;
+        height: 100vh;
         width: 50%;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         transition: right 0.5s linear;
     }
@@ -322,4 +322,23 @@
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
     border-radius: 10px;
     font-size: 14px;
+}
+
+
+.search-list{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.trending-header{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding-left:12px;
+    padding-top: 12px;
+    color: rgb(100, 114, 120);
 }
