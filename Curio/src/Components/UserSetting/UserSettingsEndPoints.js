@@ -21,7 +21,7 @@ export async function fetchUserDataFromBackend() {
     }
 }
 
-export async function sendDataToBackend(data) {
+export async function sendUserDataToBackend(data) {
     try {
         const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
             headers: {

@@ -3,11 +3,9 @@ import { Switch, Flex, Spacer, Box, useToast } from '@chakra-ui/react'
 import Titles from './childs/Titles';
 import React from 'react';
 import DropDown from './childs/DropDown';
-import axios from 'axios';
-
+import { sendUserDataToBackend,fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints';
 
 function Feeding () {
-    const serverHost = import.meta.env.VITE_SERVER_HOST;
     const toast = useToast()
     const [adultContent, setIsMature] = React.useState(false);
     const [autoplayMedia, setIsAuto] = React.useState(false)
@@ -29,96 +27,56 @@ function Feeding () {
     }
     function handleIsMature (){
         setIsMature(!adultContent)
-        sendDataToBackend({adultContent: !adultContent})
+        sendUserDataToBackend({adultContent: !adultContent})
         Toast();
         
     }
     
     function handleIsAuto(){
         setIsAuto(!autoplayMedia);
-        sendDataToBackend({autoplayMedia: !autoplayMedia});
+        sendUserDataToBackend({autoplayMedia: !autoplayMedia});
         Toast();
     }
 
     function handleCommSort(e){
         setCommunityContentSort(e.target.value)
-        sendDataToBackend({communityContentSort: e.target.value})
+        sendUserDataToBackend({communityContentSort: e.target.value})
         Toast()
     }
     function handleCommRemember(){
         setCommRemember(!rememberContentSort)
-        sendDataToBackend({rememberPerCommunity:{rememberContentSort: !rememberContentSort,
+        sendUserDataToBackend({rememberPerCommunity:{rememberContentSort: !rememberContentSort,
                                                 rememberContentView: rememberContentView}})
         Toast()
     }
     function handleCommunityThemes(){
         setCommunityThemes(!communityThemes)
-        sendDataToBackend({communityThemes: !communityThemes})
+        sendUserDataToBackend({communityThemes: !communityThemes})
         Toast()
     }
     function handleGlobalContentView(e){
         setGlobalContentView(e.target.value)
-        sendDataToBackend({globalContentView: e.target.value})
+        sendUserDataToBackend({globalContentView: e.target.value})
         Toast()
     }
     function handleRememberContentView(){
         setRememberContentView(!rememberContentView)
-        sendDataToBackend({rememberPerCommunity:{rememberContentView: !rememberContentView
+        sendUserDataToBackend({rememberPerCommunity:{rememberContentView: !rememberContentView
                                                 ,rememberContentSort: rememberContentSort}})
         Toast()
     }
     function handleOpenPostsInNewTab(){
         setOpenPostsInNewTab(!openPostsInNewTab)
-        sendDataToBackend({openPostsInNewTab: !openPostsInNewTab})
+        sendUserDataToBackend({openPostsInNewTab: !openPostsInNewTab})
         Toast()
     }
     //send and get data from backend//
-    async function sendDataToBackend(data) {
     
 
-        // Validate data
-        if (!data || typeof data !== 'object') {
-            console.error('Invalid data:', data);
-            return;
-        }
-        try {
-           
-            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            
-            // Handle response if needed
-            return response;
-        } catch (error) {
-            console.error('Error sending data to backend:', error);
-            // Handle error if needed
-        }
-    }
-
-    async function fetchDataFromBackend() {
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
-        console.error('No token found');
-        return;
-        }
-        try {
-            
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            return response.data;
-        } catch (error) {
-            console.error('Error fetching data from backend:', error);
-        }
-    }
+   
     React.useEffect(() => {
         async function fetchAndSetData() {
-            const data = await fetchDataFromBackend();
+            const data = await fetchUserDataFromBackend();
             if (data) {
                 setIsMature(data.adultContent);
                 setIsAuto(data.autoplayMedia);
