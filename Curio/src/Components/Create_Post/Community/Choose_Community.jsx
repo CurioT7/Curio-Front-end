@@ -16,6 +16,7 @@ function Choose_Community({ onSelect }) {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
     const [chosenItem, setChosenItem] = useState(null); 
+    // const [membercount, setMemberCount] = useState(0);
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
     const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
@@ -100,6 +101,7 @@ function Choose_Community({ onSelect }) {
             if (data) {
                 setUsername(data.userData.username);
                 setUserCommunities(data.communityData.communities);
+                // setMemberCount(data.communityData.communities);
             }
         };
     
@@ -182,6 +184,9 @@ function Choose_Community({ onSelect }) {
                                                         className='dropdown-community'
                                                         onClick={() => handleItemClick(community.name)}>
                                                         r/{community.name}
+                                                    </p>
+                                                    <p style={{fontSize: '12px', color:'#878a8c'}}>
+                                                        {community.memberCount} {community.memberCount === 1 ? 'member' : 'members'}
                                                     </p>
                                                 </div>
                                             </div>

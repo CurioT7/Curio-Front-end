@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Community_details.css";
 import logo from "../../../assets/Curio_logo.png";
-import coverImage from "../../../assets/cover.png";
 import { FormControl, Switch, FormLabel, useToast } from "@chakra-ui/react";
 
 function Community_details() {
@@ -9,6 +8,7 @@ function Community_details() {
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
     const toast = useToast();
 
+    
     function Toast(){
         toast({
             
