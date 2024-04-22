@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Button, Flex, useToast } from '@chakra-ui/react';
 import axios from 'axios';
+import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../../UserSetting/UserSettingsEndPoints';
+
 
 function Mute() {
   const serverHost = import.meta.env.VITE_SERVER_HOST;
@@ -90,14 +92,21 @@ function Mute() {
     });
   };
 
-  const handleAddMutedCommunity = () => {
+  const handleAddMutedCommunity = async () => {
     if (mutedCommunityInput.trim() !== '') {
         postMuteCommunity(mutedCommunityInput);
-        patchMuteCommunity(mutedCommunityInput);
-        const newUser = { username: mutedCommunityInput};
-        setMutedCommunities(prevMutedCommunities => [...prevMutedCommunities, newUser]);
-        // Call postMuteCommunity to send the request to mute the community
-        setMutedCommunityInput(''); // Reset the input field
+        const newUser = { username: mutedCommunityInput };
+        const newData = {
+          viewMutedCommunities: [...mutedCommunities, newUser]
+        };
+        try {
+          await sendUserDataToBackend(newData);
+          console.log("User preferences updated successfully");
+          setMutedCommunities(prevMutedCommunities => [...prevMutedCommunities, newUser]);
+          setMutedCommunityInput('');
+      } catch (error) {
+          console.error("Error updating user preferences:", error);
+      }
     }
   };
 

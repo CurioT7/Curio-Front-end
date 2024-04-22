@@ -93,7 +93,7 @@ function Safety() {
                 viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
             };
             try {
-                const response = await sendUserDataToBackend(data);
+                await sendUserDataToBackend(data);
                 console.log("User preferences updated successfully");
                 const newUser = { username: blockedUserInput };
                 setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
