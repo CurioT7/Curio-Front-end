@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Textarea, useToast } from '@chakra-ui/react';
-import axios from 'axios';
 import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
 
-function ProfileInformation({ profileData, setProfileData }) {
-  const serverHost = import.meta.env.VITE_SERVER_HOST;
+function ProfileInformation({ profileData }) {
   const toast = useToast();
   const [displayName, setDisplayName] = useState('');
   const [about, setAbout] = useState('');

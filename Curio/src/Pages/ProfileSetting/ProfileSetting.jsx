@@ -12,6 +12,8 @@ import { fetchUserDataFromBackend } from '../../Components/UserSetting/UserSetti
 function ProfileSetting(props) {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState({ displayName: '', about: '' });
+  const [userData, setUserData] = useState(false);
+  const [userCategory, setUserCategory] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -32,6 +34,15 @@ function ProfileSetting(props) {
             displayName: data.displayName,
             about: data.about
           });
+          setUserData({
+            allowFollow: data.allowFollow,
+            contentVisibility: data.contentVisibility,
+            activeInCommunityVisibility: data.activeInCommunityVisibility,
+            clearHistory: data.clearHistory
+          })
+          setUserCategory({
+            NSFW: data.NSFW
+          })
         }
     }
 
@@ -44,14 +55,14 @@ function ProfileSetting(props) {
         <div className="customize-profile-section">
           <h2 className='customize-profile-heading'>Customize profile</h2>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Profile Information</h3>
-          <ProfileInformation profileData={profileData} setProfileData={setProfileData}/>
+          <ProfileInformation profileData={profileData}/>
           <SocialLinksComponent/>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Images</h3>
           <ProfileImageUpload/>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Profile category</h3>
-          <ProfileCategory/>
+          <ProfileCategory userCategory={userCategory}/>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Advanced</h3>
-          <Advanced/>
+          <Advanced userData={userData}/>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Profile moderation</h3>
           <div className="profile-moderation mb-4">
             For moderation tools please visit our <a href="#">Profile Moderation page</a>

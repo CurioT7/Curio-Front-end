@@ -2,16 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Box, Text, Button, Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import "./Advanced.css";
 import Titles from "../../feedSettings/childs/Titles";
-import axios from 'axios';
 import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
-function Advanced() {
+function Advanced({ userData }) {
   const [allowFollow, setFollowChecked] = useState(true);
   const [contentVisibility, setContentVisibilityChecked] = useState(true);
   const [activeInCommunityVisibility, setCommunitiesVisibilityChecked] = useState(true);
   const [clearHistory, setclearHistorychecked] = useState(false);
   const toast = useToast();
+
+  useEffect(() => {
+    setFollowChecked(userData.allowFollow);
+    setContentVisibilityChecked(userData.contentVisibility);
+    setCommunitiesVisibilityChecked(userData.activeInCommunityVisibility);
+    setclearHistorychecked(userData.clearHistory);
+  }, [userData]);
 
   const handleFollowChange = () => {
     setFollowChecked(!allowFollow); 
@@ -45,56 +50,6 @@ function Advanced() {
         isClosable: true,
       })
   }
-
-  async function fetchDataFromBackend() {
-    const token = localStorage.getItem('token');
-        if (!token) {
-        console.error('No token found');
-        return;
-        }
-      try {
-          
-          const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
-              headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-              }
-          });
-            // Handle different response status codes
-          switch (response.status) {
-            case 404:
-              console.log("User preferences not found");
-              break;
-            default:
-              console.log("Unexpected response status:", response.status);
-              break;
-          }
-          return response.data;
-      } catch (error) {
-        if (error.response) {
-          // Handle error response here
-          const status = error.response.status;
-          if (status === 500) {
-            console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
-          } else {
-            console.error("Error fetching data from backend:", error.response.data);
-          }
-        } else {
-          console.error('Error fetching data from backend:', error.message);
-        }
-      }
-  }
-  useEffect(() => {
-    async function fetchAndSetData() {
-        const data = await fetchDataFromBackend();
-        if (data) {
-          setFollowChecked(data.allowFollow);
-          setContentVisibilityChecked(data.contentVisibility);
-          setCommunitiesVisibilityChecked(data.activeInCommunityVisibility);
-          setclearHistorychecked(data.clearHistory)
-        }
-    }
-    fetchAndSetData();
-    }, []);
 
   return (
     <>
