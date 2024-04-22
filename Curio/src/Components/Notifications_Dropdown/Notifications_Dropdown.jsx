@@ -19,7 +19,6 @@ function Notifications() {
                   <div className="notifications-messages-title">
                       <span className="notifications-messages-text">Messages</span>
                   </div>
-              </div>
           </a>
           <div className="notifications-extra"></div>
           <div className="messages-extra"></div>
