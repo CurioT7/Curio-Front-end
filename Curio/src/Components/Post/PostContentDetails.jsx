@@ -22,7 +22,7 @@ import {useParams} from 'react-router-dom';
 import PostLock from './PostLock';
 import { set } from 'mongoose';
 import UserPopover from '../UserPopover/UserPopover.jsx';
-import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import { FetchSubredditName } from './PostEndPoints';
 
 
@@ -236,7 +236,7 @@ function PostContentDetails(post) {
     async function handleGetFollower(username) {
         try {
             const result = await getFollower(username);
-            if (result.success) {
+            if (result) {
                 setIsFollowing(true);
             } else {
                 console.error('Error:', result.error);
@@ -246,14 +246,12 @@ function PostContentDetails(post) {
         }
     }
 
-    async function showFriendInformation(username) {
-        try {
-            const response = await axios.get(`${hostUrl}/user/${username}/about`);
-            setFriendInfo(response.data);
-        } catch (error) {
-            console.error('Error:', error);
+    async function showFriendInfo(username) {
+        const result = await showFriendInformation(username);
+        if(result) {
+          setFriendInfo(result.data);
         }
-    }
+      }
 
 
     return (
@@ -267,7 +265,7 @@ function PostContentDetails(post) {
                             <div className='d-flex flex-column'>
                                 <a className='community-post-name'>r/germany</a>
                                 <UserPopover user={post.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
-                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInformation} classname="userPosting" />
+                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="userPosting" />
                             </div>
                         </div>
                         <div className='ms-auto d-flex flex-direction-row'>

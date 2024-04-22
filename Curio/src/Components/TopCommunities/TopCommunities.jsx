@@ -45,16 +45,9 @@ function TopCommunities(props) {
     }
 }
 
-  const lastCommIndex = currentPage * commPerPage;
-  const firstCommIndex = lastCommIndex - commPerPage;
-  const currentComms = communityInfo.slice(firstCommIndex, lastCommIndex);
-
-
   for (let i = 1; i <= Math.ceil(communitiesnumber / commPerPage); i++) {
     pages.push(i);
   }
-
-  console.log("Printed communities:", currentComms);
 
   return (
     <div id="testtest2" className="container parentDiv">

@@ -7,7 +7,7 @@ import picture from "../../styles/icons/commPic.png";
 import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
-import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import UserPopover from '../UserPopover/UserPopover.jsx';
 
 
@@ -183,7 +183,7 @@ function Post(props) {
     async function handleGetFollower(username) {
         try {
             const result = await getFollower(username);
-            if (result.success) {
+            if (result) {
                 setIsFollowing(true);
             } else {
                 console.error('Error:', result.error);
@@ -193,14 +193,12 @@ function Post(props) {
         }
     }
 
-    async function showFriendInformation(username) {
-        try {
-            const response = await axios.get(`${hostUrl}/user/${username}/about`);
-            setFriendInfo(response.data);
-        } catch (error) {
-            console.error('Error:', error);
+    async function showFriendInfo(username) {
+        const result = await showFriendInformation(username);
+        if(result) {
+          setFriendInfo(result.data);
         }
-    }
+      }
 
  
 
@@ -215,7 +213,7 @@ function Post(props) {
                             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                                 <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
                                <UserPopover user={props.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
-                               handleGetFollower={handleGetFollower} showFriendInformation={showFriendInformation} classname="community-post-name" />
+                               handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />

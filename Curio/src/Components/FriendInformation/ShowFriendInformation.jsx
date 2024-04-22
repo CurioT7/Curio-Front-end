@@ -46,7 +46,16 @@ function ShowFriendInformation(props) {
         });
     }
 
-
+    const toastsuccess = useToast()
+    function ToastSuccess() {
+        toastsuccess({
+            description: "User Blocked successfully",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
@@ -79,7 +88,7 @@ function ShowFriendInformation(props) {
     async function handleGetFollower(username) {
         try {
             const result = await getFollower(username);
-            if (result.success) {
+            if (result) {
                 setIsFollowing(true);
             } else {
                 console.error('Error:', result.error);
@@ -125,9 +134,6 @@ function ShowFriendInformation(props) {
                 }
                 else if(result === 401){
                     ToastError("You are not authorized to perform this action");
-                }
-                else{
-                    ToastError("Something is wrong, please try again later.");
                 }
             }
         }
@@ -177,13 +183,22 @@ function ShowFriendInformation(props) {
             navigate('/login');
         } else {
             const result = await userBlock(username);
-            if(result.success){
+            if(result === 200){
                 patchBlockUser(username);
                 props.handleBlockPage();
                 ToastSuccess();
             }
-            if (!result.success) {
-                ToastError("You can't block somebody again within 24 hours of blocking them");
+            if (result === 403) {
+                ToastError("You can't block somebody again within 24 hours of unblocking them");
+            }
+            else if(result === 500){
+                ToastError("An unexpected error occurred on the server. Please try again later.");
+            }
+            else if(result === 404){
+                ToastError("User is not found");
+            }
+            else if(result === 401){
+                ToastError("You are not authorized to perform this action");
             }
         }
     }

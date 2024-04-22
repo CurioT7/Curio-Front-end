@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { showFriendInformation } from '../../Components/FriendInformation/ShowFriendInformationEndpoints.js';
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
@@ -17,17 +18,15 @@ function UserPage( props ) {
 
 
   useEffect(() => {
-    showFriendInformation(username);
+    handleFriendInformation(username);
   }, [username]);
 
-  async function showFriendInformation(username) {
-    try {
-        const response = await axios.get(`${hostUrl}/user/${username}/about`);
-        setFriendInfo(response.data);
-    } catch (error) {
-        console.error('Error:', error);
+  async function handleFriendInformation(username) {
+    const result = await showFriendInformation(username);
+    if(result) {
+      setFriendInfo(result.data);
     }
-}
+  }
 
 
   const handleBlockUser = () => {
@@ -59,15 +58,15 @@ function UserPage( props ) {
                 <div className='d-flex justify-content-center'>
                 <img src={Picture} alt='reddit figure' className='block-page-fig'/>
                 </div>
-                <h1 className='header-title'>u/{username} is blocked</h1>
+                <h1 className='header-title'>You've blocked {username} </h1>
                 <p className='paragraph'>
-                  Are u sure you want to continue to their profile?
+                Continue to view their profile or visit your settings to <Link to='/settings/privacy' className='LinkToSettings'>manage who you have blocked.</Link>
                 </p>
                 </div>
                 <div className='button-flex'>
                   <button onClick={handleBlock} className='continue-btn'>Yes, continue</button>
                   <Link to="/home">
-                  <button className='go-back-btn'>No, go back</button>
+                  <button className='go-back-btn' onClick={props.showSidebar}>No, go back</button>
                   </Link>
               </div>
             </div>
