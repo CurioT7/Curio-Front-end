@@ -11,7 +11,6 @@ function Createpostarea({ community }) {
   const [inputTitle, setInputTitle] = useState('');
   const [selectedMethod, setSelectedMethod] = useState("Post");
   const [content, setContent] = useState('');
-  const [content, setContent] = useState('');
   const [dayNumber, setDayNumber] = useState(3);
   const [optionsText, setoptionsText] = useState([]);
   const [imageFormData, setImageFormData] = useState(null);
@@ -31,14 +30,11 @@ function Createpostarea({ community }) {
   const handleTitleInputChange = (event) => {
     setInputTitle(event.target.value);
     adjustTextareaHeight();
-    adjustTextareaHeight();
   };
 
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
@@ -63,9 +59,7 @@ function Createpostarea({ community }) {
     switch (selectedMethod) {
       case "Post":
         return <Post onContentChange={handleContentChange} />;
-        return <Post onContentChange={handleContentChange} />;
       case "Image & Video":
-        return <ImageVideo onImageUpload={handleImageUpload} />;
         return <ImageVideo onImageUpload={handleImageUpload} />;
       case "Link":
         return <Link onLinkChange={handleLinkChange} />;

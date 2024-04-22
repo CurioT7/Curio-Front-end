@@ -1,5 +1,4 @@
 import React, { useState, useEffect,useRef } from 'react';
-import React, { useState, useEffect,useRef } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
 import openchat from "../../assets/Chat_navbar.png";
@@ -20,17 +19,7 @@ import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
 import { BsArrowUpRightCircle } from "react-icons/bs";
-import { BsArrowUpRightCircle } from "react-icons/bs";
 import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-} from '@chakra-ui/react'
-import { getTrending } from './SearchingEndPoints';
-
-import Trending from './Trending';
 import {
   Popover,
   PopoverTrigger,
@@ -44,7 +33,6 @@ import Trending from './Trending';
 
 function NavbarComponent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [trending, setTrending] = React.useState([]);
   const [trending, setTrending] = React.useState([]);
   const navigate = useNavigate();
   const checkAuthentication = () => {
@@ -68,14 +56,8 @@ function NavbarComponent() {
       popoverRef.current.style.width = `${inputRef.current.offsetWidth}px`;
     }
   }, []);
-  const inputRef = useRef();
-  const popoverRef = useRef();
-  
-  useEffect(() => {
-    if (inputRef.current && popoverRef.current) {
-      popoverRef.current.style.width = `${inputRef.current.offsetWidth}px`;
-    }
-  }, []);
+
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -142,7 +124,7 @@ function NavbarComponent() {
               <PopoverTrigger>
                 <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
-              <PopoverContent borderBottomRadius='5px' borderRadius='20px' ref={popoverRef}>
+              <PopoverContent borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
                   <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
                   { trending.map((trend) => (
