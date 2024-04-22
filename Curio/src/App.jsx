@@ -26,9 +26,10 @@ import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
 import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 
+import CommPopup from './Components/CommunityPopup/CommunityPopup.jsx';
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
-import Notifications from "./Components/Notifications/Notifications.jsx";
-import Notification_Messages from "./Components/Notification_Messages/Notification_Messages.jsx";
+import Notifications from "./Pages/Notifications/Notifications.jsx";
+
 
 
 function App() {
@@ -82,9 +83,8 @@ function App() {
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
-          <Route path="/notifications" element={<Notifications/>}/>
-        <Route path="/messages" element={<Notification_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-        <Route path='/polls' element={<ShowPoll/>} />
+          <Route path="/notifications" element={<Notifications/>} />
+           <Route path='/polls' element={<ShowPoll/>} />
         </Routes>
       </ChakraProvider>
     </div>

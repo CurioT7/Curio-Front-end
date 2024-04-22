@@ -53,7 +53,7 @@ const navigate = useNavigate();
                               </span>
                               <div className="notifications-item-icon">
                               <i className="fa-solid fa-message"/>
-                          </div>
+                                </div>
                           </div>
                           
                       </div>
@@ -69,19 +69,19 @@ const navigate = useNavigate();
                           </div>
                       </div>
                       <div className="notifications-item-options">
-                      <Popover placement='bottom-start'>
-                        <PopoverTrigger>
-                            <Button 
-                            variant='ghost'
-                            colorScheme='gray'><SlOptions /></Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <PopoverArrow />
-                            <PopoverBody>Hide this notification</PopoverBody>
-                            <PopoverBody>Disable updates from this community</PopoverBody>
-                            <PopoverBody>Turn off this notification type</PopoverBody>
-                        </PopoverContent>
-                    </Popover>
+                        <Popover placement='bottom-start'>
+                            <PopoverTrigger>
+                                <Button 
+                                variant='ghost'
+                                colorScheme='gray'><SlOptions /></Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverBody>Hide this notification</PopoverBody>
+                                <PopoverBody>Disable updates from this community</PopoverBody>
+                                <PopoverBody>Turn off this notification type</PopoverBody>
+                            </PopoverContent>
+                        </Popover>
                       </div>
                   </div>
               </div>
@@ -215,11 +215,11 @@ const navigate = useNavigate();
 
         </div>
         <div className="notifications-see-all">
-            <a href="" type="button" className="see-all-button">
+            <Link to={"/notifications"} type="button" className="see-all-button">
                 <span className="see-all-text">
                     <span className="see-all-text-inner" >See All</span>
                 </span>
-            </a>
+            </Link>
         </div>
     </div>
   );

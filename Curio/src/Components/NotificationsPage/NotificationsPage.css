@@ -1,0 +1,64 @@
+.notifications-page{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.notifications-header-page{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: grid;
+    grid-template-columns: 0.7fr 2rem;
+}
+.notifications-date{
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+.notifications-time{
+    color: #576f76;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.sperator-notifications{
+    height: 1rem;
+    border-width: .0625rem;
+    border-style: solid;
+    color: #0000001a;
+}
+.notification-content{
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: grid;
+    cursor: pointer;
+    gap: .5rem;
+    grid-template-columns: 2rem 0.682fr 2rem;
+}
+.notification-details{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+@media (max-width: 560px) {
+    .notification-item-icon-page{
+        right: -.25rem;
+        bottom: 17px;
+    }
+}
+
+@media (max-width: 503px) {
+    .notification-item-icon-page{
+        right: -.25rem;
+        bottom: 38px;
+    }
+}
+
+@media (max-width: 413px) {
+    .notification-item-icon-page{
+        right: -.25rem;
+        bottom: 55px;
+    }
+}
