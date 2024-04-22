@@ -4,7 +4,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { BsRocket } from "react-icons/bs";
 import { TbArrowBigUpLines } from "react-icons/tb";
 import { LuBadge } from "react-icons/lu";
-function SortingComments(){
+function SortingComments(props){
     function Sort() {
         document.getElementById("sortComments").classList.toggle("show");
        
@@ -24,7 +24,9 @@ function SortingComments(){
 
     const [sortValue, setSortValue] = React.useState('New');
     function ChangeSortValue(value){
-        setSortValue(value);
+        props.onChangeSort(value)
+        let capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
+        setSortValue(capitalizedValue);
     }
 
     return(
@@ -34,9 +36,9 @@ function SortingComments(){
                 <button onClick={Sort} className="sortbtn"> {sortValue} <IoIosArrowDown className="arrow-icon"/></button>
                 <div id='sortComments' className='sort-content'>
                     <h6 className='sort-title'>Sort By</h6>
-                    <p className='sort-item' onClick={()=>ChangeSortValue('Best')}><div><BsRocket className='item-icon'/> <span>Best</span></div></p>
-                    <p className='sort-item' onClick={()=>ChangeSortValue('Top')}><div><TbArrowBigUpLines className='item-icon'/> <span>Top</span></div></p>
-                    <p className='sort-item' onClick={()=>ChangeSortValue('New')}><div><LuBadge className='item-icon'/><span>New</span></div></p>
+                    <p className='sort-item' onClick={()=>ChangeSortValue('best')}><div><BsRocket className='item-icon'/> <span>Best</span></div></p>
+                    <p className='sort-item' onClick={()=>ChangeSortValue('top')}><div><TbArrowBigUpLines className='item-icon'/> <span>Top</span></div></p>
+                    <p className='sort-item' onClick={()=>ChangeSortValue('new')}><div><LuBadge className='item-icon'/><span>New</span></div></p>
                 </div>
             </div>
         </div>

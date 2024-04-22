@@ -1,17 +1,22 @@
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import { Flex,Avatar,Box,Heading,IconButton,Text,Image } from '@chakra-ui/react'
 import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import Popover from 'react-bootstrap/Popover';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import picture from "../../styles/icons/commPic.png";
+import Minus from "../../styles/icons/Minus";
+import PlusIcon from "../../styles/icons/PlusIcon";
+import Chat from "../../styles/icons/Chat";
+import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import UserPopover from '../UserPopover.css/UserPopover.jsx';
+
+
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
-import {
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverBody,
-  } from '@chakra-ui/react'
+
 import { FaRegCommentAlt } from "react-icons/fa";
-import { PiLockSimple } from "react-icons/pi";
+import PostLock from './PostLock.jsx';
 import { FcLock } from "react-icons/fc";
 import { LuShare } from "react-icons/lu";
 import { SlOptions } from "react-icons/sl";
@@ -22,16 +27,22 @@ import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
-import { BsShield } from "react-icons/bs";
-import { PiLockSimpleFill } from "react-icons/pi";
-import { SendLockedPost,SendUnlockedPost } from './PostEndPoints.js';
+
+import { FetchObjectInfo } from './PostEndPoints.js';
 import './Post.css'
 import PostControl from './PostControl.jsx';
 import axios from 'axios';
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
+const token = localStorage.getItem('token');
+
+
 
 function Post(props) {
-    const [subreddit, setSubreddit] = useState([]);
+    const [subredditName, setSubredditName] = useState("");
     const [isHidden, setIsHidden] = useState(false);
+    const [showPopover, setShowPopover] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [friendInfo, setFriendInfo] = useState({});
     const toast = useToast();
     const postId = props._id;
     const handleHidePost = () => {
@@ -48,14 +59,7 @@ function Post(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
-    const Toast = (message,statues) => {
-        toast({
-            description: message,
-            status: statues,
-            duration: 3000,
-            isClosable: true,
-        });
-    }
+    
     const makePostUpvoted = () => {
         if (upvoted) {
             setUpvoted(false);
@@ -72,32 +76,10 @@ function Post(props) {
             setUpvoted(false);
         }
     }
-    const handleLockComments = async () => {
-       
-        const response = await SendLockedPost(props.id);
-        if(response.success){
-            setIsLocked(true);
-            console.log("Post locked successfully");
-            Toast("Post locked successfully","success");
-        }
-        else{
-            Toast("Something went wrong, please try again later.","error");
-        }
-
+    
+    const handleIsLocked = (value) => {
+        setIsLocked(value);
     }
-    const handleUnlockComments = async () => {
-        
-        const response = await SendUnlockedPost(props.id);
-        if(response.success){
-            console.log("Post unlocked successfully");
-            setIsLocked(false);
-            Toast("Post unlocked successfully","success");
-        }
-        else{
-            Toast("Something went wrong, please try again later.","error");
-        }
-    }
-
     const handleUnhide = async () => {
         try{
             var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -140,46 +122,100 @@ function Post(props) {
       }
     }
   }
-
-    const handleNavigationToDetails = () => {
-        const post = {
-            _id: props._id,
-            user: props.user,
-            title: props.title,
-            subreddit: props.linkedSubreddit,
-            content: props.content,
-            image: props.image,
-            upvotes: props.upvotes,
-            downvotes: props.downvotes,
-            comments: props.comments,
-            savedPosts: props.savedPosts,
-            savedComments: props.savedComments,
-            hiddenPosts: props.hiddenPosts,
-            dateViewed: new Date().toISOString()
-        }
-        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
-        console.log(post);
-
-
-        if (recentPosts && Array.isArray(recentPosts)) {
-
-            const postExists = recentPosts.find((recentPost) => recentPost._id === post._id);
-            if (!postExists) {
-
-                recentPosts.unshift(post);
-                recentPosts.slice(0,10);
-                localStorage.setItem('recentPosts', JSON.stringify(recentPosts));
+    useEffect(() => {
+        const fetchPostStatus = async () => {
+            const postInfo = await FetchObjectInfo(props._id,"post");
+            if(postInfo){
+                setIsLocked(postInfo.item.isLocked);  
+            }
+            const SubredditInfo = await FetchObjectInfo(props.linkedSubreddit,"subreddit");
+            if(SubredditInfo){
+                
+                setSubredditName(SubredditInfo.item.name);
             }
         }
-        else {
-            localStorage.setItem('recentPosts', JSON.stringify([post]));
-        }
+        fetchPostStatus();
+    })
 
-        if (recentPosts && recentPosts.length === 0) {
-            localStorage.setItem('recentPosts', JSON.stringify([post]));
+    const handleNavigationToDetails = async () => {
+        try{
+            const post = {
+                _id: props._id,
+                user: props.user,
+                title: props.title,
+                subreddit: subredditName,
+                content: props.content,
+                image: props.image,
+                upvotes: props.upvotes,
+                downvotes: props.downvotes,
+                comments: props.comments,
+                savedPosts: props.savedPosts,
+                savedComments: props.savedComments,
+                hiddenPosts: props.hiddenPosts,
+                isMod: props.isMod,
+                isLocked: isLocked,
+                dateViewed: new Date().toISOString()
+            }
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/history`, {
+                postID: props._id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                window.dispatchEvent(new Event('newRecentPost'));
+                navigate(`/post/post-details/${props._id}`, { state: { post } });
+            }
         }
-        window.dispatchEvent(new Event('newRecentPost'));
-        navigate(`/post/post-details/${props._id}`, { state: { post } });
+        catch(err){
+            console.log(err);
+            toast({
+                description: "Server Error Occured.",               
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
+        }
+    }
+
+
+    function handleFollowToggle(username) {
+        if (!token) {
+         navigate('/login');
+        }
+        else{
+        if (isFollowing) {
+            userUnfollow(username);
+        } else {
+            userFollow(username);
+        }
+        setIsFollowing(!isFollowing);
+    }
+    }
+
+    async function handleGetFollower(username) {
+        try {
+            const result = await getFollower(username);
+            if (result.success) {
+                setIsFollowing(true);
+            } else {
+                console.error('Error:', result.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function showFriendInformation(username) {
+        try {
+            const response = await axios.get(`${hostUrl}/user/${username}/about`);
+            setFriendInfo(response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
  
@@ -194,11 +230,8 @@ function Post(props) {
                             <Flex spacing='4'>
                             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                                 <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-
-                                <Box>
-                                <a href={`/user/${props.user}`} className='community-post-name'>{props.user}</a>
-                                
-                                </Box>
+                               <UserPopover user={props.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
+                               handleGetFollower={handleGetFollower} showFriendInformation={showFriendInformation} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
@@ -206,8 +239,7 @@ function Post(props) {
                         </CardHeader>
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
-                            {props.content && <Text className='text-body'>
-                            {props.content}
+                            {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
                             </Text>}
                             {props.image && <Image
                                 objectFit='cover'
@@ -274,22 +306,7 @@ function Post(props) {
                             </Box>
 
                             {props.isMod&& <Box display='flex'  justifyContent='end'>
-                                <Popover>
-                                    <PopoverTrigger>
-                                        <Button
-                                            variant='ghost'
-                                            colorScheme='gray'
-                                            className='moderator-icon'
-                                            
-                                        ><BsShield /></Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent margin={0} padding={0}>
-                                        <PopoverBody margin={0} padding={0}>
-                                        {isLocked?(<Text onClick={handleUnlockComments} margin={0} padding={3} className='moderator-content'><div><PiLockSimpleFill className='moderator-content-icon' /><span>Unlock Comments</span></div></Text>) :(<Text onClick={handleLockComments} margin={0} padding={3} className='moderator-content'> <div> <PiLockSimple className='moderator-content-icon'  /> <span>Lock comments</span></div></Text>)}
-                                            
-                                        </PopoverBody>
-                                    </PopoverContent>
-                                </Popover>
+                               <PostLock isLocked={isLocked} id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             
                         </CardFooter>

@@ -38,7 +38,7 @@ function Createpost(props) {
             </div>
           </div>
           <div className='right-container-post'>
-            <Posting_Cards/>
+            <Posting_Cards community={selectedCommunity ? selectedCommunity.replace(/^r\//, '').replace(/^u\//, '') : null}/>
           </div>
       </div>
     </div>

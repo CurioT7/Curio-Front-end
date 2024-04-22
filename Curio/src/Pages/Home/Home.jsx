@@ -5,7 +5,8 @@ import RecentPosts from '../../Components/RecentPosts/RecentPosts'
 import Post from '../../Components/Post/Post'
 import BackToTheTopButton from "./BackToTopButton.jsx";
 import Listing from '../../Components/CommunitiesListing/Listing.jsx'
-import { fetchPostsFromBackend,fetchHotFromBackend,fetchNewFromBackend,fetchTopFromBackend,fetchRandomFromBackend } from './HomeEndPoints.js'
+import Poll from '../../Components/Poll/ShowPoll.jsx'
+import { fetchPostsFromBackend,SortHomePosts } from './HomeEndPoints.js'
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
 function Home() {
@@ -106,10 +107,10 @@ function Home() {
     },
     isSelected: false
   })
-React.useEffect(() => {
+useEffect(() => {
   async function fetchAndSetData() {
       const data = await fetchPostsFromBackend();
-      console.log(data);
+      
       if (data) {
           setPosts(data.SortedPosts || data);
           setRandomPost({ ...randomPost, isSelected: false });
@@ -123,40 +124,75 @@ React.useEffect(() => {
   }
 }, []);
 
-console.log(posts);
+
 
 
 async function changeSortType(value,time) {
   
-  console.log(`value :${value}`);
+  
   async function SetData() {
       if (value === 'Hot') {
-          const data = await fetchHotFromBackend();
+          const data = await SortHomePosts("hot");
           if (data) {
               setPosts(data.SortedPosts || data);
               setRandomPost({ ...randomPost, isSelected: false });
+          } else{
+            setPosts([]);
+            toast({
+              description: "Server Error Occured.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            })
           }
       }
       else if (value === 'New') {
-          const data = await fetchNewFromBackend();
+          const data = await SortHomePosts("new");
           if (data) {
               setPosts(data.SortedPosts || data);
               setRandomPost({ ...randomPost, isSelected: false });
+          }
+          else{
+            setPosts([]);
+            toast({
+              description: "Server Error Occured.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            })
           }
       }
       else if (value === 'Top') {
-          const data = await fetchTopFromBackend();
+          const data = await SortHomePosts("top");
           if (data) {
               setPosts(data.SortedPosts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           }
+          else{
+            setPosts([]);
+            toast({
+              description: "Server Error Occured.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            })
+          }
       }
-      else if (value === 'Random') {
-          // const data = await fetchRandomFromBackend();
-          // if (data) {
-          //     setRandomPost({ post: data, isSelected: true });
-          //     console.log(`this is random post: ${randomPost.post}`);
-          // }
+      else if (value === 'Best') {
+          const data = await fetchPostsFromBackend();
+          if (data) {
+              setPosts(data.SortedPosts || data);
+              setRandomPost({ ...randomPost, isSelected: false });
+          }
+          else{
+            setPosts([]);
+            toast({
+              description: "Server Error Occured.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            })
+          }
       }
   }
   SetData();
@@ -165,7 +201,7 @@ async function changeSortType(value,time) {
     <>
     
       {/* Insert posts here (above recent posts) */}
-      <div className='col-md-6 d-flex p-3 posts-container flex-column'>
+      <div className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
         <div className='my-1'>
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
@@ -181,7 +217,7 @@ async function changeSortType(value,time) {
             downvotes={post.downvotes}
             comments={post.comments}
             content={post.content}
-            subReddit={post.linkedSubreddit}
+            linkedSubreddit={post.linkedSubreddit}
             savedPosts={savedPosts}
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
@@ -199,6 +235,7 @@ async function changeSortType(value,time) {
           downvotes={randomPost.post.downvotes}
           comments={randomPost.post.comments}
           content={randomPost.post.content}
+          linkedSubreddit={randomPost.linkedSubreddit}
           savedPosts={savedPosts}
           savedComments={savedComments}
         />
