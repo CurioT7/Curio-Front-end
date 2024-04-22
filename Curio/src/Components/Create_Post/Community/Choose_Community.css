@@ -118,3 +118,7 @@
     flex: none;
     margin-right: 8px;
 }
+
+.arrow-clicked {
+    transform: rotate(180deg); /* Rotate the arrow icon when clicked */
+}

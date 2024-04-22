@@ -16,7 +16,7 @@ function Choose_Community({ onSelect }) {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
     const [chosenItem, setChosenItem] = useState(null); 
-    // const [membercount, setMemberCount] = useState(0);
+    const [arrowClicked, setArrowClicked] = useState(false);
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
     const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
@@ -34,6 +34,9 @@ function Choose_Community({ onSelect }) {
         } else {
             setInputFocused(false);
             setDropdownVisible(false);
+        }
+        if (event.target.classList.contains('community-arrow')) {
+            setDropdownVisible(true); // Ensure dropdown opens when clicking the arrow
         }
     };
 
@@ -54,10 +57,7 @@ function Choose_Community({ onSelect }) {
         }else{
             onSelect(`r${null}`)
         }
-    };
-    
-    
-    
+    };    
 
     useEffect(() => {
         document.addEventListener('click', handleClick);
@@ -108,6 +108,15 @@ function Choose_Community({ onSelect }) {
     
         fetchData();
     }, []);
+
+    const handleArrowClick = () => {
+        if (dropdownVisible) {
+            setDropdownVisible(false); // Close the dropdown if it's already open
+        } else {
+            setDropdownVisible(true); // Open the dropdown if it's closed
+        }
+    };
+    
     
     return (
         <>
@@ -196,8 +205,8 @@ function Choose_Community({ onSelect }) {
                                 </div>
                             )}
                         </div>
-                        <div className="icon-container">
-                            <i className="community-arrow fa-solid fa-angle-down"></i>
+                        <div className="icon-container" onClick={handleArrowClick}>
+                            <i className={`community-arrow fa-solid fa-angle-down ${dropdownVisible ? 'arrow-clicked' : ''}`}></i>
                         </div>
                     </div>
                 </div>
