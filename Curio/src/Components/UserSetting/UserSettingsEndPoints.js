@@ -1,11 +1,11 @@
 import axios from "axios";
-
+const serverHost = import.meta.env.VITE_SERVER_HOST;
 
 export async function fetchUserDataFromBackend() {
     try {
         const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
         return response.data;
@@ -25,7 +25,7 @@ export async function sendDataToBackend(data) {
     try {
         const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
         return response;
