@@ -95,7 +95,6 @@ function Mute() {
         postMuteCommunity(mutedCommunityInput);
         patchMuteCommunity(mutedCommunityInput);
         const newUser = { username: mutedCommunityInput};
-        // Add the community to the state
         setMutedCommunities(prevMutedCommunities => [...prevMutedCommunities, newUser]);
         // Call postMuteCommunity to send the request to mute the community
         setMutedCommunityInput(''); // Reset the input field

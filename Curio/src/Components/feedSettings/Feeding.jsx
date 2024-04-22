@@ -1,20 +1,20 @@
+import React, { useState, useEffect } from "react";
 import './Feeding.css'
 import { Switch, Flex, Spacer, Box, useToast } from '@chakra-ui/react'
 import Titles from './childs/Titles';
-import React from 'react';
 import DropDown from './childs/DropDown';
 import { sendUserDataToBackend,fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints';
 
 function Feeding () {
     const toast = useToast()
-    const [adultContent, setIsMature] = React.useState(false);
-    const [autoplayMedia, setIsAuto] = React.useState(false)
-    const [communityThemes, setCommunityThemes] =React.useState(false)
-    const [communityContentSort, setCommunityContentSort] =React.useState('Hot'); 
-    const [rememberContentSort, setCommRemember] = React.useState(false)
-    const [globalContentView,setGlobalContentView] = React.useState('card')
-    const [rememberContentView,setRememberContentView] = React.useState(false)
-    const [openPostsInNewTab, setOpenPostsInNewTab] = React.useState(false)
+    const [adultContent, setIsMature] = useState(false);
+    const [autoplayMedia, setIsAuto] = useState(false)
+    const [communityThemes, setCommunityThemes] = useState(false)
+    const [communityContentSort, setCommunityContentSort] = useState('Hot'); 
+    const [rememberContentSort, setCommRemember] = useState(false)
+    const [globalContentView,setGlobalContentView] = useState('card')
+    const [rememberContentView,setRememberContentView] = useState(false)
+    const [openPostsInNewTab, setOpenPostsInNewTab] = useState(false)
     
     function Toast(){
         toast({
@@ -25,6 +25,7 @@ function Feeding () {
             isClosable: true,
           })
     }
+    
     function handleIsMature (){
         setIsMature(!adultContent)
         sendUserDataToBackend({adultContent: !adultContent})
@@ -69,12 +70,9 @@ function Feeding () {
         setOpenPostsInNewTab(!openPostsInNewTab)
         sendUserDataToBackend({openPostsInNewTab: !openPostsInNewTab})
         Toast()
-    }
-    //send and get data from backend//
-    
-
+    }    
    
-    React.useEffect(() => {
+    useEffect(() => {
         async function fetchAndSetData() {
             const data = await fetchUserDataFromBackend();
             if (data) {
