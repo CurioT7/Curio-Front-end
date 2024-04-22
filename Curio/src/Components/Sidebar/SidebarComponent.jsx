@@ -50,7 +50,7 @@ function SidebarComponent(props) {
   const getJoinedCommunities = async () => {
       try{
         const hostUrl = import.meta.env.VITE_SERVER_HOST;
-        const response = await axios.get(`${hostUrl}/user/${localStorage.getItem("username")}/communities`);
+        const response = await axios.get(`${hostUrl}/api/user/${localStorage.getItem("username")}/communities`);
         setJoinedCommunities(response.data.communities);
       }
       catch(error){
@@ -193,7 +193,7 @@ function SidebarComponent(props) {
           <div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
             <div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}></div>
           </div>
-          <Link to="/communities/best" style={{ textDecoration: 'none' }}>
+          <Link to="/communities/best/1" style={{ textDecoration: 'none' }}>
           <MenuItem icon={<Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities</MenuItem>
           </Link>
           <MenuItem href="https://www.reddit.com/posts/2023/global/" icon={<BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Best of Reddit</MenuItem>
