@@ -1,6 +1,7 @@
 import { Card, CardBody} from '@chakra-ui/react'
 import React from 'react';
 import './searchList.css';
+import './Trending.css';
 import { Avatar } from '@chakra-ui/react';
 import cover from "../../assets/cover.png";
 
