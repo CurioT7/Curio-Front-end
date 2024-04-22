@@ -9,33 +9,13 @@ export async function fetchPostsFromBackend() {
         console.error('Error fetching data from backend:', error);
     }
 }
-export async function fetchHotFromBackend() {
+export async function SortHomePosts(type) {
     try {
-        const request = await axios.get(`${serverHost}/api/best`);
-        return request.data;
-    } catch (error) {
-        console.error('Error fetching data from backend:', error);
-    }
-}
-export async function fetchNewFromBackend() {
-    try {
-        const request = await axios.get(`${serverHost}/api/best`);
-        return request.data;
-    } catch (error) {
-        console.error('Error fetching data from backend:', error);
-    }
-}
-export async function fetchTopFromBackend() {
-    try {
-        const request = await axios.get(`${serverHost}/api/best`);
-        return request.data;
-    } catch (error) {
-        console.error('Error fetching data from backend:', error);
-    }
-}
-export async function fetchRandomFromBackend() {
-    try {
-        const request = await axios.get(`${serverHost}/api/best`);
+        const request = await axios.get(`${serverHost}/api/user/${type}`,{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         return request.data;
     } catch (error) {
         console.error('Error fetching data from backend:', error);
