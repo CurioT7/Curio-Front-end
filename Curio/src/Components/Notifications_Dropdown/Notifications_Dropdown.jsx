@@ -53,7 +53,7 @@ const navigate = useNavigate();
                               </span>
                               <div className="notifications-item-icon">
                               <i className="fa-solid fa-message"/>
-                                </div>
+                            </div>
                           </div>
                           
                       </div>
@@ -69,7 +69,7 @@ const navigate = useNavigate();
                           </div>
                       </div>
                       <div className="notifications-item-options">
-                        <Popover placement='bottom-start'>
+                        <Popover placement='bottom-end'>
                             <PopoverTrigger>
                                 <Button 
                                 variant='ghost'

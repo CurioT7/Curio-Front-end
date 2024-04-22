@@ -62,3 +62,17 @@
         bottom: 55px;
     }
 }
+
+@media (max-width: 383px) {
+    .notification-item-icon-page{
+        right: -.25rem;
+        bottom: 76px;
+    }
+}
+
+@media (max-width: 356px) {
+    .notification-item-icon-page{
+        right: -.25rem;
+        bottom: 97px;
+    }
+}

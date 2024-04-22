@@ -27,8 +27,8 @@ function NotificationsPage() {
                 top:'2px'
             }}>
                 <div className="notifications-settings-link">
-                    <Tooltip label='Notifications Settings'>
-                        <Link to={'/settings/notifications'} target="_blank" className="settings-link">
+                    <Tooltip label='Notifications Settings' placement='left'>
+                        <Link to={'/settings/notifications'}target="_blank" className="settings-link">
                             <i className="fa-solid fa-gear"/>
                         </Link>
                     </Tooltip>
@@ -60,7 +60,7 @@ function NotificationsPage() {
                 </div>
             </div>
             <div className='notifications-item-options'> 
-                <Popover placement='bottom-start'>
+                <Popover placement='bottom-end'>
                     <PopoverTrigger>
                         <Button 
                         variant='ghost'
