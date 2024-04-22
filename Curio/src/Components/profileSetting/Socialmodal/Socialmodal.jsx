@@ -28,12 +28,32 @@ function Socialmodal(props){
     };
     
     const handleRemoveSocialLink = (index) => {
-        const linkToRemove = selectedSocialLinks[index];
-        window.open(linkToRemove.url, "_blank"); 
         const updatedLinks = [...selectedSocialLinks];
         updatedLinks.splice(index, 1);
         setSelectedSocialLinks(updatedLinks);
+    
+        // Prepare the updated socialLinks array with the removed link
+        const updatedSocialLinks = selectedSocialLinks.filter((_, i) => i !== index);
+    
+        // Send a PATCH request to update the user's preferences
+        axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
+            socialLinks: updatedSocialLinks.length > 0 ? updatedSocialLinks : null
+        },{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}` 
+            }
+        }).then(response => {
+            // Handle successful patching if needed
+        }).catch(error => {
+            // Handle error if needed
+        });
     };
+    
+
+    const RedirectToSocialLink = (index) =>{
+        const linkToRedirect = selectedSocialLinks[index];
+        window.open(linkToRedirect.url, "_blank"); 
+    }
 
     const patchSocialLink = (iconClass, name, url) => {
         let platform;
@@ -131,7 +151,7 @@ function Socialmodal(props){
     return(
         <>
         {Array.isArray(selectedSocialLinks) && selectedSocialLinks.slice(0, 5).map((link, index) => (
-            <div key={index} className="selected-social-link">
+            <div key={index} className="selected-social-link" onClick={() => RedirectToSocialLink(index)}>
                 <i className={link.platform}/> {link.displayName} 
                 <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
             </div>

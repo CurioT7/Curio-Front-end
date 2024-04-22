@@ -77,7 +77,7 @@ function Choose_Community({ onSelect }) {
                 }
             );
             const communityDataResponse = await axios.get(
-                `${serverHost}/user/${userDataResponse.data.username}/communities`
+                `${serverHost}/api/user/${userDataResponse.data.username}/communities`
             );
             return { userData: userDataResponse.data, communityData: communityDataResponse.data };
         } catch (error) {

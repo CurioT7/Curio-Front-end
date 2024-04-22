@@ -20,10 +20,11 @@ function ProfileImageUpload() {
           'authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      setProfileImage(response.data.profilePicture); 
-      console.log("gygggggggggggggggggggggggggggggggggggggggggggggggggg")
-      console.log(profileImage)
       setBannerImage(response.data.banner); 
+      localStorage.setItem('bannerImage', response.data.banner);
+      setProfileImage(response.data.profilePicture);
+      localStorage.setItem('profileImage', response.data.profilePicture);
+      
     } catch (error) {
       if (error.response) {
         // Handle error response here
@@ -38,6 +39,11 @@ function ProfileImageUpload() {
       }
     }
   };
+
+  useEffect(() => {
+    // console.log("Profile Image:", profileImage);
+  }, [profileImage,bannerImage]);
+  
 
   const handleProfileImageChange = (event) => {
     const file = event.target.files[0];
@@ -168,7 +174,7 @@ function ProfileImageUpload() {
             <Box className="column-banner-image" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, setBannerImage)}>
               <Box className="banner-upload  ms-3 me-0 card text-center" style={{ backgroundImage: `url(${bannerImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <label htmlFor="banner-upload">
-                  <Box className='upload-profile'>
+                  <Box className='banner-upload-container'>
                     {bannerImage  ? <i className="fa fa-camera upload-image-icon-appear" aria-hidden="true"/> : <i className="fa fa-plus upload-image-icon" aria-hidden="true"/>}
                   </Box>
                   <Box className='image-text'>
