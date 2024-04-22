@@ -13,10 +13,11 @@ import {
   } from '@chakra-ui/react'
 
 import './Post.css'
+import { set } from "mongoose";
 
 function PostLock(props){
 
-    const [isLocked, setIsLocked] = useState(false);
+    const [isLocked, setIsLocked] =  useState(false);
     const toast = useToast();
     const Toast = (message,statues) => {
         toast({
@@ -27,16 +28,10 @@ function PostLock(props){
         });
     }
 
-    useEffect(() => {
-        const fetchPostLockStatus = async () => {
-            const response = await FetchPostLockStatus(props.id);
-            if(response){
-                setIsLocked(response.item.isLocked);
-                props.handleIsLocked(response.item.isLocked)
-            }
-        }
-        fetchPostLockStatus();
-    },[])
+    setTimeout(async () => {
+        setIsLocked(props.isLocked);
+    },0)
+    
 
     const handleLockComments = async () => {
        

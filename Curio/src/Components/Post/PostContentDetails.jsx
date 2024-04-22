@@ -46,6 +46,9 @@ function PostContentDetails(post) {
     const handleIsLocked = (value) => {
         setIsLocked(value);
     }
+    setTimeout(async () => {
+        setIsLocked(post.isLocked);
+    },0)
     useEffect(() => {
         const getSaved = async () => {
             try{
@@ -196,10 +199,7 @@ function PostContentDetails(post) {
             else {
                 Toast();
             }
-            const subredditName = await FetchSubredditName(post.subreddit);
-            if (subredditName) {
-                console.log(subredditName);
-            }
+            
         }
         window.addEventListener('deleteComment', fetchAndSetData);
     
@@ -210,13 +210,17 @@ function PostContentDetails(post) {
     }, []);
 
     const handleChangedSort = async (value) => {
-        const data = await GetSortedComments(post._id, value,subreddit);
-        if (data) {
-            setComments(data.comments);
-        }
-        else {
-            Toast();
-        }
+        setTimeout( async () => {
+            
+            const data = await GetSortedComments(post._id, value,post.subreddit);
+            if (data) {
+                setComments(data.comments);
+            }
+            else {
+                Toast();
+            }
+        },0)
+       
     }
 
     function handleFollowToggle(username) {
@@ -299,8 +303,7 @@ function PostContentDetails(post) {
                                         </MenuButton>
                                         <MenuList>
                                         <MenuItem onClick={async () => {
-                                            console.log('MenuItem clicked');
-                                                console.log('postId:', postId);
+                                            
                                                 await navigator.clipboard.writeText(`http://localhost:5173/post/post-details/${postId}`);
                                                 alert('Link copied to clipboard');
                 
@@ -316,7 +319,7 @@ function PostContentDetails(post) {
                         </Box>
                         <Box>
                             {post.isMod&& 
-                            <PostLock id={postId} onChangeLock={handleIsLocked} />
+                            <PostLock id={postId} isLocked={isLocked} onChangeLock={handleIsLocked} />
                             }
                         </Box>
                     </Box>
@@ -328,7 +331,7 @@ function PostContentDetails(post) {
                         <button onClick={handleUnhide} className='undo-button'>Undo</button>
                     </div>
                 }
-                <CommentInputForm />
+                <CommentInputForm type={"createComment"} ID={postId} />
                 <SortingComments onChangeSort={handleChangedSort} />
             {comments.map((comment, index) => (
                 <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />

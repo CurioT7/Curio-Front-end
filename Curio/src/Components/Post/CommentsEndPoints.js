@@ -35,3 +35,20 @@ export async function GetSortedComments(postID,sortType,subreddit) {
         }
     }
 }
+
+export async function CreateComment(postID,commentText) {
+    try {
+        const response = await axios.post(`${serverHost}/api/comments/`, {
+            content: commentText,
+            postid: postID
+        },{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data from backend:', error);
+        return false;
+    }
+}

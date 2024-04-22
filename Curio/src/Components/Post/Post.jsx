@@ -28,7 +28,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 
-import { FetchPostLockStatus } from './PostEndPoints.js';
+import { FetchObjectInfo } from './PostEndPoints.js';
 import './Post.css'
 import PostControl from './PostControl.jsx';
 import axios from 'axios';
@@ -38,7 +38,7 @@ const token = localStorage.getItem('token');
 
 
 function Post(props) {
-    const [subreddit, setSubreddit] = useState([]);
+    const [subredditName, setSubredditName] = useState("");
     const [isHidden, setIsHidden] = useState(false);
     const [showPopover, setShowPopover] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -123,6 +123,20 @@ function Post(props) {
       }
     }
   }
+    useEffect(() => {
+        const fetchPostStatus = async () => {
+            const postInfo = await FetchObjectInfo(props._id,"post");
+            if(postInfo){
+                setIsLocked(postInfo.item.isLocked);  
+            }
+            const SubredditInfo = await FetchObjectInfo(props.linkedSubreddit,"subreddit");
+            if(SubredditInfo){
+                
+                setSubredditName(SubredditInfo.item.name);
+            }
+        }
+        fetchPostStatus();
+    })
 
     const handleNavigationToDetails = async () => {
         try{
@@ -130,7 +144,7 @@ function Post(props) {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: props.linkedSubreddit,
+                subreddit: subredditName,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
@@ -140,6 +154,7 @@ function Post(props) {
                 savedComments: props.savedComments,
                 hiddenPosts: props.hiddenPosts,
                 isMod: props.isMod,
+                isLocked: isLocked,
                 dateViewed: new Date().toISOString()
             }
             const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -223,8 +238,7 @@ function Post(props) {
                         </CardHeader>
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
-                            {props.content && <Text className='text-body'>
-                            {props.content}
+                            {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
                             </Text>}
                             {props.image && <Image
                                 objectFit='cover'
@@ -291,7 +305,7 @@ function Post(props) {
                             </Box>
 
                             {props.isMod&& <Box display='flex'  justifyContent='end'>
-                               <PostLock id={props._id} onChangeLock={handleIsLocked} />
+                               <PostLock isLocked={isLocked} id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             
                         </CardFooter>
