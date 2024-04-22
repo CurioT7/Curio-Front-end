@@ -74,3 +74,25 @@
         flex-wrap: wrap;
     }
 }
+
+@media screen and (max-width: 500px) {
+    .row-images { 
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .column-banner-image{
+        height: 150px;
+    }
+
+    .profile-banner-images-section{
+        margin-bottom: 6em;
+    }
+
+    .upload-profile-image,
+    .banner-upload{
+        height: 90px;
+        
+    }
+}
