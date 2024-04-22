@@ -19,7 +19,7 @@ function handleRmoveUsers(){
 }
     return(
         <Box className='container'>
-            <Box className='settings-section col'> 
+            <Box className='chat-settings-section col'> 
                 <Box className="user-settings-header">
                     <h2 className="settings-heading ">Chat & Messaging</h2>
                     <Flex mb={5}>

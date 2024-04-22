@@ -333,7 +333,7 @@ function PostContentDetails(post) {
                         <button onClick={handleUnhide} className='undo-button'>Undo</button>
                     </div>
                 }
-                <CommentInputForm />
+                <CommentInputForm type={"createComment"} ID={postId} />
                 <SortingComments onChangeSort={handleChangedSort} />
             {comments.map((comment, index) => (
                 <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
