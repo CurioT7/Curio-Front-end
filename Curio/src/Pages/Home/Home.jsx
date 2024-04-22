@@ -9,10 +9,12 @@ import Poll from '../../Components/Poll/ShowPoll.jsx'
 import { fetchPostsFromBackend,fetchHotFromBackend,fetchNewFromBackend,fetchTopFromBackend,fetchRandomFromBackend } from './HomeEndPoints.js'
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
+import { set } from 'mongoose'
 function Home() {
   const [savedPosts, setSavedPosts] = useState([]);
   const [savedComments, setSavedComments] = useState([]);
   const [hiddenPosts, setHiddenPosts] = useState([]); 
+  const [isBlocked, setIsBlocked] = useState(false);
   const toast = useToast();
 
   const getSaved = async () => {
@@ -125,8 +127,6 @@ React.useEffect(() => {
 }, []);
 
 
-
-
 async function changeSortType(value,time) {
   
   
@@ -162,15 +162,20 @@ async function changeSortType(value,time) {
   }
   SetData();
 }
+
+
+
   return (
     <>
     
       {/* Insert posts here (above recent posts) */}
       <div className='col-md-6 d-flex p-3 posts-container flex-column'>
+        {isBlocked? null : (
         <div className='my-1'>
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
+        )}
         {((randomPost.isSelected==false) && posts) ? (posts.map((post) => (
           <><Post
             

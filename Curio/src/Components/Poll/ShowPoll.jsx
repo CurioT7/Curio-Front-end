@@ -13,7 +13,7 @@ import Check from "../../styles/icons/Check";
 
 
 
-function ShowPoll() {
+function ShowPoll( props ) {
   const [votepick, setVotepick] = useState("");
   const [hasVoted, setVoted] = useState(false);
 
@@ -55,7 +55,7 @@ function ShowPoll() {
 
 
   return (
-    <div className=" d-flex p-3 posts-container flex-column">
+    <div className="d-flex col-6 p-3 posts-container flex-column">
       <div className="pollDiv p-2">
         <div>
           <div className="d-flex align-items-center">
@@ -79,7 +79,7 @@ function ShowPoll() {
             {hasVoted? (<>
             {backendObject.voteOptions.map((option, index) => (
               <div style={{backgroundColor: backendObject.voteNumbers[index] === maxVoteNumber ? 'rgb(255, 190, 166)' : 'rgb(226, 231, 233)',
-              width: `${newArray[index]}px`, borderRadius: '4px'}} className="d-flex mb-2">
+              width: `${newArray[index]}px`, borderRadius: '4px'}} className="d-flex mb-2 ms-2">
                 <div key={index} className="d-flex">
                   <span className="me-4 voteNumbers">{backendObject.voteNumbers[index]}</span>
                   <span className="voteText me-2">{option}</span>
@@ -87,22 +87,10 @@ function ShowPoll() {
                 </div>
               </div>
             ))}
-            {/* <div className="d-flex">
-              <span className="me-4 voteNumbers">123</span>
-              <span className="voteText">Fish</span>
-            </div>
-            <div>
-            <span className="me-4 voteNumbers">15</span>
-              <span className="voteText">Meat</span>
-            </div>
-            <div>
-            <span className="me-4 voteNumbers">3</span>
-              <span className="voteText">Chicken</span>
-            </div> */}
             </>) : (
               <>
             {backendObject.voteOptions.map((option, index) => (
-              <div key={index}>
+              <div style={{backgroundColor: 'transparent'}} className="ms-3" key={index}>
                 <input
                   className="voteRadio"
                   type="radio"
@@ -110,42 +98,12 @@ function ShowPoll() {
                   value={option}
                   onClick={handleVote}
                 />
-                <span className="voteText">{option}</span>
+                <span style={{backgroundColor: 'transparent'}} className="voteText">{option}</span>
               </div>
             ))}
-            {/* <div>
-              <input
-                className="voteRadio"
-                type="radio"
-                name="vote"
-                value="Fish"
-                onClick={handleVote}
-              />
-              <span className="voteText">Fish</span>
-            </div>
-            <div>
-              <input
-                className="voteRadio"
-                type="radio"
-                name="vote"
-                value="Meat"
-                onClick={handleVote}
-              />
-              <span className="voteText">Meat</span>
-            </div>
-            <div>
-              <input
-                className="voteRadio"
-                type="radio"
-                name="vote"
-                value="Chicken"
-                onClick={handleVote}
-              />
-              <span className="voteText">Chicken</span>
-            </div> */}
-            <div className="d-flex adjust-items-center">
+            <div className="d-flex adjust-items-center" style={{backgroundColor: 'transparent'}}>
               <button
-                className={`voteButton ${
+                className={`voteButton mb-2 ms-2 ${
                   votepick === "" ? "voteButton-disabled" : "voteButton-enabled"
                 }`}
                 id="voteButton"
@@ -161,6 +119,7 @@ function ShowPoll() {
         </Card>
         <div className="d-flex mt-2 ms-3">
           <Postsfooter />
+          <Postsfooter upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments} />
         </div>
       </div>
     </div>

@@ -43,6 +43,7 @@ function Post(props) {
     const [showPopover, setShowPopover] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
+    const [isBlocked, setIsBlocked] = useState(false);
     const toast = useToast();
     const postId = props._id;
     const handleHidePost = () => {
@@ -204,7 +205,7 @@ function Post(props) {
  
 
     return (
-
+        
         <>
             {!isHidden &&
                 <div>

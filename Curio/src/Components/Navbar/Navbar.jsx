@@ -155,6 +155,7 @@ function NavbarComponent() {
       </div>
       <ul className='right-section-navbar'>
         {isAuthenticated && 
+        <>
           <li className='sub-right-navbar'>
             <Tooltip label="Advertise on Curio">
               <a href="#" style={{ display: "flex" }} className='right-item-option'>
@@ -162,8 +163,6 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
-        }
-        {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Open chat">
               <a href="#" className='right-item-option' style={{ display: "flex" }}>
@@ -171,8 +170,6 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
-        }
-        {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Create post">
               <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
@@ -181,8 +178,6 @@ function NavbarComponent() {
               </Link>
             </Tooltip>
           </li>
-        }
-        {isAuthenticated && 
           <li className='sub-right-navbar'>
             <Tooltip label="Open inbox">
               <a style={{ display: "flex" }} className='right-item-option'>
@@ -202,8 +197,6 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
-        }
-        {isAuthenticated && 
           <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
             <Tooltip label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
@@ -211,6 +204,7 @@ function NavbarComponent() {
               </a>
             </Tooltip>
           </li>
+          </>
         }
         {!isAuthenticated &&
           <div className='d-flex ms-auto'>
@@ -238,52 +232,14 @@ function NavbarComponent() {
                 </div>
             </div>
           </Link>
-          <div className="d-flex align-items-center sub-menu-link">
-            <EditAvatar />
-            <span className="drop-down-description">Edit Avatar</span>
-          </div>
-          <div className="d-flex align-items-center sub-menu-link">
-          <ContProgram />
-            <div className="d-flex flex-column">
-            <span className="drop-down-description">Contributor Porgram</span>
-              <div className='d-flex flex-start align-items-center ArrowandNumber'>
-              <ContArrow />
-              <span className='contribNumber'>0</span>
-              </div>
-            </div>
-          </div>
-          <div className="d-flex align-items-center sub-menu-link switchDiv">
-            <ModMode />
-            <span className="drop-down-description">Mod mode</span>
-            <Stack align='center' direction='row' className='switchplacement'>
-              <Switch size='lg' colorScheme='blue' />
-            </Stack>
-          </div>
-          <div className="d-flex align-items-center sub-menu-link switchDiv">
-            <DarkMode />
-            <span className="drop-down-description">Dark mode</span>
-            <Stack align='center' direction='row' className='switchplacement'>
-              <Switch size='lg' colorScheme='blue' />
-            </Stack>
-          </div>
           <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
             <SignupHandler/>
-          </div>
-          <hr />
-          <div className="d-flex align-items-center sub-menu-link">
-            <Advertisement />
-            <span className="drop-down-description"> Advertise on reddit</span>
           </div>
           <hr />
           <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 
             <Settings />
             <span className="drop-down-description">Settings</span>
           </Link>
-          <hr />
-          <div className="d-flex align-items-center last-item1">
-            <Premium />
-            <span className="drop-down-description"> Premium</span>
-          </div>
         </div>
       </div>
       <div className="menu">
