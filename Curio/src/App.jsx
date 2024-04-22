@@ -29,8 +29,6 @@ import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Components/Notifications/Notifications.jsx";
 import Notification_Messages from "./Components/Notification_Messages/Notification_Messages.jsx";
-import Notifications from "./Components/Notifications/Notifications.jsx";
-import Notification_Messages from "./Components/Notification_Messages/Notification_Messages.jsx";
 
 
 function App() {

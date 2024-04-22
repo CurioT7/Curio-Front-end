@@ -73,8 +73,19 @@ function NavbarComponent() {
   function toggleMenu(){
     let subMenu = document.getElementById("subMenu");
     subMenu.classList.toggle("open-menu");
+    event.stopPropagation();
   }
-
+  
+  let subMenu = document.getElementById('subMenu');
+  
+  document.addEventListener('click', function(event) {
+    if(subMenu){
+    if (!subMenu.contains(event.target)) {
+      subMenu.classList.remove("open-menu");
+    }
+  }
+  });
+    
   
   React.useEffect(() => {
       async function fetchData() {
