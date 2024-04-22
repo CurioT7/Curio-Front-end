@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css"; 
 import logo from "../../assets/Profile_navbar.png";
-import { Popover, PopoverTrigger, PopoverContent, PopoverBody, Text, Button } from '@chakra-ui/react';
+import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
-import {
-    PopoverHeader,
-    PopoverFooter,
-    PopoverArrow,
-    PopoverCloseButton,
-    PopoverAnchor,
-  } from '@chakra-ui/react'
 import { SlOptions } from "react-icons/sl";
 
 
@@ -59,7 +52,7 @@ function Notifications() {
                               </span>
                               <div className="notifications-item-icon">
                               <i className="fa-solid fa-message"/>
-                          </div>
+                                </div>
                           </div>
                           
                       </div>
@@ -75,30 +68,30 @@ function Notifications() {
                           </div>
                       </div>
                       <div className="notifications-item-options">
-                      <Popover placement='bottom-start'>
-                        <PopoverTrigger>
-                            <Button 
-                            variant='ghost'
-                            colorScheme='gray'><SlOptions /></Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <PopoverArrow />
-                            <PopoverBody>Hide this notification</PopoverBody>
-                            <PopoverBody>Disable updates from this community</PopoverBody>
-                            <PopoverBody>Turn off this notification type</PopoverBody>
-                        </PopoverContent>
-                    </Popover>
+                        <Popover placement='bottom-start'>
+                            <PopoverTrigger>
+                                <Button 
+                                variant='ghost'
+                                colorScheme='gray'><SlOptions /></Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverBody>Hide this notification</PopoverBody>
+                                <PopoverBody>Disable updates from this community</PopoverBody>
+                                <PopoverBody>Turn off this notification type</PopoverBody>
+                            </PopoverContent>
+                        </Popover>
                       </div>
                   </div>
               </div>
             </div>
         </div>
         <div className="notifications-see-all">
-            <a href="" type="button" className="see-all-button">
+            <Link to={"/notifications"} type="button" className="see-all-button">
                 <span className="see-all-text">
                     <span className="see-all-text-inner">See All</span>
                 </span>
-            </a>
+            </Link>
         </div>
     </div>
   );
