@@ -5,8 +5,9 @@ import ExclamationMark from '../../styles/icons/ExclamationIcon';
 import classes from './ModalPages.module.css';
 import Back from '../../styles/icons/Back'
 import axios from "axios";
-import { userBlock , userUnblock, handleUserBlock, handleUserUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
+import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
 import { useToast } from '@chakra-ui/react';
+import { reportUser } from './ModalPagesEndpoints.jsx';
 
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -30,9 +31,9 @@ const MultiPageFormModal = (props) => {
 
     const toastError = useToast();
 
-    function ToastError() {
+    function ToastError(description) {
         toastError({
-            description: "You can't block somebody again within 24 hours of blocking them",
+            description: description,
             status: 'error',
             duration: 3000,
             isClosable: true,
@@ -106,24 +107,10 @@ const MultiPageFormModal = (props) => {
         props.onHide();
     };
 
-    const reportUser = async (reportedUsername, reportType, reportReason ,reportDetails ) => {
-        try {
-            const response = await axios.post(`${hostUrl}/api/report_user`, {
-                reportedUsername: reportedUsername,
-                reportType: reportType,
-                reportReason: reportReason,
-                reportDetails
-            }, {
-                headers: {
-                    authorization : `Bearer ${token}`
-                }
-            });
-    
-            return response.data;
-        } catch (error) {
-            console.error(error);
-        }
-    };
+
+    async function handleReportUser(){
+        await reportUser(props.username, selectedOption, reportReason, furtherDetails);
+    }
 
     async function getBlocked(username) {
         try {
@@ -157,16 +144,36 @@ const MultiPageFormModal = (props) => {
 
       const handleUserBlock = async (username) => {
             const result = await userBlock(username);
-            if(result.success){
+            if(result === 200){
                 await getBlocked(username);
                 patchBlockUser(username);
                 ToastSuccess();
             }
-            if (!result.success) {
-                ToastError();
-                setIsBlockedError(true);
+            else {
+                const result = await userBlock(username);
+                if(result === 200){
+                    patchBlockUser(username);
+                    props.handleBlockPage();
+                    ToastSuccess();
+                }
+                if (result === 403) {
+                    ToastError("You can't block somebody again within 24 hours of unblocking them");
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+                else{
+                    ToastError("Something is wrong, please try again later.");
+                }
             }
         }
+
 
     const handleUserUnblock = async (username) => {
             try {
@@ -573,7 +580,7 @@ const MultiPageFormModal = (props) => {
                             </div>
                             <div className={classes['submit-btn-container']}>
                                 {reportReason === 'hate' || reportReason === 'prohibited transaction' || reportReason === 'self-harm or suicide' ? (
-                                    <button className={classes['main-button']} disabled={!isSecondStep}  onClick={() => {twoSteps(); reportUser(props.username, selectedOption, reportReason, furtherDetails)}}>Submit</button>
+                                    <button className={classes['main-button']} disabled={!isSecondStep}  onClick={() => {twoSteps(); handleReportUser()}}>Submit</button>
                                 ) : (
                                     <button className={classes['main-button']} disabled={!isSecondStep} onClick={nextStep}>Next</button>
                                     )}
@@ -581,7 +588,7 @@ const MultiPageFormModal = (props) => {
                         </div>
                     )}
                     {step === 3 && (
-                        <button className={classes['submit-button']} disabled={!isPrevStep} onClick={() => {nextStep(); reportUser(props.username, selectedOption, reportReason, furtherDetails)}}>Submit</button>
+                        <button className={classes['submit-button']} disabled={!isPrevStep} onClick={() => {nextStep(); handleReportUser()}}>Submit</button>
                     )}
                     {step === 4 && (
                         <div className="d-flex flex-column w-100">

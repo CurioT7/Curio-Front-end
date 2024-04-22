@@ -9,10 +9,12 @@ import Poll from '../../Components/Poll/ShowPoll.jsx'
 import { fetchPostsFromBackend,SortHomePosts } from './HomeEndPoints.js'
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
+import { set } from 'mongoose'
 function Home() {
   const [savedPosts, setSavedPosts] = useState([]);
   const [savedComments, setSavedComments] = useState([]);
   const [hiddenPosts, setHiddenPosts] = useState([]); 
+  const [isBlocked, setIsBlocked] = useState(false);
   const toast = useToast();
 
   const getSaved = async () => {
@@ -125,8 +127,6 @@ useEffect(() => {
 }, []);
 
 
-
-
 async function changeSortType(value,time) {
   
   
@@ -197,6 +197,9 @@ async function changeSortType(value,time) {
   }
   SetData();
 }
+
+
+
   return (
     <>
     
