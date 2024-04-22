@@ -1,4 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
 import openchat from "../../assets/Chat_navbar.png";
@@ -19,7 +20,17 @@ import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
 import { BsArrowUpRightCircle } from "react-icons/bs";
+import { BsArrowUpRightCircle } from "react-icons/bs";
 import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+} from '@chakra-ui/react'
+import { getTrending } from './SearchingEndPoints';
+
+import Trending from './Trending';
 import {
   Popover,
   PopoverTrigger,
@@ -33,6 +44,7 @@ import Trending from './Trending';
 
 function NavbarComponent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [trending, setTrending] = React.useState([]);
   const [trending, setTrending] = React.useState([]);
   const navigate = useNavigate();
   const checkAuthentication = () => {
@@ -48,6 +60,14 @@ function NavbarComponent() {
     navigate('/login');
   }
 
+  const inputRef = useRef();
+  const popoverRef = useRef();
+  
+  useEffect(() => {
+    if (inputRef.current && popoverRef.current) {
+      popoverRef.current.style.width = `${inputRef.current.offsetWidth}px`;
+    }
+  }, []);
   const inputRef = useRef();
   const popoverRef = useRef();
   

@@ -5,7 +5,7 @@ import ExclamationMark from '../../styles/icons/ExclamationIcon';
 import classes from './ModalPages.module.css';
 import Back from '../../styles/icons/Back'
 import axios from "axios";
-import { userBlock , userUnblock, handleUserBlock, handleUserUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
+import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
 import { useToast } from '@chakra-ui/react';
 import { reportUser } from './ModalPagesEndpoints.jsx';
 

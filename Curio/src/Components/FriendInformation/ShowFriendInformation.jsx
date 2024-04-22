@@ -101,7 +101,7 @@ function ShowFriendInformation(props) {
     }
     
 
-    const handleFollowToggle = () => {
+    const handleFollowToggle = async () => {
         if (!token) {
             navigate('/login');
         }
