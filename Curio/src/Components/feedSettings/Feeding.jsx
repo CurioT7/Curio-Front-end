@@ -101,7 +101,7 @@ function Feeding () {
                             <Titles title="Show mature(18+) content"
                                     description="See NSFW (Not Safe for Work) mature and adult images, videos, written content, and other media in your Reddit feeds and search results."/> 
                             <Spacer/>
-                            <Switch size='lg' isChecked={adultContent} onChange={handleIsMature}></Switch>
+                            <Switch size='lg' data-testid="adult-content-switch" isChecked={adultContent} onChange={handleIsMature}></Switch>
                             
                         </Flex>
                     </Box>
@@ -112,7 +112,7 @@ function Feeding () {
                             <Titles title="Autoplay media"
                                     description="Play videos and gifs automatically when in the viewport."/> 
                             <Spacer/>
-                            <Switch size='lg' isChecked={autoplayMedia} onChange={handleIsAuto}></Switch>
+                            <Switch size='lg' data-testid="auto-play-media" isChecked={autoplayMedia} onChange={handleIsAuto}></Switch>
                             
                         </Flex>
                     </Box>
@@ -121,18 +121,18 @@ function Feeding () {
                             <Titles title="Community themes"
                                     description="Use custom themes for all communities. You can also turn this off on a per community basis."/> 
                             <Spacer/>
-                            <Switch size='lg' isChecked={communityThemes} onChange={handleCommunityThemes}></Switch>
+                            <Switch size='lg' data-testid="community-themes" isChecked={communityThemes} onChange={handleCommunityThemes}></Switch>
                             
                         </Flex>
                     </Box>
-                    <DropDown isSort={true} isGlobal={false}  isChecked={rememberContentSort} value={communityContentSort} onChangeSort={handleCommSort} onChangeRemember={handleCommRemember}/>
-                    <DropDown isSort={false} isGlobal={true}  isChecked={rememberContentView} value={globalContentView} onChangeSort={handleGlobalContentView} onChangeRemember={handleRememberContentView}/>
+                    <DropDown isSort={true} isGlobal={false} data-testid="community-content-sort"  isChecked={rememberContentSort} value={communityContentSort} onChangeSort={handleCommSort} onChangeRemember={handleCommRemember}/>
+                    <DropDown isSort={false} isGlobal={true} data-testid="global-content-view" isChecked={rememberContentView} value={globalContentView} onChangeSort={handleGlobalContentView} onChangeRemember={handleRememberContentView}/>
                     <Box>
                         <Flex mb={5}  alignItems='center'>
                             <Titles title="Open posts in new tab"
                                     description="Enable to always open posts in a new tab."/> 
                             <Spacer/>
-                            <Switch size='lg' isChecked={openPostsInNewTab} onChange={handleOpenPostsInNewTab}></Switch>
+                            <Switch size='lg' data-testid="post-new-tab" isChecked={openPostsInNewTab} onChange={handleOpenPostsInNewTab}></Switch>
                             
                         </Flex>
                     </Box>
