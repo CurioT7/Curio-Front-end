@@ -3,7 +3,7 @@ import { Button, Flex } from '@chakra-ui/react';
 import "./Post_Methods.css"
 
 function Post_Methods({ onMethodSelect }) {
-  const [selectedTab, setSelectedTab] = useState("Post"); // Initialize state for tracking clicked button
+  const [selectedTab, setSelectedTab] = useState("post"); // Initialize state for tracking clicked button
 
   // Function to handle button click and update selectedTab state
   const handleButtonClick = (buttonName) => {
