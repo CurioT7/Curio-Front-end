@@ -1,16 +1,26 @@
 import React, { useState } from "react";
 import "./NewPostForm.css";
-import { Button, Flex, Spacer, Checkbox } from "@chakra-ui/react";
+import { Button, Flex, Spacer, Checkbox, useToast } from "@chakra-ui/react";
 import { AddIcon, CheckIcon } from "@chakra-ui/icons";
 import "./EditCreatearea.css";
 import axios from "axios";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function EditCreatearea({ title, content, community, days, options, imageFormData }) {
+function EditCreatearea({ title, content, community, days, options, imageFormData, selectedMethod }) {
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
+  const toast = useToast();
+
+  function Toast(message, state){
+    toast({
+        description: message,
+        status: state,
+        duration: 3000,
+        isClosable: true,
+      })
+  }
 
   const handleOcClick = () => {
     setOcClicked(!ocClicked);
@@ -36,7 +46,8 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         isSpoiler: spoilerClicked,
         isNSFW: nsfwClicked,
         voteLength: days,
-        options: options
+        options: options,
+        type: selectedMethod
       };
 
       // If imageFormData is available, append it to postData
@@ -53,26 +64,12 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
           },
         }
       );
-
-      // Handle different response status codes
       switch (response.status) {
         case 201:
-          console.log("Post created successfully");
-          break;
-        case 401:
-          console.log("Unauthorized: Authentication token is missing or invalid");
-          break;
-        case 404:
-          console.log("User not found");
-          break;
-        case 400:
-          console.log("Invalid destination");
-          break;
-        case 500:
-          console.log("Internal server error");
+          Toast('Post created successfully','success');
           break;
         default:
-          console.log("Unexpected response status:", response.status);
+          console.error("Unexpected response status:", response.status);
           break;
       }
     } catch (error) {
@@ -80,19 +77,19 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         const status = error.response.status;
         switch (status) {
           case 401:
-            console.log("Unauthorized: Authentication token is missing or invalid");
+            Toast('Unauthorized: Authentication token is missing or invalid','error');
             break;
           case 404:
-            console.log("User not found");
+            Toast('User not found','error');
             break;
           case 400:
-            console.log("Invalid destination");
+            Toast('Invalid destination','error');
             break;
           case 500:
-            console.log("Internal server error");
+            Toast('Internal server error','error');
             break;
           default:
-            console.log("Unexpected error:", error.response.data);
+            console.error("Unexpected response status:", response.status);
             break;
         }
       } else {
