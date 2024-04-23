@@ -28,15 +28,28 @@ export async function sendUserDataToBackend(data) {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
+        switch (response.status) {
+            case 200:
+              console.log("User preferences updated successfully");
+              break;
+            case 404:
+              console.log("User preferences not found");
+              break;
+            default:
+              console.log("Unexpected response status:", response.status);
+              break;
+          }
         return response;
     } catch (error) {
         if (error.response) {
-            console.error('Server Error:', error.response.data);
-        } else if (error.request) {
-            console.error('No response received:', error.request);
+            const status = error.response.status;
+        if (status === 500) {
+            console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
         } else {
-            console.error('Error', error.message);
+            console.error("Error sending data to backend:", error.response.data);
         }
-        console.error('Error config:', error.config);
+        } else {
+            console.error('Error sending data to backend:', error.message);
+        }
     }
 }

@@ -88,7 +88,14 @@ function Createpostarea({ community }) {
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea title={inputTitle} content={content || linkUrl} community={community} days={dayNumber} options={optionsText} imageFormData={imageFormData} />
+      <EditCreatearea 
+      title={inputTitle} 
+      content={content || linkUrl} 
+      community={community} 
+      days={dayNumber} 
+      options={optionsText} 
+      imageFormData={imageFormData} 
+      />
     </div>
   );
 }

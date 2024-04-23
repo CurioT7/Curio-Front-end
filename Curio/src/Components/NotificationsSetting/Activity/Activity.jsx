@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import Titles from "../../feedSettings/childs/Titles";
+import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../UserSetting/UserSettingsEndPoints';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -26,81 +27,45 @@ function Activity() {
 
   function handleMentionChange(){
     setMentionChecked(!mentions);
-    sendDataToBackend({mentions :! mentions});
+    sendUserDataToBackend({mentions :! mentions});
     Toast();
   };
 
   function handleCommentsChange(){
     setCommentsChecked(!comments);
-    sendDataToBackend({comments :! comments});
+    sendUserDataToBackend({comments :! comments});
     Toast();
   };
 
   function handleUpvotesPostsChange(){
     setUpvotesPostsChecked(!upvotesPosts);
-    sendDataToBackend({upvotesPosts :! upvotesPosts});
+    sendUserDataToBackend({upvotesPosts :! upvotesPosts});
     Toast();
   };
 
   function handleUpvotesCommentsChange(){
     setUpvotesCommentsChecked(!upvotesComments);
-    sendDataToBackend({upvotesComments :! upvotesComments});
+    sendUserDataToBackend({upvotesComments :! upvotesComments});
     Toast();
   };
 
   function handleRepliesChange(){
     setRepliesChecked(!replies);
-    sendDataToBackend({replies :! replies});
+    sendUserDataToBackend({replies :! replies});
     Toast();
   };
 
   function handleNewFollowersChange(){
     setNewFollowersChecked(!newFollowers);
-    sendDataToBackend({newFollowers :! newFollowers});
+    sendUserDataToBackend({newFollowers :! newFollowers});
     Toast();
   };
 
   function handlePostsFollowChange(){
     setPostsFollowChecked(!postsYouFollow);
-    sendDataToBackend({postsYouFollow :! postsYouFollow});
+    sendUserDataToBackend({postsYouFollow :! postsYouFollow});
+    Toast();
   };
-
-  async function sendDataToBackend(data) {
-    try {
-      const response = await axios.patch(
-        `${serverHost}/api/settings/v1/me/prefs`,
-        data,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      switch (response.status) {
-        case 200:
-          console.log("User preferences updated successfully");
-          break;
-        case 404:
-          console.log("User preferences not found");
-          break;
-        default:
-          console.log("Unexpected response status:", response.status);
-          break;
-      }
-      return response;
-    } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
-        if (status === 500) {
-          console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
-        } else {
-          console.error("Error sending data to backend:", error.response.data);
-        }
-      } else {
-        console.error('Error sending data to backend:', error.message);
-      }
-    }
-  }
 
   async function fetchDataFromBackend() {
     try {

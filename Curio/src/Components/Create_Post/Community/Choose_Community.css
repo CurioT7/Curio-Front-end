@@ -3,8 +3,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    position: relative; /* Ensure the dropdown is positioned relative to the input */
-    width: fit-content; /* Adjust width as needed */
+    position: relative; 
+    width: fit-content; 
 }
 
 .middle-div{
@@ -63,15 +63,17 @@
 }
 
 .dropdown-list-choose-community {
+    max-height: 250px; 
+    overflow-y: auto; 
     position: absolute;
-    top: calc(100% + 5px); /* Position the dropdown below the input with some space */
+    top: calc(100% + 5px); 
     left: 0;
     width: 100%;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensure the dropdown appears above other content */
+    z-index: 1000; 
 }
 
 .dropdown-content-username{
@@ -87,15 +89,16 @@
 }
 
 .dropdown-user {
-    align-items: center; /* Align items vertically */
+    align-items: center; 
     display: flex;
     margin-bottom: 8px;
     cursor: pointer;
+    flex-direction: row;
 }
 
 .username-section {
     display: flex;
-    flex-direction: column; /* Align text vertically */
+    flex-direction: column; 
 }
 
 .dropdown-username,
@@ -103,7 +106,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
-    margin: auto 0; /* Center text vertically */
+    margin: auto 0; 
 }
 
 .username-image,
@@ -116,4 +119,8 @@
     box-sizing: border-box;
     flex: none;
     margin-right: 8px;
+}
+
+.arrow-clicked {
+    transform: rotate(180deg); /* Rotate the arrow icon when clicked */
 }

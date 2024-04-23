@@ -90,7 +90,7 @@ function ShowFriendInformation(props) {
     async function handleGetFollower(username) {
         try {
             const result = await getFollower(username);
-            if (result.success) {
+            if (result) {
                 setIsFollowing(true);
             } else {
                 console.error('Error:', result.error);
@@ -101,19 +101,46 @@ function ShowFriendInformation(props) {
     }
     
 
-    const handleFollowToggle = () => {
+    const handleFollowToggle = async () => {
         if (!token) {
-         navigate('/login');
+            navigate('/login');
         }
-        else{
-        if (isFollowing) {
-            userUnfollow(props.username);
-        } else {
-            userFollow(props.username);
+        else {
+            if (!isFollowing) {
+                const result = await userFollow(props.username);
+                if(result === 200){
+                    setIsFollowing(true);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+                else{
+                    ToastError("Something is wrong, please try again later.");
+                }
+            } else {
+                const result = await userUnfollow(props.username);
+                if(result){
+                    setIsFollowing(false);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+            }
         }
-        setIsFollowing(!isFollowing);
     }
-    }
+    
 
     async function getBlocked(username) {
         try {
@@ -158,13 +185,22 @@ function ShowFriendInformation(props) {
             navigate('/login');
         } else {
             const result = await userBlock(username);
-            if(result.success){
+            if(result === 200){
                 patchBlockUser(username);
                 props.handleBlockPage();
                 ToastSuccess();
             }
-            if (!result.success) {
-                ToastError();
+            if (result === 403) {
+                ToastError("You can't block somebody again within 24 hours of unblocking them");
+            }
+            else if(result === 500){
+                ToastError("An unexpected error occurred on the server. Please try again later.");
+            }
+            else if(result === 404){
+                ToastError("User is not found");
+            }
+            else if(result === 401){
+                ToastError("You are not authorized to perform this action");
             }
         }
     }

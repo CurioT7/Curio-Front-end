@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Textarea, useToast } from '@chakra-ui/react';
+import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
 
-function ProfileInformation(props) {
+function ProfileInformation({ profileData }) {
   const toast = useToast();
+  const [displayName, setDisplayName] = useState('');
+  const [about, setAbout] = useState('');
 
-  const handleEnterKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      props.sendDataToBackend();
-      Toast();
-    }
-  };
+  useEffect(() => {
+    setDisplayName(profileData.displayName);
+    setAbout(profileData.about);
+  }, [profileData]);
 
-  const Toast = () => {
+  function Toast() {
     toast({
       description: "Changes Saved",
       status: 'info',
@@ -20,8 +21,27 @@ function ProfileInformation(props) {
     })
   }
 
-  const remainingDisplayNameCharacters = 30 - (props.displayName ? props.displayName.length : 0);
-  const remainingAboutCharacters = 200 - (props.about ? props.about.length : 0);
+  const handleDisplayNameChange = (event) => {
+    setDisplayName(event.target.value);
+  };
+
+  const handleAboutChange = (event) => {
+    setAbout(event.target.value);
+  };
+
+  const handleEnterKeyPress = async (event) => {
+    if (event.key === 'Enter') {
+      try {
+        await sendUserDataToBackend({ displayName, about }); 
+        Toast();
+      } catch (error) {
+        console.error('Error sending data to backend:', error);
+      }
+    }
+  };
+
+  const remainingDisplayNameCharacters = 30 - (displayName ? displayName.length : 0); // Check if displayName is not undefined
+  const remainingAboutCharacters = 200 - (about ? about.length : 0); // Check if about is not undefined
 
   const displayNameClass = remainingDisplayNameCharacters <= 0 ? 'text-danger' : '';
   const aboutClass = remainingAboutCharacters <= 0 ? 'text-danger' : '';
@@ -40,8 +60,8 @@ function ProfileInformation(props) {
           maxLength="30"
           name="display-name-input"
           id="display-name-input"
-          value={props.displayName}
-          onChange={(event) => props.setDisplayName(event.target.value)}
+          value={displayName}
+          onChange={handleDisplayNameChange}
           onKeyDown={handleEnterKeyPress}
         />
         <Box className={`word-remaining p-1 b-80 mb-4 ${displayNameClass}`}>{remainingDisplayNameCharacters} Characters remaining</Box>
@@ -60,8 +80,8 @@ function ProfileInformation(props) {
             rows="4"
             maxLength="200"
             placeholder="About (optional)"
-            value={props.about}
-            onChange={(event) => props.setAbout(event.target.value)}
+            value={about}
+            onChange={handleAboutChange}
             onKeyDown={handleEnterKeyPress}
           />
           <Box className={`word-remaining p-1 b-80 mb-4 ${aboutClass}`}>{remainingAboutCharacters} Characters remaining</Box>

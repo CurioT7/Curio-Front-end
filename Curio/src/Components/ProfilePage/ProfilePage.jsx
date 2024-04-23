@@ -10,6 +10,7 @@ import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
 import { useToast } from "@chakra-ui/react";
 import PostComments from '../Post/PostComments.jsx';
+import { Link } from 'react-router-dom';
 
 function ProfilePage(){
 
@@ -388,13 +389,50 @@ return(
   <div className="profileItem">Comment Karma</div>
 </div>
 <br />
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 0.5fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-
-  <div className="profilevalue">{userAbout.cakeDay || 'Mar 3, 2023'} </div> 
-   <div className="profilevalue">{userAbout.goldRecieved || '0'}</div>
-  <div className="profileItem">Cake day</div>
-  <div className="profileItem">Gold Received</div>
-</div>
+{userAbout.followersCount > 0 ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateRows: "repeat(2, 0.5fr)",
+                rowGap: "0.3rem",
+                columnGap: "1rem",
+              }}
+            >
+              <div className="profilevalue">{userAbout.followersCount}</div>
+              <div className="profilevalue">
+                {userAbout.cakeDay || "Mar 3, 2023"}{" "}
+              </div>
+              <Link to={`/user/${username}/followers`} > 
+              <div className="profileItem">Followers</div>
+              </Link>
+              <div className="profileItem">Cake day</div>
+              <div className="profilevalue mt-3">
+                {userAbout.goldRecieved || "0"}
+              </div>
+              <div className="profilevalue mt-3"></div>
+              <div className="profileItem">Gold Received</div>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateRows: "repeat(2, 0.5fr)",
+                rowGap: "0.3rem",
+                columnGap: "1rem",
+              }}
+            >
+              <div className="profilevalue">
+                {userAbout.cakeDay || "Mar 3, 2023"}{" "}
+              </div>
+              <div className="profilevalue">
+                {userAbout.goldRecieved || "0"}
+              </div>
+              <div className="profileItem">Cake day</div>
+              <div className="profileItem">Gold Received</div>
+            </div>
+          )}
  <Divider orientation='horizontal' />
 
  <p>Settings</p>

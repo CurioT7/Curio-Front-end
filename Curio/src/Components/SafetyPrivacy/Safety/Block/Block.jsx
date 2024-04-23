@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Button, Flex, useToast } from '@chakra-ui/react';
-// import "./Safety.css";
 import axios from 'axios';
+import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../../UserSetting/UserSettingsEndPoints';
+
 
 function Safety() {
   const serverHost = import.meta.env.VITE_SERVER_HOST;
@@ -47,21 +48,6 @@ function Safety() {
     }
     fetchBlockedUsers();
   }, []);
-
-  /////////////////////////////////// Block User ////////////////////////////////
-  const patchBlockUser = (name) => {
-    axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
-      viewBlockedPeople: [...blockedUsers, { username: name}]//, blockedAt: new Date(), timeAgo: 'just now' }]
-    },{
-      headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}` 
-      }
-    }).then(response => {
-    })
-    .catch(error => {
-    });
-  };
-
   
   const postBlockUser = async (username) => {
     try {
@@ -101,17 +87,26 @@ function Safety() {
   
   const handleAddBlockedUser = async () => {
     if (blockedUserInput.trim() !== '') {
-      const blockResult = await postBlockUser(blockedUserInput);
-      if (blockResult === true) {
-        patchBlockUser(blockedUserInput);
-        const newUser = { username: blockedUserInput };
-        setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-        setBlockedUserInput('');
-      }
+        const blockResult = await postBlockUser(blockedUserInput);
+        if (blockResult === true) {
+            const data = {
+                viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
+            };
+            try {
+                await sendUserDataToBackend(data);
+                console.log("User preferences updated successfully");
+                const newUser = { username: blockedUserInput };
+                setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
+                setBlockedUserInput('');
+            } catch (error) {
+                console.error("Error updating user preferences:", error);
+            }
+        }
     }
-  };
-//////////////////////////////////// Unblock /////////////////////////////////
-    const postunBlockUser = (username) => {
+};
+
+
+  const postunBlockUser = (username) => {
         axios.post(`${serverHost}/api/User/unblock`, {
             usernameToUnblock: username
         },{
