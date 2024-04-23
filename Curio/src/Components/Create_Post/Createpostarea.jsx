@@ -9,7 +9,7 @@ import Post from "./Post_Section/Post";
 
 function Createpostarea({ community }) {
   const [inputTitle, setInputTitle] = useState('');
-  const [selectedMethod, setSelectedMethod] = useState("Post");
+  const [selectedMethod, setSelectedMethod] = useState("post");
   const [content, setContent] = useState('');
   const [dayNumber, setDayNumber] = useState(3);
   const [optionsText, setoptionsText] = useState([]);
@@ -57,13 +57,13 @@ function Createpostarea({ community }) {
   };
   const renderSelectedMethod = () => {
     switch (selectedMethod) {
-      case "Post":
+      case "post":
         return <Post onContentChange={handleContentChange} />;
-      case "Image & Video":
+      case "media":
         return <ImageVideo onImageUpload={handleImageUpload} />;
-      case "Link":
+      case "link":
         return <Link onLinkChange={handleLinkChange} />;
-      case "Polls":
+      case "poll":
         return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} />;
     }
   };
@@ -95,6 +95,7 @@ function Createpostarea({ community }) {
       days={dayNumber} 
       options={optionsText} 
       imageFormData={imageFormData} 
+      selectedMethod={selectedMethod}
       />
     </div>
   );

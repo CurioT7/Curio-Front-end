@@ -49,7 +49,7 @@ function ProfileSetting(props) {
               url: link.url,
               displayName: link.displayName,
               platform: `fa-brands fa-${link.platform.toLowerCase()}`,
-            })) : []);          
+            })) : []);  
         }
     }
 

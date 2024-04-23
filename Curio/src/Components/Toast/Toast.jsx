@@ -1,12 +1,12 @@
 import { useToast } from "@chakra-ui/react";
 
-function Message(message,info){
+function Toast(props){
     const toast = useToast()
     toast({
-        description: message,
-        status: info,
+        description: props.message,
+        status: props.info,
         duration: 3000,
         isClosable: true,
       })
 }
-export default Message;
+export default Toast;
