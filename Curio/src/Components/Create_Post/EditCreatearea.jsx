@@ -7,7 +7,7 @@ import axios from "axios";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function EditCreatearea({ title, content, community, days, options, imageFormData }) {
+function EditCreatearea({ title, content, community, days, options, imageFormData, selectedMethod }) {
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
@@ -36,7 +36,8 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         isSpoiler: spoilerClicked,
         isNSFW: nsfwClicked,
         voteLength: days,
-        options: options
+        options: options,
+        selectedMethod: selectedMethod
       };
 
       // If imageFormData is available, append it to postData

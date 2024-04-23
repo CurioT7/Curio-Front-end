@@ -6,29 +6,11 @@ import InfoIcon from "../../../styles/icons/InfoIcon";
 import SixDots from "../../../styles/icons/SixDots";
 import Remove from "../../../styles/icons/Remove";
 
-function Polls( {handleDayChange, handleOptionChange }) {
-  const [options, setOptions] = useState([]);
-  const [optionsText, setoptionsText] = useState([]);
-  const maxOptions = 4;
+function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options }) {
+  // const [options, setOptions] = useState([]);
+  // const maxOptions = 4;
 
 
-
-
-  const handleAddOption = () => {
-    if (options.length < maxOptions) {
-      setOptions([...options, `Option ${options.length + 3}`]);
-    }
-  };
-
-  const handleRemoveOption = () => {
-      setOptions(options.slice(0, options.length - 1));
-  };
-
-  // const handleOptionChange = (index, event) => {
-  //   const newOptionsText = [...optionsText];
-  //   newOptionsText[index] = event.target.value;
-  //   setoptionsText(newOptionsText);
-  // };
 
   return (
     <div className="flex-wrap pollPage">
@@ -64,7 +46,7 @@ function Polls( {handleDayChange, handleOptionChange }) {
                   placeholder={option} 
                   onChange={(event) => handleOptionChange(index + 2, event)}
                 />
-                <button onClick={handleRemoveOption}>
+                <button onClick={() => handleRemoveOption(index)}>
                   <Remove className='removeIcon' />
                 </button>
                 </div>

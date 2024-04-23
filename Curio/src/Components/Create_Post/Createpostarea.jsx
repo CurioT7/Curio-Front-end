@@ -9,13 +9,32 @@ import Post from "./Post_Section/Post";
 
 function Createpostarea({ community }) {
   const [inputTitle, setInputTitle] = useState('');
-  const [selectedMethod, setSelectedMethod] = useState("Post");
+  const [selectedMethod, setSelectedMethod] = useState("post");
   const [content, setContent] = useState('');
   const [dayNumber, setDayNumber] = useState(3);
-  const [optionsText, setoptionsText] = useState([]);
   const [imageFormData, setImageFormData] = useState(null);
   const [linkUrl, setLinkUrl] = useState(''); 
   const textareaRef = useRef(null);
+  const [optionsText, setoptionsText] = useState([]); 
+  const [options, setOptions] = useState([]);
+  const maxOptions = 4;
+
+
+  const handleAddOption = () => {
+    if (options.length < maxOptions) {
+      setOptions([...options, `Option ${options.length + 3}`]);
+    }
+  };
+
+  const handleRemoveOption = (index) => {
+    const newOptions = [...options];
+    newOptions.splice(index, 1);
+    setOptions(newOptions);
+  
+    const newOptionsText = [...optionsText];
+    newOptionsText.splice(index + 2, 1);
+    setoptionsText(newOptionsText);
+  };
 
   const handleDayChange = (event) => {
     setDayNumber(parseInt(event.target.value));
@@ -64,7 +83,8 @@ function Createpostarea({ community }) {
       case "Link":
         return <Link onLinkChange={handleLinkChange} />;
       case "Polls":
-        return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} />;
+        return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} handleAddOption={handleAddOption} handleRemoveOption={handleRemoveOption}
+        options={options} />;
     }
   };
 
@@ -95,6 +115,7 @@ function Createpostarea({ community }) {
       days={dayNumber} 
       options={optionsText} 
       imageFormData={imageFormData} 
+      selectedMethod={selectedMethod}
       />
     </div>
   );

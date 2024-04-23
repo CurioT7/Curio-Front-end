@@ -43,7 +43,7 @@ function Post(props) {
     const [showPopover, setShowPopover] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
-    const [isBlocked, setIsBlocked] = useState(false);
+    const [blockedUsers, setBlockedUsers] = useState([]);
     const toast = useToast();
     const postId = props._id;
     const handleHidePost = () => {
@@ -123,20 +123,20 @@ function Post(props) {
       }
     }
   }
-    useEffect(() => {
-        const fetchPostStatus = async () => {
-            const postInfo = await FetchObjectInfo(props._id,"post");
-            if(postInfo){
-                setIsLocked(postInfo.item.isLocked);  
-            }
-            const SubredditInfo = await FetchObjectInfo(props.linkedSubreddit,"subreddit");
-            if(SubredditInfo){
+    // useEffect(() => {
+    //     const fetchPostStatus = async () => {
+    //         const postInfo = await FetchObjectInfo(props._id,"post");
+    //         if(postInfo){
+    //             setIsLocked(postInfo.item.isLocked);  
+    //         }
+    //         const SubredditInfo = await FetchObjectInfo(props.linkedSubreddit,"subreddit");
+    //         if(SubredditInfo){
                 
-                setSubredditName(SubredditInfo.item.name);
-            }
-        }
-        fetchPostStatus();
-    })
+    //             setSubredditName(SubredditInfo.item.name);
+    //         }
+    //     }
+    //     fetchPostStatus();
+    // })
 
     const handleNavigationToDetails = async () => {
         try{
@@ -216,6 +216,7 @@ function Post(props) {
           setFriendInfo(result.data);
         }
       }
+
 
  
 
