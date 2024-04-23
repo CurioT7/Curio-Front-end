@@ -9,18 +9,7 @@ import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 function ChangePass(props){
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const currentPass="12345678"
     const toast = useToast()
-    function ToastErr(){
-        toast({
-            
-           
-            description: "Error occured, please try again later",
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          })
-    }
     function Toast(){
         toast({
             
@@ -30,7 +19,7 @@ function ChangePass(props){
             isClosable: true,
           })
     }
-    const serverHost = import.meta.env.VITE_SERVER_HOST;
+    
     //   use states
 
     const [oldPassword,setOldPass]=React.useState({
@@ -72,26 +61,8 @@ function ChangePass(props){
     function handleLogOut(){
         setLogOut(!logOut)
     }
-    //API call--------------------------------//
-    // React.useEffect(() => {
-    //     async function fetchOldPassword() {
-    //         try {
-                
-    //             const response = await axios.get(`${serverHost}/api/auth/change_password`, {
-    //                 headers: {
-    //                     authorization: `Bearer ${localStorage.getItem('token')}`
-    //                 }
-    //             });
-    //             setOldPasswordFromBackend(response.data.password);
-    //         } catch (error) {
-    //             console.error('Error fetching old password from backend:', error);
-    //         }
-    //     }
-
-    //     fetchOldPassword();
-    // }, []);
-
     async function sendNewPasswordToBackend() {
+        const serverHost = import.meta.env.VITE_SERVER_HOST;
         try {
             const response = await axios.patch(`${serverHost}/api/auth/change_password`, {
                 oldPassword: oldPassword.value,

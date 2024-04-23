@@ -53,3 +53,18 @@ export async function sendUserDataToBackend(data) {
         }
     }
 }
+
+export async function FindUserInformation(){
+    try{
+        const request = await axios.get(`${serverHost}/api/settings/v1/me`, {
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            
+            }});
+            
+            return request.data;
+    }
+    catch(error){
+
+    }
+}
