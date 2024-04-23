@@ -96,7 +96,7 @@ const forgotPassword = async (username, email) => {
 };
 
 const resetPassword = async (newPassword) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('resetToken');
   console.log(token)
   const url = `${VITE_SERVER_HOST}/api/auth/reset_password/${token}`;
   const data = {
