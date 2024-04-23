@@ -209,7 +209,7 @@ async function changeSortType(value,time) {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {((randomPost.isSelected==false) && posts) ? (posts.map((post) => (
+        {((randomPost.isSelected==false) && posts) ? (posts.slice(0,5).map((post) => (
           <><Post
             
             _id={post._id}
