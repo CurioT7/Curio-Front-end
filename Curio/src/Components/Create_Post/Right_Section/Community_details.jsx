@@ -72,8 +72,29 @@ function Community_details({ community }) {
             <div className="community-details-header">
                 {subredditData && (
                     <div className="community-details-container">
-                        <div className="community-details-logo"></div>
-                        <div className="community-details-info">
+                        {/* <div className="community-details-logo" /> */}
+                        <div className="file-upload-container-username top-1 start-1"
+                        style={{
+                            backgroundColor:'#33a8ff',
+                            borderRadius:'4px 4px 0 0',
+                            height: '94px',
+                            width:'calc(100% - 2px)',
+                            position:'absolute',
+                            top:'1px',
+                            left:'1px'
+                        }}>
+                            <div className="file-input-wrapper-username">
+                                <label htmlFor="" className="file-label-username" style={{cursor:'pointer'}}>
+                                    <div className="file-preview-container-username">
+                                        <input type="file" accept="image/x-png,image/jpeg" className="file-input-banner-username"/>
+                                    </div>
+                                    <div className="file-banner-container-username">
+                                        <i className="fa-solid fa-camera add-banner"></i>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        {/* <div className="community-details-info">
                             <img src={logo} alt="Subreddit Icon" role="presentation" className="community-details-icon" />
                             <div className="community-details-link">
                                 <a href="" className="community-link" target="_blank" rel="noopener noreferrer">
@@ -86,14 +107,73 @@ function Community_details({ community }) {
                                 {subredditData.description}
                             </div>
                         </div>
-                        <div className="community-details-created">
+                */}
+                        <div className="post-card-username" 
+                        style={{
+                            background: 'inherit',
+                            borderRadius: '6px',
+                            boxSizing: 'border-box',
+                            height: '86px',
+                            marginLeft: '-3px',
+                            marginTop: '16px',
+                            padding: '3px',
+                            position:'relative',
+                            width:'86px'
+                        }}>
+                            <div className="post-header-username">
+                                <label htmlFor="" className="post-label-username" style={{cursor: 'pointer'}}>
+                                    <span class="icon-container-username">
+                                        <div className="username-icon-container">
+                                            <img src={logo} 
+                                            alt="Username Icon" 
+                                            role="presentation" 
+                                            className="username-details-icon" 
+                                            style={{
+                                                borderRadius: '4px',
+                                                objectFit:'cover',
+                                                objectPosition:'top',
+                                                color:'white',
+                                                textIndent:'-9999px',
+                                                boxSizing:'border-box',
+                                                border: '1px solid #edeff1',
+                                                height: '100%',
+                                                width: '100%'
+                                            }}/>
+                                        </div>
+                                    </span>
+                                    <div className="file-preview-container-username">
+                                        <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username"/>
+                                    </div>
+                                    <div className="file-icon-container-username">
+                                        <i className="fa-solid fa-camera add-icon"></i>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <a href="#" className="settings-link-username"
+                        style={{
+                            display:'inline-block',
+                            marginTop:'-16px',
+                            padding: '4px',
+                            position: 'absolute',
+                            right: '12px'
+                        }}>
+                            <i className="fa-solid fa-gear"/>
+                        </a>
+                        <h4>
+                            {subredditData.displayName}
+                        </h4>
+                        <a href="#">
+                            u/
+                        </a>
+                        {/* <div className="community-details-created">
                             <div className="community-created-date">
                                 <i className="created-date-icon fa-solid fa-cake-candles"/>
                                 <span className="community-created-date">
                                     Created {renderCreatedAt()}
                                 </span>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="community-details-divider"/>
                         <hr className="hr-divider-community"/>
                         <div className="community-details-members">
