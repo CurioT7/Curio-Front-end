@@ -1,10 +1,33 @@
+import { useState, useEffect } from 'react'; 
 import { useToast, Flex, Switch, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 import "./ProfileCategory.css"
 import Titles from "../../feedSettings/childs/Titles";
+import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
 
-function ProfileCategory({ NSFW, handleSwitchChange, isModalOpen, setIsModalOpen, confirmChange }) {
-  
+function ProfileCategory({ userCategory }) {
   const toast = useToast();
+  const [NSFW, setIsChecked] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsChecked(userCategory.NSFW);
+  }, [userCategory]);
+
+  const handleSwitchChange = () => {
+    if (NSFW) { 
+      setIsModalOpen(true);
+    } else {
+      confirmChange();
+    }
+  };
+
+  const confirmChange = () => {
+    setIsChecked(!NSFW);
+    sendUserDataToBackend({NSFW: !NSFW});
+    setIsModalOpen(false);
+    Toast();
+  };  
+  
 
   function Toast(){ 
     toast({   
@@ -27,7 +50,7 @@ function ProfileCategory({ NSFW, handleSwitchChange, isModalOpen, setIsModalOpen
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>SWITCH ACCOUNT TO SFW</ModalHeader>
-          <ModalCloseButton onClick={() => setIsModalOpen(false)} />
+          <ModalCloseButton onClick={() => setIsChecked(true)} />
           <ModalBody>
             If your account contains <a href="#">NSFW content</a> (contains nudity, pornography, profanity or inappropriate content for those under 18) 
             and it’s not set to NSFW, this will result in actions up to and including suspension of your account.
