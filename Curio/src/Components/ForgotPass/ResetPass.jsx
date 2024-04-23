@@ -12,6 +12,9 @@ function ResetPass(props) {
     const [checked, setChecked] = useState(false);
     const [match, setMatch] = useState(true);
     const {token} = useParams();
+    localStorage.setItem('resetToken', token);
+    console.log(token);
+    
 
     useEffect(() => {
         if(password !== newPassword){
@@ -26,6 +29,8 @@ function ResetPass(props) {
 
         try {
             const response = await resetPassword(password);
+           
+          
             console.log('Success:', response);
         } catch (error) {
             console.error('Error:', error);

@@ -56,7 +56,6 @@ function Preferences(props){
             <h2 className="interests"> 📈 Trending</h2>
         </div>
         <div className="mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
-            <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NFL') ? 'clicked' : ''}`}>NFL</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NBA') ? 'clicked' : ''}`}>NBA</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Taylor Swift') ? 'clicked' : ''}`}>Taylor Swift</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Fantasy Football') ? 'clicked' : ''}`}>Fantasy Football</button>
@@ -112,7 +111,6 @@ function Preferences(props){
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Am I the A**hole?') ? 'clicked' : ''}`}>Am I the A**hole?</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Contagious laughter') ? 'clicked' : ''}`}>Contagious laughter</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny videos') ? 'clicked' : ''}`}>Funny videos</button>
-            <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Memes') ? 'clicked' : ''}`}>Memes</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Shower thoughts') ? 'clicked' : ''}`}>Shower thoughts</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny animals') ? 'clicked' : ''}`}>Funny animals</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Jokes') ? 'clicked' : ''}`}>Jokes</button>
@@ -166,7 +164,6 @@ function Preferences(props){
             <h2 className="interests"> 🏈 NFL</h2>
         </div>
         <div className="mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
-            <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NFL') ? 'clicked' : ''}`}>NFL</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NFL memes') ? 'clicked' : ''}`}>NFL memes</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Fantasy Football') ? 'clicked' : ''}`}>Fantasy Football</button>
             <button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NFL Draft') ? 'clicked' : ''}`}>NFL Draft</button>
@@ -186,7 +183,7 @@ function Preferences(props){
         </div>
 
       </Modal.Body>
-    <Modal.Footer className='border-0 pb-4 d-flex justify-content-center border-top' style={{paddingLeft: '80px', paddingRight: '80px'}}>
+    <Modal.Footer className='border-0 pb-4 mb-4 d-flex justify-content-center border-top' style={{paddingLeft: '80px', paddingRight: '80px'}}>
         <Button onClick={handlePreferences} disabled={buttonsClicked.length===0} className={buttonsClicked.length===0 ? "w-100 continue-button-disabled preferences-disabled" : "w-100 continue-button"}>{buttonsClicked.length===0 ? "Select at least 1 to continue" : "Continue"}</Button>
     </Modal.Footer>
     </Modal>

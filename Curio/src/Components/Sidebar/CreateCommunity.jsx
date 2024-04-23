@@ -154,7 +154,7 @@ function CreateCommunity(props) {
                   {type === 'private' && (selectedType === type ? <PrivateActive /> : <PrivateUnactive />)}
                   <div className="mx-3 d-flex flex-column">
                     <p style={{ color: '#000000', fontSize: '0.875rem', fontWeight: '0!important' }} className='mb-0 mt-0'>{type.charAt(0).toUpperCase() + type.slice(1)}</p>
-                    <p className='create-community-muted-secondary m-0'>{type === "public" ? "Anyone can view, post, and comment to this community" : type === "Restricted" ? "Anyone can view, but only approved users can contribute" : "Only approved users can view and submit to this community"}</p>
+                    <p className='create-community-muted-secondary m-0'>{type === "public" ? "Anyone can view, post, and comment to this community" : type === "restricted" ? "Anyone can view, but only approved users can contribute" : "Only approved users can view and submit to this community"}</p>
                   </div>
                   <div className='ms-auto'>
                   {type === 'public' && (selectedType === type ? <RadioButtonActive /> : <RadioButtonUnactive />)}

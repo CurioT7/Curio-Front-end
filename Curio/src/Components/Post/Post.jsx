@@ -248,11 +248,6 @@ function Post(props) {
                             />}
                             
                         </CardBody>
-                        {/* <Image
-                            objectFit='cover'
-                            src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                            alt='Chakra UI'
-                        /> */}
 
                         <CardFooter
                             display='flex'
@@ -279,7 +274,7 @@ function Post(props) {
                                     </button>
                                 </div>
                                 <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                                <span className='share-post-text'>{props.comments.length}</span>
+                                <span className='share-post-text'>{props.comments && props.comments.length}</span>                                
                                 </Button>
                                 <Menu>
                                 <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>

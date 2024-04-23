@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
 import"../Notification_Messages/Notification_Messages.jsx"
-import {useNavigate} from 'react-router-dom';
 
 function Notifications() {
-const[messages, setMessages] = useState(false);
-const navigate = useNavigate();
+const closeDropdown = () => {
+    setDropdownOpen(false);
+}
 
   return (
     <div className="notifications-container">
@@ -215,7 +215,7 @@ const navigate = useNavigate();
 
         </div>
         <div className="notifications-see-all">
-            <Link to={"/notifications"} type="button" className="see-all-button">
+            <Link to={"/notifications"} type="button" className="see-all-button" onClick={closeDropdown}>
                 <span className="see-all-text">
                     <span className="see-all-text-inner" >See All</span>
                 </span>
