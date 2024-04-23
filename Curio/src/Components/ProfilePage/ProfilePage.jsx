@@ -154,9 +154,9 @@ return(
 <div className="mainComponent">
 <div className="userInfo">
 <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-{/* //C:\Users\Developer\Desktop\Curio-Front-end\Curio\src\assets\Curio_logo.png */}
-<h3 className="profileName">{username}</h3>
+<h3 className='userName'> {userAbout.displayName}</h3>
 <h5 className="userName"> u/{username} </h5>
+<b>{userAbout.bio}</b>
 </div>
 
 <div className="tableList">
@@ -279,7 +279,7 @@ return(
             savedPosts={savedPosts}
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
-          />
+             />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </div>
           </>
@@ -317,6 +317,7 @@ return(
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
             isInProfile={true}
+            style={{backgroundColor: "#00000000"}}
           />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </div>
@@ -483,6 +484,14 @@ return(
 <button> Mod Settings</button>
 </div>
 
+
+<Divider orientation='horizontal' />
+<p>Social Links</p>
+
+<div className='profileSettings'>
+<button> + Add Social Link</button>
+
+</div>
 
 </div>
 </div>    
