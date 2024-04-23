@@ -6,11 +6,8 @@ import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
 import"../Notification_Messages/Notification_Messages.jsx"
-// import {useNavigate} from 'react-router-dom';
 
 function Notifications() {
-const[messages, setMessages] = useState(false);
-// const navigate = useNavigate();
 const closeDropdown = () => {
     setDropdownOpen(false);
 }
