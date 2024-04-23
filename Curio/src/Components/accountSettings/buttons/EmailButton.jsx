@@ -16,8 +16,8 @@ const EmailButton = (props) =>{
     })
     const [errorMessage, setErrorMessage] = React.useState({
         value: "",
-        isCorrectEmail: false,
-        isCorrectPassword: false,
+        isCorrectEmail: true,
+        isCorrectPassword: true,
       });
     const toast = useToast()
 
@@ -61,7 +61,7 @@ const EmailButton = (props) =>{
 
     }
     // send data to backend fetch data from backend--------------------------------
-    async function sendDataToBackend(data) {
+    async function sendDataToBackend() {
         try {
             const response = await axios.patch(`${serverHost}/api/auth/change_email`, {
               email: email.value, // assuming 'username' state holds the new email
@@ -72,6 +72,7 @@ const EmailButton = (props) =>{
               }
             });
             setErrorMessage({value: "Email changed successfully", isCorrectPassword: true,isCorrectEmail: true});
+            props.onChangeEmail(email.value);
             clearForm();
             Toast();
           } catch (error) {

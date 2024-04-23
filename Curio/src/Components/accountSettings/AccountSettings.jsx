@@ -50,7 +50,7 @@ const AccountSettings = () =>{
                 <div className="account-settings-section col"> 
                     <h2 className="settings-heading ">Account settings</h2>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">account preferences</h3>
-                    <AccountPreferences email={email} username={username} findPass={findPass}/>
+                    <AccountPreferences onChangeEmail={setEmail} email={email} username={username} findPass={findPass}/>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">CONNECTED ACCOUNTS</h3>
                     <ConnectedAccounts findPass={findPass} isConnected={connectedToGoogle}/>
                     <h3 className="headings-titles text-uppercase fw-bold mb-3">delete ACCOUNTS</h3>
