@@ -339,6 +339,7 @@ function ShowFriendInformation(props) {
                             <h3 className="muted-header p-4 pt-0 mb-1">MODERATOR OF THESE COMMUNITIES</h3>
                             <div className="d-flex flex-column">
                                 {props.friendInfo.moderatedSubreddits && props.friendInfo.moderatedSubreddits.map((community, index) => (
+                                    community.privacyMode !== "private" &&
                                     <div key={index} className="d-flex justify-content-between p-4 pt-0 pb-0">
                                     <img src={community.icon} alt="community icon" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3" />
                                     <div className="d-flex flex-column me-auto">
@@ -346,7 +347,7 @@ function ShowFriendInformation(props) {
                                         <p className="mod-community-subscribers secondary-subheader">{community.members.length} members</p>
                                     </div>
                                     <button className="join-button">Join</button>
-                                    </div>
+                                    </div>           
                                 ))}
                             </div>
                         </div>
