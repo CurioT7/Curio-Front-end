@@ -2,13 +2,11 @@ import './ProfilePage.css';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
 import {useNavigate} from 'react-router-dom';
 import React, { useRef, useEffect, useState } from 'react';
-import RecentPosts from '../RecentPosts/RecentPosts.jsx'
 import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
 import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
 import axios from 'axios';
 import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
-import { useToast } from "@chakra-ui/react";
 import PostComments from '../Post/PostComments.jsx';
 import { Link } from 'react-router-dom';
 
@@ -191,11 +189,21 @@ return(
         <>
           {userPosts.map(post => (
             <div className='post-card' key={post.id}>
-              <div className='author'>
-            <img className="profileAvatar" src={profile}  alt="profile picture"/>
-              <b>u/{post.authorName}</b>
-              </div>
-              <p>{post.content}</p>
+               <Post
+            
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            linkedSubreddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+          />
             </div>
           ))}
           {userComments.map(comment => (
@@ -218,11 +226,21 @@ return(
   ) : (
     userPosts.map(post => (
       <div className='post-card' key={post.id}>
-        <div className='author'>
-        <img className="profileAvatar" src={profile}  alt="profile picture"/>
-        <b>u/{post.authorName}</b>
-        </div>
-        <p>{post.content}</p>
+       <Post
+            
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            linkedSubreddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+          />
       </div>
     ))
   )}
@@ -336,7 +354,7 @@ return(
 
     <TabPanel>
   {downvotedPosts.length === 0 ? (
-    <p>Looks like you haven't upvoted anything yet</p>
+    <p>Looks like you haven't downvoted anything yet</p>
   ) : (
     <>
       {downvotedPosts.map(post => (
