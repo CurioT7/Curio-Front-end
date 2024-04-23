@@ -173,7 +173,7 @@ function SignupInfo(props) {
             <p className='me-2'>Already a redditor?</p> <a style={{color: "#0d6efd", cursor: "pointer"}} onClick={handleNavigateToLogin}>Log In</a>
         </div>
       </Modal.Body>
-      <Modal.Footer className='border-0 pb-4 d-flex justify-content-center' style={{paddingLeft: '80px', paddingRight: '80px'}}>
+      <Modal.Footer className='border-0 pb-4 mb-4 d-flex justify-content-center' style={{paddingLeft: '80px', paddingRight: '80px'}}>
         <Button disabled={isEmailValid === 1} className = {(isEmailValid===1) ? "continue-button-disabled w-100" : "w-100 continue-button"} onClick={handleContinue}>Continue</Button>
       </Modal.Footer>
     </Modal>
