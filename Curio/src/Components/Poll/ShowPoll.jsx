@@ -14,8 +14,8 @@ import axios from "axios";
 
 
 function ShowPoll( props ) {
-  const [votepick, setVotepick] = useState("");
-  const [hasVoted, setVoted] = useState(false);
+  // const [votepick, setVotepick] = useState("");
+  // const [hasVoted, setVoted] = useState(false);
   const _id = props._id;
 
   const maxVoteNumber = Math.max(...props.votes);
@@ -35,35 +35,35 @@ function ShowPoll( props ) {
   const totalVotesnum = props.votes.reduce((acc, number) => acc + number, 0);
 
 
-  const handleVote = (event) => {
-    setVotepick(event.target.value);
-  };
+  // const handleVote = (event) => {
+  //   setVotepick(event.target.value);
+  // };
 
-  const handleVoted = () => {
-    setVoted(true)
-    console.log(votepick);
-    console.log(props._id);
-  }
+  // const handleVoted = () => {
+  //   setVoted(true)
+  //   console.log(votepick);
+  //   console.log(props._id);
+  // }
 
-  async function pollVote(_id, votepick){
-    const hostUrl = import.meta.env.VITE_SERVER_HOST;
-    try{
-    const response = await axios.post(`${hostUrl}/api/pollVote`, {
-      postId: _id,
-      option: votepick
-    },{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    if(response === 200){
-      setVoted(true);
-    }
-  }
-    catch(error){
-      console.error(error);
-    }
-  }
+  // async function pollVote(_id, votepick){
+  //   const hostUrl = import.meta.env.VITE_SERVER_HOST;
+  //   try{
+  //   const response = await axios.post(`${hostUrl}/api/pollVote`, {
+  //     postId: _id,
+  //     option: votepick
+  //   },{
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //     },
+  //   });
+  //   if(response === 200){
+  //     setVoted(true);
+  //   }
+  // }
+  //   catch(error){
+  //     console.error(error);
+  //   }
+  // }
 
 //   useEffect(() => {
 //     async function checkVote(){
@@ -78,23 +78,11 @@ function ShowPoll( props ) {
     <>
     <div className="d-flex flex-column">
       <div className="pollDiv p-2">
-        <div>
-          <div className="d-flex align-items-center">
-            <img src={profilephoto} className="postPhoto" />
-            <span className="profileName ms-1">{props.user}</span>
-            <span className="ms-2 middleDot"> &#183;</span>
-            <span className="ms-2 postTime"> 1 hr. ago</span>
-          </div>
-          <div className="pollTitle">{props.pollTitle}</div>
-          <div className="pollText">
-            {props.pollText}
-          </div>
-        </div>
         <Card className="mx-2 pollCard">
           <Card.Header className="d-flex cardheaderDiv align-items-center">
             <span className="openorClose">Open</span>
             <span className="ms-1 middleDot1"> &#183;</span>
-            {hasVoted? (
+            {props.hasVoted? (
             <span className="postTime ms-1"> {totalVotesnum + 1} total votes</span>
             ):
             (
@@ -103,10 +91,10 @@ function ShowPoll( props ) {
             
           </Card.Header>
           <Card.Body>
-          {hasVoted ? (
+          {props.hasVoted ? (
   <>
     {props.optionNames.map((option, index) => {
-      const voteCount = votepick === option ? props.votes[index] + 1 : props.votes[index];
+      const voteCount = props.votepick === option ? props.votes[index] + 1 : props.votes[index];
       const backgroundColor = voteCount >= maxVoteNumber ? 'rgb(255, 190, 166)' : 'rgb(226, 231, 233)';
 
       return (
@@ -118,7 +106,7 @@ function ShowPoll( props ) {
           <div className="d-flex">
             <span className="me-4 voteNumbers">{voteCount}</span>
             <span className="voteText me-2">{option}</span>
-            {votepick === option ? <Check /> : null}
+            {props.votepick === option ? <Check /> : null}
           </div>
         </div>
       );
@@ -133,7 +121,7 @@ function ShowPoll( props ) {
                   type="radio"
                   name="vote"
                   value={option}
-                  onClick={handleVote}
+                  onClick={props.handleVote}
                 />
                 <span style={{backgroundColor: 'transparent'}} className="voteText">{option}</span>
               </div>
@@ -141,11 +129,11 @@ function ShowPoll( props ) {
             <div className="d-flex adjust-items-center" style={{backgroundColor: 'transparent'}}>
               <button
                 className={`voteButton mb-2 ms-2 ${
-                  votepick === "" ? "voteButton-disabled" : "voteButton-enabled"
+                  props.votepick === "" ? "voteButton-disabled" : "voteButton-enabled"
                 }`}
                 id="voteButton"
-                disabled={votepick === "" ? true : false}
-                onClick={() => {handleVoted(); pollVote(_id, votepick)}}
+                disabled={props.votepick === "" ? true : false}
+                onClick={props.handleVoted}
               >
                 Vote
               </button>
@@ -154,9 +142,6 @@ function ShowPoll( props ) {
             </>)}
           </Card.Body> 
         </Card>
-        <div className="d-flex mt-2 ms-3">
-          <Postsfooter upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments} />
-        </div>
       </div>
     </div>
     </>

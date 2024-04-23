@@ -26,6 +26,19 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
     setNsfwClicked(!nsfwClicked);
   };
 
+  const handleTurnToSting = (options) => {
+    let string = "";
+    for (let i = 0; i < options.length; i++) {
+      string += options[i];
+      if (i < options.length - 1) {
+        string += ",";
+      }
+    }
+    return string;
+  }
+
+  const optionsString = handleTurnToSting(options);
+
   const handleSubmit = async () => {
     try {
       const postData = {
@@ -36,7 +49,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         isSpoiler: spoilerClicked,
         isNSFW: nsfwClicked,
         voteLength: days,
-        options: options,
+        options: optionsString,
         selectedMethod: selectedMethod
       };
 

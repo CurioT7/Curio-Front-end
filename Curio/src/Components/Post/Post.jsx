@@ -9,6 +9,7 @@ import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
 import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import UserPopover from '../UserPopover/UserPopover.jsx';
+import Polls from '../Poll/ShowPoll.jsx';
 
 
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
@@ -60,6 +61,19 @@ function Post(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
+    const [votepick, setVotepick] = useState("");
+    const [hasVoted, setVoted] = useState(false);
+
+      const handleVote = (event) => {
+    setVotepick(event.target.value);
+  };
+
+  const handleVoted = () => {
+    setVoted(true)
+    console.log(votepick);
+    console.log(props._id);
+  }
+
     
     const makePostUpvoted = () => {
         if (upvoted) {
@@ -237,6 +251,9 @@ function Post(props) {
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
                             </Flex>
                         </CardHeader>
+                        {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
+                            pollText={props.pollText} voteLength={props.voteLength} handleVoted={handleVoted} handleVote={handleVote} votepick={votepick} hasVoted={hasVoted}
+                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments}/> ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
                             {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
@@ -247,8 +264,11 @@ function Post(props) {
                                 alt='Chakra UI'
                                 className='mb-1'
                             />}
+
                             
                         </CardBody>
+                        
+                    ) }
                         {/* <Image
                             objectFit='cover'
                             src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'

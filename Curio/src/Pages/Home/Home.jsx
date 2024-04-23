@@ -124,7 +124,6 @@ useEffect(() => {
           const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
           console.log('Polls Data:', pollsData);
           setPolls(pollsData);
-
       }
   }
   window.addEventListener('deletePost', fetchAndSetData);
@@ -255,12 +254,14 @@ useEffect(() => {
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
         {polls.map((poll, index) => (
-          <><ShowPoll
+          <><Post
             key={index}
             pollTitle={poll.title}
+            body={poll.body}
             pollText={poll.content}
             user={poll.authorName}
             _id={poll._id}
+            type={poll.type}
             optionNames={poll.options.map(option => option.name)}
             votes={poll.options.map(option => option.votes)}
             upvotes={poll.upvotes}
@@ -272,7 +273,7 @@ useEffect(() => {
           </>
         ))}
             {((randomPost.isSelected==false) && posts) ? (
-              posts
+              posts.slice(0, 5)
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
                   <>
@@ -315,7 +316,6 @@ useEffect(() => {
       <div className='d-flex justify-content-end ms-auto mb-4 fixed-container' style={{marginRight: "3rem", paddingTop: "1.2rem", height: "100vh", overflowY: "auto", width: "20%"}}>
           <RecentPosts />
           <BackToTheTopButton/>
-
       </div>
     
     </>

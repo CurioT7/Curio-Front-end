@@ -7,9 +7,6 @@ import SixDots from "../../../styles/icons/SixDots";
 import Remove from "../../../styles/icons/Remove";
 
 function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options }) {
-  // const [options, setOptions] = useState([]);
-  // const maxOptions = 4;
-
 
 
   return (
