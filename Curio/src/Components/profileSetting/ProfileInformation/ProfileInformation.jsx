@@ -40,8 +40,8 @@ function ProfileInformation({ profileData }) {
     }
   };
 
-  const remainingDisplayNameCharacters = 30 - (displayName ? displayName.length : 0); // Check if displayName is not undefined
-  const remainingAboutCharacters = 200 - (about ? about.length : 0); // Check if about is not undefined
+  const remainingDisplayNameCharacters = 30 - (displayName ? displayName.length : 0); 
+  const remainingAboutCharacters = 200 - (about ? about.length : 0); 
 
   const displayNameClass = remainingDisplayNameCharacters <= 0 ? 'text-danger' : '';
   const aboutClass = remainingAboutCharacters <= 0 ? 'text-danger' : '';
