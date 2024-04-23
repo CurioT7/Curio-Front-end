@@ -83,8 +83,6 @@ function Createpostarea({ community }) {
       case "link":
         return <Link onLinkChange={handleLinkChange} />;
       case "poll":
-        return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} />;
-      case "Polls":
         return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} handleAddOption={handleAddOption} handleRemoveOption={handleRemoveOption}
         options={options} />;
     }
