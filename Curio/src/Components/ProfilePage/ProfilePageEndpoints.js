@@ -243,7 +243,7 @@ const getUserSubmitted = async (username) => {
 };
 
 const getUserAbout = async (username) => {
-    const url = `${VITE_SERVER_HOST}/api/user/${username}/about`;
+    const url = `${VITE_SERVER_HOST}/user/${username}/about`;
     const token = localStorage.getItem('token')
 
     const response = await fetch(url, {

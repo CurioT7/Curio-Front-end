@@ -300,7 +300,7 @@ function Post(props) {
                                     </button>
                                 </div>
                                 <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                                <span className='share-post-text'>{props.comments.length}</span>
+                                <span className='share-post-text'>{props.comments && props.comments.length}</span>                                
                                 </Button>
                                 <Menu>
                                 <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>

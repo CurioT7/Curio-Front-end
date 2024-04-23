@@ -76,12 +76,14 @@ function Createpostarea({ community }) {
   };
   const renderSelectedMethod = () => {
     switch (selectedMethod) {
-      case "Post":
+      case "post":
         return <Post onContentChange={handleContentChange} />;
-      case "Image & Video":
+      case "media":
         return <ImageVideo onImageUpload={handleImageUpload} />;
-      case "Link":
+      case "link":
         return <Link onLinkChange={handleLinkChange} />;
+      case "poll":
+        return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} />;
       case "Polls":
         return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} handleAddOption={handleAddOption} handleRemoveOption={handleRemoveOption}
         options={options} />;

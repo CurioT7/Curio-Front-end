@@ -14,6 +14,7 @@ function ProfileSetting(props) {
   const [profileData, setProfileData] = useState({ displayName: '', about: '' });
   const [userData, setUserData] = useState(false);
   const [userCategory, setUserCategory] = useState(false);
+  const [SocialLinks, setSocialLinks] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -43,6 +44,12 @@ function ProfileSetting(props) {
           setUserCategory({
             NSFW: data.NSFW
           })
+          setSocialLinks(data.socialLinks ? 
+            data.socialLinks.map(link => ({
+              url: link.url,
+              displayName: link.displayName,
+              platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+            })) : []);  
         }
     }
 
@@ -56,7 +63,7 @@ function ProfileSetting(props) {
           <h2 className='customize-profile-heading'>Customize profile</h2>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Profile Information</h3>
           <ProfileInformation profileData={profileData}/>
-          <SocialLinksComponent/>
+          <SocialLinksComponent SocialLinks={SocialLinks}/>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Images</h3>
           <ProfileImageUpload/>
           <h3 className='headings-titles text-uppercase fw-bold mb-4'>Profile category</h3>

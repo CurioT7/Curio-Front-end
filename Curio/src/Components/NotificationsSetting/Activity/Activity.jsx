@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
-import axios from "axios";
 import Titles from "../../feedSettings/childs/Titles";
-import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../UserSetting/UserSettingsEndPoints';
+import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function Activity() {
+function Activity({ userActivity }) {
   const toast = useToast();
   const [mentions, setMentionChecked] = useState(true);
   const [comments, setCommentsChecked] = useState(true);
@@ -15,6 +13,16 @@ function Activity() {
   const [replies, setRepliesChecked] = useState(true);
   const [newFollowers, setNewFollowersChecked] = useState(true);
   const [postsYouFollow, setPostsFollowChecked] = useState(true);
+
+  useEffect(() => {
+    setMentionChecked(userActivity.mentions);
+    setCommentsChecked(userActivity.comments);
+    setUpvotesPostsChecked(userActivity.upvotesPosts);
+    setUpvotesCommentsChecked(userActivity.upvotesComments);
+    setRepliesChecked(userActivity.replies);
+    setNewFollowersChecked(userActivity.newFollowers);
+    setPostsFollowChecked(userActivity.postsYouFollow);
+  }, [userActivity]);
 
   function Toast() {
     toast({
@@ -43,6 +51,7 @@ function Activity() {
     Toast();
   };
 
+
   function handleUpvotesCommentsChange(){
     setUpvotesCommentsChecked(!upvotesComments);
     sendUserDataToBackend({upvotesComments :! upvotesComments});
@@ -66,57 +75,6 @@ function Activity() {
     sendUserDataToBackend({postsYouFollow :! postsYouFollow});
     Toast();
   };
-
-  async function fetchDataFromBackend() {
-    try {
-      const response = await axios.get(
-        `${serverHost}/api/settings/v1/me/prefs`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      switch (response.status) {
-        case 404:
-          console.log("User preferences not found");
-          break;
-        default:
-          console.log("Unexpected response status:", response.status);
-          break;
-      }
-      return response.data;
-    } catch (error) {
-      if (error.response) {
-        // Handle error response here
-        const status = error.response.status;
-        if (status === 500) {
-          console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
-        } else {
-          console.error("Error fetching data from backend:", error.response.data);
-        }
-      } else {
-        console.error('Error fetching data from backend:', error.message);
-      }
-    }
-  }
-
-  useEffect(() => {
-    async function fetchAndSetData() {
-        const data = await fetchDataFromBackend();
-        if (data) {
-          setMentionChecked(data.mentions);
-          setCommentsChecked(data.comments);
-          setUpvotesPostsChecked(data.upvotesPosts);
-          setUpvotesCommentsChecked(data.upvotesComments);
-          setRepliesChecked(data.replies);
-          setNewFollowersChecked(data.newFollowers);
-          setPostsFollowChecked(data.postsYouFollow);
-        }
-      } 
-
-    fetchAndSetData();
-  }, []);
 
   return (
     <>

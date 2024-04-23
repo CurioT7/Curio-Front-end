@@ -7,12 +7,10 @@ import ChangePass from "./buttons/ChangePass"
 import EmailButton from "./buttons/EmailButton"
 import GeneratePass from "./buttons/GeneratePass"
 import { useToast, } from '@chakra-ui/react';
-import axios from 'axios';
+import { sendUserDataToBackend,fetchUserDataFromBackend } from "../UserSetting/UserSettingsEndPoints"
 
 
-const AccountPreferences = (props) => {
-    const serverHost = import.meta.env.VITE_SERVER_HOST;
-   
+const AccountPreferences = (props) => {   
     const [gender, setGender] = React.useState("MAN")
     const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
    
@@ -33,7 +31,7 @@ const AccountPreferences = (props) => {
     
     const handleGender = (event) => {
         setGender(event.target.value);
-        sendDataToBackend({gender: event.target.value})
+        sendUserDataToBackend({gender: event.target.value})
         Toast()
       };
     
@@ -41,53 +39,10 @@ const AccountPreferences = (props) => {
         setIP(event.target.value);
         
         Toast()
-    };
-    
-    async function fetchDataFromBackend() {
-        try {
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            return response.data;
-        } catch (error) {
-            if (error.response) {
-                console.error('Server Error:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error', error.message);
-            }
-            console.error('Error config:', error.config);
-        }
-    }
-    
-
-    async function sendDataToBackend(data) {
-        try {
-            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            
-            return response;
-        } catch (error) {
-            if (error.response) {
-                console.error('Server Error:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error', error.message);
-            }
-            console.error('Error config:', error.config);
-        }
-    }
-
+    };    
     React.useEffect(() => {
         async function fetchAndSetData() {
-            const data = await fetchDataFromBackend();
+            const data = await fetchUserDataFromBackend();
             if (data) {
                 setGender(data.gender);
                 setIP(data.locationCustomization);
@@ -118,7 +73,7 @@ const AccountPreferences = (props) => {
                 
                     <Spacer />
                     <Box className='account-button'>
-                    <EmailButton  buttonStyle={buttonStyle}/>
+                    <EmailButton onChangeEmail={props.onChangeEmail}  buttonStyle={buttonStyle}/>
                     </Box>
                 </Flex>
 
