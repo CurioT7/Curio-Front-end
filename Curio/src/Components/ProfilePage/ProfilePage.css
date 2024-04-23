@@ -1,16 +1,19 @@
+
 .profileContainer{
 
-    width: 90%;
-    height: 100%;
+    margin-left: 18rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    justify-content: center;
     display: flex;
-    justify-content: flex-end;
-    position: absolute;
-    left: 10%;
-
+    flex-direction: row;
+    width: 100%;
+    margin-right: auto;
+    max-width: 1200px;
 }
 
 .mainComponent{
-    width: 70%;
+    width: 100%;
 }
 
 
@@ -22,7 +25,7 @@ justify-content: flex-start;
 .rightSideBar {
     justify-content: flex-end;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    height: 95vh;
+    height: 100vh;
     width: 100%;
     border-radius: 10px;
     scrollbar-color: transparent transparent;
@@ -34,6 +37,7 @@ justify-content: flex-start;
     margin-right: 0;
     padding: 1%;
     background-color: #F9FAFA;
+    max-width: 40vh;
 }
 
 @media screen and (max-width: 768px) {
@@ -44,11 +48,13 @@ justify-content: flex-start;
 
 @media screen and (min-width: 769px) {
     .rightSideBar {
-        width: 35vh;
         min-width: 200px;
         margin-right: 20px;
     }
 }
+
+
+
 
 .profileAvatar{
 width: 100px;
