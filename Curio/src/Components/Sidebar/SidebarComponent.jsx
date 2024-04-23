@@ -144,7 +144,7 @@ function SidebarComponent(props) {
         {isAuthenticated && <MenuItem component={<Link to = "/user/CreatePost" />} icon={<Add />}> Create Post </MenuItem>}
         <hr className='mt-3 w-100'></hr>
         {isAuthenticated &&
-          <SubMenu label="YOUR COMMUNITIES" rootStyles={{
+          <SubMenu label= {!collapsed ? "YOUR COMMUNITIES" : ""} rootStyles={{
               color: '#576F76',
               backgroundColor: '#FFFFFF',
               fontSize: '0.875rem',
@@ -167,7 +167,7 @@ function SidebarComponent(props) {
           </SubMenu>
         }
         {isAuthenticated && <hr className='mt-3 ps-5 w-100'></hr>}
-        <SubMenu label="RESOURCES" rootStyles={{
+        <SubMenu label= {!collapsed ? "RESOURCES" : ""} rootStyles={{
           fontSize: '0.875rem',
           color: '#576F76',
           backgroundColor: '#FFFFFF',
@@ -204,9 +204,11 @@ function SidebarComponent(props) {
           <MenuItem href="https://www.redditinc.com/policies/user-agreement" icon={<UserAgreement />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>User Agreement</MenuItem>
         </SubMenu>
       </Menu>
-      <div className='mt-4 mb-2'>
-        <a className='rights-reserved ms-4'>Reddit, Inc. © 2024. All rights reserved.</a>
-      </div>
+      {!collapsed && 
+        <div className='mt-4 mb-2'>
+          <a className='rights-reserved ms-4'>Reddit, Inc. © 2024. All rights reserved.</a>
+        </div>
+      }
     </Sidebar>
     {isCreateCommunityModalOpen && <CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />}
     </div>
