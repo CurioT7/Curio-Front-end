@@ -18,7 +18,9 @@ function SocialLinksSection({ SocialLinks }) {
           <ul className='list-unstyled d-flex flex-wrap gap-2'>
             <li className='social-link d-flex align-items-center rounded-pill px-3 py-2'>
               <Spacer />
-              <Socialmodal buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+              <div style={{display:'flex', flexWrap:'wrap', gap:'0.5em'}}>
+                <Socialmodal buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+              </div>
             </li>
           </ul>
         </nav>

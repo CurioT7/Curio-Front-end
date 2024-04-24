@@ -8,9 +8,8 @@ import Posting_Cards from "../../Components/Create_Post/Right_Section/Posting_Ca
 
 function Createpost(props) {
   const navigate = useNavigate();
-  const [selectedCommunity, setSelectedCommunity] = useState(null); // State to hold the selected community or username
+  const [selectedCommunity, setSelectedCommunity] = useState(null); 
 
-    // Callback function to receive the selected community or username from Choose_Community
     const handleCommunitySelect = (community) => {
         setSelectedCommunity(community);
     };
@@ -38,7 +37,7 @@ function Createpost(props) {
             </div>
           </div>
           <div className='right-container-post'>
-            <Posting_Cards community={selectedCommunity ? selectedCommunity.replace(/^r\//, '').replace(/^u\//, '') : null}/>
+            <Posting_Cards community={selectedCommunity}/>
           </div>
       </div>
     </div>
