@@ -205,6 +205,20 @@
 @media(max-width:1000px) {
     .navbar-component .right-section-navbar{
         background: gray;
+        height: 100vh;
+        flex-direction: column-reverse;
+        gap: 2em;
+        justify-content: center;
+        padding-left: 0;
+    }
+    .sub-right-navbar{
+        width: 100%;
+        height: 60px;
+        justify-content: center;
+    }
+    .sub-right-navbar:hover{
+        cursor: pointer;
+        background-color:  #edeff1;
     }
     .search-box button{
         position: absolute;
@@ -213,7 +227,6 @@
         position: fixed;
         top: 30px;
         right: -100%;
-        /* background: white; */
         height: 80vh;
         width: 50%;
         flex-direction: row;

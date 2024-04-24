@@ -156,47 +156,47 @@ function NavbarComponent() {
       <ul className='right-section-navbar'>
         {isAuthenticated && 
         <>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Advertise on Curio">
-              <a href="#" style={{ display: "flex" }} className='right-item-option'>
-                <Advertisement />
-              </a>
-            </Tooltip>
-          </li>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Open chat">
-              <a href="#" className='right-item-option' style={{ display: "flex" }}>
-                <img className='navImg' src={openchat} alt="logo"/>
-              </a>
-            </Tooltip>
-          </li>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Create post">
-              <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
+          <Tooltip label="Advertise on Curio">
+            <a href="#" className='sub-right-navbar'>
+              <li className='right-item-option' style={{ display: "flex" }}>
+                    <Advertisement />
+              </li>
+            </a>
+          </Tooltip>
+          <Tooltip label="Open chat">
+            <a href="#" className='sub-right-navbar'>
+              <li className='right-item-option' style={{ display: "flex" }}>
+                    <img className='navImg' src={openchat} alt="logo"/>
+              </li>
+            </a>
+          </Tooltip>
+          <Tooltip label="Create post">
+            <Link to={'/user/CreatePost'} className='sub-right-navbar'>
+              <li className='create-icon' style={{ display: "flex" }}>
                 <img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
                 Create
-              </Link>
-            </Tooltip>
-          </li>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Open inbox">
-              <a style={{ display: "flex" }} className='right-item-option'>
-              <Menu>
-                <MenuButton>
-                  <img className='navImg notificimg' src={inbox} alt="logo"/>
-                </MenuButton>
-                <MenuList 
-                style={{
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  boxShadow: 'none', 
-                }}>
-                  <Notifications_Dropdown/>
-                </MenuList>
-              </Menu>
-              </a>
-            </Tooltip>
-          </li>
+              </li>
+            </Link>
+          </Tooltip>
+          <Tooltip label="Open inbox">
+            <a className='sub-right-navbar'>
+              <li className='right-item-option' style={{ display: "flex" }}>
+                  <Menu>
+                    <MenuButton>
+                      <img className='navImg notificimg' src={inbox} alt="logo"/>
+                    </MenuButton>
+                    <MenuList 
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      boxShadow: 'none', 
+                    }}>
+                      <Notifications_Dropdown/>
+                    </MenuList>
+                  </Menu>
+              </li>
+            </a>
+          </Tooltip>
           <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
             <Tooltip label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
