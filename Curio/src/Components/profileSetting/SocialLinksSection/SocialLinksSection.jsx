@@ -19,7 +19,7 @@ function SocialLinksSection({ SocialLinks }) {
             <li className='social-link d-flex align-items-center rounded-pill px-3 py-2'>
               <Spacer />
               <div style={{display:'flex', flexWrap:'wrap', gap:'0.5em'}}>
-                <Socialmodal buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+                <Socialmodal buttonStyle={buttonStyle} SocialLinks={SocialLinks} validate={'withCancel'}/>
               </div>
             </li>
           </ul>

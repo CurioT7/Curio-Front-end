@@ -64,9 +64,11 @@ function Socialmodal(props){
     return(
         <>
         {Array.isArray(selectedSocialLinks) && selectedSocialLinks.slice(0, 5).map((link, index) => (
-            <div key={index} className="selected-social-link" onClick={() => RedirectToSocialLink(index)}>
+            <div key={link.displayName} className="selected-social-link" onClick={() => RedirectToSocialLink(index)}>
                 <i className={link.platform}/> {link.displayName} 
-                <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
+                {props.validate === 'withCancel' ? ( 
+                    <i className="fa-solid fa-x" onClick={() => handleRemoveSocialLink(index)}></i>
+                ) : null}
             </div>
         ))}
         <div className="social-link-container">

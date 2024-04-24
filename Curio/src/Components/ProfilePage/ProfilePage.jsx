@@ -9,6 +9,8 @@ import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
 import PostComments from '../Post/PostComments.jsx';
 import { Link } from 'react-router-dom';
+import SocialLink from '../profileSetting/Socialmodal/Socialmodal.jsx';
+import { fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints.js';
 
 function ProfilePage(){
 
@@ -26,6 +28,7 @@ function ProfilePage(){
   const [downvotedPosts, setDownvotedPosts] = useState([]);
   const [ upvotedComments, setUpvotedComments] = useState([]);
   const [downvotedComments, setDownvotedComments] = useState([]);
+  const [SocialLinks, setSocialLinks] = useState([]);
   const getSaved = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -49,6 +52,10 @@ function ProfilePage(){
       }
     }
 
+    const buttonStyle = {
+      borderRadius: "30px",
+      padding: "10px 15px", 
+    };
     const getHidden = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -138,6 +145,26 @@ useEffect(() => {
     }
     console.log(userAbout);
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const data = await fetchUserDataFromBackend();
+            if (data) {
+                setSocialLinks(data.socialLinks ? 
+                    data.socialLinks.map(link => ({
+                        url: link.url,
+                        displayName: link.displayName,
+                        platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+                    })) : []);  
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    fetchData();
+}, []);
 
   const scrollLeft = () => {
       tabListRef.current.scrollLeft -= 100;
@@ -489,7 +516,9 @@ return(
 <p>Social Links</p>
 
 <div className='profileSettings'>
-<button> + Add Social Link</button>
+<div style={{display:'flex',flexWrap:'wrap', gap:"0.5em"}}>
+  <SocialLink buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+</div>
 
 </div>
 
