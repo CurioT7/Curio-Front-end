@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Ellipsis from "../../styles/icons/Elippsis";
 import SaveButton from "../../styles/icons/SaveButton";
 import FilledSave from "../../styles/icons/FilledSave";
@@ -26,6 +26,20 @@ function PostControl(props) {
   const [isHidden, setIsHidden] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isPostAuthor, setIsPostAuthor] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowControls(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   useEffect(() => {
     if (props.username === localStorage.getItem('username')) {
@@ -314,7 +328,7 @@ function PostControl(props) {
 
   return (
     <>
-      <div>
+      <div ref={dropdownRef}>
         <button className="post-dropdown-control d-flex justify-content-center align-items-center" onClick={handleEllipsisClick}>
           <Ellipsis className="ellipsis-img" />
         </button>

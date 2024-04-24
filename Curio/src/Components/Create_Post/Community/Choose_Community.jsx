@@ -9,13 +9,14 @@ import CreateCommunity from '../../Sidebar/CreateCommunity.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function Choose_Community({ onSelect }) { // Receive onSelect prop
+function Choose_Community({ onSelect }) {
     const [inputValue, setInputValue] = useState('');
     const [username, setUsername] = useState(null);
     const [userCommunities, setUserCommunities] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
     const [chosenItem, setChosenItem] = useState(null); 
+    const [searchResults, setSearchResults] = useState([]);
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
     const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
@@ -34,14 +35,36 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
             setInputFocused(false);
             setDropdownVisible(false);
         }
+        if (event.target.classList.contains('community-arrow')) {
+            setDropdownVisible(true); // Ensure dropdown opens when clicking the arrow
+        }
     };
 
-    const handleChange = (event) => {
-        setInputValue(event.target.value);
+    const handleChange = async (event) => {
+        const query = event.target.value;
+        setInputValue(query);
+        if (query.trim() !== '') {
+            fetchSearchResults(query);
+        } else {
+            setSearchResults([]); 
+        }
     };
 
-    const handleUsernameClick = () => {
-        setInputValue(`u/${username}`);
+    useEffect(() => {
+        if (inputValue.trim() === '') {
+            setSearchResults([]); 
+        }
+    }, [inputValue]);
+    
+    const fetchSearchResults = async (query) => {
+        try {
+            const response = await axios.get(
+                `${serverHost}/api/searchCommunities/${query}`
+            );
+            setSearchResults(response.data.subreddits);
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
     };
 
     const handleInputFocus = () => {
@@ -49,13 +72,16 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
     };
 
     const handleItemClick = (item) => {
-        setChosenItem(item); // Set chosen item when an item is clicked
-        setInputValue(item.community || item); // Ensure that the selected item is either a community object or a string
-        setDropdownVisible(false);
-        onSelect(item.community ? item.community : item); // Pass the selected item without modifications if it's a string, or extract the community name if it's an object
-    };
-    
-    
+        if (item) {
+            setChosenItem(item); 
+            setInputValue(item.community || item); 
+            setDropdownVisible(false);
+            onSelect(item.community ? item.community : item);
+        }
+        if (inputValue.trim() === ''){
+            onSelect(null)
+        }
+    };    
 
     useEffect(() => {
         document.addEventListener('click', handleClick);
@@ -77,7 +103,7 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
                 }
             );
             const communityDataResponse = await axios.get(
-                `${serverHost}/user/${userDataResponse.data.username}/communities`
+                `${serverHost}/api/user/${userDataResponse.data.username}/communities`
             );
             return { userData: userDataResponse.data, communityData: communityDataResponse.data };
         } catch (error) {
@@ -100,11 +126,21 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
             if (data) {
                 setUsername(data.userData.username);
                 setUserCommunities(data.communityData.communities);
+                // setMemberCount(data.communityData.communities);
             }
         };
     
         fetchData();
     }, []);
+
+    const handleArrowClick = () => {
+        if (dropdownVisible) {
+            setDropdownVisible(false); // Close the dropdown if it's already open
+        } else {
+            setDropdownVisible(true); // Open the dropdown if it's closed
+        }
+    };
+    
     
     return (
         <>
@@ -117,7 +153,7 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
                             chosenItem ? (
                                 <img src={profile} alt="Profile Picture" className="username-image" />
                             ) : (
-                                <span className="circle-dot" />
+                                <span className="circle-dot"/>
                             )
                         )}
                         <div className="input-container">
@@ -183,15 +219,35 @@ function Choose_Community({ onSelect }) { // Receive onSelect prop
                                                         onClick={() => handleItemClick(community.name)}>
                                                         r/{community.name}
                                                     </p>
+                                                    <p style={{fontSize: '12px', color:'#878a8c'}}>
+                                                        {community.memberCount} {community.memberCount === 1 ? 'member' : 'members'}
+                                                    </p>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
+                                    {searchResults.length > 0 && (
+                                        <div className='dropdown-content-search-results container mt-2'>
+                                            {searchResults.map((community) => (
+                                                <div key={community.name} className='dropdown-user' onClick={() => handleItemClick({ community: `r/${community.name}` })}>
+                                                    <img src={profile} alt="Community Icon" className='community-image' />
+                                                    <div className='username-section'>
+                                                        <p className='dropdown-community' onClick={() => handleItemClick({ community: `r/${community.name}` })}>
+                                                            r/{community.name}
+                                                        </p>
+                                                        <p style={{ fontSize: '12px', color: '#878a8c' }}>
+                                                            {community.members} {community.members === 1 ? 'member' : 'members'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
-                        <div className="icon-container">
-                            <i className="community-arrow fa-solid fa-angle-down"></i>
+                        <div className="icon-container" onClick={handleArrowClick}>
+                            <i className={`community-arrow fa-solid fa-angle-down ${dropdownVisible ? 'arrow-clicked' : ''}`}></i>
                         </div>
                     </div>
                 </div>

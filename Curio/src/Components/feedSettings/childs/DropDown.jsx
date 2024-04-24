@@ -15,7 +15,7 @@ return(
                     description="Choose how you would like content displayed in feeds. This control is also found above your feed."/> }
            
             <Spacer/>
-            <Select  display='flex' flexDirection='row' alignItems='end' className="fw-bold feeding-select" textAlign={[ 'left', 'center' ]}  variant='unstyled' onChange={props.onChangeSort} value={props.value} size='xs' width='fit-content'  textTransform="uppercase" >
+            <Select data-testid="sort-dropdown"  display='flex' flexDirection='row' alignItems='end' className="fw-bold feeding-select" textAlign={[ 'left', 'center' ]}  variant='unstyled' onChange={props.onChangeSort} value={props.value} size='xs' width='fit-content'  textTransform="uppercase" >
                
                     {props.isSort && <>
                         <option className='fw-bold' value='Hot' >Hot</option>
@@ -41,7 +41,7 @@ return(
                     description="Enable if you would like each community to remember and use the last content sort you selected for that community."/>
             <Spacer/>
             
-            <Switch size='lg' isChecked={props.isChecked} onChange={props.onChangeRemember}></Switch>
+            <Switch size='lg' data-testid="remember-switch" isChecked={props.isChecked} onChange={props.onChangeRemember}></Switch>
             
         </Flex>
     </Box>

@@ -5,7 +5,7 @@
     --fourclr: #0079d3;
     --fifthclr: #1a1a1b;
 }
-.settings-section{
+.chat-settings-section{
     width: 65%;
 }
 
@@ -43,4 +43,13 @@ option{
     text-transform:capitalize;
     
     
+}
+
+@media screen and (max-width: 775px) {
+    .chat-settings-section{
+        width: 100%;
+    }
+    .account-button{
+        margin-left: 20rem;
+    }
 }

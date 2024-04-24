@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css"; 
 import logo from "../../assets/Profile_navbar.png";
-import { Popover, PopoverTrigger, PopoverContent, PopoverBody, Text, Button } from '@chakra-ui/react';
+import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
-import {
-    PopoverHeader,
-    PopoverFooter,
-    PopoverArrow,
-    PopoverCloseButton,
-    PopoverAnchor,
-  } from '@chakra-ui/react'
 import { SlOptions } from "react-icons/sl";
-
+import"../Notification_Messages/Notification_Messages.jsx"
 
 function Notifications() {
+const closeDropdown = () => {
+    setDropdownOpen(false);
+}
 
   return (
     <div className="notifications-container">
@@ -23,11 +19,9 @@ function Notifications() {
               <span className="notifications-title-text">Notifications</span>
           </div>
           <a href="#" className="notifications-messages-link">
-              <div className="notifications-messages">
                   <div className="notifications-messages-title">
                       <span className="notifications-messages-text">Messages</span>
-                  </div>
-              </div>
+                   </div>
           </a>
           <div className="notifications-extra"></div>
           <div className="messages-extra"></div>
@@ -59,7 +53,7 @@ function Notifications() {
                               </span>
                               <div className="notifications-item-icon">
                               <i className="fa-solid fa-message"/>
-                          </div>
+                            </div>
                           </div>
                           
                       </div>
@@ -75,19 +69,19 @@ function Notifications() {
                           </div>
                       </div>
                       <div className="notifications-item-options">
-                      <Popover placement='bottom-start'>
-                        <PopoverTrigger>
-                            <Button 
-                            variant='ghost'
-                            colorScheme='gray'><SlOptions /></Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <PopoverArrow />
-                            <PopoverBody>Hide this notification</PopoverBody>
-                            <PopoverBody>Disable updates from this community</PopoverBody>
-                            <PopoverBody>Turn off this notification type</PopoverBody>
-                        </PopoverContent>
-                    </Popover>
+                        <Popover placement='bottom-end'>
+                            <PopoverTrigger>
+                                <Button 
+                                variant='ghost'
+                                colorScheme='gray'><SlOptions /></Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverBody>Hide this notification</PopoverBody>
+                                <PopoverBody>Disable updates from this community</PopoverBody>
+                                <PopoverBody>Turn off this notification type</PopoverBody>
+                            </PopoverContent>
+                        </Popover>
                       </div>
                   </div>
               </div>
@@ -221,11 +215,11 @@ function Notifications() {
 
         </div>
         <div className="notifications-see-all">
-            <a href="" type="button" className="see-all-button">
+            <Link to={"/notifications"} type="button" className="see-all-button" onClick={closeDropdown}>
                 <span className="see-all-text">
-                    <span className="see-all-text-inner">See All</span>
+                    <span className="see-all-text-inner" >See All</span>
                 </span>
-            </a>
+            </Link>
         </div>
     </div>
   );

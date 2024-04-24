@@ -29,7 +29,7 @@ function Login({
   const toast = useToast();
 
   useEffect(() => {
-    if (password.length < 8) {
+    if (password && password.length < 8) {
       setPasswordError('Password must be at least 8 characters long.');
     } else {
       setPasswordError('');

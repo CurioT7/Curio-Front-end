@@ -6,7 +6,6 @@ function UserSetting() {
   const [activeLink, setActiveLink] = useState('/settings/account');
 
   useEffect(() => {
-    // Update the active link state after rendering is completed
     setActiveLink(window.location.pathname);
   }, []);
 

@@ -7,8 +7,9 @@ import picture from "../../styles/icons/commPic.png";
 import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
-import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
-import UserPopover from '../UserPopover.css/UserPopover.jsx';
+import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import UserPopover from '../UserPopover/UserPopover.jsx';
+import Polls from '../Poll/ShowPoll.jsx';
 
 
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
@@ -28,7 +29,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 
-import { FetchPostLockStatus } from './PostEndPoints.js';
+import { FetchObjectInfo } from './PostEndPoints.js';
 import './Post.css'
 import PostControl from './PostControl.jsx';
 import axios from 'axios';
@@ -38,11 +39,12 @@ const token = localStorage.getItem('token');
 
 
 function Post(props) {
-    const [subreddit, setSubreddit] = useState([]);
+    const [subredditName, setSubredditName] = useState("");
     const [isHidden, setIsHidden] = useState(false);
     const [showPopover, setShowPopover] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
+    const [blockedUsers, setBlockedUsers] = useState([]);
     const toast = useToast();
     const postId = props._id;
     const handleHidePost = () => {
@@ -59,6 +61,19 @@ function Post(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
+    const [votepick, setVotepick] = useState("");
+    const [hasVoted, setVoted] = useState(false);
+
+      const handleVote = (event) => {
+    setVotepick(event.target.value);
+  };
+
+  const handleVoted = () => {
+    setVoted(true)
+    console.log(votepick);
+    console.log(props._id);
+  }
+
     
     const makePostUpvoted = () => {
         if (upvoted) {
@@ -122,47 +137,63 @@ function Post(props) {
       }
     }
   }
+    // useEffect(() => {
+    //     const fetchPostStatus = async () => {
+    //         const postInfo = await FetchObjectInfo(props._id,"post");
+    //         if(postInfo){
+    //             setIsLocked(postInfo.item.isLocked);  
+    //         }
+    //         const SubredditInfo = await FetchObjectInfo(props.linkedSubreddit,"subreddit");
+    //         if(SubredditInfo){
+                
+    //             setSubredditName(SubredditInfo.item.name);
+    //         }
+    //     }
+    //     fetchPostStatus();
+    // })
 
-    const handleNavigationToDetails = () => {
-        const post = {
-            _id: props._id,
-            user: props.user,
-            title: props.title,
-            subreddit: props.linkedSubreddit,
-            content: props.content,
-            image: props.image,
-            upvotes: props.upvotes,
-            downvotes: props.downvotes,
-            comments: props.comments,
-            savedPosts: props.savedPosts,
-            savedComments: props.savedComments,
-            hiddenPosts: props.hiddenPosts,
-            isMod: props.isMod,
-            dateViewed: new Date().toISOString()
-        }
-        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
-        console.log(post);
-
-
-        if (recentPosts && Array.isArray(recentPosts)) {
-
-            const postExists = recentPosts.find((recentPost) => recentPost._id === post._id);
-            if (!postExists) {
-
-                recentPosts.unshift(post);
-                recentPosts.slice(0,10);
-                localStorage.setItem('recentPosts', JSON.stringify(recentPosts));
+    const handleNavigationToDetails = async () => {
+        try{
+            const post = {
+                _id: props._id,
+                user: props.user,
+                title: props.title,
+                subreddit: subredditName,
+                content: props.content,
+                image: props.image,
+                upvotes: props.upvotes,
+                downvotes: props.downvotes,
+                comments: props.comments,
+                savedPosts: props.savedPosts,
+                savedComments: props.savedComments,
+                hiddenPosts: props.hiddenPosts,
+                isMod: props.isMod,
+                isLocked: isLocked,
+                dateViewed: new Date().toISOString()
+            }
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/history`, {
+                postID: props._id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                window.dispatchEvent(new Event('newRecentPost'));
+                navigate(`/post/post-details/${props._id}`, { state: { post } });
             }
         }
-        else {
-            localStorage.setItem('recentPosts', JSON.stringify([post]));
+        catch(err){
+            console.log(err);
+            toast({
+                description: "Server Error Occured.",               
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
         }
-
-        if (recentPosts && recentPosts.length === 0) {
-            localStorage.setItem('recentPosts', JSON.stringify([post]));
-        }
-        window.dispatchEvent(new Event('newRecentPost'));
-        navigate(`/post/post-details/${props._id}`, { state: { post } });
     }
 
 
@@ -183,7 +214,7 @@ function Post(props) {
     async function handleGetFollower(username) {
         try {
             const result = await getFollower(username);
-            if (result.success) {
+            if (result) {
                 setIsFollowing(true);
             } else {
                 console.error('Error:', result.error);
@@ -193,19 +224,18 @@ function Post(props) {
         }
     }
 
-    async function showFriendInformation(username) {
-        try {
-            const response = await axios.get(`${hostUrl}/user/${username}/about`);
-            setFriendInfo(response.data);
-        } catch (error) {
-            console.error('Error:', error);
+    async function showFriendInfo(username) {
+        const result = await showFriendInformation(username);
+        if(result) {
+          setFriendInfo(result.data);
         }
-    }
+      }
+
 
  
 
     return (
-
+        
         <>
             {!isHidden &&
                 <div>
@@ -215,16 +245,18 @@ function Post(props) {
                             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                                 <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
                                <UserPopover user={props.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
-                               handleGetFollower={handleGetFollower} showFriendInformation={showFriendInformation} classname="community-post-name" />
+                               handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
                             </Flex>
                         </CardHeader>
+                        {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
+                            pollText={props.pollText} voteLength={props.voteLength} handleVoted={handleVoted} handleVote={handleVote} votepick={votepick} hasVoted={hasVoted}
+                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments}/> ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
-                            {props.content && <Text className='text-body'>
-                            {props.content}
+                            {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
                             </Text>}
                             {props.image && <Image
                                 objectFit='cover'
@@ -232,8 +264,11 @@ function Post(props) {
                                 alt='Chakra UI'
                                 className='mb-1'
                             />}
+
                             
                         </CardBody>
+                        
+                    ) }
                         {/* <Image
                             objectFit='cover'
                             src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
@@ -265,7 +300,7 @@ function Post(props) {
                                     </button>
                                 </div>
                                 <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                                <span className='share-post-text'>{props.comments.length}</span>
+                                <span className='share-post-text'>{props.comments && props.comments.length}</span>                                
                                 </Button>
                                 <Menu>
                                 <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>
@@ -291,7 +326,7 @@ function Post(props) {
                             </Box>
 
                             {props.isMod&& <Box display='flex'  justifyContent='end'>
-                               <PostLock id={props._id} onChangeLock={handleIsLocked} />
+                               <PostLock isLocked={isLocked} id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             
                         </CardFooter>

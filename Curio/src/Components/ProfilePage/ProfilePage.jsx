@@ -2,14 +2,13 @@ import './ProfilePage.css';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
 import {useNavigate} from 'react-router-dom';
 import React, { useRef, useEffect, useState } from 'react';
-import RecentPosts from '../RecentPosts/RecentPosts.jsx'
 import { getUserAbout, getUserComments , getUserOverview , getUserSubmitted, getUserDownvoted, getUserUpvoted} from './ProfilePageEndpoints.js';
 import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
 import axios from 'axios';
 import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
-import { useToast } from "@chakra-ui/react";
 import PostComments from '../Post/PostComments.jsx';
+import { Link } from 'react-router-dom';
 
 function ProfilePage(){
 
@@ -155,9 +154,9 @@ return(
 <div className="mainComponent">
 <div className="userInfo">
 <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-{/* //C:\Users\Developer\Desktop\Curio-Front-end\Curio\src\assets\Curio_logo.png */}
-<h3 className="profileName">{username}</h3>
+<h3 className='userName'> {userAbout.displayName}</h3>
 <h5 className="userName"> u/{username} </h5>
+<b>{userAbout.bio}</b>
 </div>
 
 <div className="tableList">
@@ -190,11 +189,21 @@ return(
         <>
           {userPosts.map(post => (
             <div className='post-card' key={post.id}>
-              <div className='author'>
-            <img className="profileAvatar" src={profile}  alt="profile picture"/>
-              <b>u/{post.authorName}</b>
-              </div>
-              <p>{post.content}</p>
+               <Post
+            
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            linkedSubreddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+          />
             </div>
           ))}
           {userComments.map(comment => (
@@ -217,11 +226,21 @@ return(
   ) : (
     userPosts.map(post => (
       <div className='post-card' key={post.id}>
-        <div className='author'>
-        <img className="profileAvatar" src={profile}  alt="profile picture"/>
-        <b>u/{post.authorName}</b>
-        </div>
-        <p>{post.content}</p>
+       <Post
+            
+            _id={post._id}
+            title={post.title}
+            body={post.body}
+            user={post.authorName}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+            comments={post.comments}
+            content={post.content}
+            linkedSubreddit={post.linkedSubreddit}
+            savedPosts={savedPosts}
+            savedComments={savedComments}
+            hiddenPosts={hiddenPosts}
+          />
       </div>
     ))
   )}
@@ -260,7 +279,7 @@ return(
             savedPosts={savedPosts}
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
-          />
+             />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </div>
           </>
@@ -298,6 +317,7 @@ return(
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
             isInProfile={true}
+            style={{backgroundColor: "#00000000"}}
           />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </div>
@@ -335,7 +355,7 @@ return(
 
     <TabPanel>
   {downvotedPosts.length === 0 ? (
-    <p>Looks like you haven't upvoted anything yet</p>
+    <p>Looks like you haven't downvoted anything yet</p>
   ) : (
     <>
       {downvotedPosts.map(post => (
@@ -388,13 +408,50 @@ return(
   <div className="profileItem">Comment Karma</div>
 </div>
 <br />
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 0.5fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
-
-  <div className="profilevalue">{userAbout.cakeDay || 'Mar 3, 2023'} </div> 
-   <div className="profilevalue">{userAbout.goldRecieved || '0'}</div>
-  <div className="profileItem">Cake day</div>
-  <div className="profileItem">Gold Received</div>
-</div>
+{userAbout.followersCount > 0 ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateRows: "repeat(2, 0.5fr)",
+                rowGap: "0.3rem",
+                columnGap: "1rem",
+              }}
+            >
+              <div className="profilevalue">{userAbout.followersCount}</div>
+              <div className="profilevalue">
+                {userAbout.cakeDay || "Mar 3, 2023"}{" "}
+              </div>
+              <Link to={`/user/${username}/followers`} > 
+              <div className="profileItem">Followers</div>
+              </Link>
+              <div className="profileItem">Cake day</div>
+              <div className="profilevalue mt-3">
+                {userAbout.goldRecieved || "0"}
+              </div>
+              <div className="profilevalue mt-3"></div>
+              <div className="profileItem">Gold Received</div>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateRows: "repeat(2, 0.5fr)",
+                rowGap: "0.3rem",
+                columnGap: "1rem",
+              }}
+            >
+              <div className="profilevalue">
+                {userAbout.cakeDay || "Mar 3, 2023"}{" "}
+              </div>
+              <div className="profilevalue">
+                {userAbout.goldRecieved || "0"}
+              </div>
+              <div className="profileItem">Cake day</div>
+              <div className="profileItem">Gold Received</div>
+            </div>
+          )}
  <Divider orientation='horizontal' />
 
  <p>Settings</p>
@@ -427,6 +484,14 @@ return(
 <button> Mod Settings</button>
 </div>
 
+
+<Divider orientation='horizontal' />
+<p>Social Links</p>
+
+<div className='profileSettings'>
+<button> + Add Social Link</button>
+
+</div>
 
 </div>
 </div>    
