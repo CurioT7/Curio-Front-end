@@ -2,12 +2,13 @@ import Listing from "./Listing";
 import "./CommunityPage.css";
 import Post from "../Post/Post";
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
 import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo,fetchUserName } from "./CommunityEndPoints";
-function CommunityBody({ props }) {
-  
+function CommunityBody(props) {
+  const navigate = useNavigate();
   const[posts, setPosts] = React.useState([])
   const[randomPost, setRandomPost] = React.useState({
     post:{
@@ -49,7 +50,10 @@ React.useEffect(() => {
   fetchAndSetData();
 }, [Community]);
 
-
+function handleCreatePost(){
+  props.setSubreddit(Community);
+  navigate(`/user/CreatePost`);
+}
 
 async function changeSortType(value,time) {
     
@@ -156,7 +160,7 @@ async function changeSortType(value,time) {
           <div className="col text-center">
           <h4 className="fw-bold" >This community doesn't have any posts yet</h4>
           <p className="text-muted">Make one and get this feed started.</p>
-          <Button colorScheme="blue" fontSize='sm' fontWeight='bold' style={{borderRadius:'30px'}} >Create a post</Button>
+          <Button onClick={handleCreatePost} colorScheme="blue" fontSize='sm' fontWeight='bold' style={{borderRadius:'30px'}} >Create a post</Button>
           </div>
           </div>):null}
       </div>
