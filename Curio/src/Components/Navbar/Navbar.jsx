@@ -31,7 +31,7 @@ import { getTrending } from './SearchingEndPoints';
 import Trending from './Trending';
 
 
-function NavbarComponent() {
+function NavbarComponent(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [trending, setTrending] = React.useState([]);
   const navigate = useNavigate();
@@ -120,8 +120,16 @@ function NavbarComponent() {
     }, 0);
   }
 }, [isOpen]);
+
+if (!props.NavbarVisibility) {
+  return null;
+}
+
   return (
-    <nav className='navbar-component'>
+    <nav className='navbar-component'
+    style={{
+      visibility: props.NavbarVisibility ? 'visible' : 'hidden',
+    }}>
       <input type="checkbox" name="" id="chk1"/>
       <div className="logo">
         <Link to={'/'} style={{ display: "flex" }}>
@@ -164,11 +172,11 @@ function NavbarComponent() {
             </a>
           </Tooltip>
           <Tooltip label="Open chat">
-            <a href="#" className='sub-right-navbar'>
+            <Link to={'/room/create'} className='sub-right-navbar'>
               <li className='right-item-option' style={{ display: "flex" }}>
                     <img className='navImg' src={openchat} alt="logo"/>
               </li>
-            </a>
+            </Link>
           </Tooltip>
           <Tooltip label="Create post">
             <Link to={'/user/CreatePost'} className='sub-right-navbar'>
@@ -233,7 +241,7 @@ function NavbarComponent() {
             </div>
           </Link>
           <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
-            <SignupHandler/>
+            <SignupHandler />
           </div>
           <hr />
           <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 

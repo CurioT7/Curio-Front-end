@@ -1,0 +1,138 @@
+.chat-left-title{
+    padding-bottom: .75rem;
+    padding-top: .75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-items: center;
+    display: flex;
+}
+.filter-chat-options{
+    display: flex;
+    padding-left: 10px;
+    padding-right: 6px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+.add-chat{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+.filter-chat-options:hover,
+.add-chat:hover{
+    background: #edeff1;
+    border-radius: 999px;
+}
+.threads-container{
+    border-bottom-color: #f2f2f2;
+    border-style: solid;
+    border-bottom-width: 0.0625rem;
+    border-width: 0px;
+}
+
+.threads-container:hover{
+    background: #edeff1;
+}
+.threads-list{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+    justify-content: space-between;
+    cursor: pointer;
+    padding-right: 16px;
+    padding-left: 16px;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    color: #0f1a1c;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.left-section-thread{
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.threads-arrow-leftup{
+    line-height: 1rem;
+    font-size: 1.25rem;
+    width: 2rem;
+    /* height: 2rem; */
+    align-items: center;
+}
+
+.thread-title{
+    padding-bottom: .375rem;
+    padding-top: .375rem;
+    line-height: 1.25rem;
+    font-size: 1rem;
+}
+
+.arrow-right-threads-icon{
+    align-items: center;
+    display: flex;
+    width: 2rem;
+    font-size: 1.25rem;
+    /* margin-right: 0.5rem; */
+}
+
+.body-chat-message{
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    gap: .125rem;
+    overflow: hidden;
+}
+
+.row-1-chat,
+.row-2-chat{
+    display: flex;
+    gap: .5rem;
+    justify-content: space-between;
+    min-width: 0px;
+}
+
+.username-chat{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.last-message-time{
+    font-size: 10px;
+    color: #434343;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.last-message{
+    color: #434343;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+.message-container-text{
+    background-color: #f8f8f8;
+    align-items: center;
+    border: none;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    padding: 0.5rem 0.75rem;
+    justify-content: left;
+    min-height: 60px;
+    text-align: left;
+    text-decoration: none;
+    width: 100%;
+}
+
+.image-chat-message{
+    box-sizing: border-box;
+    height: 2rem;
+    width: 2rem;
+    display: inline-block;
+}
