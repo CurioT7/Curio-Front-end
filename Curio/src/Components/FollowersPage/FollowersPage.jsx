@@ -38,6 +38,10 @@ function FollowersPage(props) {
   const [userAbout, setUserAbout] = useState({});
   const [friendAbout, setFriendAbout] = useState({});
 
+  const followers = ['freddy', 'Lively_Infinity_8489'];
+
+  const following = ['Holly_Walsh6', 'freddy'];
+
   const token = localStorage.getItem("token");
   const toastsuccess = useToast()
   function ToastSuccess(description) {

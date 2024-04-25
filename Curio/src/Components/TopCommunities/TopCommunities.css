@@ -68,3 +68,7 @@
 .upContainer{
   margin-top: 2rem;
 }
+
+.selectedPage{
+  color: rgb(24, 112, 244);
+}

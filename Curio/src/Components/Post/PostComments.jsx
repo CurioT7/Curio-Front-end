@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Avatar, IconButton, Box, Button } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import { LuShare } from "react-icons/lu";
@@ -29,8 +29,24 @@ function PostComments(props) {
     const [reportReason, setReportReason] = useState('');
     const [isSaved, setIsSaved] = useState(false);
     const [isCommentAuthor, setIsCommentAuthor] = useState(false);
+    const dropdownRef = useRef(null);
+
     const toast = useToast();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowControls(false);
+        }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdownRef]);
+
     const handleOpenReportModal = () => {
         setReportReasonModalOpen(true);
     }
@@ -242,7 +258,7 @@ function PostComments(props) {
                 <button className="post-dropdown-control d-flex justify-content-center align-items-center p-2" onClick={handleEllipsisClick}>
                     <Ellipsis className="ellipsis-img" />
                 </button>
-                {showControls && <div className="post-dropdown" style={{ 
+                {showControls && <div className="post-dropdown" ref={dropdownRef} style={{ 
                                                     display: showControls ? 'flex' : 'none',
                                                     flexDirection: 'column',
                                                     alignItems: 'flex-start',

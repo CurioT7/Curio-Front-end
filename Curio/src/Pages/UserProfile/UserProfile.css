@@ -31,3 +31,11 @@
   /* margin-left: 55rem; */
 }
 
+.LinkToSettings{
+  color: rgb(0, 69, 172);
+}
+
+.LinkToSettings:hover{
+  text-decoration: underline;
+}
+

@@ -21,8 +21,8 @@ import SortingComments from './SortingComments';
 import {useParams} from 'react-router-dom';
 import PostLock from './PostLock';
 import { set } from 'mongoose';
-import UserPopover from '../UserPopover.css/UserPopover.jsx';
-import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import UserPopover from '../UserPopover/UserPopover.jsx';
+import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import { FetchSubredditName } from './PostEndPoints';
 
 
@@ -46,6 +46,9 @@ function PostContentDetails(post) {
     const handleIsLocked = (value) => {
         setIsLocked(value);
     }
+    setTimeout(async () => {
+        setIsLocked(post.isLocked);
+    },0)
     useEffect(() => {
         const getSaved = async () => {
             try{
@@ -151,6 +154,11 @@ function PostContentDetails(post) {
         }
     }, [hiddenPosts]);
 
+    useEffect(() => {   
+
+
+    })
+
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [savedComments, setSavedComments] = useState([]);
@@ -196,10 +204,7 @@ function PostContentDetails(post) {
             else {
                 Toast();
             }
-            const subredditName = await FetchSubredditName(post.subreddit);
-            if (subredditName) {
-                console.log(subredditName);
-            }
+            
         }
         window.addEventListener('deleteComment', fetchAndSetData);
     
@@ -210,13 +215,17 @@ function PostContentDetails(post) {
     }, []);
 
     const handleChangedSort = async (value) => {
-        const data = await GetSortedComments(post._id, value,subreddit);
-        if (data) {
-            setComments(data.comments);
-        }
-        else {
-            Toast();
-        }
+        setTimeout( async () => {
+            
+            const data = await GetSortedComments(post._id, value,post.subreddit);
+            if (data) {
+                setComments(data.comments);
+            }
+            else {
+                Toast();
+            }
+        },0)
+       
     }
 
     function handleFollowToggle(username) {
@@ -236,7 +245,7 @@ function PostContentDetails(post) {
     async function handleGetFollower(username) {
         try {
             const result = await getFollower(username);
-            if (result.success) {
+            if (result) {
                 setIsFollowing(true);
             } else {
                 console.error('Error:', result.error);
@@ -246,15 +255,17 @@ function PostContentDetails(post) {
         }
     }
 
-    async function showFriendInformation(username) {
-        try {
-            const response = await axios.get(`${hostUrl}/user/${username}/about`);
-            setFriendInfo(response.data);
-        } catch (error) {
-            console.error('Error:', error);
+    async function showFriendInfo(username) {
+        const result = await showFriendInformation(username);
+        if(result) {
+          setFriendInfo(result.data);
         }
-    }
+      }
 
+      function handleCopyLink(postId) {
+        navigator.clipboard.writeText(`http://localhost:5173/post/post-details/${postId}`);
+        alert('Link copied to clipboard');
+      }
 
     return (
         <>
@@ -267,7 +278,7 @@ function PostContentDetails(post) {
                             <div className='d-flex flex-column'>
                                 <a className='community-post-name'>r/germany</a>
                                 <UserPopover user={post.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
-                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInformation} classname="userPosting" />
+                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="userPosting" />
                             </div>
                         </div>
                         <div className='ms-auto d-flex flex-direction-row'>
@@ -301,11 +312,7 @@ function PostContentDetails(post) {
                                         </MenuButton>
                                         <MenuList>
                                         <MenuItem onClick={async () => {
-                                            console.log('MenuItem clicked');
-                                                console.log('postId:', postId);
-                                                await navigator.clipboard.writeText(`http://localhost:5173/post/post-details/${postId}`);
-                                                alert('Link copied to clipboard');
-                
+                                            handleCopyLink(postId);
                                         }}>
                                         <svg rpl="" class="mt-[1px] ml-[4px]" fill="currentColor" height="20" icon-name="link-post-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M14.111 12.5a3.701 3.701 0 0 1-1.09 2.41c-.479.47-.928.922-1.378 1.373-.45.45-.894.9-1.368 1.366a3.852 3.852 0 0 1-2.698 1.099 3.852 3.852 0 0 1-2.698-1.099 3.738 3.738 0 0 1-1.116-2.659c0-.997.402-1.953 1.116-2.658.479-.472.928-.923 1.378-1.375.45-.45.893-.9 1.368-1.365A3.936 3.936 0 0 1 9.638 8.59a3.968 3.968 0 0 1 2.24.258c.27-.269.546-.54.812-.806l.131-.13a5.086 5.086 0 0 0-3.182-.624A5.052 5.052 0 0 0 6.732 8.71c-.48.471-.929.922-1.377 1.373-.449.451-.894.9-1.37 1.366A4.982 4.982 0 0 0 2.5 14.992c0 1.328.534 2.602 1.486 3.543A5.13 5.13 0 0 0 7.58 20a5.13 5.13 0 0 0 3.595-1.465c.478-.471.927-.923 1.377-1.374.451-.451.894-.9 1.368-1.366a4.993 4.993 0 0 0 1.263-2.071c.243-.781.288-1.61.132-2.412L14.11 12.5Z"></path>
@@ -318,7 +325,7 @@ function PostContentDetails(post) {
                         </Box>
                         <Box>
                             {post.isMod&& 
-                            <PostLock id={postId} onChangeLock={handleIsLocked} />
+                            <PostLock id={postId} isLocked={isLocked} onChangeLock={handleIsLocked} />
                             }
                         </Box>
                     </Box>
@@ -330,7 +337,7 @@ function PostContentDetails(post) {
                         <button onClick={handleUnhide} className='undo-button'>Undo</button>
                     </div>
                 }
-                <CommentInputForm />
+                <CommentInputForm type={"createComment"} ID={postId} />
                 <SortingComments onChangeSort={handleChangedSort} />
             {comments.map((comment, index) => (
                 <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />

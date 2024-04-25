@@ -57,14 +57,14 @@ function Postsfooter(props) {
                   {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
               </button>
               <div className='me-2'>
-                  {/* <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{(props.upvotes - props.downvotes > 0) ? (props.upvotes - props.downvotes) : 0}</span> */}
+                  <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{(props.upvotes - props.downvotes > 0) ? (props.upvotes - props.downvotes) : 0}</span>
               </div>
               <button data-testid="downvotes" className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
                   {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
               </button>
           </div>
           <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-          {/* <span className='share-post-text'>{props.comments.length}</span> */}
+          <span className='share-post-text'>{props.comments.length}</span>
           </Button>
           <Menu>
           <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>

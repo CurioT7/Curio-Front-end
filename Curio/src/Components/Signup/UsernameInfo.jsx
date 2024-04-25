@@ -75,6 +75,14 @@ function UsernameInfo(props) {
   }
 
   const handleContinue = async () => {
+    if (username === ''){
+      setUsernameErrorMsg("Please fill out this field.");
+      setIsUsernameValid(1);
+    }
+    if (password === ''){
+      setPasswordErrorMsg("Please fill out this field.");
+      setIsPasswordValid(1);
+    }
     if(username === '' || password === '' || username.length < 3 || password.length < 8){
       return;
     }
@@ -172,7 +180,7 @@ function UsernameInfo(props) {
             <span className='p-2 py-2' style={{color: isPasswordValid===1 ? "#a50016" : "#0e8a00", fontSize: "0.875rem"}}>{passwordErrorMsg}</span>
           </div>
       </Modal.Body>
-      <Modal.Footer className='border-0 pb-4' style={{paddingLeft: '80px', paddingRight: '80px'}}>
+      <Modal.Footer className='border-0 pb-4 mb-4' style={{paddingLeft: '80px', paddingRight: '80px'}}>
         <Button disabled={isUsernameValid === 1 || isPasswordValid === 1} className = {(isUsernameValid===1 || isPasswordValid===1) ? "continue-button-disabled w-100" : "w-100 continue-button"} onClick={handleContinue}>Continue</Button>
       </Modal.Footer>
     </Modal>

@@ -7,15 +7,13 @@ import ChangePass from "./buttons/ChangePass"
 import EmailButton from "./buttons/EmailButton"
 import GeneratePass from "./buttons/GeneratePass"
 import { useToast, } from '@chakra-ui/react';
-import axios from 'axios';
+import { sendUserDataToBackend,fetchUserDataFromBackend } from "../UserSetting/UserSettingsEndPoints"
 
 
-const AccountPreferences = (props) => {
-    const serverHost = import.meta.env.VITE_SERVER_HOST;
-   
+const AccountPreferences = (props) => {   
     const [gender, setGender] = React.useState("MAN")
     const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
-   
+    const LocationArr=["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "The Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin",  "Bosnia and Herzegovina", "Brazil","Cameroon","Canada","Chile","China","Colombia","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Egypt","Estonia","Finland","France","Georgia","Germany","Ghana","Greece","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Japan","Jordan","Kazakhstan","Kenya","Kuwait","Lebanon","Liberia","Libya","Lithuania","Luxembourg","Madagascar","Malaysia","Maldives","Mali","Malta","Mexico","Moldova","Monaco","Mongolia","Morocco","Nepal","Netherlands","New Zealand","Nigeria","Norway","Oman","Pakistan","Panama","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Saudi Arabia","Senegal","Serbia","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","Sudan","Sweden","Switzerland","Syria","Taiwan","Tanzania","Thailand","Tunisia","Turkey","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia"]
 
     const toast = useToast()
     function Toast(){
@@ -33,61 +31,18 @@ const AccountPreferences = (props) => {
     
     const handleGender = (event) => {
         setGender(event.target.value);
-        sendDataToBackend({gender: event.target.value})
+        sendUserDataToBackend({gender: event.target.value})
         Toast()
       };
     
     const handleIP = (event) => {
         setIP(event.target.value);
-        
+        sendUserDataToBackend({locationCustomization: event.target.value})
         Toast()
-    };
-    
-    async function fetchDataFromBackend() {
-        try {
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            return response.data;
-        } catch (error) {
-            if (error.response) {
-                console.error('Server Error:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error', error.message);
-            }
-            console.error('Error config:', error.config);
-        }
-    }
-    
-
-    async function sendDataToBackend(data) {
-        try {
-            const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            
-            return response;
-        } catch (error) {
-            if (error.response) {
-                console.error('Server Error:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error', error.message);
-            }
-            console.error('Error config:', error.config);
-        }
-    }
-
+    };    
     React.useEffect(() => {
         async function fetchAndSetData() {
-            const data = await fetchDataFromBackend();
+            const data = await fetchUserDataFromBackend();
             if (data) {
                 setGender(data.gender);
                 setIP(data.locationCustomization);
@@ -118,7 +73,7 @@ const AccountPreferences = (props) => {
                 
                     <Spacer />
                     <Box className='account-button'>
-                    <EmailButton  buttonStyle={buttonStyle}/>
+                    <EmailButton onChangeEmail={props.onChangeEmail}  buttonStyle={buttonStyle}/>
                     </Box>
                 </Flex>
 
@@ -148,9 +103,10 @@ const AccountPreferences = (props) => {
                 <Titles title='Location customization' description='Specify a location to customize your recommendations and feed. Reddit does not track your precise geolocation data.'/>
                 
                 <Box display='flex' ms={10}>
-                    <Select  textAlign={[ 'left', 'center' ]}  fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={locationCustomization} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='xs'  >
-                        <option value='Egypt' >Egypt</option>
-                        <option value='Germany' >Germany</option>
+                    <Select  textAlign='left' fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={locationCustomization} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='sm'  >
+                        {LocationArr.map((location, index) => (
+                            <option key={index} value={location}>{location}</option>
+                        ))}
                     </Select>
                 </Box>
 

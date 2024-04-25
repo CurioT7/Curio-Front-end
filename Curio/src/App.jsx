@@ -25,14 +25,14 @@ import TopCommunities from './Components/TopCommunities/TopCommunities.jsx';
 import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
 import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
-
+import FollowersPage from "./Components/FollowersPage/FollowersPage.jsx";
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
-import Notifications from "./Components/Notifications/Notifications.jsx";
-import Notification_Messages from "./Components/Notification_Messages/Notification_Messages.jsx";
-
+import Notifications from "./Pages/Notifications/Notifications.jsx";
+import OpenChat from "./Pages/OpenChat/OpenChat.jsx";
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
   const handleHideSidebar = () => {
     setIsSidebarVisible(false);
@@ -40,6 +40,14 @@ function App() {
 
   const handleShowSidebar = () => {
     setIsSidebarVisible(true);
+  };
+
+  const handleHideNavbar = () => {
+    setIsNavbarVisible(false);
+  };
+
+  const handleShowNavbar = () => {
+    setIsNavbarVisible(true);
   };
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
@@ -52,7 +60,7 @@ function App() {
         </div>
       </div>
       <ChakraProvider>
-        <NavbarComponent />
+        <NavbarComponent NavbarVisibility={isNavbarVisible}/>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
@@ -78,13 +86,14 @@ function App() {
           <Route path='/r/:Community/New' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Top' element={<CommuntiyPage/>} />
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
-          <Route path='/profile/:username' element={<ProfilePage/>}/>
+          <Route path='/profile/:username' element={<ProfilePage />}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/notifications" element={<Notifications/>}/>
-        <Route path="/messages" element={<Notification_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-        <Route path='/polls' element={<ShowPoll/>} />
+          <Route path='/polls' element={<ShowPoll/>} />
+          <Route path='/user/:username/followers' element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/room/create' element={<OpenChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
         </Routes>
       </ChakraProvider>
     </div>

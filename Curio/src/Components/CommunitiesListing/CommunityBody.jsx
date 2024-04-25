@@ -126,7 +126,6 @@ async function changeSortType(value,time) {
         {randomPost.isSelected==false ? (posts.map((post) => (
           <>
           <Post
-            
             _id={post._id}
             title={post.title}
             body={post.body}
