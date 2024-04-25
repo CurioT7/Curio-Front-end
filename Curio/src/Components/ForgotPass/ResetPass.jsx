@@ -5,6 +5,7 @@ import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import logo from "../../assets/Curio_logo.png";
 import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
 import { useParams , useNavigate} from 'react-router-dom';
+import { useToast, } from '@chakra-ui/react';
 
 function ResetPass(props) {
     const [password, setPassword] = useState('');
@@ -14,6 +15,16 @@ function ResetPass(props) {
     const {token} = useParams();
     localStorage.setItem('resetToken', token);
     const navigate = useNavigate();
+    const toast = useToast()
+    function Toast(){
+        toast({
+            
+            description: "Password reset Failed",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
 
     
 
@@ -36,7 +47,8 @@ const handleResetPassword = async (event) => {
     navigate('/login');
   } catch (error) {
     console.error('Error:', error);
-  }
+    Toast() 
+ }
 };
 
     useEffect(() => {
