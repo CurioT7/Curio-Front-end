@@ -28,9 +28,11 @@ import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 import FollowersPage from "./Components/FollowersPage/FollowersPage.jsx";
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Pages/Notifications/Notifications.jsx";
+import OpenChat from "./Pages/OpenChat/OpenChat.jsx";
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
   const handleHideSidebar = () => {
     setIsSidebarVisible(false);
@@ -38,6 +40,14 @@ function App() {
 
   const handleShowSidebar = () => {
     setIsSidebarVisible(true);
+  };
+
+  const handleHideNavbar = () => {
+    setIsNavbarVisible(false);
+  };
+
+  const handleShowNavbar = () => {
+    setIsNavbarVisible(true);
   };
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
@@ -50,7 +60,7 @@ function App() {
         </div>
       </div>
       <ChakraProvider>
-        <NavbarComponent />
+        <NavbarComponent NavbarVisibility={isNavbarVisible}/>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/settings/profile" element={<ProfSetting hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} /> 
@@ -83,6 +93,7 @@ function App() {
           <Route path="/notifications" element={<Notifications/>}/>
           <Route path='/polls' element={<ShowPoll/>} />
           <Route path='/user/:username/followers' element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/room/create' element={<OpenChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
         </Routes>
       </ChakraProvider>
     </div>

@@ -1,0 +1,26 @@
+.chat-left-title{
+    padding-bottom: .75rem;
+    padding-top: .75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-items: center;
+    display: flex;
+}
+.filter-chat-options{
+    display: flex;
+    padding-left: 10px;
+    padding-right: 6px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+.add-chat{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+.filter-chat-options:hover,
+.add-chat:hover{
+    background: #edeff1;
+    border-radius: 999px;
+}
