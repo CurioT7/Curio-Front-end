@@ -5,17 +5,26 @@ function SearchBy(props){
 
     return (
         <Card variant='ghost'>
-            <CardBody padding={3} paddingTop={3} marginTop={0} className=' searchBy-body-content'>
-                <div>
-                    <Avatar size='2xs'/>
-                </div>
-                <div>
-                    <h5>  {props.title} </h5>
-                    <p className='trending-post-description'>{props.description}</p>
-                    <p className='trending-post-subreddit'>  <span>subreddits</span></p>
-                </div>
+            <div className=' search-body'>
+                <CardBody padding={3} paddingTop={3} marginTop={0} className=' searchBy-body-content'>
+                    <div>
+                        {console.log(props.avatar)}
+                        {props.avatar&&<Avatar src={toString(props.avatar)} size='xs'/>}
+                    </div>
+                    { props.type==="user" &&<div className='searchBy-details'>
+                        
+                        <p className='search-user'>u/{props.name}</p>
+                        <p className='trending-post-subreddit'>  <span>{props.description} karma</span></p>
+                    </div>
+                    }
+                    { props.type==="comm" &&<div className='searchBy-details'>
+                        <p className='search-user'>r/{props.name}</p>
+                        <p className='trending-post-subreddit'>  <span>{props.description} members</span></p>
+                        </div>
+                    }
 
-            </CardBody>
+                </CardBody>
+            </div>
         </Card>
     )
 }

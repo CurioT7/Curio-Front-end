@@ -26,14 +26,20 @@ import {
   PopoverContent,
   PopoverBody,
 } from '@chakra-ui/react'
-import { getTrending } from './SearchingEndPoints';
+import { CiSearch } from "react-icons/ci";
+import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
 
 import Trending from './Trending';
+import SearchBy from './SearchBy';
+
 
 
 function NavbarComponent(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [trending, setTrending] = React.useState([]);
+  const [searchCommunities, setSearchCommunities] = React.useState([]);
+  const [searchPeople, setSearchPeople] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('');
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -44,6 +50,23 @@ function NavbarComponent(props) {
     }
   };
 
+  const handleSearchChange = async (e) => {
+    setSearchValue(e.target.value);
+    const searchCommunitiesData = await getSearchSubreddits(searchValue);
+    const searchPeopleData = await getSearchPeople(searchValue);
+    if(searchCommunitiesData){
+      setSearchCommunities(searchCommunitiesData.subreddits);
+    }
+    else{
+      setSearchCommunities([]);
+    }
+    if(searchPeopleData){
+      setSearchPeople(searchPeopleData.users);
+    }
+    else{
+      setSearchPeople([]);
+    }
+  }
   const navigateToLogin = () => {
     navigate('/login');
   }
@@ -90,8 +113,10 @@ function NavbarComponent(props) {
   React.useEffect(() => {
       async function fetchData() {
           const trendingData = await getTrending();
+          
           setTrending(trendingData.posts);
-          console.log(trendingData.posts);
+         
+
       }
       fetchData();
   }, []);
@@ -141,11 +166,14 @@ if (!props.NavbarVisibility) {
         <form action="">
             <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
               <PopoverTrigger>
-                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+                <input onChange={handleSearchChange} value={searchValue} onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
               <PopoverContent borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
-                  <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
+
+                  { !searchValue&&
+                  <div>
+                   <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
                   { trending.map((trend) => (
                     <Trending
                       key={trend._id}
@@ -155,6 +183,45 @@ if (!props.NavbarVisibility) {
                     />
                     ))
                   }
+                  </div>}
+                  { searchValue && <div>
+
+                    {searchCommunities && <div>
+                    <div className='searchBy-header'> Communities</div>
+                    <SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/>
+                    { searchCommunities.map((comm) => (
+                      <SearchBy
+                        key={comm._id}
+                        type="comm"
+                        avatar={comm.icon}
+                        name={comm.name}
+                        description={comm.members}
+                      />
+                      ))
+                    }
+                    </div>
+                    }
+                    {searchPeople && <div>
+                    <div className='searchBy-header'>People</div>
+                    <SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/>
+                    { searchPeople.map((user) => (
+                      <SearchBy
+                        key={user._id}
+                        type="user"
+                        avatar={user.profilePicture}
+                        name={user.username}
+                        description={user.karma}
+                      />
+                      ))
+                    }
+                     
+                    
+                    </div>
+                    }
+                    <div className='search-footer'> <CiSearch className='search-icon'/> <span> Search by  "{searchValue}"</span>
+                    </div>
+                  </div>}
+                  
                 </PopoverBody>
               </PopoverContent>
             </Popover>
