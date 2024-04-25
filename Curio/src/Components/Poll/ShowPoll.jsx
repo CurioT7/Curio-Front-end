@@ -45,33 +45,27 @@ function ShowPoll( props ) {
   //   console.log(props._id);
   // }
 
-  // async function pollVote(_id, votepick){
-  //   const hostUrl = import.meta.env.VITE_SERVER_HOST;
-  //   try{
-  //   const response = await axios.post(`${hostUrl}/api/pollVote`, {
-  //     postId: _id,
-  //     option: votepick
-  //   },{
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //     },
-  //   });
-  //   if(response === 200){
-  //     setVoted(true);
-  //   }
-  // }
-  //   catch(error){
-  //     console.error(error);
-  //   }
-  // }
+  async function pollVote(_id, votepick){
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    try{
+    const response = await axios.post(`${hostUrl}/api/pollVote`, {
+      postId: _id,
+      option: votepick
+    },{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if(response === 200){
+      setVoted(true);
+    }
+  }
+    catch(error){
+      console.error(error);
+    }
+  }
 
-//   useEffect(() => {
-//     async function checkVote(){
-//     await pollVote(props._id, votepick);
-//     }
 
-//     checkVote();
-// }, []);
 
 
   return (
@@ -133,7 +127,7 @@ function ShowPoll( props ) {
                 }`}
                 id="voteButton"
                 disabled={props.votepick === "" ? true : false}
-                onClick={props.handleVoted}
+                onClick={() => {props.handleVoted(); props.pollVote(props._id, props.votepick)}}
               >
                 Vote
               </button>

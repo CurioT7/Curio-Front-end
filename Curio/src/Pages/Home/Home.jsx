@@ -227,7 +227,7 @@ async function getBlocked() {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
       });
-      const blockedUsernames = response.data.viewBlockedPeople.map(user => user.username);
+      const blockedUsernames = response.data.viewBlockedPeople.map(user => user.blockedUsername);
       setBlockedUsers(blockedUsernames);
       return response.data
   } catch (error) {

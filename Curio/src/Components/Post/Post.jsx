@@ -70,9 +70,35 @@ function Post(props) {
 
   const handleVoted = () => {
     setVoted(true)
-    console.log(votepick);
-    console.log(props._id);
   }
+
+  async function pollVote(_id, votepick){
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    try{
+    const response = await axios.post(`${hostUrl}/api/pollVote`, {
+      postId: _id,
+      option: votepick
+    },{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if(response === 200){
+      setVoted(true);
+    }
+  }
+    catch(error){
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    async function checkVote(){
+    await pollVote(props._id, votepick);
+    }
+
+    checkVote();
+}, []);
 
     
     const makePostUpvoted = () => {
@@ -253,7 +279,7 @@ function Post(props) {
                         </CardHeader>
                         {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
                             pollText={props.pollText} voteLength={props.voteLength} handleVoted={handleVoted} handleVote={handleVote} votepick={votepick} hasVoted={hasVoted}
-                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments}/> ) : (
+                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments} pollVote={pollVote}/> ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
                             {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
