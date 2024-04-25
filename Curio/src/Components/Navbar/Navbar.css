@@ -75,12 +75,17 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
+    gap: 1em;
 }
 .navbar-component .right-section-navbar .sub-right-navbar{
     list-style: none;
 }
 .navbar-component .right-section-navbar .sub-right-navbar a{
     padding: 10px 10px;
+}
+.create-icon,
+.right-item-option{
+    padding: 7px 5px;
 }
 .navbar-component .right-section-navbar .sub-right-navbar .right-item-option:hover,
 .create-icon:hover{
@@ -205,6 +210,20 @@
 @media(max-width:1000px) {
     .navbar-component .right-section-navbar{
         background: gray;
+        height: 100vh;
+        flex-direction: column-reverse;
+        gap: 2em;
+        justify-content: center;
+        padding-left: 0;
+    }
+    .sub-right-navbar{
+        width: 100%;
+        height: 60px;
+        justify-content: center;
+    }
+    .sub-right-navbar:hover{
+        cursor: pointer;
+        background-color:  #edeff1;
     }
     .search-box button{
         position: absolute;
@@ -213,7 +232,6 @@
         position: fixed;
         top: 30px;
         right: -100%;
-        /* background: white; */
         height: 80vh;
         width: 50%;
         flex-direction: row;

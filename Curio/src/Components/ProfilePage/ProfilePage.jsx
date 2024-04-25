@@ -9,6 +9,8 @@ import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
 import PostComments from '../Post/PostComments.jsx';
 import { Link } from 'react-router-dom';
+import SocialLink from '../profileSetting/Socialmodal/Socialmodal.jsx';
+import { fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints.js';
 
 function ProfilePage(){
 
@@ -26,6 +28,7 @@ function ProfilePage(){
   const [downvotedPosts, setDownvotedPosts] = useState([]);
   const [ upvotedComments, setUpvotedComments] = useState([]);
   const [downvotedComments, setDownvotedComments] = useState([]);
+  const [SocialLinks, setSocialLinks] = useState([]);
   const getSaved = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -49,6 +52,10 @@ function ProfilePage(){
       }
     }
 
+    const buttonStyle = {
+      borderRadius: "30px",
+      padding: "10px 15px", 
+    };
     const getHidden = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -139,6 +146,26 @@ useEffect(() => {
     console.log(userAbout);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const data = await fetchUserDataFromBackend();
+            if (data) {
+                setSocialLinks(data.socialLinks ? 
+                    data.socialLinks.map(link => ({
+                        url: link.url,
+                        displayName: link.displayName,
+                        platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+                    })) : []);  
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    fetchData();
+}, []);
+
   const scrollLeft = () => {
       tabListRef.current.scrollLeft -= 100;
   };
@@ -154,9 +181,9 @@ return(
 <div className="mainComponent">
 <div className="userInfo">
 <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
-{/* //C:\Users\Developer\Desktop\Curio-Front-end\Curio\src\assets\Curio_logo.png */}
-<h3 className="profileName">{username}</h3>
+<h3 className='userName'> {userAbout.displayName}</h3>
 <h5 className="userName"> u/{username} </h5>
+<b>{userAbout.bio}</b>
 </div>
 
 <div className="tableList">
@@ -279,7 +306,7 @@ return(
             savedPosts={savedPosts}
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
-          />
+             />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </div>
           </>
@@ -317,6 +344,7 @@ return(
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
             isInProfile={true}
+            style={{backgroundColor: "#00000000"}}
           />
           <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
           </div>
@@ -483,6 +511,16 @@ return(
 <button> Mod Settings</button>
 </div>
 
+
+<Divider orientation='horizontal' />
+<p>Social Links</p>
+
+<div className='profileSettings'>
+<div style={{display:'flex',flexWrap:'wrap', gap:"0.5em"}}>
+  <SocialLink buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+</div>
+
+</div>
 
 </div>
 </div>    

@@ -57,7 +57,7 @@ function Advanced({ userData }) {
         <Titles title='Allow people to follow you'
         description="Followers will be notified about posts you make to your profile and see them in their home feed."/>
         <Spacer/>
-        <Switch size='lg' isChecked={allowFollow} onChange={handleFollowChange}/>
+        <Switch size='lg' isChecked={allowFollow} onChange={handleFollowChange} data-testid="follow-switch"/>
       </Flex>
       <Flex mb={5} alignItems='center'>
         <Titles title='Content visibility'
@@ -68,13 +68,13 @@ function Advanced({ userData }) {
         }
         />
         <Spacer/>
-        <Switch size='lg' isChecked={contentVisibility} onChange={handleContentVisibilityChange}/>
+        <Switch size='lg' isChecked={contentVisibility} onChange={handleContentVisibilityChange} data-testid="content-visibility-switch"/>
       </Flex>
       <Flex mb={5} alignItems='center'>
         <Titles title='Active in communities visibility'
         description="Show which communities I am active in on my profile."/>
         <Spacer/>
-        <Switch size='lg' isChecked={activeInCommunityVisibility} onChange={handleCommunitiesVisibilityChange}/>
+        <Switch size='lg' isChecked={activeInCommunityVisibility} onChange={handleCommunitiesVisibilityChange} data-testid="communities-visibility-switch"/>
       </Flex>
       <Box className="clear-history d-flex flex-wrap mb-3">
         <Box className="clear-history-label">
@@ -90,7 +90,9 @@ function Advanced({ userData }) {
           tabIndex="0" 
           className='btn btn-primary'
           checked={clearHistory}
-          onClick={handleClearHistoryChange}>
+          onClick={handleClearHistoryChange}
+          data-testid="Clear-history"
+          >
             Clear history
           </Button>
         </Box>

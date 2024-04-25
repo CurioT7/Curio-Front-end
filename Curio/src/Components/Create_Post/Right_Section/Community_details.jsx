@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Community_details.css";
 import logo from "../../../assets/Curio_logo.png";
-import { FormControl, Switch, FormLabel, useToast } from "@chakra-ui/react";
+import { useToast, FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import axios from "axios"; 
+import { VscActivateBreakpoints } from "react-icons/vsc";
+import SocialLink from "../../profileSetting/Socialmodal/Socialmodal";
+import { Link } from "react-router-dom";
+import { fetchUserDataFromBackend } from "../../UserSetting/UserSettingsEndPoints";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 function Community_details({ community }) {
-    console.log(community.community);
+    const username = localStorage.getItem('username');
     const [subredditData, setSubredditData] = useState(null);
     const [isSwitch, setIsSwitch] = useState(true);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
-    const toast = useToast();
+    const [SocialLinks, setSocialLinks] = useState([]);
+    const toast = useToast();  
 
-    
     function Toast(){
         toast({
             
@@ -23,6 +27,11 @@ function Community_details({ community }) {
           })
     }
 
+    const buttonStyle = {
+        borderRadius: "30px",
+        padding: "10px 15px", 
+    };
+
     useEffect(() => {
         if (community.community !== null) {
             fetchSubredditData();
@@ -32,11 +41,20 @@ function Community_details({ community }) {
     const fetchSubredditData = async () => {
         try {
             const response = await axios.get(`${serverHost}/api/subredditOverview/${community.community}`, {
-                headers: {
+                headers: {  
                     authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
             setSubredditData(response.data);
+            const data = await fetchUserDataFromBackend();
+            if (data) {
+                setSocialLinks(data.socialLinks ? 
+                  data.socialLinks.map(link => ({
+                    url: link.url,
+                    displayName: link.displayName,
+                    platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+                  })) : []);  
+              }
         } catch (error) {
             console.error("Error fetching subreddit data:", error);
         }
@@ -72,7 +90,9 @@ function Community_details({ community }) {
             <div className="community-details-header">
                 {subredditData && (
                     <div className="community-details-container">
-                        {/* <div className="community-details-logo" /> */}
+                        {community.community !== username ? (
+                        <div className="community-details-logo" />
+                        ) : (
                         <div className="file-upload-container-username top-1 start-1"
                         style={{
                             backgroundColor:'#33a8ff',
@@ -94,96 +114,126 @@ function Community_details({ community }) {
                                 </label>
                             </div>
                         </div>
-                        {/* <div className="community-details-info">
-                            <img src={logo} alt="Subreddit Icon" role="presentation" className="community-details-icon" />
-                            <div className="community-details-link">
-                                <a href="" className="community-link" target="_blank" rel="noopener noreferrer">
-                                    <span className="community-name" title="r/">r/{subredditData.subreddit}</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="community-details-description">
-                            <div className="community-details-description-text">
-                                {subredditData.description}
-                            </div>
-                        </div>
-                */}
-                        <div className="post-card-username" 
-                        style={{
-                            background: 'inherit',
-                            borderRadius: '6px',
-                            boxSizing: 'border-box',
-                            height: '86px',
-                            marginLeft: '-3px',
-                            marginTop: '16px',
-                            padding: '3px',
-                            position:'relative',
-                            width:'86px'
-                        }}>
-                            <div className="post-header-username">
-                                <label htmlFor="" className="post-label-username" style={{cursor: 'pointer'}}>
-                                    <span class="icon-container-username">
-                                        <div className="username-icon-container">
-                                            <img src={logo} 
-                                            alt="Username Icon" 
-                                            role="presentation" 
-                                            className="username-details-icon" 
-                                            style={{
-                                                borderRadius: '4px',
-                                                objectFit:'cover',
-                                                objectPosition:'top',
-                                                color:'white',
-                                                textIndent:'-9999px',
-                                                boxSizing:'border-box',
-                                                border: '1px solid #edeff1',
-                                                height: '100%',
-                                                width: '100%'
-                                            }}/>
-                                        </div>
+                        )}
+                        {community.community !== username ? ( 
+                            <>
+                                <div className="community-details-info">
+                                    <img src={logo} alt="Subreddit Icon" role="presentation" className="community-details-icon" />
+                                    <div className="community-details-link">
+                                        <a href="" className="community-link" target="_blank" rel="noopener noreferrer">
+                                            <span className="community-name" title="r/">r/{subredditData.subreddit}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="community-details-description">
+                                    <div className="community-details-description-text">
+                                        {subredditData.description}
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="post-card-username" 
+                                style={{
+                                    background: 'inherit',
+                                    borderRadius: '6px',
+                                    boxSizing: 'border-box',
+                                    height: '86px',
+                                    marginLeft: '-3px',
+                                    marginTop: '16px',
+                                    padding: '3px',
+                                    position:'relative',
+                                    width:'86px'
+                                }}>
+                                    <div className="post-header-username">
+                                        <label htmlFor="" className="post-label-username" style={{cursor: 'pointer'}}>
+                                            <span class="icon-container-username">
+                                                <div className="username-icon-container">
+                                                    <img src={logo} 
+                                                    alt="Username Icon" 
+                                                    role="presentation" 
+                                                    className="username-details-icon" 
+                                                    style={{
+                                                        borderRadius: '4px',
+                                                        objectFit:'cover',
+                                                        objectPosition:'top',
+                                                        color:'white',
+                                                        textIndent:'-9999px',
+                                                        boxSizing:'border-box',
+                                                        border: '1px solid #edeff1',
+                                                        height: '100%',
+                                                        width: '100%'
+                                                    }}/>
+                                                </div>
+                                            </span>
+                                            <div className="file-preview-container-username">
+                                                <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username"/>
+                                            </div>
+                                            <div className="file-icon-container-username">
+                                                <i className="fa-solid fa-camera add-icon"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <Link to={"/settings/profile"} className="settings-link-username"
+                                style={{
+                                    display:'inline-block',
+                                    marginTop:'-16px',
+                                    padding: '4px',
+                                    position: 'absolute',
+                                    right: '12px'
+                                }}>
+                                    <i className="fa-solid fa-gear setting-cards"/>
+                                </Link>
+                                <h4 className="subreddit-title-username">
+                                    {subredditData.displayName}
+                                </h4>
+                                <Link to={`/profile/${username}`} className='username-link'>
+                                    u/ {username}
+                                </Link>
+                                <div>{subredditData.about}</div>
+                        </>
+                    )}
+                     {community.community !== username ? ( 
+                        <>
+                            <div className="community-details-created">
+                                <div className="community-created-date">
+                                    <i className="created-date-icon fa-solid fa-cake-candles"/>
+                                    <span className="community-created-date">
+                                        Created {renderCreatedAt()}
                                     </span>
-                                    <div className="file-preview-container-username">
-                                        <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username"/>
-                                    </div>
-                                    <div className="file-icon-container-username">
-                                        <i className="fa-solid fa-camera add-icon"></i>
-                                    </div>
-                                </label>
+                                </div>
+                            </div> 
+                            <div className="community-details-divider"/>
+                            <hr className="hr-divider-community"/>
+                            <div className="community-details-members">
+                                <div className="community-details-members-count">
+                                    {subredditData.members}
+                                </div>
+                                <p className="community-details-members-label">
+                                    {subredditData.members === 1 ? 'Member' : 'Members'}
+                                </p>
+                            </div> 
+                        </>
+                    ) : (
+                        <div className="info-container-username">
+                            <div className="info-item-username">
+                                <h5 className="info-title-username">Karma</h5>
+                                <div className="info-content-username">
+                                <VscActivateBreakpoints color="#24a0ed"/>
+                                <span className="info-value-username">{subredditData.karma}</span>
+                                </div>
+                            </div>
+                            <div className="info-item-username">
+                                <h5 className="info-title-username">Cake day</h5>
+                                <div className="info-content-username">
+                                    <i className="created-date-icon fa-solid fa-cake-candles" style={{color:'#24a0ed'}}/>
+                                    <span className="info-value-username">{subredditData.createdAt}</span>
+                                </div>
                             </div>
                         </div>
-                        <a href="#" className="settings-link-username"
-                        style={{
-                            display:'inline-block',
-                            marginTop:'-16px',
-                            padding: '4px',
-                            position: 'absolute',
-                            right: '12px'
-                        }}>
-                            <i className="fa-solid fa-gear"/>
-                        </a>
-                        <h4>
-                            {subredditData.displayName}
-                        </h4>
-                        <a href="#">
-                            u/
-                        </a>
-                        {/* <div className="community-details-created">
-                            <div className="community-created-date">
-                                <i className="created-date-icon fa-solid fa-cake-candles"/>
-                                <span className="community-created-date">
-                                    Created {renderCreatedAt()}
-                                </span>
-                            </div>
-                        </div> */}
-                        <div className="community-details-divider"/>
-                        <hr className="hr-divider-community"/>
-                        <div className="community-details-members">
-                            <div className="community-details-members-count">
-                                {subredditData.members}
-                            </div>
-                            <p className="community-details-members-label">
-                                {subredditData.members === 1 ? 'Member' : 'Members'}
-                            </p>
-                        </div>
+                    )}
+                     {community.community !== username ? ( 
                         <div className="community-details-actions">
                             <button role="button" tabindex="0" className="community-details-options" onClick={toggleOptions}>
                                 Community options
@@ -203,6 +253,11 @@ function Community_details({ community }) {
                                 </FormControl>
                             )}
                         </div>
+                     ) : (
+                        <div style={{display:'flex',flexWrap:'wrap', gap:"0.5em"}}>
+                            <SocialLink buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+                        </div>
+                     )}
                     </div>
                 )}
             </div>
