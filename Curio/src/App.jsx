@@ -21,6 +21,7 @@ import ResetPass from './Components/ForgotPass/ResetPass.jsx';
 import CommuntiyPage from './Components/CommunitiesListing/CommunityPage.jsx';
 import Top from './Pages/TopCommunityPage/TopCommunity.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
+import { useLocation } from 'react-router-dom';
 import TopCommunities from './Components/TopCommunities/TopCommunities.jsx';
 import ProfilePage from './Components/ProfilePage/ProfilePage.jsx';
 import PostDetails from './Pages/PostDetails/PostDetails.jsx';
@@ -31,8 +32,10 @@ import Notifications from "./Pages/Notifications/Notifications.jsx";
 import OpenChat from "./Pages/OpenChat/OpenChat.jsx";
 
 function App() {
+  const location = useLocation();
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [subreddit, setSubreddit] = useState(null);
 
   const handleHideSidebar = () => {
     setIsSidebarVisible(false);
@@ -49,6 +52,12 @@ function App() {
   const handleShowNavbar = () => {
     setIsNavbarVisible(true);
   };
+
+  React.useEffect(() => {
+    if (location.pathname !== '/user/CreatePost') {
+      setSubreddit(null);
+    }
+  }, [location.pathname]);
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
  
@@ -80,11 +89,11 @@ function App() {
           <Route path='/settings/feeding' element={<FeedingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/settings/email' element={<EmailSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/settings/chatandmasseging' element={<ChatAndMessagingSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-          <Route path='/user/CreatePost' element={<CreatePost hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
-          <Route path='/r/:Community' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/Hot' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/New' element={<CommuntiyPage/>} />
-          <Route path='/r/:Community/Top' element={<CommuntiyPage/>} />
+          <Route path='/user/CreatePost' element={<CreatePost subreddit={subreddit} setSubreddit={setSubreddit} hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
+          <Route path='/r/:Community' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
+          <Route path='/r/:Community/Hot' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
+          <Route path='/r/:Community/New' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
+          <Route path='/r/:Community/Top' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
           <Route path='/profile/:username' element={<ProfilePage />}/>
           <Route path='/post/post-details/:id' element={<PostDetails/>}/>
