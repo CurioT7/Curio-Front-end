@@ -342,3 +342,7 @@
     padding-top: 12px;
     color: rgb(100, 114, 120);
 }
+
+.logOutstyle:hover{
+    color: #0d6efd;
+}

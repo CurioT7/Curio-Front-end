@@ -137,7 +137,7 @@ async function userUnblock(usernameToUnblock) {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        return response;
+        return true;
     } catch (error) {
         console.error('Error:', error);
     }

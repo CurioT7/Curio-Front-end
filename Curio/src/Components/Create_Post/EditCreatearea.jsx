@@ -50,6 +50,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
   const optionsString = handleTurnToSting(options);
 
   const handleSubmit = async () => {
+    
     try {
       const postData = {
         title: title, 
@@ -59,7 +60,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         isSpoiler: spoilerClicked,
         isNSFW: nsfwClicked,
         voteLength: days,
-        options: options,
+        options: optionsString,
         type: selectedMethod
       };
 
@@ -67,7 +68,6 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
       if (imageFormData) {
         postData.image = imageFormData;
       }
-
       const response = await axios.post(
         `${serverHost}/api/submit`,
         postData,

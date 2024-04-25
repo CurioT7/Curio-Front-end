@@ -233,7 +233,7 @@ function NavbarComponent() {
             </div>
           </Link>
           <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
-            <SignupHandler/>
+            <SignupHandler />
           </div>
           <hr />
           <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 
