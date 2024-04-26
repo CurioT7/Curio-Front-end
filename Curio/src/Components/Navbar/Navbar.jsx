@@ -34,6 +34,7 @@ import Trending from './Trending';
 function NavbarComponent(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [trending, setTrending] = React.useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -50,6 +51,12 @@ function NavbarComponent(props) {
 
   const inputRef = useRef();
   const popoverRef = useRef();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search/${searchTerm}`);
+    setSearchTerm('');
+  }
   
   useEffect(() => {
     if (inputRef.current && popoverRef.current) {
@@ -138,10 +145,10 @@ if (!props.NavbarVisibility) {
         </Link>
       </div>
       <div className="search-box">
-        <form action="">
+        <form action="" onSubmit={handleSearch}>
             <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
               <PopoverTrigger>
-                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+                <input onFocus={() => setIsOpen(true)} onChange={(e) => setSearchTerm(e.target.value)} ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
               <PopoverContent borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
