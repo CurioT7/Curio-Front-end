@@ -76,8 +76,8 @@ function NavbarComponent(props) {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/search/${searchTerm}`);
-    setSearchTerm('');
+    navigate(`/search/${searchValue}`);
+    setSearchValue('');
   }
   
   useEffect(() => {
