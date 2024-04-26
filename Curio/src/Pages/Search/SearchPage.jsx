@@ -61,6 +61,8 @@ function SearchPage(){
                     <div>
                         <TabPanels>
                             <TabPanel>
+                            </TabPanel>
+                            <TabPanel>
                                 {communityResults.length === 0 ? (
                                     <p>No search results</p>
                                 ) : (
@@ -73,6 +75,8 @@ function SearchPage(){
                                         ))}
                                     </>
                                 )}
+                            </TabPanel>
+                            <TabPanel>
                             </TabPanel>
                             <TabPanel>
                                 {userResults.length === 0 ? (
