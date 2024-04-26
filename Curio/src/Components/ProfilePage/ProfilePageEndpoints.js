@@ -52,7 +52,6 @@ const getUserOverview = async (username) => {
         upvotes: comment.upvotes,
         downvotes: comment.downvotes
     }));
-
     return { userPosts, userComments };
 };
 

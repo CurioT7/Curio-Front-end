@@ -290,6 +290,7 @@ useEffect(() => {
                       savedPosts={savedPosts}
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
+                      isSpoiler={post.isSpoiler}
                     />
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
                   </>
@@ -308,6 +309,7 @@ useEffect(() => {
                   linkedSubreddit={randomPost.linkedSubreddit}
                   savedPosts={savedPosts}
                   savedComments={savedComments}
+                  isSpoiler={randomPost.post.isSpoiler}
                 />
                 <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
               </>

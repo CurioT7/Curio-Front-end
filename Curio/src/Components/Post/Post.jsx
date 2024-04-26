@@ -121,6 +121,38 @@ function Post(props) {
     const handleIsLocked = (value) => {
         setIsLocked(value);
     }
+  
+    
+const postCategory = async (postID) => {
+    
+    const url = `${VITE_SERVER_HOST}/api/saved_categories`;
+    const token = localStorage.getItem('token')
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
+        },
+    });
+    console.log(response);
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+
+    const postData = responseData.map(post => ({
+     
+        isSpoiler: post.isSpoiler,
+        
+    }));
+
+
+    return postData;
+};
+
     const handleUnhide = async () => {
         try{
             var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -163,6 +195,7 @@ function Post(props) {
       }
     }
   }
+
     // useEffect(() => {
     //     const fetchPostStatus = async () => {
     //         const postInfo = await FetchObjectInfo(props._id,"post");
@@ -193,6 +226,7 @@ function Post(props) {
                 savedPosts: props.savedPosts,
                 savedComments: props.savedComments,
                 hiddenPosts: props.hiddenPosts,
+                isSpoiler: props.isSpoiler,
                 isMod: props.isMod,
                 isLocked: isLocked,
                 dateViewed: new Date().toISOString()
@@ -282,8 +316,20 @@ function Post(props) {
                             upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments} pollVote={pollVote}/> ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
-                            {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
-                            </Text>}
+                     {props.isSpoiler ? (
+                            <>
+                                <span className='text-body-spoiler' >
+                                    {props.content}
+                                </span>
+                               { console.log("spoiler",props.isSpoiler)}
+                            </>
+                        ) : (
+                            <>  
+                            <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}></Text>
+                            { console.log("not spoiler",props.isSpoiler)}
+
+                            </>
+                        )}
                             {props.image && <Image
                                 objectFit='cover'
                                 src={props.image}
