@@ -29,6 +29,7 @@ import FollowersPage from "./Components/FollowersPage/FollowersPage.jsx";
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Pages/Notifications/Notifications.jsx";
 import OpenChat from "./Pages/OpenChat/OpenChat.jsx";
+import SearchPage from "./Pages/Search/SearchPage.jsx";
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -94,6 +95,7 @@ function App() {
           <Route path='/polls' element={<ShowPoll/>} />
           <Route path='/user/:username/followers' element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/room/create' element={<OpenChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/search/:searchTerm' element={<SearchPage />}></Route>
         </Routes>
       </ChakraProvider>
     </div>
