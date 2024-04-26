@@ -73,6 +73,12 @@ function NavbarComponent(props) {
 
   const inputRef = useRef();
   const popoverRef = useRef();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search/${searchTerm}`);
+    setSearchTerm('');
+  }
   
   useEffect(() => {
     if (inputRef.current && popoverRef.current) {
@@ -163,7 +169,7 @@ if (!props.NavbarVisibility) {
         </Link>
       </div>
       <div className="search-box">
-        <form action="">
+        <form action="" onSubmit={handleSearch}>
             <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
               <PopoverTrigger>
                 <input onChange={handleSearchChange} value={searchValue} onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
