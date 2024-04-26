@@ -112,50 +112,15 @@ const MultiPageFormModal = (props) => {
         await reportUser(props.username, selectedOption, reportReason, furtherDetails);
     }
 
-    async function getBlocked(username) {
-        try {
-            const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            setBlockedUsers(response.data.viewBlockedPeople || []);
-            return response.data
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
 
-    const patchBlockUser = async (name) => {
-        const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-          viewBlockedPeople: [...blockedUsers, { username: name}]
-        },{
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if(response.status === 200){
-            const newUser = { username: name};
-            setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-        }
-      };
+
 
       const handleUserBlock = async (username) => {
             const result = await userBlock(username);
             if(result === 200){
-                await getBlocked(username);
-                patchBlockUser(username);
                 ToastSuccess();
             }
             else {
-                const result = await userBlock(username);
-                if(result === 200){
-                    patchBlockUser(username);
-                    props.handleBlockPage();
-                    ToastSuccess();
-                }
                 if (result === 403) {
                     ToastError("You can't block somebody again within 24 hours of unblocking them");
                 }
@@ -175,35 +140,20 @@ const MultiPageFormModal = (props) => {
         }
 
 
-    const handleUserUnblock = async (username) => {
+        const handleUserUnblock = async (username) => {
             try {
-                const index = blockedUsers.findIndex((user) => user.username === username);
-                if (index === -1) {
-                    console.error('User not found');
-                    return;
+                const result = await userUnblock(username);
+                if(result){
+                    ToastSuccess();
                 }
-        
-                const updatedBlockedUsers = [...blockedUsers];
-                updatedBlockedUsers.splice(index, 1);
-        
-
-                const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-                    viewBlockedPeople: updatedBlockedUsers
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-        
-                if (response.status === 200) {
-                    setBlockedUsers(updatedBlockedUsers);
-                    userUnblock(username);
+                else if(result === 500){
+                    console.error('An unexpected error occurred on the server. Please try again later.');
                 }
-            } catch (error) {
-                console.error('Error:', error);
+                
+                }catch (error) {
+                    console.error('Error:', error);
+                }
             }
-    };
 
 
     const handleBlockToggle = async (username) => {

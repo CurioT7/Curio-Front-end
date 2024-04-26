@@ -20,32 +20,32 @@ function Safety() {
       })
   }
   /////////////////////////////////// Fetch //////////////////////////////
-  useEffect(() => {
-    async function fetchBlockedUsers() {
-        try {
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`,
-            {
-              headers: {
-                  authorization: `Bearer ${localStorage.getItem('token')}` 
-              }
-            });
-            // setBlockedUsers(response.data.block); // Set blocked users directly
-            setBlockedUsers(response.data.viewBlockedPeople || []);
-        } catch (error) {
-            if (error.response){
-                switch (error.response.status) {
-                    case 404:
-                        Toast('User preferences not found');
-                        break;    
-                    case 500:
-                        Toast('An unexpected error occurred on the server. Please try again later.');
-                        break;
-                    default:
-                        break;
-                    }
-            }
+  async function fetchBlockedUsers() {
+    try {
+        const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`,
+        {
+          headers: {
+              authorization: `Bearer ${localStorage.getItem('token')}` 
+          }
+        });
+        setBlockedUsers(response.data.viewBlockedPeople || []);
+        
+    } catch (error) {
+        if (error.response){
+            switch (error.response.status) {
+                case 404:
+                    Toast('User preferences not found');
+                    break;    
+                case 500:
+                    Toast('An unexpected error occurred on the server. Please try again later.');
+                    break;
+                default:
+                    break;
+                }
         }
     }
+}
+  useEffect(() => {
     fetchBlockedUsers();
   }, []);
   
@@ -92,15 +92,8 @@ function Safety() {
             const data = {
                 viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
             };
-            try {
-                await sendUserDataToBackend(data);
-                console.log("User preferences updated successfully");
-                const newUser = { username: blockedUserInput };
-                setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-                setBlockedUserInput('');
-            } catch (error) {
-                console.error("Error updating user preferences:", error);
-            }
+            setBlockedUserInput('');
+            fetchBlockedUsers();
         }
     }
 };
@@ -134,26 +127,11 @@ function Safety() {
         });
     };
 
-    const patchUnblockUser = (name) => {
-      const updatedBlockedUsers = blockedUsers.filter(user => user.username !== name);
-      axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
-        viewBlockedPeople: updatedBlockedUsers
-      }, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }).then(response => {
-      }).catch(error => {
-      });
-    };
-
 
     const handleRemoveBlockedUser = index => {
         const updatedBlockedUsers = [...blockedUsers];
-        const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].username;
+        const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].blockedUsername;
         setBlockedUsers(updatedBlockedUsers);
-        patchUnblockUser(unblockedUser);
-        // Call postunBlockUser here after removing the user
         postunBlockUser(unblockedUser);
     };
 
@@ -167,7 +145,7 @@ function Safety() {
     </Box>
     {blockedUsers.length > 0 && blockedUsers.map((user, index) => (
         <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
-          <Text>{user.username}</Text> 
+          <Text>{user.blockedUsername}</Text> 
           <Button className="btn btn-primary" onClick={() => {handleRemoveBlockedUser(index); handleUnblockUser();}} bg="transparent" border="none">Remove</Button>
         </Flex>
     ))}
