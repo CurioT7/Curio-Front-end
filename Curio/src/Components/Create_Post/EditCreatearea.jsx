@@ -4,6 +4,7 @@ import { Button, Flex, Spacer, Checkbox, useToast } from "@chakra-ui/react";
 import { AddIcon, CheckIcon } from "@chakra-ui/icons";
 import "./EditCreatearea.css";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -13,6 +14,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   function Toast(message, state) {
     toast({
@@ -90,6 +92,9 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
       switch (response.status) {
         case 201:
           Toast('Post created successfully', 'success');
+          const postId = response.data.postId;
+          console.log(postId);
+          navigate(`/post/post-details/${postId}`);d
           break;
         default:
           console.error("Unexpected response status:", response.status);
