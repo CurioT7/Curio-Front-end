@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import logo from "../../assets/Profile_navbar.png";
