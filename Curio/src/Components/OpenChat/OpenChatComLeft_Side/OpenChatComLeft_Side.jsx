@@ -101,7 +101,7 @@ function OpenChatCom({handleNewPage}) {
                 <div>
                     <a href="#" className='message-container-text'>
                         <span className='image-chat-message'>
-                            <img src={profile} alt="" style={{ borderRadius: '624.938px' }} />
+                            <img src={profile} alt="" style={{ borderRadius: '20px' }} />
                         </span>
                         <div className='body-chat-message'>
                             <div className='row-1-chat'>

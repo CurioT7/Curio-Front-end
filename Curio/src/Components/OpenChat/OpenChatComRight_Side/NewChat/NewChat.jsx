@@ -9,9 +9,16 @@ import HeaderChatRight_Side from "../../HeaderChatRight_Side/HeaderChatRight_Sid
 
 function NewChat() {
     const [squareIsChecked, setSquareIsChecked] = useState(false);
+    const [selectedUser, setSelectedUser] = useState({ image: '', username: '' });
 
-    const handleSquareIsChecked = () => {
+    const handleSquareIsCheckedAndSelectUser = (image, username) => {
         setSquareIsChecked(!squareIsChecked);
+        setSelectedUser({ image, username });
+        if (!squareIsChecked) {
+            document.getElementById("floatingInput").value = username;
+        } else {
+            document.getElementById("floatingInput").value = "";
+        }
     };
 
     return (
@@ -23,12 +30,12 @@ function NewChat() {
                         <span>
                             <div>
                                 <div class="form-floating">
-                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" style={{ borderRadius: '1rem' }} />
-                                    <label for="floatingInput">Type username(s)*</label>
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" style={{ borderRadius: '1rem' }}/>
+                                    <label for="floatingInput">Type username(s)<span style={{color:'red'}}>*</span></label>
                                 </div>
                                 <div className='new-chat-form-container'>
                                     <div className='suggested-div'>Suggested</div>
-                                    <li className='chat-li' onClick={handleSquareIsChecked}>
+                                    <li className='chat-li' onClick={() => handleSquareIsCheckedAndSelectUser({profile}, 'General_Boat_962')} >
                                         <div className='container-li-chat'>
                                             <span className='span-li-chat'>
                                                 <Image
@@ -38,7 +45,8 @@ function NewChat() {
                                                     alt='Dan Abramov'
                                                     style={{
                                                         display: 'flex',
-                                                        alignItems: 'center'
+                                                        alignItems: 'center',
+                                                        borderRadius: '20px'
                                                     }}
                                                 />
                                                 General_Boat_962
