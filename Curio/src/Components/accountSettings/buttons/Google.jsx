@@ -7,14 +7,12 @@ import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { MdMarkEmailUnread } from "react-icons/md";
 import { useToast } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 const Google = (props) =>{
     const toast = useToast()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")
     const [wrongPass,setWrongPass]=React.useState(false)
     const serverHost = import.meta.env.VITE_SERVER_HOST;
-    const navigate = useNavigate();
     function Toast(){
         toast({
             title: "account connected successfully",
@@ -25,14 +23,6 @@ const Google = (props) =>{
     }
     function handleYourPass(e){
         setYourPass(e.target.value)
-    }
-    function handleIsClicked(){
-        setIsClicked(true)
-    }
-    function clearForm(){
-        setYourPass("")
-        setIsClicked(false)
-        
     }
     const handleGoogleSignupResponse = async (response) => {
         
@@ -48,7 +38,10 @@ const Google = (props) =>{
           setWrongPass(false)
           Toast()
           onClose()
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();window.location.reload();
+          },500)
+          
             
         }catch(error){
             console.error( error.message);
