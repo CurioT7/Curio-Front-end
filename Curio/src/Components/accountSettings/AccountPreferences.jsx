@@ -44,7 +44,8 @@ const AccountPreferences = (props) => {
         async function fetchAndSetData() {
             const data = await fetchUserDataFromBackend();
             if (data) {
-                setGender(data.gender);
+                
+                setGender(data.gender.toUpperCase());
                 setIP(data.locationCustomization);
             }
            

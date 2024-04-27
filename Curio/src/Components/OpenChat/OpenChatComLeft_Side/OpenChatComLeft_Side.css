@@ -13,6 +13,8 @@
     padding-top: 10px;
     padding-bottom: 10px;
     cursor: pointer;
+    align-items: center;
+
 }
 .add-chat{
     padding-top: 10px;
@@ -59,7 +61,6 @@
     line-height: 1rem;
     font-size: 1.25rem;
     width: 2rem;
-    /* height: 2rem; */
     align-items: center;
 }
 
@@ -75,7 +76,6 @@
     display: flex;
     width: 2rem;
     font-size: 1.25rem;
-    /* margin-right: 0.5rem; */
 }
 
 .body-chat-message{
@@ -135,4 +135,24 @@
     height: 2rem;
     width: 2rem;
     display: inline-block;
+}
+
+.popover-chat-list{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.chat-icons-header{
+    display: flex;
+    margin-left: 130px;
+}
+
+@media (max-width: 767px) {
+    .chat-icons-header{
+        margin-left: 60px;
+    }
+    .username-chat{
+        font-size: 12px;
+    }
 }

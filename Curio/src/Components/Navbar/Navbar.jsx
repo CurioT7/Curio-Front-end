@@ -6,34 +6,33 @@ import plus from "../../assets/Plus_navbar.png";
 import inbox from "../../assets/Inbox_navbar.png";
 import profile from "../../assets/avatar_default_6.png";
 import Settings from '../../styles/icons/Settings';
-import EditAvatar from '../../styles/icons/EditAvatar';
-import ContProgram from '../../styles/icons/ContributorProgram';
-import ModMode from '../../styles/icons/ModMode';
-import DarkMode from '../../styles/icons/DarkMode';
-import Advertisement from '../../styles/icons/Ad';
-import Premium from '../../styles/icons/Premium';
-import ContArrow from '../../styles/icons/ContArrow';
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
 import { BsArrowUpRightCircle } from "react-icons/bs";
-import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
+import { Menu, MenuButton, MenuList, Tooltip } from '@chakra-ui/react'
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
 } from '@chakra-ui/react'
-import { getTrending } from './SearchingEndPoints';
+import { CiSearch } from "react-icons/ci";
+import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
 
 import Trending from './Trending';
+import SearchBy from './SearchBy';
+
 
 
 function NavbarComponent(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [trending, setTrending] = React.useState([]);
+  const [searchCommunities, setSearchCommunities] = React.useState([]);
+  const [searchPeople, setSearchPeople] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('');
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -44,12 +43,35 @@ function NavbarComponent(props) {
     }
   };
 
+  const handleSearchChange = async (e) => {
+    setSearchValue(e.target.value);
+    const searchCommunitiesData = await getSearchSubreddits(searchValue);
+    const searchPeopleData = await getSearchPeople(searchValue);
+    if(searchCommunitiesData){
+      setSearchCommunities(searchCommunitiesData.subreddits);
+    }
+    else{
+      setSearchCommunities([]);
+    }
+    if(searchPeopleData){
+      setSearchPeople(searchPeopleData.users);
+    }
+    else{
+      setSearchPeople([]);
+    }
+  }
   const navigateToLogin = () => {
     navigate('/login');
   }
 
   const inputRef = useRef();
   const popoverRef = useRef();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search/${searchValue}`);
+    setSearchValue('');
+  }
   
   useEffect(() => {
     if (inputRef.current && popoverRef.current) {
@@ -90,8 +112,10 @@ function NavbarComponent(props) {
   React.useEffect(() => {
       async function fetchData() {
           const trendingData = await getTrending();
+          
           setTrending(trendingData.posts);
-          console.log(trendingData.posts);
+         
+
       }
       fetchData();
   }, []);
@@ -138,14 +162,17 @@ if (!props.NavbarVisibility) {
         </Link>
       </div>
       <div className="search-box">
-        <form action="">
+        <form action="" onSubmit={handleSearch}>
             <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
               <PopoverTrigger>
-                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+                <input onChange={handleSearchChange} value={searchValue} onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
               <PopoverContent borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
-                  <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
+
+                  { !searchValue&&
+                  <div>
+                   <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
                   { trending.map((trend) => (
                     <Trending
                       key={trend._id}
@@ -155,6 +182,45 @@ if (!props.NavbarVisibility) {
                     />
                     ))
                   }
+                  </div>}
+                  { searchValue && <div>
+
+                    {searchCommunities && <div>
+                    <div className='searchBy-header'> Communities</div>
+                    <SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/>
+                    { searchCommunities.map((comm) => (
+                      <SearchBy
+                        key={comm._id}
+                        type="comm"
+                        avatar={comm.icon}
+                        name={comm.name}
+                        description={comm.members}
+                      />
+                      ))
+                    }
+                    </div>
+                    }
+                    {searchPeople && <div>
+                    <div className='searchBy-header'>People</div>
+                    <SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/>
+                    { searchPeople.map((user) => (
+                      <SearchBy
+                        key={user._id}
+                        type="user"
+                        avatar={user.profilePicture}
+                        name={user.username}
+                        description={user.karma}
+                      />
+                      ))
+                    }
+                     
+                    
+                    </div>
+                    }
+                    <div className='search-footer'> <CiSearch className='search-icon'/> <span> Search by  "{searchValue}"</span>
+                    </div>
+                  </div>}
+                  
                 </PopoverBody>
               </PopoverContent>
             </Popover>
@@ -164,13 +230,6 @@ if (!props.NavbarVisibility) {
       <ul className='right-section-navbar'>
         {isAuthenticated && 
         <>
-          <Tooltip label="Advertise on Curio">
-            <a href="#" className='sub-right-navbar'>
-              <li className='right-item-option' style={{ display: "flex" }}>
-                    <Advertisement />
-              </li>
-            </a>
-          </Tooltip>
           <Tooltip label="Open chat">
             <Link to={'/room/create'} className='sub-right-navbar'>
               <li className='right-item-option' style={{ display: "flex" }}>
@@ -241,7 +300,7 @@ if (!props.NavbarVisibility) {
             </div>
           </Link>
           <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
-            <SignupHandler/>
+            <SignupHandler />
           </div>
           <hr />
           <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 

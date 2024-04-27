@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import SearchIcon from "../../styles/SearchIcon";
+import SearchIcon from "../../styles/icons/SearchIcon.jsx";
 import avatar1 from "../../assets/avatar_default_6.png";
 import avatar2 from "../../assets/avatar_default_2.png";
 import {

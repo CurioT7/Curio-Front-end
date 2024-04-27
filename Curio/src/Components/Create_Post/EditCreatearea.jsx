@@ -4,22 +4,25 @@ import { Button, Flex, Spacer, Checkbox, useToast } from "@chakra-ui/react";
 import { AddIcon, CheckIcon } from "@chakra-ui/icons";
 import "./EditCreatearea.css";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
 function EditCreatearea({ title, content, community, days, options, imageFormData, selectedMethod }) {
+  const username = localStorage.getItem('username');
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
-  function Toast(message, state){
+  function Toast(message, state) {
     toast({
-        description: message,
-        status: state,
-        duration: 3000,
-        isClosable: true,
-      })
+      description: message,
+      status: state,
+      duration: 3000,
+      isClosable: true,
+    })
   }
 
   const handleOcClick = () => {
@@ -30,7 +33,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
     if (community && community.community) {
       setSpoilerClicked(!spoilerClicked);
     }
-  };  
+  };
 
   const handleNsfwClick = () => {
     setNsfwClicked(!nsfwClicked);
@@ -47,19 +50,29 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
     return string;
   }
 
-  const optionsString = handleTurnToSting(options);
-
   const handleSubmit = async () => {
     try {
+      let optionsString; // Initialize optionsString
+      if (selectedMethod === 'poll') {
+        // If selectedMethod is 'poll', generate optionsString
+        optionsString = handleTurnToSting(options);
+      }
+
+      // Initialize subreddit to null
+      let subreddit = null;
+
+      if (community.community !== username) {
+        subreddit = community.community;
+      }
       const postData = {
-        title: title, 
+        title: title,
         content: content,
-        subreddit: community.community && community.community,
+        subreddit: subreddit,
         isOC: ocClicked,
         isSpoiler: spoilerClicked,
         isNSFW: nsfwClicked,
         voteLength: days,
-        options: options,
+        options: optionsString,
         type: selectedMethod
       };
 
@@ -67,7 +80,6 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
       if (imageFormData) {
         postData.image = imageFormData;
       }
-
       const response = await axios.post(
         `${serverHost}/api/submit`,
         postData,
@@ -79,7 +91,10 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
       );
       switch (response.status) {
         case 201:
-          Toast('Post created successfully','success');
+          Toast('Post created successfully', 'success');
+          const postId = response.data.postId;
+          console.log(postId);
+          navigate(`/post/post-details/${postId}`);d
           break;
         default:
           console.error("Unexpected response status:", response.status);
@@ -90,16 +105,16 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         const status = error.response.status;
         switch (status) {
           case 401:
-            Toast('Unauthorized: Authentication token is missing or invalid','error');
+            Toast('Unauthorized: Authentication token is missing or invalid', 'error');
             break;
           case 404:
-            Toast('User not found','error');
+            Toast('User not found', 'error');
             break;
           case 400:
-            Toast('Invalid destination','error');
+            Toast('Invalid destination', 'error');
             break;
           case 500:
-            Toast('Internal server error','error');
+            Toast('Internal server error', 'error');
             break;
           default:
             console.error("Unexpected response status:", response.status);
@@ -115,9 +130,9 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
     <div className="EditCreatearea">
       <div>
         <div className='button-group-edit'>
-          <Button 
+          <Button
             className='rest-button'
-            variant='ghost' 
+            variant='ghost'
             leftIcon={ocClicked ? <CheckIcon /> : <AddIcon />}
             onClick={handleOcClick}
             style={{
@@ -129,9 +144,9 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
           >
             OC
           </Button>
-          <Button 
-            className='rest-button' 
-            variant='ghost' 
+          <Button
+            className='rest-button'
+            variant='ghost'
             leftIcon={spoilerClicked ? <CheckIcon /> : <AddIcon />}
             onClick={handleSpoilerClick}
             disabled={!community || !community.community}
@@ -146,9 +161,9 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
           >
             Spoiler
           </Button>
-          <Button 
-            className='rest-button'  
-            variant='ghost' 
+          <Button
+            className='rest-button'
+            variant='ghost'
             leftIcon={nsfwClicked ? <CheckIcon /> : <AddIcon />}
             onClick={handleNsfwClick}
             style={{
@@ -168,12 +183,12 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         </Flex>
       </div>
       <div className='reply_notifications'>
-        <Checkbox  value='reply_notifications' size='md'>Send me post reply notifications</Checkbox>
+        <Checkbox value='reply_notifications' size='md'>Send me post reply notifications</Checkbox>
         <div className='container-share-account'>
           <a className='share-account' href="#">
             Connect accounts to share your post
           </a>
-          <i class="fa fa-info-circle" aria-hidden="true"/>
+          <i class="fa fa-info-circle" aria-hidden="true" />
         </div>
       </div>
     </div>

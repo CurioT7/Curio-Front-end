@@ -41,4 +41,12 @@ i{
     padding: 10px 15px;
     cursor: pointer;
   }
+  .rightSideBar .selected-social-link {
+    margin-right: 0;
+    background-color: #EAEDEF;  
+    align-items: center;
+    padding: 7px 10px;
+    border: none;
+    font-size: 0.85rem;
+}
   

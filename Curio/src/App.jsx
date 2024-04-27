@@ -29,7 +29,8 @@ import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 import FollowersPage from "./Components/FollowersPage/FollowersPage.jsx";
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Pages/Notifications/Notifications.jsx";
-import OpenChat from "./Pages/OpenChat/OpenChat.jsx";
+import NewChat from "./Pages/Right_Side_Chat/Right_Side_Chat.jsx";
+import SearchPage from "./Pages/Search/SearchPage.jsx";
 
 function App() {
   const location = useLocation();
@@ -96,13 +97,15 @@ function App() {
           <Route path='/r/:Community/Top' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
           <Route path='/profile/:username' element={<ProfilePage />}/>
-          <Route path='/post/post-details/:id' element={<PostDetails/>}/>
+          <Route path='/post/post-details/:postID' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/notifications" element={<Notifications/>}/>
           <Route path='/polls' element={<ShowPoll/>} />
           <Route path='/user/:username/followers' element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-          <Route path='/room/create' element={<OpenChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/room/create' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/threads' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/search/:searchTerm' element={<SearchPage />}></Route>
         </Routes>
       </ChakraProvider>
     </div>
