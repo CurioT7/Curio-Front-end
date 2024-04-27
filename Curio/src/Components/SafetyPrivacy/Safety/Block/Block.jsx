@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Button, Flex, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../../UserSetting/UserSettingsEndPoints';
+import { Link } from 'react-router-dom';
 
 
 function Safety() {
@@ -145,7 +146,9 @@ function Safety() {
     </Box>
     {blockedUsers.length > 0 && blockedUsers.map((user, index) => (
         <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
+          <Link to={`/user/${user.blockedUsername}`} className="settings-link">
           <Text>{user.blockedUsername}</Text> 
+          </Link>
           <Button className="btn btn-primary" onClick={() => {handleRemoveBlockedUser(index); handleUnblockUser();}} bg="transparent" border="none">Remove</Button>
         </Flex>
     ))}

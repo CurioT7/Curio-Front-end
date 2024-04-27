@@ -284,7 +284,6 @@ if (!props.NavbarVisibility) {
                     <MenuButton>
                       <img className='navImg notificimg' src={inbox} alt="logo"/>
                       <span className='unread-notifs'>{unreadNotifications}</span>
-
                     </MenuButton>
                     <MenuList 
                     style={{
@@ -343,11 +342,11 @@ if (!props.NavbarVisibility) {
           </Link>
         </div>
       </div>
-      <div className="menu">
+      {/* <div className="menu">
         <label htmlFor="chk1">
           <i className="fa fa-bars" aria-hidden="true"></i>
         </label>
-      </div>
+      </div> */}
     </nav>
   );
 }

@@ -283,7 +283,7 @@
         right: 0;
     }
 }
-@media(max-width:600px){
+ @media(max-width:600px){
     .navbar-component .logo{
         font-size: 10px;
         margin-left: 8px;
@@ -291,7 +291,7 @@
     .navbar-component ul{
         width: 100%;
     }
-}
+} 
 @media(max-width:960px){
     .navbar-component .logo h1{
         display: none;
@@ -309,6 +309,20 @@
 .new-dropdown-label:hover{
     color: #0d6efd;
 }
+
+@media(max-width:800){
+    .navbar-component .logo h1{
+        display: none;
+    }
+    .sub-right-navbar .right-item-option .navImg{
+        width: 3px;
+    }
+    .create-icon {
+        display: none;
+        width: 3px;
+    }
+}
+
 
 
 .logged-out-button{
