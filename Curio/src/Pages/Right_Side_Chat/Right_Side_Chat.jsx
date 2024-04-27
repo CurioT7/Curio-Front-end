@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import OpenChatCom from "../../Components/OpenChat/OpenChatComLeft_Side/OpenChatComLeft_Side";
 import NewChat_Com from "../../Components/OpenChat/OpenChatComRight_Side/NewChat/NewChat";
 import "./Right_Side_Chat.css";
-import { useLocation } from 'react-router-dom';
+import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
+import { useNavigate } from 'react-router-dom';
 
 function Right_Side_Chat(props) {
-    const [newPage, setNewPage] = useState('');
+    const [newPage, setNewPage] = useState('New Chat');
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -24,7 +25,7 @@ function Right_Side_Chat(props) {
 
     const handleNewPage = (PageName) => {
         setNewPage(PageName);
-        console.log(newPage)
+        // console.log(newPage)
     };
 
     return (
@@ -33,7 +34,11 @@ function Right_Side_Chat(props) {
                 <OpenChatCom handleNewPage={handleNewPage} />
             </div>
             <div className='right-side-main-chat'>
-                <NewChat_Com />
+                {newPage === "New Chat" ? (
+                    <NewChat_Com />
+                ) : newPage === "Threads" ? (
+                    <Threads />
+                ) : null}
             </div>
         </div>
     );

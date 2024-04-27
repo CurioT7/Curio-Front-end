@@ -3,7 +3,8 @@ import profile from "../../../../assets/avatar_default_6.png";
 import { FaRegSquare } from "react-icons/fa";
 import { BsCheckSquareFill } from "react-icons/bs";
 import "./NewChat.css";
-import { Image, Button, Stack, Spacer } from '@chakra-ui/react'
+import { Image, Button, Stack, Spacer } from '@chakra-ui/react';
+import HeaderChatRight_Side from "../../HeaderChatRight_Side/HeaderChatRight_Side";
 
 
 function NewChat() {
@@ -15,11 +16,7 @@ function NewChat() {
 
     return (
         <div className='chat-div'>
-            <header className='chat-header'>
-                <div className='header-conatainer'>
-                    New Chat
-                </div>
-            </header>
+            <HeaderChatRight_Side header='New Chat' />
             <form className='chat-form'>
                 <main className='chat-main'>
                     <div>

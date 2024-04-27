@@ -6,27 +6,6 @@
     width: 100%;
     height: 100vh;
 }
-.chat-header{
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    border-bottom-color: #f2f2f2;
-    border-style: solid;
-    width: 100%;
-    height: 2.75rem;
-    display: flex;
-    box-sizing: border-box;
-    align-items: center;
-    border-bottom-width: 0.0625rem;
-    justify-content: flex-start;
-}
-.header-conatainer{
-    padding-left: 0.5rem;
-    max-width: calc(100% - 40px);
-    margin-right: auto;
-    font-weight: 600;
-    line-height: 1.25rem;
-    font-size: 0.875rem;
-}
 
 .chat-form{
     display: flex;
@@ -34,7 +13,7 @@
     flex-direction: column;
     width: 100%;
     background-color: #eaedef;
-    overflow: hidden;
+    overflow: hidden auto;
 }
 
 .chat-main{
