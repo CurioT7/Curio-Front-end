@@ -10,7 +10,6 @@ import EditAvatar from '../../styles/icons/EditAvatar';
 import ContProgram from '../../styles/icons/ContributorProgram';
 import ModMode from '../../styles/icons/ModMode';
 import DarkMode from '../../styles/icons/DarkMode';
-import Advertisement from '../../styles/icons/Ad';
 import Premium from '../../styles/icons/Premium';
 import ContArrow from '../../styles/icons/ContArrow';
 import { Link } from 'react-router-dom';
@@ -237,13 +236,6 @@ if (!props.NavbarVisibility) {
       <ul className='right-section-navbar'>
         {isAuthenticated && 
         <>
-          <Tooltip label="Advertise on Curio">
-            <a href="#" className='sub-right-navbar'>
-              <li className='right-item-option' style={{ display: "flex" }}>
-                    <Advertisement />
-              </li>
-            </a>
-          </Tooltip>
           <Tooltip label="Open chat">
             <Link to={'/room/create'} className='sub-right-navbar'>
               <li className='right-item-option' style={{ display: "flex" }}>
