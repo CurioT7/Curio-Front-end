@@ -92,13 +92,13 @@ function Post(props) {
     }
   }
 
-  useEffect(() => {
-    async function checkVote(){
-    await pollVote(props._id, votepick);
-    }
+//   useEffect(() => {
+//     async function checkVote(){
+//     await pollVote(props._id, votepick);
+//     }
 
-    checkVote();
-}, []);
+//     checkVote();
+// }, []);
 
     
     const makePostUpvoted = () => {

@@ -24,6 +24,7 @@ import {
 } from "../ProfilePage/ProfilePageEndpoints.js";
 import profile from "../../assets/avatar_default_6.png";
 import { userFollow, userUnfollow } from "../FriendInformation/ShowFriendInformationEndpoints.js";
+import { getFollowers } from "./FollowesPageEnpoints.js";
 
 import { Link } from "react-router-dom";
 import "../ProfilePage/ProfileSideBar.jsx";
@@ -37,10 +38,9 @@ function FollowersPage(props) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [userAbout, setUserAbout] = useState({});
   const [friendAbout, setFriendAbout] = useState({});
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
-  const followers = ['freddy', 'Lively_Infinity_8489'];
-
-  const following = ['Holly_Walsh6', 'freddy'];
 
   const token = localStorage.getItem("token");
   const toastsuccess = useToast()
@@ -53,6 +53,19 @@ function FollowersPage(props) {
           position: 'bottom',
       });
   }
+
+  async function handleGetFollowers() {
+    const response = await getFollowers('followings');
+    if (response) {
+      setFollowers(response.data.friendsArray);
+      console.log(response.data.friendsArray);
+    }
+  }
+
+  useEffect(() => {
+    handleGetFollowers();
+
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

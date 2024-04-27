@@ -25,7 +25,6 @@ function UserPage( props ) {
     const result = await showFriendInformation(username);
     if(result) {
       setFriendInfo(result.data);
-      console.log(result.data)
     }
   }
 
