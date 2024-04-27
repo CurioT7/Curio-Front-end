@@ -97,7 +97,7 @@ function App() {
           <Route path='/r/:Community/Top' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
           <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
           <Route path='/profile/:username' element={<ProfilePage />}/>
-          <Route path='/post/post-details/:id' element={<PostDetails/>}/>
+          <Route path='/post/post-details/:postID' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path="/notifications" element={<Notifications/>}/>
