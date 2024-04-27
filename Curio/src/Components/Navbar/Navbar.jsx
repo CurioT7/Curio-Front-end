@@ -28,6 +28,7 @@ import {
 } from '@chakra-ui/react'
 import { CiSearch } from "react-icons/ci";
 import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
+import { getUnreadNotifications, getAllNotifications } from '../Notifications_Dropdown/NotificationsEndpoints';
 
 import Trending from './Trending';
 import SearchBy from './SearchBy';
@@ -40,6 +41,10 @@ function NavbarComponent(props) {
   const [searchCommunities, setSearchCommunities] = React.useState([]);
   const [searchPeople, setSearchPeople] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
+  const [unreadNotifications, setUnreadNotifications] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -49,6 +54,33 @@ function NavbarComponent(props) {
       setIsAuthenticated(false);
     }
   };
+
+  async function handleUnreadNotifications(){
+    const unreadNotifications = await getUnreadNotifications();
+    if(unreadNotifications){
+      setUnreadNotifications(unreadNotifications.data.unreadCount);
+    }
+  }
+
+  async function handleAllNotifications() {
+    const response = await getAllNotifications();
+    if(response) {
+        setNotifications(response.data.notifications);
+    }
+}
+
+  function handleOpenNotifications(){
+    setUnreadNotifications(null);
+    setIsNotificationsOpen(true);
+    handleAllNotifications();
+  }
+
+  useEffect(() => {
+    handleUnreadNotifications();
+  }, []);
+
+
+
 
   const handleSearchChange = async (e) => {
     setSearchValue(e.target.value);
@@ -260,11 +292,13 @@ if (!props.NavbarVisibility) {
             </Link>
           </Tooltip>
           <Tooltip label="Open inbox">
-            <a className='sub-right-navbar'>
+            <a className='sub-right-navbar' style={{position: 'relative'}} onClick={handleOpenNotifications}>
               <li className='right-item-option' style={{ display: "flex" }}>
                   <Menu>
                     <MenuButton>
                       <img className='navImg notificimg' src={inbox} alt="logo"/>
+                      <span className='unread-notifs'>{unreadNotifications}</span>
+
                     </MenuButton>
                     <MenuList 
                     style={{
@@ -272,7 +306,7 @@ if (!props.NavbarVisibility) {
                       border: 'none',
                       boxShadow: 'none', 
                     }}>
-                      <Notifications_Dropdown/>
+                      <Notifications_Dropdown notifications={notifications}/>
                     </MenuList>
                   </Menu>
               </li>

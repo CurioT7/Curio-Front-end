@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import logo from "../../assets/Profile_navbar.png";
 import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, Button } from '@chakra-ui/react';
 import { SlOptions } from "react-icons/sl";
 import "./NotificationsPage.css"
+import { getAllNotifications } from '../Notifications_Dropdown/NotificationsEndpoints';
+
+
 
 
 function NotificationsPage() {
+    const [notifications, setNotifications] = useState([]);
+
+    async function handleAllNotifications() {
+        const response = await getAllNotifications();
+        if(response) {
+            setNotifications(response.data.notifications);
+        }
+    }
+
+    useEffect(() => {
+        handleAllNotifications();
+    },[]);
+
+
   return (
     <div className="notifications-page">
         <div className='notifications-header-page'>
@@ -35,6 +52,7 @@ function NotificationsPage() {
                 </div>
             </div>
         </div>
+        {notifications.map((notification) => ( 
         <div className='notification-content'>
             <div className='avatar'>
                 <span className='avatar-image'>
@@ -47,15 +65,15 @@ function NotificationsPage() {
             <div className='notification-details'>
                 <div className='notifications-item-info' style={{display:'flex', gap:'0.4rem'}}>  
                     <span className="notifications-item-info-text">
-                        r/cfrv got its 1st member!
+                        {notification.title}
                     </span>
                     <span className="notifications-item-info-date">
-                        17h
+                        {notification.timestamp}
                     </span>
                 </div>
                 <div className="notifications-item-message">               
                     <span className='notifications-item-message-text'>
-                        Not forever alone! You’re on your way now.
+                        {notification.message}
                     </span>           
                 </div>
             </div>
@@ -75,6 +93,7 @@ function NotificationsPage() {
                 </Popover>
             </div>
         </div>
+        ))}
     </div>
   );
 }
