@@ -13,6 +13,8 @@
     padding-top: 10px;
     padding-bottom: 10px;
     cursor: pointer;
+    align-items: center;
+
 }
 .add-chat{
     padding-top: 10px;
@@ -135,4 +137,10 @@
     height: 2rem;
     width: 2rem;
     display: inline-block;
+}
+
+.popover-chat-list{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
