@@ -80,6 +80,15 @@
     background-color: #f8f8f8;
     border-top: 1px solid #f2f2f2;
     display: flex;
+    /* flex-wrap: wrap; */
     flex-direction: row-reverse;
     padding: .75rem 1rem;
+}
+
+@media (max-width: 450px) {
+    .buttons-section-chat{
+        padding: 0.5rem 0.75rem; 
+        justify-content: center;
+        text-align: center;
+    }
 }

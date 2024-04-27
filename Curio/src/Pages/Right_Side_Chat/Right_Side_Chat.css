@@ -18,3 +18,8 @@
     flex-direction: column;
     overflow: hidden;
 }
+@media (max-width: 767px) {
+    .open-chat-container{
+        grid-template-columns: 220px 1fr;
+    }
+}

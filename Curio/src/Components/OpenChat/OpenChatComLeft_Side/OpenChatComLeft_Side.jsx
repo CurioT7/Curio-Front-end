@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "./OpenChatComLeft_Side.css";
-import { Flex, Spacer, Box } from '@chakra-ui/react';
+import { Flex, Spacer, Box, position } from '@chakra-ui/react';
 import { IoChatbubbleSharp, IoFilterOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { PiArrowBendUpLeft } from "react-icons/pi";
@@ -10,12 +10,8 @@ import {
     Popover,
     PopoverTrigger,
     PopoverContent,
-    PopoverHeader,
     PopoverBody,
-    PopoverFooter,
-    PopoverArrow,
     Stack,
-    Checkbox,
     Button
 } from '@chakra-ui/react'
 import { FaRegSquare } from "react-icons/fa";
@@ -47,14 +43,14 @@ function OpenChatCom({handleNewPage}) {
                     fontSize: '1.125rem'
                 }}>Chats</Box >
                 <Spacer />
-                <Box style={{ display: 'flex', marginLeft: '130.312px' }}>
+                <Box className='chat-icons-header'>
                     <Link to={'/room/create'} className='add-chat' onClick={() => handleNewPage("New Chat")}>
                         <IoChatbubbleSharp style={{
                             width: '2rem',
                         }} />
                     </Link>
                     <div className='filter-chat-options'>
-                        <Popover placement='top-start'>
+                        <Popover placement='top-start' style={{position:'relative'}}>
                             <PopoverTrigger>
                                 <Button style={{ background: 'transparent', padding: '0', height: '5px' }}><IoFilterOutline />
                                     <MdKeyboardArrowDown /></Button>
