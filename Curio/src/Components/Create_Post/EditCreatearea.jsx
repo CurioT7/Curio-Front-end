@@ -8,6 +8,7 @@ import axios from "axios";
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
 function EditCreatearea({ title, content, community, days, options, imageFormData, selectedMethod }) {
+  const username = localStorage.getItem('username');
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
@@ -54,10 +55,17 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         // If selectedMethod is 'poll', generate optionsString
         optionsString = handleTurnToSting(options);
       }
+
+      // Initialize subreddit to null
+      let subreddit = null;
+
+      if (community.community !== username) {
+        subreddit = community.community;
+      }
       const postData = {
         title: title,
         content: content,
-        subreddit: community.community && community.community,
+        subreddit: subreddit,
         isOC: ocClicked,
         isSpoiler: spoilerClicked,
         isNSFW: nsfwClicked,
