@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import "./InputForm.css";
 import Text_Editor from "../Text_Editor/Text_Editor.jsx";
 import { CreateComment } from "./CommentsEndPoints.js";
+import axios from "axios";
 
 function CommentInputForm(props) {
     const [inputState, setInputState] = useState(0);
@@ -18,7 +19,7 @@ function CommentInputForm(props) {
         
         }
         else if (inputState === 2) {
-        setInputText(newContent);
+            setInputText(newContent);
         }
     
     }
@@ -37,14 +38,23 @@ function CommentInputForm(props) {
         }
     }
     const sendCommentToBackend = async () => {
-        console.log(props.ID,inputText)
-        const response = await CreateComment(props.ID,inputText);
-        if(response){
-            console.log("Comment Created");
-            setInputState(0);
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        try{
+            const response = await axios.post(`${hostUrl}/api/comments`,{
+                postId: props.ID,
+                content: inputText
+            },
+                {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                window.dispatchEvent(new Event('deletecomment'));
+            }   
         }
-        else{
-            console.log("Error creating comment");
+        catch (error) {
+            console.error('Error:', error);
         }
     }
     const toolbarOptions = [['bold', 'italic','link','strike',{ 'script': 'super' }],
@@ -86,7 +96,7 @@ function CommentInputForm(props) {
                                 </div>
                                 <div className="d-flex ms-auto mb-2">
                                     <button data-testid="cancel-textarea-comment" onClick={() => setInputState(0)} className="me-3 cancel-comment-button p-2">Cancel</button>
-                                    <button data-testid="comment-confirm" onClick={sendCommentToBackend} className="me-4 comment-button-post-details p-2">Comment</button>
+                                    <button type="button" data-testid="comment-confirm" onClick={sendCommentToBackend} className="me-4 comment-button-post-details p-2">Comment</button>
                                 </div>
                             </div>
                             }

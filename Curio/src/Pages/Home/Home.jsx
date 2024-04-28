@@ -116,23 +116,30 @@ function Home() {
 
 useEffect(() => {
   async function fetchAndSetData() {
-      const data = await fetchPostsFromBackend();
-      
-      if (data) {
-          setPosts(data.SortedPosts || data);
-          setRandomPost({ ...randomPost, isSelected: false });
-          const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
-          console.log('Polls Data:', pollsData);
-          setPolls(pollsData);
-      }
+    let data;
+    if (localStorage.getItem('token')) {
+      data = await SortHomePosts("best");
+    } else {
+      data = await fetchPostsFromBackend();
+    }
+
+    if (data) {
+      setPosts(data.SortedPosts || data.posts);
+      setRandomPost({ ...randomPost, isSelected: false });
+      const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
+      console.log('Polls Data:', pollsData);
+      setPolls(pollsData);
+    }
   }
+
   window.addEventListener('deletePost', fetchAndSetData);
 
   fetchAndSetData();
   return () => {
-      window.removeEventListener('deletePost', fetchAndSetData);
+    window.removeEventListener('deletePost', fetchAndSetData);
   }
 }, []);
+
 
 useEffect(() => {
   console.log('Polls needed array:', polls);
