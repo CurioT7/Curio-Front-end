@@ -89,15 +89,17 @@ function Safety() {
   const handleAddBlockedUser = async () => {
     if (blockedUserInput.trim() !== '') {
         const blockResult = await postBlockUser(blockedUserInput);
-        if (blockResult === true) {
-            const data = {
-                viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
-            };
+        // if (blockResult === true) {
+        //     const data = {
+        //         viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
+        //     };
+            // if(blockedUserInput === localStorage.getItem('username')){
+            //     Toast('You can not block yourself');
+            // }
             setBlockedUserInput('');
             fetchBlockedUsers();
         }
     }
-};
 
 
   const postunBlockUser = (username) => {

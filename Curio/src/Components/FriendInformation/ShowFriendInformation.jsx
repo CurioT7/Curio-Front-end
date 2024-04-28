@@ -37,6 +37,8 @@ function ShowFriendInformation(props) {
     const toastError = useToast();
     const navigate = useNavigate();
 
+    // const navigate = useNavigate();
+
     function ToastError() {
         toastError({
             description: "You can't block somebody again within 24 hours of blocking them",
@@ -46,6 +48,14 @@ function ShowFriendInformation(props) {
             position: 'top',
         });
     }
+
+    useEffect(() => {
+        const myUsername = localStorage.getItem('username');
+        if(props.username === myUsername){
+            setIsFollowing(true);
+            navigate(`/profile/${myUsername}`);
+        }
+    }, []);
 
     const toastsuccess = useToast()
     function ToastSuccess(description) {
@@ -57,13 +67,6 @@ function ShowFriendInformation(props) {
             position: 'top',
         });
     }
-
-    useEffect(() => {
-        const myUsername = localStorage.getItem('username');
-        if(myUsername === props.username){
-            navigate(`/profile/${myUsername}`);
-        }
-    }, []);
 
 
     const handleEllipsisClick = () => {
@@ -169,21 +172,6 @@ function ShowFriendInformation(props) {
             console.error('Error:', error);
         }
     }
-
-    // const patchBlockUser = (name) => {
-    //     const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-    //       viewBlockedPeople: [...blockedUsers, { username: name}]
-    //     },{
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${token}`
-    //       }
-    //     })
-    //     if(response.status === 200){
-    //         const newUser = { username: name};
-    //         setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-    //     }
-    //   };
 
       const handleUserBlock = async (username) => {
         if (!token) {

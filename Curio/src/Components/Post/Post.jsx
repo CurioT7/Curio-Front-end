@@ -268,7 +268,7 @@ function Post(props) {
                     <Card className='Post' variant='ghost' >
                         <CardHeader className='py-0'>
                             <Flex spacing='4'>
-                            <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
+                            <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap' onClick={handleNavigationToDetails}>
                                 <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
                                <UserPopover user={props.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
