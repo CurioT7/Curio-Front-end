@@ -35,6 +35,7 @@ function ShowFriendInformation(props) {
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
+    const navigate = useNavigate();
 
     function ToastError() {
         toastError({
@@ -57,6 +58,13 @@ function ShowFriendInformation(props) {
         });
     }
 
+    useEffect(() => {
+        const myUsername = localStorage.getItem('username');
+        if(myUsername === props.username){
+            navigate(`/profile/${myUsername}`);
+        }
+    }, []);
+
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
@@ -78,8 +86,6 @@ function ShowFriendInformation(props) {
     const handleReportPopupClose = () => {
         setShowReportMenu(false);
     };
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         handleGetFollower(props.username);

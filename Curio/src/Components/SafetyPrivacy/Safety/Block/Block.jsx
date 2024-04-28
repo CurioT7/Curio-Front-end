@@ -76,7 +76,7 @@ function Safety() {
             Toast(`${username} already blocked`);
             break;
           case 500:
-            Toast(`An unexpected error occurred on the server. Please try again later.`);
+            Toast(`Request is unsuccessful.`);
             break;
           default:
             break;
