@@ -92,13 +92,13 @@ function Post(props) {
     }
   }
 
-  useEffect(() => {
-    async function checkVote(){
-    await pollVote(props._id, votepick);
-    }
+//   useEffect(() => {
+//     async function checkVote(){
+//     await pollVote(props._id, votepick);
+//     }
 
-    checkVote();
-}, []);
+//     checkVote();
+// }, []);
 
     
     const makePostUpvoted = () => {
@@ -210,15 +210,30 @@ function Post(props) {
                 window.dispatchEvent(new Event('newRecentPost'));
                 navigate(`/post/post-details/${props._id}`, { state: { post } });
             }
+            if (response.status === 401){
+                navigate(`/post/post-details/${props._id}`, { state: { post } });
+            }
         }
         catch(err){
+            const post = {
+                _id: props._id,
+                user: props.user,
+                title: props.title,
+                subreddit: subredditName,
+                content: props.content,
+                image: props.image,
+                upvotes: props.upvotes,
+                downvotes: props.downvotes,
+                comments: props.comments,
+                savedPosts: props.savedPosts,
+                savedComments: props.savedComments,
+                hiddenPosts: props.hiddenPosts,
+                isMod: props.isMod,
+                isLocked: isLocked,
+                dateViewed: new Date().toISOString()
+            }
             console.log(err);
-            toast({
-                description: "Server Error Occured.",               
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            })
+            navigate(`/post/post-details/${props._id}`, { state: { post } });
         }
     }
 
