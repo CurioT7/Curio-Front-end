@@ -160,19 +160,37 @@ async function changeSortType(value,time) {
           <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
           </>
         ))):(
-          
-        <Post 
-          _id={randomPost.post._id}
-          title={randomPost.post.title}
-          body={randomPost.post.body}
-          user={randomPost.post.authorName}
-          upvotes={randomPost.post.upvotes}
-          downvotes={randomPost.post.downvotes}
-          comments={randomPost.post.comments}
-          content={randomPost.post.content}
-          isMod={isMod}
-          linkedSubreddit={randomPost.linkedSubreddit}
-        />)}
+          <>
+ {randomPost.post.type === 'poll' ? (
+                    <Post
+                    pollTitle={randomPost.post.title}
+                    body={randomPost.post.body}
+                    pollText={randomPost.post.content}
+                    user={randomPost.post.authorName}
+                    _id={randomPost.post._id}
+                    type={randomPost.post.type}
+                    optionNames={randomPost.post.options.map((option) => option.name)}
+                    votes={randomPost.post.options.map((option) => option.votes)}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    voteLength={randomPost.post.voteLength}
+                  />) : (
+                    <Post
+                    _id={randomPost.post._id}
+                    title={randomPost.post.title}
+                    body={randomPost.post.body}
+                    user={randomPost.post.authorName}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    content={randomPost.post.content}
+                    isMod={isMod}
+                    linkedSubreddit={randomPost.post.linkedSubreddit}
+                  />
+                  )}
+        </>
+        )}
         {(posts.length<1 && randomPost.isSelected==false) ||(!randomPost.post && randomPost.isSelected==true)? (<div className="m-5 row justify-content-center align-items-center">
           <div className="col text-center">
           <h4 className="fw-bold" >This community doesn't have any posts yet</h4>
