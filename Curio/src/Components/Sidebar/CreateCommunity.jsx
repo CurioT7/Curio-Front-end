@@ -62,6 +62,7 @@ function CreateCommunity(props) {
       const response = await createCommunity({data});
       if (response.status === 200 || response.status === 201) {
         window.dispatchEvent(new Event('communityCreated'));
+        navigate(`/r/${communityName}`);
         props.onHide();
       }
       if (response.response.status === 400){
