@@ -72,6 +72,10 @@ function ShowPoll( props ) {
     <>
     <div className="d-flex flex-column">
       <div className="pollDiv p-2">
+      <div className="pollTitle">{props.pollTitle}</div>
+          <div className="pollText">
+            {props.pollText}
+          </div>
         <Card className="mx-2 pollCard">
           <Card.Header className="d-flex cardheaderDiv align-items-center">
             <span className="openorClose">Open</span>
