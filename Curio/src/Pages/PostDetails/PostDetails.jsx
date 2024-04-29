@@ -32,7 +32,7 @@ function PostDetails(props) {
     }, []);
   const post = location.state?.post;
   return (
-    <div className='posts-content-container mt-4 col-md-6 col-7'>
+    <div style={{marginTop: "80px"}} className='posts-content-container col-md-6 col-7'>
       <PostContentDetails {...(post || postInfo)} />
     </div>
   );
