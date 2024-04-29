@@ -195,6 +195,7 @@ function PostContentDetails(post) {
         });
     }
     const handleBack = () => {
+        setIsClicked(false);
         navigate(-1);
     }
     useEffect(() => {
@@ -303,6 +304,8 @@ function PostContentDetails(post) {
                         ) : (
                             <>
                                 <p className='post-details-content'>{post.content}</p>
+                                {console.log("spoiler", post)}
+
                             </>
                         )}
                     </div>

@@ -5,8 +5,7 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 const url = VITE_SERVER_HOST;
 
 const getUserOverview = async (username) => {
-    const url = `${VITE_SERVER_HOST}/user/${username}/overview`;
-
+    const url = `${VITE_SERVER_HOST}/api/user/${username}/overview`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -57,7 +56,7 @@ const getUserOverview = async (username) => {
 
 const getUserComments = async (username) => {
     
-    const url = `${VITE_SERVER_HOST}/user/${localStorage.getItem('username')}/comments`;
+    const url = `${VITE_SERVER_HOST}/api/user/${localStorage.getItem('username')}/comments`;
     const token = localStorage.getItem('token')
 
     const response = await fetch(url, {
@@ -92,7 +91,7 @@ const getUserComments = async (username) => {
 };
 
 const getUserDownvoted = async () => {
-    const url = `${VITE_SERVER_HOST}/user/downvoted`;
+    const url = `${VITE_SERVER_HOST}/api/user/downvoted`;
     const token = localStorage.getItem('token');
 
     const response = await fetch(url, {
@@ -145,7 +144,7 @@ const getUserDownvoted = async () => {
 };
 
 const getUserUpvoted = async () => {
-    const url = `${VITE_SERVER_HOST}/user/upvoted`;
+    const url = `${VITE_SERVER_HOST}/api/user/upvoted`;
     const token = localStorage.getItem('token');
 
     const response = await fetch(url, {

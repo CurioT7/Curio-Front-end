@@ -263,6 +263,7 @@ const postCategory = async (postID) => {
                 savedComments: props.savedComments,
                 hiddenPosts: props.hiddenPosts,
                 isMod: props.isMod,
+                isSpoiler: props.isSpoiler,
                 isLocked: isLocked,
                 dateViewed: new Date().toISOString()
             }

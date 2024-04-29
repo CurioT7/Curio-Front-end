@@ -257,7 +257,6 @@ return(
     userPosts.map(post => (
       <div className='post-card' key={post.id}>
        <Post
-            
             _id={post._id}
             title={post.title}
             body={post.body}
@@ -344,6 +343,7 @@ return(
             comments={post.comments}
             content={post.content}
             subReddit={post.linkedSubreddit}
+            isSpoiler={post.isSpoiler}
             savedPosts={savedPosts}
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
