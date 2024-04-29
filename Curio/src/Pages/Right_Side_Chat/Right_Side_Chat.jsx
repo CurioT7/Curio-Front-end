@@ -25,7 +25,6 @@ function Right_Side_Chat(props) {
 
     const handleNewPage = (PageName) => {
         setNewPage(PageName);
-        // console.log(newPage)
     };
 
     return (
