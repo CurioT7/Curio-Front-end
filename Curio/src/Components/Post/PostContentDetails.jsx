@@ -360,11 +360,10 @@ function PostContentDetails(post) {
                                 <p className='text-body-spoiler'>
                                     {post.content}
                                 </p>
-                                {console.log("spoiler", post.isSpoiler)}
                             </>
                         ) : (
                             <>
-                                <p className='post-details-content'>{post.content}</p>
+                                <p className='post-details-content' dangerouslySetInnerHTML={{ __html: post.content}} />
                                 {console.log("spoiler", post)}
 
                             </>

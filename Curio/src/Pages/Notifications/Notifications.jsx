@@ -22,7 +22,7 @@ function Notifications() {
   }
 
   return (
-    <div className='Notifications-page-conatainer'>
+    <div className='Notifications-page-conatainer' style={{marginTop:'3rem'}}>
       <h1 className='notifications-page-title'>
         Notifications
       </h1>

@@ -32,6 +32,23 @@ async function getAllNotifications() {
   }
 }
 
-export { getUnreadNotifications, getAllNotifications };
+
+async function markAsViweed () {
+  const hostUrl = import.meta.env.VITE_SERVER_HOST;
+  try{
+  const response = await axios.patch(`${hostUrl}/api/notifications/mark-all-viewed`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+  return response;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+
+}
+
+export { getUnreadNotifications, getAllNotifications, markAsViweed };
 
 

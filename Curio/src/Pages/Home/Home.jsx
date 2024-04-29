@@ -126,9 +126,6 @@ useEffect(() => {
       setPosts(data.posts);
       setTotalPages(Math.ceil(data.totalPosts / 10));
       setRandomPost({ ...randomPost, isSelected: false });
-      //const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
-      //console.log('Polls Data:', pollsData);
-      //setPolls(pollsData);
     }
   }
 
@@ -248,9 +245,6 @@ async function changeSortType(value,time) {
   SetData();
 }
 
-function handleShowPolls(){
-  console.log(polls);
-}
 
 async function getBlocked() {
   try {
@@ -288,7 +282,7 @@ useEffect(() => {
       {/* Insert posts here (above recent posts) */}
       <div style={{marginTop: "70px"}} className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
         <div className='my-1'>
-        <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false} onClick={handleShowPolls}/>
+        <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
             {((randomPost.isSelected==false) && posts) ? (
@@ -296,7 +290,7 @@ useEffect(() => {
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
                   <>
-                    {post.type === 'poll' ? (
+                    {post.post.type === 'poll' ? (
                     <Post
                     pollTitle={post.post.title}
                     body={post.post.body}
