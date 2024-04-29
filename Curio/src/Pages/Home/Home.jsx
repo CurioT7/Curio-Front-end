@@ -273,6 +273,7 @@ useEffect(() => {
                     downvotes={post.post.downvotes}
                     comments={post.post.comments}
                     voteLength={post.post.voteLength}
+                    linkedSubreddit={post.details.subredditName}
                   />) : (
                     <Post
                     _id={post.post._id}
