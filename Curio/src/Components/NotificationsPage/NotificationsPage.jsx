@@ -7,7 +7,7 @@ import { SlOptions } from "react-icons/sl";
 import "./NotificationsPage.css";
 import { getTimeDifference } from "../../Components/getTimeDifference/getTimeDifference";
 
-function NotificationsPage({ notifications }) {
+function NotificationsPage({ notifications, unreadNotifications }) {
     return (
         <div className="notifications-page">
             <div className='notifications-header-page'>
@@ -36,8 +36,8 @@ function NotificationsPage({ notifications }) {
                 </div>
             </div>
             <div className='notification-content'>
-                {notifications.map(notification => (
-                    <div key={notification._id} className='notification-item'>
+            {notifications.length > 0 && notifications.map(notification => (
+                    <div key={notification._id} className={`notification-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}>
                         <div className='avatar'>
                             <span className='avatar-image'>
                                 <img src={logo} alt="avatar for notification" style={{ marginBottom: "0" }} />

@@ -125,7 +125,6 @@ useEffect(() => {
       setPosts(data.posts);
       setTotalPages(Math.ceil(data.totalPosts / 10));
       setRandomPost({ ...randomPost, isSelected: false });
-      window.scrollTo(0, 0); // Scroll to the top of the page
       //const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
       //console.log('Polls Data:', pollsData);
       //setPolls(pollsData);
@@ -135,7 +134,6 @@ useEffect(() => {
   window.addEventListener('deletePost', fetchAndSetData);
 
   fetchAndSetData();
-  console.log("posts", posts)
   return () => {
     window.removeEventListener('deletePost', fetchAndSetData);
   }
@@ -280,6 +278,7 @@ useEffect(() => {
                     downvotes={post.downvotes}
                     comments={post.comments}
                     voteLength={post.voteLength}
+                    linkedSubreddit={post.details.subredditName}
                     isLocked={post.isLocked}
                   />) : (
                     <Post
@@ -295,6 +294,8 @@ useEffect(() => {
                     linkedSubreddit={post.details.subredditName}
                     voteStatus={post.details.voteStatus}
                     isLocked={post.post.isLocked}
+                    savedPosts={savedPosts}
+                    hiddenPosts={hiddenPosts}
                   />
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>

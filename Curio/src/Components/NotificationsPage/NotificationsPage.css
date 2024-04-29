@@ -40,6 +40,15 @@
     display: grid;
     grid-template-columns: 2rem 0.682fr 2rem;
 }
+
+.notification-item.unread {
+    background-color: #f2f2f2; 
+}
+
+.notification-item.read {
+    background-color: transparent; 
+}
+
 .notification-details{
     display: flex;
     flex-direction: column;

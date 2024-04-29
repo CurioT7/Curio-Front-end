@@ -124,7 +124,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         console.error("Error:", error.message);
       }
     }
-  };
+  }; 
 
   return (
     <div className="EditCreatearea">
@@ -144,9 +144,8 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
           >
             OC
           </Button>
-          <Button
-            className='rest-button'
-            variant='ghost'
+          <Button 
+            className='rest-button' 
             leftIcon={spoilerClicked ? <CheckIcon /> : <AddIcon />}
             onClick={handleSpoilerClick}
             disabled={!community || !community.community}

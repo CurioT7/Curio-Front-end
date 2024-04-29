@@ -55,6 +55,8 @@ function Community_details({ community }) {
                     platform: `fa-brands fa-${link.platform.toLowerCase()}`,
                   })) : []);  
               }
+              console.log("subredditData")
+              console.log(subredditData)
         } catch (error) {
             console.error("Error fetching subreddit data:", error);
         }

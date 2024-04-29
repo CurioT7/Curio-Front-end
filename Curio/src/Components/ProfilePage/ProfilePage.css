@@ -2,7 +2,7 @@
 .profileContainer{
 
     margin-left: 18rem;
-    margin-top: 0.25rem;
+    margin-top: 4rem;
     margin-bottom: 0.25rem;
     justify-content: center;
     display: flex;
@@ -38,6 +38,7 @@ justify-content: flex-start;
     padding: 1%;
     background-color: #F9FAFA;
     max-width: 40vh;
+    margin-left: 5%;
 }
 
 @media screen and (max-width: 768px) {
@@ -229,3 +230,4 @@ line-height: 1.25rem;
     align-items: center;
     margin-bottom: 1%;
 }
+
