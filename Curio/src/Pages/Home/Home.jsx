@@ -135,7 +135,6 @@ useEffect(() => {
   window.addEventListener('deletePost', fetchAndSetData);
 
   fetchAndSetData();
-  console.log("posts", posts)
   return () => {
     window.removeEventListener('deletePost', fetchAndSetData);
   }
@@ -280,6 +279,8 @@ useEffect(() => {
                     downvotes={post.downvotes}
                     comments={post.comments}
                     voteLength={post.voteLength}
+                    linkedSubreddit={post.details.subredditName}
+                    isLocked={post.isLocked}
                   />) : (
                     <Post
                     _id={post.post._id}
@@ -293,6 +294,7 @@ useEffect(() => {
                     //isMod={isMod}
                     linkedSubreddit={post.details.subredditName}
                     voteStatus={post.details.voteStatus}
+                    isLocked={post.post.isLocked}
                   />
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
@@ -314,6 +316,7 @@ useEffect(() => {
                     downvotes={randomPost.post.downvotes}
                     comments={randomPost.post.comments}
                     voteLength={randomPost.post.voteLength}
+                    isLocked={randomPost.post.isLocked}
                   />) : (
                     <Post
                     _id={randomPost.post._id}
@@ -326,6 +329,7 @@ useEffect(() => {
                     content={randomPost.post.content}
                     //isMod={isMod}
                     linkedSubreddit={randomPost.post.linkedSubreddit}
+                    isLocked={randomPost.post.isLocked}
                   />
                   )}
                 <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>

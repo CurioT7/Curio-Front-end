@@ -16,6 +16,7 @@ function PostDetails(props) {
             const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`);
             if (response.status === 200 || response.status === 201){
                 setPostInfo(response.data.item);
+                console.log(postInfo);
             }
         }
         catch(err){
@@ -32,7 +33,7 @@ function PostDetails(props) {
     }, []);
   const post = location.state?.post;
   return (
-    <div style={{marginTop: "80px"}} className='posts-content-container col-md-6 col-7'>
+    <div className='posts-content-container col-md-6 col-7'>
       <PostContentDetails {...(post || postInfo)} />
     </div>
   );

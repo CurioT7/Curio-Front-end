@@ -111,7 +111,7 @@ function handleFriendInformation(username) {
 }
 
   return (
-    <div className="d-flex">
+    <div className="d-flex followersPageCont">
       <div className="d-flex p-3 mx-auto flex-column followersPageDiv">
         <div className="d-flex flex-column followersSearchDiv p-2">
           <span className="Followers">Followers</span>
