@@ -14,7 +14,7 @@ function UserSetting() {
   };
 
   return (
-    <div className='container'>
+    <div className='container' style={{marginTop:'4rem'}}>
       <div className="user-settings">
         <div className="user-settings-header">
           <h3 id='user_settings'>User settings</h3>

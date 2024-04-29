@@ -8,6 +8,7 @@
 .container-create-post {
     display: flex;
     background: #DAE0E6;
+    margin-top: 3.6rem;
 }
 
 .container-create-post .left-container-post {

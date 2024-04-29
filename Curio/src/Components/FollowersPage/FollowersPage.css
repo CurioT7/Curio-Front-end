@@ -5,6 +5,10 @@
   width: 640px;
 }
 
+.followersPageCont{
+  margin-top: 4rem;
+}
+
 .followersSearchBox{
   height: 32px;
   border: 1px solid gray;
