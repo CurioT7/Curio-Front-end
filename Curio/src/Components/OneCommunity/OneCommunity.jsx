@@ -69,9 +69,11 @@ function Community({ index, name, category, members, picture }) {
       </Popover>
     }
   >
+    <Link to={`/r/${name}`}>
     <h6 className="commName" onMouseEnter={() => setShowPopover(true)} onMouseLeave={() => setShowPopover(false)}>
       r/{name}
     </h6>
+    </Link>
   </OverlayTrigger>
 </>
         <h6 className="commCategory">{category}</h6>

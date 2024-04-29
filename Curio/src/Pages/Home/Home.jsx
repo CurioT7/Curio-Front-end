@@ -260,62 +260,72 @@ useEffect(() => {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false} onClick={handleShowPolls}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {polls.map((poll, index) => (
-          <><Post
-            key={index}
-            pollTitle={poll.title}
-            body={poll.body}
-            pollText={poll.content}
-            user={poll.authorName}
-            _id={poll._id}
-            type={poll.type}
-            optionNames={poll.options.map(option => option.name)}
-            votes={poll.options.map(option => option.votes)}
-            upvotes={poll.upvotes}
-            downvotes={poll.downvotes}
-            comments={poll.comments}
-            voteLength={poll.voteLength}
-          />
-          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
-          </>
-        ))}
             {((randomPost.isSelected==false) && posts) ? (
               posts.slice(0, 5)
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
                   <>
+                    {post.type === 'poll' ? (
                     <Post
-                      _id={post._id}
-                      title={post.title}
-                      body={post.body}
-                      user={post.authorName}
-                      upvotes={post.upvotes}
-                      downvotes={post.downvotes}
-                      comments={post.comments}
-                      content={post.content}
-                      linkedSubreddit={post.linkedSubreddit}
-                      savedPosts={savedPosts}
-                      savedComments={savedComments}
-                      hiddenPosts={hiddenPosts}
-                    />
+                    pollTitle={post.title}
+                    body={post.body}
+                    pollText={post.content}
+                    user={post.authorName}
+                    _id={post._id}
+                    type={post.type}
+                    optionNames={post.options.map((option) => option.name)}
+                    votes={post.options.map((option) => option.votes)}
+                    upvotes={post.upvotes}
+                    downvotes={post.downvotes}
+                    comments={post.comments}
+                    voteLength={post.voteLength}
+                  />) : (
+                    <Post
+                    _id={post._id}
+                    title={post.title}
+                    body={post.body}
+                    user={post.authorName}
+                    upvotes={post.upvotes}
+                    downvotes={post.downvotes}
+                    comments={post.comments}
+                    content={post.content}
+                    isMod={isMod}
+                    linkedSubreddit={post.linkedSubreddit}
+                  />
+                  )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
                   </>
                 ))
             ):(
               <>
-                <Post
-                  _id={randomPost.post._id}
-                  title={randomPost.post.title}
-                  body={randomPost.post.body}
-                  user={randomPost.post.authorName}
-                  upvotes={randomPost.post.upvotes}
-                  downvotes={randomPost.post.downvotes}
-                  comments={randomPost.post.comments}
-                  content={randomPost.post.content}
-                  linkedSubreddit={randomPost.linkedSubreddit}
-                  savedPosts={savedPosts}
-                  savedComments={savedComments}
-                />
+                    {randomPost.post.type === 'poll' ? (
+                    <Post
+                    pollTitle={randomPost.post.title}
+                    body={randomPost.post.body}
+                    pollText={randomPost.post.content}
+                    user={randomPost.post.authorName}
+                    _id={randomPost.post._id}
+                    type={randomPost.post.type}
+                    optionNames={randomPost.post.options.map((option) => option.name)}
+                    votes={randomPost.post.options.map((option) => option.votes)}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    voteLength={randomPost.post.voteLength}
+                  />) : (
+                    <Post
+                    _id={randomPost.post._id}
+                    title={randomPost.post.title}
+                    body={randomPost.post.body}
+                    user={randomPost.post.authorName}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    content={randomPost.post.content}
+                    isMod={isMod}
+                    linkedSubreddit={randomPost.post.linkedSubreddit}
+                  />
+                  )}
                 <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
               </>
             )}

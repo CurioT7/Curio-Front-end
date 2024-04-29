@@ -35,6 +35,9 @@ function ShowFriendInformation(props) {
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
+    const navigate = useNavigate();
+
+    // const navigate = useNavigate();
 
     function ToastError() {
         toastError({
@@ -45,6 +48,14 @@ function ShowFriendInformation(props) {
             position: 'top',
         });
     }
+
+    useEffect(() => {
+        const myUsername = localStorage.getItem('username');
+        if(props.username === myUsername){
+            setIsFollowing(true);
+            navigate(`/profile/${myUsername}`);
+        }
+    }, []);
 
     const toastsuccess = useToast()
     function ToastSuccess(description) {
@@ -78,8 +89,6 @@ function ShowFriendInformation(props) {
     const handleReportPopupClose = () => {
         setShowReportMenu(false);
     };
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         handleGetFollower(props.username);
@@ -163,21 +172,6 @@ function ShowFriendInformation(props) {
             console.error('Error:', error);
         }
     }
-
-    // const patchBlockUser = (name) => {
-    //     const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-    //       viewBlockedPeople: [...blockedUsers, { username: name}]
-    //     },{
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${token}`
-    //       }
-    //     })
-    //     if(response.status === 200){
-    //         const newUser = { username: name};
-    //         setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-    //     }
-    //   };
 
       const handleUserBlock = async (username) => {
         if (!token) {

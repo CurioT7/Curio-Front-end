@@ -76,7 +76,7 @@ function Safety() {
             Toast(`${username} already blocked`);
             break;
           case 500:
-            Toast(`An unexpected error occurred on the server. Please try again later.`);
+            Toast(`Request is unsuccessful.`);
             break;
           default:
             break;
@@ -89,15 +89,17 @@ function Safety() {
   const handleAddBlockedUser = async () => {
     if (blockedUserInput.trim() !== '') {
         const blockResult = await postBlockUser(blockedUserInput);
-        if (blockResult === true) {
-            const data = {
-                viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
-            };
+        // if (blockResult === true) {
+        //     const data = {
+        //         viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
+        //     };
+            // if(blockedUserInput === localStorage.getItem('username')){
+            //     Toast('You can not block yourself');
+            // }
             setBlockedUserInput('');
             fetchBlockedUsers();
         }
     }
-};
 
 
   const postunBlockUser = (username) => {

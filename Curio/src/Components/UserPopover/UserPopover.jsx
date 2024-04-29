@@ -1,6 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import './UserPopover.css';
-import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Minus from "../../styles/icons/Minus.jsx";
@@ -12,10 +11,14 @@ import Cake from "../../styles/icons/Cake.jsx";
 
 
 function UserPopover( { user, friendInfo, isFollowing, handleFollowToggle, handleGetFollower, showFriendInformation, classname } ) {
-  const [show, setShow] = useState(false);
-  const [target, setTarget] = useState(null);
   const [showPopover, setShowPopover] = useState(false);
-  const ref = useRef(null);
+  const [isSelf , setIsSelf] = useState(false);
+
+  useEffect(() => {
+    if (user === localStorage.getItem('username')) {
+      setIsSelf(true);
+    }
+  }, [user]);
 
   return (
     <OverlayTrigger
@@ -68,6 +71,7 @@ function UserPopover( { user, friendInfo, isFollowing, handleFollowToggle, handl
           >
             What is Karma?
           </a>
+          {isSelf? null : (
           <div className="d-flex mt-2 ">
             <button
               className={`d-flex align-items-center popoverFollow p-2 ${
@@ -89,6 +93,8 @@ function UserPopover( { user, friendInfo, isFollowing, handleFollowToggle, handl
               <span className="ms-2 ">Chat</span>
             </button>
           </div>
+          )
+      }
         </Popover>
       }
     >
