@@ -72,25 +72,25 @@ function Post(props) {
     setVoted(true)
   }
 
-  async function pollVote(_id, votepick){
-    const hostUrl = import.meta.env.VITE_SERVER_HOST;
-    try{
-    const response = await axios.post(`${hostUrl}/api/pollVote`, {
-      postId: _id,
-      option: votepick
-    },{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    if(response === 200){
-      setVoted(true);
-    }
-  }
-    catch(error){
-      console.error(error);
-    }
-  }
+//   async function pollVote(_id, votepick){
+//     const hostUrl = import.meta.env.VITE_SERVER_HOST;
+//     try{
+//     const response = await axios.post(`${hostUrl}/api/pollVote`, {
+//       postId: _id,
+//       option: votepick
+//     },{
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//     });
+//     if(response === 200){
+//       setVoted(true);
+//     }
+//   }
+//     catch(error){
+//       console.error(error);
+//     }
+//   }
 
 //   useEffect(() => {
 //     async function checkVote(){
@@ -318,7 +318,7 @@ const postCategory = async (postID) => {
                     <Card className='Post' variant='ghost' >
                         <CardHeader className='py-0'>
                             <Flex spacing='4'>
-                            <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap' onClick={handleNavigationToDetails}>
+                            <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                                 <Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
                                <UserPopover user={props.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
@@ -328,8 +328,8 @@ const postCategory = async (postID) => {
                             </Flex>
                         </CardHeader>
                         {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
-                            pollText={props.pollText} voteLength={props.voteLength} handleVoted={handleVoted} handleVote={handleVote} votepick={votepick} hasVoted={hasVoted}
-                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments} pollVote={pollVote} handleNavigation={handleNavigationToDetails}/>  ) : (
+                            pollText={props.pollText} voteLength={props.voteLength}
+                            handleNavigation={handleNavigationToDetails}/>  ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
                      {props.isSpoiler ? (
@@ -369,7 +369,6 @@ const postCategory = async (postID) => {
                             flexDirection='row'
                             justifyContent='space-between'
                             flexWrap='wrap'
-                            onClick={handleNavigationToDetails}
                             sx={{
                             '& > button': {
                                 minW: '136px',

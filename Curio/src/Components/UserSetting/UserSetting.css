@@ -4,6 +4,9 @@
     --thirdclr: #edeff1;
     --fourcle: #0079d3;
 }
+.userSettingsContainer{
+    margin-top: 4rem;
+}
 #user_settings{
     font-size: 18px;
     font-weight: 500;
