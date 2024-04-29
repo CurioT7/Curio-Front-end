@@ -90,11 +90,6 @@ function Email (){
         fetchAndSetData();
     }, []);
     
-    // console test
-    console.log(` New user: ${newFollowerEmail}`)
-    console.log(`Chat: ${chatRequestEmail}`)
-    console.log(`Unsub: ${unsubscribeFromAllEmails}`)
-    // *-----------------------------------------------*//
     return(
         <Box className="user-settings-header">
             <h3 className="headings-titles text-uppercase fw-bold mb-3">messages</h3>

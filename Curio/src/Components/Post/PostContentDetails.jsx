@@ -360,7 +360,6 @@ function PostContentDetails(post) {
                                 <p className='text-body-spoiler'>
                                     {post.content}
                                 </p>
-                                {console.log("spoiler", post.isSpoiler)}
                             </>
                         ) : (
                             <>

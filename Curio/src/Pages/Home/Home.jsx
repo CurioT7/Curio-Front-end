@@ -125,9 +125,6 @@ useEffect(() => {
       setPosts(data.posts);
       setTotalPages(Math.ceil(data.totalPosts / 10));
       setRandomPost({ ...randomPost, isSelected: false });
-      //const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
-      //console.log('Polls Data:', pollsData);
-      //setPolls(pollsData);
     }
   }
 

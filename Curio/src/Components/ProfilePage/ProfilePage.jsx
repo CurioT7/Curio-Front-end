@@ -143,7 +143,6 @@ useEffect(() => {
     if (StoredUsername) {
       getUserAbout(StoredUsername).then(data => setUserAbout(data));
     }
-    console.log(userAbout);
   }, []);
 
   useEffect(() => {
@@ -180,7 +179,7 @@ return(
 <div className="profileContainer">
 <div className="mainComponent">
 <div className="userInfo">
-<img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+<img src={profile} alt="profile picture" className="profileAvatar" />
 <h3 className='userName'> {userAbout.displayName}</h3>
 <h5 className="userName"> u/{username} </h5>
 <b>{userAbout.bio}</b>
@@ -215,7 +214,6 @@ return(
       ) : (
         <>
         {userPosts.map(post => {
-    console.log(post.isSpoiler);
     return (
         <div className='post-card' key={post.id}>
             <Post
@@ -365,7 +363,7 @@ return(
       {upvotedPosts.map(post => (
         <div className='post-card' key={post.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{post.authorName}</b>
           </div>
           <p>{post.content}</p>
@@ -374,7 +372,7 @@ return(
       {upvotedComments.map(comment => (
         <div className='comment-card' key={comment.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{comment.authorName}</b>
           </div>
           <p>{comment.content}</p>
@@ -392,7 +390,7 @@ return(
       {downvotedPosts.map(post => (
         <div className='post-card' key={post.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{post.authorName}</b>
           </div>
           <p>{post.content}</p>
@@ -401,7 +399,7 @@ return(
       {downvotedComments.map(comment => (
         <div className='comment-card' key={comment.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{comment.authorName}</b>
           </div>
           <p>{comment.content}</p>
@@ -487,7 +485,7 @@ return(
 
  <p>Settings</p>
  <div className="profileSettings">
-<img src="../src/assets/Curio_logo.png" alt="profile" />
+<img src={profile} alt="profile" />
 <div className="textContainer">
         <h5>Profile</h5>
         <h6>Customise your profile</h6>
