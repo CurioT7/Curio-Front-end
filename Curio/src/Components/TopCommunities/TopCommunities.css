@@ -3,6 +3,7 @@
 .parentDiv{
   font-style: -apple-system , BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   margin: 0 auto;
+  margin-top: 5rem;
 }
 
 .best-of-reddit{
