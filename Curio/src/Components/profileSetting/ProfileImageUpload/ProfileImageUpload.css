@@ -6,3 +6,92 @@
     line-height: 20px;
     color: var(--secclr);
 }
+
+.upload-profile{
+    margin-top: -8px;
+    margin-bottom: 4px;
+}
+
+.upload-profile-image,
+.banner-upload{
+    background-size: contain; 
+    background-position: center; 
+    background-color: #f6f7f8;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 4px;
+}
+
+.column-profile-image{
+    width: 120px;
+    margin: 0 12px 0 0;
+    height: 100%;
+}
+
+.column-banner-image{
+    height: 100%;
+    margin: 0;
+    width: 412px
+}
+
+.image-text{
+    font-size: 11px;
+    text-align: center;
+}
+
+.row-images{
+    display: flex;
+    flex-direction: row;
+    height: 120px;
+}
+
+.upload-image-icon,
+.upload-image-icon-appear{
+    color: #0079d3;
+    border: 1px solid #0079d3;
+    border-radius: 50%;
+    padding: 6px;
+    font-size: 18px;
+}
+
+.profile-banner-images{
+    align-items: flex-start;
+}
+
+.upload-image-icon-appear{
+    position: absolute;
+    bottom: 5px; 
+    right: 5px; 
+}
+@media screen and (max-width: 930px) {
+    .image-upload-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .row-images { 
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .column-banner-image{
+        height: 150px;
+    }
+
+    .profile-banner-images-section{
+        margin-bottom: 6em;
+    }
+
+    .upload-profile-image,
+    .banner-upload{
+        max-height: 100px;
+    }
+}

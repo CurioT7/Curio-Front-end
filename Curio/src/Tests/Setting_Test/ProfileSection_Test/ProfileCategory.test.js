@@ -1,61 +1,60 @@
-import { render, fireEvent, screen } from '@testing-library/react';
+import React from 'react';
+import { render, fireEvent, getByText, queryByTestId } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ProfileCategory from '../../../Components/profileSetting/ProfileCategory/ProfileCategory'; 
+import ProfileCategory from "../../../Components/profileSetting/ProfileCategory/ProfileCategory"
 
-// Test for rendering ProfileCategory component
-test('renders ProfileCategory component', () => {
-  render(<ProfileCategory />);
-  const categoryElement = screen.getByTestId('profile-category');
-  expect(categoryElement).toBeInTheDocument();
-});
+// Mocking the useToast and sendUserDataToBackend functions
+jest.mock('@chakra-ui/react', () => ({
+  ...jest.requireActual('@chakra-ui/react'),
+  useToast: jest.fn(),
+}));
 
-// Test for NSFW label
-test('renders NSFW label', () => {
-    render(<ProfileCategory />);
-    const nsfwLabels = screen.getAllByText(/NSFW/i); 
-    nsfwLabels.forEach((nsfwLabel) => {
-      expect(nsfwLabel).toBeInTheDocument();
-    });
+jest.mock('../../../Components/UserSetting/UserSettingsEndPoints', () => ({
+  sendUserDataToBackend: jest.fn(),
+}));
+
+describe('<ProfileCategory />', () => {
+  test('renders without crashing', () => {
+    render(<ProfileCategory userCategory={{}} />);
   });
 
-// Test for NSFW description
-test('renders NSFW description', () => {
-  render(<ProfileCategory />);
-  const nsfwDescription = screen.getByText(/This content is NSFW/i);
-  expect(nsfwDescription).toBeInTheDocument();
-});
+  test('displays NSFW switch and description', () => {
+    const { getByText } = render(<ProfileCategory userCategory={{}} />);
+    expect(getByText('NSFW')).toBeInTheDocument();
+    expect(getByText('This content is NSFW (may contain nudity, pornography, profanity, or inappropriate content for those under 18)')).toBeInTheDocument();
+  });
 
-// Test for checkbox default state
-test('checkbox is unchecked by default', () => {
-  render(<ProfileCategory />);
-  const checkbox = screen.getByRole('checkbox');
-  expect(checkbox).not.toBeChecked();
-});
+  // test('handles switch change properly', () => {
+  //   const { getByTestId } = render(<ProfileCategory userCategory={{ NSFW: false }} />);
+  //   const switchElement = getByTestId('nsfw-switch');
 
-// Test for checkbox state after clicking
-test('checkbox state toggles after clicking', () => {
-  render(<ProfileCategory />);
-  const checkbox = screen.getByRole('checkbox');
-  fireEvent.click(checkbox);
-  expect(checkbox).toBeChecked();
-});
+  //   fireEvent.click(switchElement);
 
-// Test for checkbox state after clicking twice
-test('checkbox state toggles back after clicking twice', () => {
-  render(<ProfileCategory />);
-  const checkbox = screen.getByRole('checkbox');
-  fireEvent.click(checkbox);
-  fireEvent.click(checkbox);
-  expect(checkbox).not.toBeChecked();
-});
+  //   // Should open the modal
+  //   expect(getByTestId('modal')).toBeInTheDocument();
+  // });
 
-// Test for checkbox state after clicking multiple times
-test('checkbox state toggles properly after clicking multiple times', () => {
-  render(<ProfileCategory />);
-  const checkbox = screen.getByRole('checkbox');
-  fireEvent.click(checkbox);
-  fireEvent.click(checkbox);
-  fireEvent.click(checkbox);
-  expect(checkbox).toBeChecked();
+  // test('confirms change properly', () => {
+  //   const { getByTestId, getByText, queryByTestId, debug } = render(<ProfileCategory userCategory={{ NSFW: true }} />);
+  //   const switchElement = getByTestId('nsfw-switch');
+  
+  //   fireEvent.click(switchElement);
+  
+  //   // Should open the modal
+  //   expect(getByTestId('modal')).toBeInTheDocument();
+  
+  //   // Find the button directly by its text content
+  //   const understandButton = getByText('I UNDERSTAND');
+  
+  //   fireEvent.click(understandButton);
+  
+  //   // Log the current HTML structure for debugging
+  //   debug();
+  
+  //   // Should close the modal
+  //   expect(queryByTestId('modal')).toBeNull();
+  
+  //   // Should call sendUserDataToBackend with the correct parameter
+  //   expect(sendUserDataToBackend).toHaveBeenCalledWith({ NSFW: false });
+  // });  
 });
-

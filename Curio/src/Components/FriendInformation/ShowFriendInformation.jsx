@@ -5,7 +5,7 @@ import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
 import Ellipsis from "../../styles/icons/Elippsis";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Toast } from "react-bootstrap";
 import ShareIcon from "../../styles/icons/Share";
 import ReportIcon from "../../styles/icons/Report";
 import MessageIcon from "../../styles/icons/SendMessage";
@@ -13,7 +13,7 @@ import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {userBlock , userUnblock} from "./ShowFriendInformationEndpoints.js";
+import {userBlock , userUnblock, userFollow, userUnfollow, getFollower} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
@@ -28,13 +28,16 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
-    const [blockedUsers, setBlockedUsers] = useState([]);
+    // const [blockedUsers, setBlockedUsers] = useState([]);
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
+    const navigate = useNavigate();
+
+    // const navigate = useNavigate();
 
     function ToastError() {
         toastError({
@@ -46,10 +49,18 @@ function ShowFriendInformation(props) {
         });
     }
 
+    useEffect(() => {
+        const myUsername = localStorage.getItem('username');
+        if(props.username === myUsername){
+            setIsFollowing(true);
+            navigate(`/profile/${myUsername}`);
+        }
+    }, []);
+
     const toastsuccess = useToast()
-    function ToastSuccess() {
+    function ToastSuccess(description) {
         toastsuccess({
-            description: "User Blocked successfully",
+            description: description,
             status: 'success',
             duration: 3000,
             isClosable: true,
@@ -79,83 +90,66 @@ function ShowFriendInformation(props) {
         setShowReportMenu(false);
     };
 
-    const navigate = useNavigate();
-
     useEffect(() => {
-        getFollower(props.username);
+        handleGetFollower(props.username);
         getBlocked(props.username);
     }, [props.username]);
 
 
-    async function getFollower(username) {
+    async function handleGetFollower(username) {
         try {
-            if (!token) {
-                console.error('Error:', error);
-                return;
+            const result = await getFollower(username);
+            if (result) {
+                setIsFollowing(true);
+            } else {
+                console.error('Error:', result.error);
             }
-    
-            await axios.get(`${hostUrl}/api/me/friends/${username}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                }
-            });
-            setIsFollowing(true);
         } catch (error) {
             console.error('Error:', error);
         }
     }
     
 
-    async function userFollow(friendUsername) {
-
-        try {
-            await axios.post(`${hostUrl}/api/me/friends`, {
-                friendUsername
-            },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                }
-            });
-        
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-
-        async function userUnfollow(friendUsername) {
-        try {
-            await axios.patch(`${hostUrl}/api/me/friends`, {
-                friendUsername
-            },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                }
-            });
-    
-    
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-
-    const handleFollowToggle = () => {
+    const handleFollowToggle = async () => {
         if (!token) {
-         navigate('/login');
+            navigate('/login');
         }
-        else{
-        if (isFollowing) {
-            userUnfollow(props.username);
-        } else {
-            userFollow(props.username);
+        else {
+            if (!isFollowing) {
+                const result = await userFollow(props.username);
+                if(result === 200){
+                    setIsFollowing(true);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+                else{
+                    ToastError("Something is wrong, please try again later.");
+                }
+            } else {
+                const result = await userUnfollow(props.username);
+                if(result){
+                    setIsFollowing(false);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+            }
         }
-        setIsFollowing(!isFollowing);
     }
-    }
+    
 
     async function getBlocked(username) {
         try {
@@ -170,8 +164,7 @@ function ShowFriendInformation(props) {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setBlockedUsers(response.data.viewBlockedPeople || []);
-            if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.username === username)) {
+            if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.blockedUsername === username)) {
                 props.isUserBlocked();
             }
             return response.data
@@ -180,67 +173,45 @@ function ShowFriendInformation(props) {
         }
     }
 
-    const patchBlockUser = (name) => {
-        const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-          viewBlockedPeople: [...blockedUsers, { username: name}]
-        },{
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if(response.status === 200){
-            const newUser = { username: name};
-            setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-        }
-      };
-
       const handleUserBlock = async (username) => {
         if (!token) {
             navigate('/login');
         } else {
             const result = await userBlock(username);
-            if(result.success){
-                patchBlockUser(username);
+            if(result === 200){
                 props.handleBlockPage();
-                ToastSuccess();
+                ToastSuccess('User Blocked Successfully');
             }
-            if (!result.success) {
-                ToastError();
+            if (result === 403) {
+                ToastError("You can't block somebody again within 24 hours of unblocking them");
+            }
+            else if(result === 500){
+                ToastError("An unexpected error occurred on the server. Please try again later.");
+            }
+            else if(result === 404){
+                ToastError("User is not found");
+            }
+            else if(result === 401){
+                ToastError("You are not authorized to perform this action");
             }
         }
     }
 
     const handleUserUnblock = async (username) => {
         try {
-            const index = blockedUsers.findIndex((user) => user.username === username);
-            if (index === -1) {
-                console.error('User not found');
-                return;
-            }
-    
-            const updatedBlockedUsers = [...blockedUsers];
-            updatedBlockedUsers.splice(index, 1);
-    
-
-            const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-                viewBlockedPeople: updatedBlockedUsers
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-    
-            if (response.status === 200) {
-                setBlockedUsers(updatedBlockedUsers);
+            const result = await userUnblock(username);
+            if(result){
                 props.handleUnblock();
-                userUnblock(username);
+                ToastSuccess('User unblocked successfully');
             }
-        } catch (error) {
-            console.error('Error:', error);
+            else if(result === 500){
+                console.error('An unexpected error occurred on the server. Please try again later.');
+            }
+            
+            }catch (error) {
+                console.error('Error:', error);
+            }
         }
-    };
     
 
     return (
@@ -345,6 +316,7 @@ function ShowFriendInformation(props) {
                             <h3 className="muted-header p-4 pt-0 mb-1">MODERATOR OF THESE COMMUNITIES</h3>
                             <div className="d-flex flex-column">
                                 {props.friendInfo.moderatedSubreddits && props.friendInfo.moderatedSubreddits.map((community, index) => (
+                                    community.privacyMode !== "private" &&
                                     <div key={index} className="d-flex justify-content-between p-4 pt-0 pb-0">
                                     <img src={community.icon} alt="community icon" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3" />
                                     <div className="d-flex flex-column me-auto">
@@ -352,7 +324,7 @@ function ShowFriendInformation(props) {
                                         <p className="mod-community-subscribers secondary-subheader">{community.members.length} members</p>
                                     </div>
                                     <button className="join-button">Join</button>
-                                    </div>
+                                    </div>           
                                 ))}
                             </div>
                         </div>

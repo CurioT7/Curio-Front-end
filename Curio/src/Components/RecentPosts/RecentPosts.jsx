@@ -7,15 +7,30 @@ import Card from 'react-bootstrap/Card';
 import Popover from 'react-bootstrap/Popover';
 import "./RecentPosts.css";
 import { width } from "@mui/system";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function RecentPosts() {
     const [recentPosts, setRecentPosts] = useState([]);
     const [isClear, setIsClear] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const handleClear = () => {
-        setRecentPosts([]);
-        localStorage.removeItem('recentPosts');
-        setIsClear(true);
+    const navigate = useNavigate();
+    const handleClear = async () => {
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        try{
+            const response = await axios.delete(`${hostUrl}/api/clear-history`, {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200) {
+                setRecentPosts([]);
+                setIsClear(true);
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
     const handleUpdateRecentPosts = () => {
         const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
@@ -32,6 +47,10 @@ function RecentPosts() {
         }
     };
 
+    const handleNavigateToPostDetails = (id) => {
+        navigate(`/post/post-details/${id}`);
+    }
+
 
     useEffect(() => {
         checkAuthentication();
@@ -42,13 +61,32 @@ function RecentPosts() {
     }, []);
 
     useEffect(() => {
-        const recentPosts = JSON.parse(localStorage.getItem('recentPosts'));
-        setRecentPosts(recentPosts);
+        const getRecentPosts = async () => {
+            try {
+                const hostUrl = import.meta.env.VITE_SERVER_HOST;
+                const response = await axios.get(`${hostUrl}/api/getHistory`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200) {
+                    setRecentPosts(response.data.recentPosts.reverse());
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }   
+        getRecentPosts();
         window.addEventListener('newRecentPost', handleUpdateRecentPosts);
         return () => {
             window.removeEventListener('newRecentPost', handleUpdateRecentPosts);
         }
     }, []);
+
+    const handleNavigationToUserInformation = (authorName) => {
+        navigate(`/user/${authorName}`);
+    }
 
     const renderTooltip = (props) => (
         <Tooltip className="col-md-3 p-0 border-radius-set" bsPrefix="card" id="button-tooltip" {...props}>
@@ -93,7 +131,7 @@ function RecentPosts() {
                         <p className="small-header">RECENT POSTS</p>
                     </div>
                     <div className="col-2 align-items-start d-flex justify-content-end">
-                        <button onClick={handleClear} style={{ color: "#0045ac", fontSize: "0.875rem", lineHeight: "1.25rem", fontWeight: "500" }}>Clear</button>
+                        {/* <button onClick={handleClear} style={{ color: "#0045ac", fontSize: "0.875rem", lineHeight: "1.25rem", fontWeight: "500" }}>Clear</button> */}
                     </div>
                 </div>
                 {recentPosts && recentPosts.map((post, index) => (
@@ -101,19 +139,12 @@ function RecentPosts() {
                         <div className="d-flex flex-column">
                             <div className="d-flex justify-content-start col-md-12">
                                 <div className="col-md-1 me-2">
-                                    <OverlayTrigger
-                                        placement="bottom"
-                                        trigger="click"
-                                        delay={{ show: 250, hide: 400 }}
-                                        overlay={renderTooltip}
-                                    >
-                                        <img className="rounded-circle" src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="reddit" />
-                                    </OverlayTrigger>
+                                    <img className="rounded-circle" src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="reddit" />
                                 </div>
-                                <p className="d-flex align-items-center sub-recent-name">{post.user}</p>
+                                <p onClick={() => handleNavigationToUserInformation(post.authorName)} className="d-flex align-items-center sub-recent-name">{post.authorName}</p>
                             </div>
                             <div className="col-md-12 mb-0">
-                                <p className="post-header">{post.title}</p>
+                                <p onClick={() => handleNavigateToPostDetails(post._id)} className="post-header">{post.title}</p>
                             </div>
                             <div className="d-flex justify-content-start col-md-12 mb-0" style={{ height: "1rem" }}>
                                 <p className="post-small-footer me-2">{(post.upvotes - post.downvotes > 0) ? (post.upvotes - post.downvotes) : 0} upvotes</p>

@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import Choose_Community from "./Choose_Community";
 
-function Community() {
+function Community({ onSelect, subreddit }) {
+    const handleCommunitySelect = (community) => {
+        onSelect(community.replace(/^r\//, '').replace(/^u\//, '')); // Pass the selected community without "r/" or "u/"
+    };
+    
+
     return (
         <>
-            <Choose_Community/>
+            <Choose_Community onSelect={handleCommunitySelect} subreddit={subreddit}/>
         </>
     );
 }

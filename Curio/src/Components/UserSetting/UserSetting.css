@@ -4,6 +4,9 @@
     --thirdclr: #edeff1;
     --fourcle: #0079d3;
 }
+.userSettingsContainer{
+    margin-top: 4rem;
+}
 #user_settings{
     font-size: 18px;
     font-weight: 500;
@@ -23,9 +26,23 @@
     display: inline-block;
     line-height: unset;
     margin-right: 8px;
-    padding: 15px 12px 12px;
+    padding: 15px 12px 12px 12px;
     text-decoration: inherit;
 }
 .user-settings-links .setting-link:hover{
     color: black;
+}
+
+.setting-link.active{
+    color: black;
+    border-bottom-color: #0079d3;
+    border-width: 0 0 2px 0;
+}
+
+@media screen and (max-width: 930px) {
+
+    .user-settings-links {
+        display: flex;
+        flex-wrap: wrap;
+    }
 }

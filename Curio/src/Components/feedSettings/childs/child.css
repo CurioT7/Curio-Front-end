@@ -14,3 +14,10 @@
     display: flex;
     flex-direction: column;
 }
+@media screen and (max-width: 730px) {
+    
+    .feeding-select{
+        
+        margin-left: 21rem;
+    }
+}

@@ -7,14 +7,12 @@ import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { MdMarkEmailUnread } from "react-icons/md";
 import { useToast } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 const Google = (props) =>{
     const toast = useToast()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")
     const [wrongPass,setWrongPass]=React.useState(false)
     const serverHost = import.meta.env.VITE_SERVER_HOST;
-    const navigate = useNavigate();
     function Toast(){
         toast({
             title: "account connected successfully",
@@ -26,16 +24,8 @@ const Google = (props) =>{
     function handleYourPass(e){
         setYourPass(e.target.value)
     }
-    function handleIsClicked(){
-        setIsClicked(true)
-    }
-    function clearForm(){
-        setYourPass("")
-        setIsClicked(false)
-        
-    }
     const handleGoogleSignupResponse = async (response) => {
-        console.log(response);
+        
         // const hostUrl = import.meta.env.VITE_SERVER_HOST;
         try{const serverResponse = await axios.post(`${serverHost}/api/google/connect`,{
             token: response.access_token,
@@ -48,7 +38,10 @@ const Google = (props) =>{
           setWrongPass(false)
           Toast()
           onClose()
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();window.location.reload();
+          },500)
+          
             
         }catch(error){
             console.error( error.message);
@@ -69,31 +62,7 @@ const Google = (props) =>{
       const login = useGoogleLogin({
         onSuccess: codeResponse => handleGoogleSignupResponse(codeResponse),
       });
-    async function sendDataToBackend(){
-        console.log(`Bearer ${localStorage.getItem('token')}`)
-        try {
-            const response = await axios.post(`${serverHost}/api/google/connect`, {
-                token:`Bearer ${localStorage.getItem('token')}`,
-                password: yourPass
-            },{
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }});
-            setWrongPass(false)
-            clearForm()
-        }
-        catch(error){
-            console.error( error.message);
-            switch (error.response.status) {
-                case 400:
-                    setWrongPass(true)
-                    break;
-                
-                default:
-                    break;
-          }
-        }
-    }
+   
     function handleSubmit(e){
         e.preventDefault();
         // sendDataToBackend()

@@ -2,37 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { Box, Text, Button, Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import "./Advanced.css";
 import Titles from "../../feedSettings/childs/Titles";
-import axios from 'axios';
+import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
-function Advanced() {
+function Advanced({ userData }) {
   const [allowFollow, setFollowChecked] = useState(true);
   const [contentVisibility, setContentVisibilityChecked] = useState(true);
   const [activeInCommunityVisibility, setCommunitiesVisibilityChecked] = useState(true);
   const [clearHistory, setclearHistorychecked] = useState(false);
   const toast = useToast();
 
+  useEffect(() => {
+    setFollowChecked(userData.allowFollow);
+    setContentVisibilityChecked(userData.contentVisibility);
+    setCommunitiesVisibilityChecked(userData.activeInCommunityVisibility);
+    setclearHistorychecked(userData.clearHistory);
+  }, [userData]);
+
   const handleFollowChange = () => {
     setFollowChecked(!allowFollow); 
-    sendDataToBackend({allowFollow: !allowFollow});
+    sendUserDataToBackend({allowFollow: !allowFollow});
     Toast();
   };
 
   const handleContentVisibilityChange = () => {
     setContentVisibilityChecked(!contentVisibility); 
-    sendDataToBackend({contentVisibility: !contentVisibility});
+    sendUserDataToBackend({contentVisibility: !contentVisibility});
     Toast();
   };
 
   const handleCommunitiesVisibilityChange = () => {
     setCommunitiesVisibilityChecked(!activeInCommunityVisibility); 
-    sendDataToBackend({activeInCommunityVisibility: !activeInCommunityVisibility});
+    sendUserDataToBackend({activeInCommunityVisibility: !activeInCommunityVisibility});
     Toast();
   };
 
   const handleClearHistoryChange = () => {
     setclearHistorychecked(!clearHistory); 
-    sendDataToBackend({clearHistory: !clearHistory});
+    sendUserDataToBackend({clearHistory: !clearHistory});
     Toast();
   };
 
@@ -45,102 +51,13 @@ function Advanced() {
       })
   }
 
-  async function sendDataToBackend(data) {
-    // Validate data
-    if (!data || typeof data !== 'object') {
-        console.error('Invalid data:', data);
-        return;
-    }
-    try {
-        
-        const response = await axios.patch(`${serverHost}/api/settings/v1/me/prefs`, data, {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        switch (response.status) {
-          case 200:
-            console.log("User preferences updated successfully");
-            break;
-          case 404:
-            console.log("User preferences not found");
-            break;
-          default:
-            console.log("Unexpected response status:", response.status);
-            break;
-        }
-        return response;
-    } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
-        if (status === 500) {
-          console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
-        } else {
-          console.error("Error sending data to backend:", error.response.data);
-        }
-      } else {
-        console.error('Error sending data to backend:', error.message);
-      }
-    }
-  }
-
-  async function fetchDataFromBackend() {
-    const token = localStorage.getItem('token');
-        if (!token) {
-        console.error('No token found');
-        return;
-        }
-      try {
-          
-          const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
-              headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-              }
-          });
-            // Handle different response status codes
-          switch (response.status) {
-            case 404:
-              console.log("User preferences not found");
-              break;
-            default:
-              console.log("Unexpected response status:", response.status);
-              break;
-          }
-          return response.data;
-      } catch (error) {
-        if (error.response) {
-          // Handle error response here
-          const status = error.response.status;
-          if (status === 500) {
-            console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
-          } else {
-            console.error("Error fetching data from backend:", error.response.data);
-          }
-        } else {
-          console.error('Error fetching data from backend:', error.message);
-        }
-      }
-  }
-  useEffect(() => {
-    async function fetchAndSetData() {
-        const data = await fetchDataFromBackend();
-        if (data) {
-          setFollowChecked(data.allowFollow);
-          setContentVisibilityChecked(data.contentVisibility);
-          setCommunitiesVisibilityChecked(data.activeInCommunityVisibility);
-          setclearHistorychecked(data.clearHistory)
-        }
-    }
-    fetchAndSetData();
-    }, []);
-
   return (
     <>
       <Flex mb={5} alignItems='center'>
         <Titles title='Allow people to follow you'
         description="Followers will be notified about posts you make to your profile and see them in their home feed."/>
         <Spacer/>
-        <Switch size='lg' isChecked={allowFollow} onChange={handleFollowChange}/>
+        <Switch size='lg' isChecked={allowFollow} onChange={handleFollowChange} data-testid="follow-switch"/>
       </Flex>
       <Flex mb={5} alignItems='center'>
         <Titles title='Content visibility'
@@ -151,13 +68,13 @@ function Advanced() {
         }
         />
         <Spacer/>
-        <Switch size='lg' isChecked={contentVisibility} onChange={handleContentVisibilityChange}/>
+        <Switch size='lg' isChecked={contentVisibility} onChange={handleContentVisibilityChange} data-testid="content-visibility-switch"/>
       </Flex>
       <Flex mb={5} alignItems='center'>
         <Titles title='Active in communities visibility'
         description="Show which communities I am active in on my profile."/>
         <Spacer/>
-        <Switch size='lg' isChecked={activeInCommunityVisibility} onChange={handleCommunitiesVisibilityChange}/>
+        <Switch size='lg' isChecked={activeInCommunityVisibility} onChange={handleCommunitiesVisibilityChange} data-testid="communities-visibility-switch"/>
       </Flex>
       <Box className="clear-history d-flex flex-wrap mb-3">
         <Box className="clear-history-label">
@@ -173,7 +90,9 @@ function Advanced() {
           tabIndex="0" 
           className='btn btn-primary'
           checked={clearHistory}
-          onClick={handleClearHistoryChange}>
+          onClick={handleClearHistoryChange}
+          data-testid="Clear-history"
+          >
             Clear history
           </Button>
         </Box>

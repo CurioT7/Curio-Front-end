@@ -1,0 +1,7 @@
+.threads-container{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.threads-container:hover{
+    background: transparent;
+}

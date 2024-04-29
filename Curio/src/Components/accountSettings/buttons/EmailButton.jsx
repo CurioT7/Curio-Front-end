@@ -16,15 +16,16 @@ const EmailButton = (props) =>{
     })
     const [errorMessage, setErrorMessage] = React.useState({
         value: "",
-        isCorrectEmail: false,
-        isCorrectPassword: false,
+        isCorrectEmail: true,
+        isCorrectPassword: true,
       });
+    const [successChange, setSuccessChange] = React.useState(false);
     const toast = useToast()
 
 
     function Toast(){
         toast({
-            title: "Changes Saved",
+            title: "Changes Saved, we will send email soon",
             status: 'info',
             duration: 3000,
             isClosable: true,
@@ -53,6 +54,7 @@ const EmailButton = (props) =>{
             value:"",
             isTouched:false,
         })
+        setSuccessChange(false)    
     }
     function handleSubmit(e){
         e.preventDefault();
@@ -60,8 +62,12 @@ const EmailButton = (props) =>{
         
 
     }
+    function handleModalClose(){
+        onClose();
+        clearForm();
+    }
     // send data to backend fetch data from backend--------------------------------
-    async function sendDataToBackend(data) {
+    async function sendDataToBackend() {
         try {
             const response = await axios.patch(`${serverHost}/api/auth/change_email`, {
               email: email.value, // assuming 'username' state holds the new email
@@ -72,7 +78,8 @@ const EmailButton = (props) =>{
               }
             });
             setErrorMessage({value: "Email changed successfully", isCorrectPassword: true,isCorrectEmail: true});
-            clearForm();
+            props.onChangeEmail(email.value);
+            setSuccessChange(true);   
             Toast();
           } catch (error) {
             console.error('Failed to change email:', error);
@@ -99,7 +106,7 @@ const EmailButton = (props) =>{
                         <ModalCloseButton />
                         <form onSubmit={handleSubmit}>
                         <ModalBody>
-                           
+                            { !successChange &&
                                 <Box display='flex'  flexDirection='column'>
                                     <Text className='fs-6' fontWeight='600'>Update your email below. There will be a new verification email sent that you will need to use to verify this new email.</Text>
                                     <Input isInvalid={!errorMessage.isCorrectPassword} placeholder='CURRENT PASSWORD' type='password' value={password} onChange={handleYourPass} size='lg' mb={5}></Input>
@@ -109,12 +116,17 @@ const EmailButton = (props) =>{
                                     {email.isTouched&&!validateEmail(email.value)&&errorMessage.isCorrectEmail===true ? (<PasswordErrorMessage text="Please enter a valid email"/>):null}
                                     {errorMessage.isCorrectEmail === false ? (<PasswordErrorMessage text={errorMessage.value}/>):null}
                                 </Box>
+                            }
+                            {
+                                successChange && <Box display='flex'  flexDirection='column'><Text className='fs-6 mt-3'>Curio sent email to: <b>{email.value}</b> click the verify link in the email to secure your Curio account</Text></Box>
+                            }
                             
                         </ModalBody>
 
                         <ModalFooter>
                           
-                            <Button isDisabled={!isValid()} className='fs-6 fw-bold' size='sm' type='submit' style={props.buttonStyle} colorScheme='blue'>Save email</Button>
+                            { !successChange &&<Button isDisabled={!isValid()} className='fs-6 fw-bold' size='sm' type='submit' style={props.buttonStyle} colorScheme='blue'>Save email</Button>}
+                            { successChange &&<Button onClick={handleModalClose} className='fs-6 fw-bold' size='sm' style={props.buttonStyle}>Got it</Button>}
                         </ModalFooter>
                         </form>
                     </ModalContent>

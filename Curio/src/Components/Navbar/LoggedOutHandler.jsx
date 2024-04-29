@@ -166,13 +166,6 @@ function LoggedOutHandler() {
                   Login / Sign Up
                   </span>
                   </NavDropdown.Item>}
-              {!isAuthenticated && <NavDropdown.Item className="d-flex signup-focus px-3 mt-3  ">
-                  <Advertisement />
-                  <span className="ms-3">
-                    Advertise on Curio
-                    </span>
-                </NavDropdown.Item>}
-              {!isAuthenticated && <NavDropdown.Item className="d-flex signup-focus px-3 mt-3 mb-2"><Shop /><span className="ms-3">Shop Collectible Avatars</span></NavDropdown.Item>}
               {isAuthenticated && <NavDropdown.Item onClick={handleLogout} className="d-flex signup-button-item px-3"><Signup />
               <span className="ms-3">
                 Logout

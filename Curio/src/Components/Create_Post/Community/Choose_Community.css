@@ -3,7 +3,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative; 
+    width: fit-content; 
 }
+
 .middle-div{
     position: relative;
     box-sizing: border-box;
@@ -14,12 +17,14 @@
     border: white;
     background-color: white;
 }
+
 .inner-div{
     display: flex;
     align-items: center;
     height: 100%;
     padding: 0 8px;
 }
+
 .input-container{
     font-family: inherit;
     vertical-align: baseline;
@@ -30,12 +35,14 @@
     vertical-align: middle;
     color: #1c1c1c;
 }
+
 .community-arrow{
     color: #878a8c;
     cursor: pointer;
     font-size: 22px;
     line-height: 22px;
 }
+
 .search-icon-community,
 .circle-dot{
     height: 22px;
@@ -43,12 +50,77 @@
     font-size: 22px;
     margin: 0;
 }
+
 .circle-dot{
     box-sizing: border-box;
     border-radius: 22px;
     border: 1px dashed #878a8c;
 }
+
 .input-container{
     flex: 1;
     padding-left: 8px;
+}
+
+.dropdown-list-choose-community {
+    max-height: 250px; 
+    overflow-y: auto; 
+    position: absolute;
+    top: calc(100% + 5px); 
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+}
+
+.dropdown-content-username{
+    margin: 5px 0;
+    border-bottom: 1px solid #edeff1;
+}
+
+.title-username,
+.title-community{
+    font-size: 10px;
+    color: #878a8c;
+    text-transform: uppercase;
+}
+
+.dropdown-user {
+    align-items: center; 
+    display: flex;
+    margin-bottom: 8px;
+    cursor: pointer;
+    flex-direction: row;
+}
+
+.username-section {
+    display: flex;
+    flex-direction: column; 
+}
+
+.dropdown-username,
+.dropdown-community {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: auto 0; 
+}
+
+.username-image,
+.community-image {
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    font-size: 54px;
+    line-height: 54px;
+    box-sizing: border-box;
+    flex: none;
+    margin-right: 8px;
+}
+
+.arrow-clicked {
+    transform: rotate(180deg); /* Rotate the arrow icon when clicked */
 }

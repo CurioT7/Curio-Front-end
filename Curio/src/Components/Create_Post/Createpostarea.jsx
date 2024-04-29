@@ -1,47 +1,90 @@
 import React, { useState, useRef } from 'react';
 import "./Createpostarea.css";
-import Text_Editor from "../../Components/Text_Editor/Text_Editor";
 import Post_Methods from "./Post_Methods";
 import EditCreatearea from "./EditCreatearea";
 import ImageVideo from "./Image_&_Video_Section/ImageVideo";
 import Link from "./Link_Section/Link";
 import Polls from "./Polls_Section/Polls";
+import Post from "./Post_Section/Post";
 
-function Createpostarea() {
+function Createpostarea({ community }) {
   const [inputTitle, setInputTitle] = useState('');
-  const [selectedMethod, setSelectedMethod] = useState("Post");
+  const [selectedMethod, setSelectedMethod] = useState("post");
+  const [content, setContent] = useState('');
+  const [dayNumber, setDayNumber] = useState(3);
+  const [imageFormData, setImageFormData] = useState(null);
+  const [linkUrl, setLinkUrl] = useState(''); 
   const textareaRef = useRef(null);
+  const [optionsText, setoptionsText] = useState([]); 
+  const [options, setOptions] = useState([]);
+  const maxOptions = 4;
+
+
+  const handleAddOption = () => {
+    if (options.length < maxOptions) {
+      setOptions([...options, `Option ${options.length + 3}`]);
+    }
+  };
+
+  const handleRemoveOption = (index) => {
+    const newOptions = [...options];
+    newOptions.splice(index, 1);
+    setOptions(newOptions);
+  
+    const newOptionsText = [...optionsText];
+    newOptionsText.splice(index + 2, 1);
+    setoptionsText(newOptionsText);
+  };
+
+  const handleDayChange = (event) => {
+    setDayNumber(parseInt(event.target.value));
+  };
+
+  const handleOptionChange = (index, event) => {
+    const newOptionsText = [...optionsText];
+    newOptionsText[index] = event.target.value;
+    setoptionsText(newOptionsText);
+  };
 
   const handleTitleInputChange = (event) => {
     setInputTitle(event.target.value);
-    adjustTextareaHeight(); // Adjust textarea height when text changes
+    adjustTextareaHeight();
   };
 
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto'; // Reset height to auto to calculate new height
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set height to match scroll height
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
 
   const handleMethodSelect = (method) => {
-    // Set the selected method
     setSelectedMethod(method);
   };
-  
 
-  // Render the selected component based on the selected method
+  const handleContentChange = (newContent) => {
+    setContent(newContent);
+  };
+
+  const handleImageUpload = (formData) => {
+    setImageFormData(formData);
+  };
+
+  const handleLinkChange = (url) => {
+    setLinkUrl(url);
+  };
   const renderSelectedMethod = () => {
     switch (selectedMethod) {
-      case "Post":
-        return <Text_Editor />;
-      case "Image & Video":
-        return <ImageVideo />;
-      case "Link":
-        return <Link />;
-      case "Polls":
-        return <Polls />;
+      case "post":
+        return <Post onContentChange={handleContentChange} />;
+      case "media":
+        return <ImageVideo onImageUpload={handleImageUpload} />;
+      case "link":
+        return <Link onLinkChange={handleLinkChange} />;
+      case "poll":
+        return <Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} handleAddOption={handleAddOption} handleRemoveOption={handleRemoveOption}
+        options={options} />;
     }
   };
 
@@ -65,7 +108,15 @@ function Createpostarea() {
         </div>
         {renderSelectedMethod()}
       </div>
-      <EditCreatearea title={inputTitle} />
+      <EditCreatearea 
+      title={inputTitle} 
+      content={content || linkUrl} 
+      community={community} 
+      days={dayNumber} 
+      options={optionsText} 
+      imageFormData={imageFormData} 
+      selectedMethod={selectedMethod}
+      />
     </div>
   );
 }
