@@ -29,6 +29,7 @@ function PostComments(props) {
     const [reportReason, setReportReason] = useState('');
     const [isSaved, setIsSaved] = useState(false);
     const [isCommentAuthor, setIsCommentAuthor] = useState(false);
+    const [votes, setVotes] = useState(props.commentUpvotes);
     const dropdownRef = useRef(null);
 
     const toast = useToast();
@@ -76,20 +77,83 @@ function PostComments(props) {
         setShowControls(!showControls);
     };
 
-    const makeCommentUpvoted = () => {
+    
+
+    const makeCommentUpvoted = async () => {
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (upvoted) {
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         } else {
-            setUpvoted(true);
-            setDownvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: 1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(true);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         }
     }
-    const makeCommentDownvoted = () => {
+    const makeCommentDownvoted = async () => {
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (downvoted) {
-            setDownvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         } else {
-            setDownvoted(true);
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: -1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setDownvoted(true);
+                setVotes(votes - 1);
+            }
         }
     }
     const handleSave = async () => {
@@ -246,7 +310,7 @@ function PostComments(props) {
                 <div className="votes-hover-effect d-flex justify-content-center align-items-center p-3">
                     <button onClick={makeCommentUpvoted} className=" upvotes-footer-button d-flex justify-content-center align-items-center">{!upvoted && <Upvotes />} {upvoted && <FilledUpvote colorFill="#D93A00"/>}</button>
                 </div>
-                <span className="comment-upvotes">{props.commentUpvotes}</span>
+                <span className="comment-upvotes">{votes}</span>
                 <div className="votes-hover-effect d-flex justify-content-center align-items-center p-3">
                     <button onClick={makeCommentDownvoted} className=" downvotes-footer-button d-flex justify-content-center align-items-center">{!downvoted && <Downvotes />}{downvoted && <FilledDownvote colorFill="#6A5CFF"/>}</button>
                 </div>
