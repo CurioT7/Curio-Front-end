@@ -47,6 +47,7 @@ function Post(props) {
     const [blockedUsers, setBlockedUsers] = useState([]);
     const toast = useToast();
     const postId = props._id;
+    const [votes, setVotes] = useState(props.upvotes - props.downvotes);
     const handleHidePost = () => {
         setIsHidden(!isHidden);
     }
@@ -58,8 +59,8 @@ function Post(props) {
         }      
     }, [props.hiddenPosts, props._id])
     const navigate = useNavigate();
-    const [upvoted, setUpvoted] = useState(false);
-    const [downvoted, setDownvoted] = useState(false);
+    const [upvoted, setUpvoted] = useState(props.voteStatus === "upvoted" ? true : false);
+    const [downvoted, setDownvoted] = useState(props.voteStatus === "downvoted" ? true : false);
     const [isLocked, setIsLocked] = useState(false);
     const [votepick, setVotepick] = useState("");
     const [hasVoted, setVoted] = useState(false);
@@ -101,20 +102,79 @@ function Post(props) {
 // }, []);
 
     
-    const makePostUpvoted = () => {
+    const makePostUpvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (upvoted) {
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         } else {
-            setUpvoted(true);
-            setDownvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(true);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         }
     }
-    const makePostDownvoted = () => {
+    const makePostDownvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (downvoted) {
-            setDownvoted(false);
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         } else {
-            setDownvoted(true);
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: -1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(true);
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         }
     }
     
@@ -184,7 +244,7 @@ function Post(props) {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: subredditName,
+                subreddit: props.linkedSubreddit,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
@@ -192,6 +252,7 @@ function Post(props) {
                 comments: props.comments,
                 savedPosts: props.savedPosts,
                 savedComments: props.savedComments,
+                voteStatus: upvoted ? "upvoted" : downvoted ? "downvoted" : "unvoted",
                 hiddenPosts: props.hiddenPosts,
                 isMod: props.isMod,
                 isLocked: isLocked,
@@ -219,7 +280,7 @@ function Post(props) {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: subredditName,
+                subreddit: props.linkedSubreddit,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
@@ -322,7 +383,6 @@ function Post(props) {
                             flexDirection='row'
                             justifyContent='space-between'
                             flexWrap='wrap'
-                            onClick={handleNavigationToDetails}
                             sx={{
                             '& > button': {
                                 minW: '136px',
@@ -335,7 +395,7 @@ function Post(props) {
                                         {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
                                     </button>
                                     <div className='me-2'>
-                                        <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{(props.upvotes - props.downvotes > 0) ? (props.upvotes - props.downvotes) : 0}</span>
+                                        <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{votes}</span>
                                     </div>
                                     <button data-testid="downvotes" className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
                                         {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
@@ -367,7 +427,7 @@ function Post(props) {
                                 </Menu>
                             </Box>
 
-                            {props.isMod&& <Box display='flex'  justifyContent='end'>
+                            {props.isMod && <Box display='flex'  justifyContent='end'>
                                <PostLock isLocked={isLocked} id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             

@@ -135,7 +135,6 @@ useEffect(() => {
   window.addEventListener('deletePost', fetchAndSetData);
 
   fetchAndSetData();
-  console.log("posts", posts)
   return () => {
     window.removeEventListener('deletePost', fetchAndSetData);
   }
@@ -280,6 +279,7 @@ useEffect(() => {
                     downvotes={post.downvotes}
                     comments={post.comments}
                     voteLength={post.voteLength}
+                    linkedSubreddit={post.details.subredditName}
                   />) : (
                     <Post
                     _id={post.post._id}
