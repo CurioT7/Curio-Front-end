@@ -25,7 +25,7 @@ const scrollToTop = () => {
   }, []);
 
   return (
-    <div className="back-to-top">
+    <div className="back-to-top" >
       {isVisible && (
        <button 
        onClick={scrollToTop} 
