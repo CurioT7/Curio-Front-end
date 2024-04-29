@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./ProfileImageUpload.css";
 
-
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
 function ProfileImageUpload() {
@@ -93,7 +92,7 @@ function ProfileImageUpload() {
       uploadImages();
     }
   }, [checkImageProfile, checkImageBanner]);
-  
+
 
   const uploadImages = async () => {
     const formData = new FormData();

@@ -5,12 +5,12 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, But
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
-import "../Notification_Messages/Notification_Messages.jsx";
-import { fetchNotificationsFromBackend } from "../../Pages/Notifications/NotificationsEndPoints.js";
+import { fetchNotificationsFromBackend, hideNotification } from "../../Pages/Notifications/NotificationsEndPoints.js";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 
 function Notifications_Dropdown() {
     const [notifications, setNotifications] = useState([]);
+    const [unreadNotifications, setUnreadNotifications] = useState([]);
 
     const closeDropdown = () => {
         setDropdownOpen(false);
@@ -24,9 +24,19 @@ function Notifications_Dropdown() {
         const data = await fetchNotificationsFromBackend();
         if (data) {
             setNotifications(data.notifications || []);
+            setUnreadNotifications(data.unreadNotifications || []);
         }
     }
 
+    async function handleHideNotification(notificationID) {
+        try {
+            await hideNotification({notificationID: notificationID});
+            fetchAndSetData();
+        } catch (error) {
+            console.error('Error hiding notification:', error.message);
+        }
+    }
+    
     return (
         <div className="notifications-container">
             <div className="notifications-header">
@@ -42,7 +52,7 @@ function Notifications_Dropdown() {
                 <div className="messages-extra"></div>
             </div>
             <div className="notifications-body">
-                <div className="notifications-actions">
+                <div className="notifications-actions" style={{marginBottom:'10px'}}>
                     <div className="notifications-mark-all">
                         <button className="mark-all-button">
                             <span className="mark-all-text">Mark all as read</span>
@@ -58,9 +68,9 @@ function Notifications_Dropdown() {
                         </div>
                     </div>
                 </div>
-                {notifications.map(notification => (
-                    <div key={notification._id} className="notifications-item">
-                        <div className="notifications-item-link" style={{ cursor: 'pointer' }}>
+                {notifications.length > 0 && notifications.map(notification => (
+                    <div key={notification._id} className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}>
+                        <div className="notifications-item-link" style={{ cursor: 'pointer' }} >
                             <div className="notifications-item-content">
                                 <div className="notifications-item-avatar">
                                     <div className="avatar">
@@ -90,9 +100,9 @@ function Notifications_Dropdown() {
                                         </PopoverTrigger>
                                         <PopoverContent>
                                             <PopoverArrow />
-                                            <PopoverBody>Hide this notification</PopoverBody>
-                                            <PopoverBody>Disable updates from this community</PopoverBody>
-                                            <PopoverBody>Turn off this notification type</PopoverBody>
+                                            <PopoverBody className="popover-body"onClick={() => handleHideNotification(notification._id)}>Hide this notification</PopoverBody>
+                                            <PopoverBody className="popover-body">Disable updates from this community</PopoverBody>
+                                            <PopoverBody className="popover-body">Turn off this notification type</PopoverBody>
                                         </PopoverContent>
                                     </Popover>
                                 </div>
