@@ -324,7 +324,7 @@ const postCategory = async (postID) => {
                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
-                            <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
+                            <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} isSpoiler={props.isSpoiler}  post={props.post}/>
                             </Flex>
                         </CardHeader>
                         {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
@@ -337,12 +337,10 @@ const postCategory = async (postID) => {
                                 <span className='text-body-spoiler' >
                                     {props.content}
                                 </span>
-                               { console.log("spoiler",props.isSpoiler)}
                             </>
                         ) : (
                             <>  
                             <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}></Text>
-                            { console.log("not spoiler",props.isSpoiler)}
 
                             </>
                         )}

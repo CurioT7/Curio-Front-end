@@ -143,7 +143,6 @@ useEffect(() => {
     if (StoredUsername) {
       getUserAbout(StoredUsername).then(data => setUserAbout(data));
     }
-    console.log(userAbout);
   }, []);
 
   useEffect(() => {
@@ -215,7 +214,6 @@ return(
       ) : (
         <>
         {userPosts.map(post => {
-    console.log(post.isSpoiler);
     return (
         <div className='post-card' key={post.id}>
             <Post
@@ -365,7 +363,7 @@ return(
       {upvotedPosts.map(post => (
         <div className='post-card' key={post.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{post.authorName}</b>
           </div>
           <p>{post.content}</p>
@@ -374,7 +372,7 @@ return(
       {upvotedComments.map(comment => (
         <div className='comment-card' key={comment.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{comment.authorName}</b>
           </div>
           <p>{comment.content}</p>
@@ -392,7 +390,7 @@ return(
       {downvotedPosts.map(post => (
         <div className='post-card' key={post.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{post.authorName}</b>
           </div>
           <p>{post.content}</p>
@@ -401,7 +399,7 @@ return(
       {downvotedComments.map(comment => (
         <div className='comment-card' key={comment.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{comment.authorName}</b>
           </div>
           <p>{comment.content}</p>
