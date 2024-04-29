@@ -9,13 +9,13 @@ import CreateCommunity from '../../Sidebar/CreateCommunity.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function Choose_Community({ onSelect }) {
+function Choose_Community({ onSelect, subreddit }) {
     const username = localStorage.getItem('username');
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(subreddit ? subreddit : '');
     const [userCommunities, setUserCommunities] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
-    const [chosenItem, setChosenItem] = useState(null); 
+    const [chosenItem, setChosenItem] = useState(subreddit ? subreddit : null); 
     const [searchResults, setSearchResults] = useState([]);
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
@@ -55,6 +55,13 @@ function Choose_Community({ onSelect }) {
             setSearchResults([]); 
         }
     }, [inputValue]);
+
+    useEffect(() => {
+        if (subreddit !== null) {
+            handleItemClick(`r/${subreddit}`);
+        }
+    }, [subreddit]);
+    
     
     const fetchSearchResults = async (query) => {
         try {
