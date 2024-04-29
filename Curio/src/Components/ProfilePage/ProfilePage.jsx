@@ -214,25 +214,28 @@ return(
         <p>u/{username} hasn't posted or commented yet</p>
       ) : (
         <>
-          {userPosts.map(post => (
-            <div className='post-card' key={post.id}>
-               <Post
-            
-            _id={post._id}
-            title={post.title}
-            body={post.body}
-            user={post.authorName}
-            upvotes={post.upvotes}
-            downvotes={post.downvotes}
-            comments={post.comments}
-            content={post.content}
-            linkedSubreddit={post.linkedSubreddit}
-            savedPosts={savedPosts}
-            savedComments={savedComments}
-            hiddenPosts={hiddenPosts}
-          />
-            </div>
-          ))}
+        {userPosts.map(post => {
+    console.log(post.isSpoiler);
+    return (
+        <div className='post-card' key={post.id}>
+            <Post
+                _id={post.id}
+                title={post.title}
+                body={post.body}
+                user={post.authorName}
+                upvotes={post.upvotes}
+                downvotes={post.downvotes}
+                comments={post.comments}
+                content={post.content}
+                linkedSubreddit={post.linkedSubreddit}
+                isSpoiler={post.isSpoiler}
+                savedPosts={savedPosts}
+                savedComments={savedComments}
+                hiddenPosts={hiddenPosts}
+            />
+        </div>
+    );
+})}
           {userComments.map(comment => (
             <div className='comment-card' key={comment.id}>
               <h6>u/author    •   title</h6>
@@ -254,7 +257,6 @@ return(
     userPosts.map(post => (
       <div className='post-card' key={post.id}>
        <Post
-            
             _id={post._id}
             title={post.title}
             body={post.body}
@@ -263,6 +265,7 @@ return(
             downvotes={post.downvotes}
             comments={post.comments}
             content={post.content}
+            isSpoiler={post.isSpoiler}
             linkedSubreddit={post.linkedSubreddit}
             savedPosts={savedPosts}
             savedComments={savedComments}
@@ -340,6 +343,7 @@ return(
             comments={post.comments}
             content={post.content}
             subReddit={post.linkedSubreddit}
+            isSpoiler={post.isSpoiler}
             savedPosts={savedPosts}
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}

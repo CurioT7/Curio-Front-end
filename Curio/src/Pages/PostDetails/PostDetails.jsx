@@ -17,6 +17,7 @@ function PostDetails(props) {
             if (response.status === 200 || response.status === 201){
                 console.log(response.data.item);
                 setPostInfo(response.data.item);
+                console.log(postInfo);
             }
         }
         catch(err){

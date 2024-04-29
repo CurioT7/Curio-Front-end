@@ -32,7 +32,6 @@ const token = localStorage.getItem('token');
 
 function PostContentDetails(post) {
     const { postID } = useParams();
-    const subreddit = "Art error";
     const [savedPosts, setSavedPosts] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]);
     const [isHidden, setIsHidden] = useState(false);
@@ -43,13 +42,13 @@ function PostContentDetails(post) {
     const [votes, setVotes] = useState(post.upvotes - post.downvotes);
     const toast = useToast();
     const postId = post._id;
+    const [isClicked, setIsClicked] = useState(false);
+
 
     const handleIsLocked = (value) => {
         setIsLocked(value);
     }
-    setTimeout(async () => {
-        setIsLocked(post.isLocked);
-    },0)
+   
     useEffect(() => {
         const getSaved = async () => {
             try{
@@ -100,7 +99,7 @@ function PostContentDetails(post) {
             getSaved();
         }
     }, []);
-
+ 
     const handleUnhide = async () => {
         try{
             var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -156,9 +155,8 @@ function PostContentDetails(post) {
     }, [hiddenPosts]);
 
     useEffect(() => {   
-
-
-    })
+        setIsLocked(post.isLocked);
+    },[post])
 
     const [upvoted, setUpvoted] = useState(post.voteStatus === "upvoted" ? true : false);
     const [downvoted, setDownvoted] = useState(post.voteStatus === "downvoted" ? true : false);
@@ -254,6 +252,7 @@ function PostContentDetails(post) {
         });
     }
     const handleBack = () => {
+        setIsClicked(false);
         navigate(-1);
     }
     useEffect(() => {
@@ -354,7 +353,23 @@ function PostContentDetails(post) {
                         </div>
                     </div>
                     <h3 className='post-content-header mb-3'>{post.title}</h3>
-                    <p className='post-details-content' dangerouslySetInnerHTML={{ __html: post.content }} />
+
+                    <div onClick={() => setIsClicked(true)}>
+                        {post.isSpoiler && !isClicked ? (
+                            <>
+                                <p className='text-body-spoiler'>
+                                    {post.content}
+                                </p>
+                                {console.log("spoiler", post.isSpoiler)}
+                            </>
+                        ) : (
+                            <>
+                                <p className='post-details-content'>{post.content}</p>
+                                {console.log("spoiler", post)}
+
+                            </>
+                        )}
+                    </div>
                     <Box className=' mb-5 col-12 ' display='flex' flexDirection='row' justifyContent='space-between'>
                             <Box display='flex' flexDirection='row'>
                             <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
