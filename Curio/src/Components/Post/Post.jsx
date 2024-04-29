@@ -61,6 +61,7 @@ function Post(props) {
     useEffect(() => {
         setUpvoted(props.voteStatus === "upvoted" ? true : false);
         setDownvoted(props.voteStatus === "downvoted" ? true : false);
+        setIsLocked(props.isLocked);
         window.addEventListener('loginOrSignup', () => {
             if (localStorage.getItem('token') === null){
                 setUpvoted(false);
@@ -295,7 +296,7 @@ const postCategory = async (postID) => {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: props.linkedSubreddit,
+                subreddit: props.subreddit,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
