@@ -31,7 +31,7 @@ function Createpost(props) {
             <Box className="cont-create-post">
               <Text className='create-post-title'>Create Post</Text>
             </Box>
-            <Community onSelect={handleCommunitySelect}/>
+            <Community onSelect={handleCommunitySelect} subreddit={props.subreddit}/>
             <div className='new-post-form'>
               <NewPostForm community={selectedCommunity ? selectedCommunity.replace(/^r\//, '').replace(/^u\//, '') : null} />
             </div>
