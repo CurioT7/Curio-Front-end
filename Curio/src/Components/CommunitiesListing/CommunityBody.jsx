@@ -144,6 +144,7 @@ async function changeSortType(value,time) {
                     comments={post.comments}
                     voteLength={post.voteLength}
                     isLocked={post.isLocked}
+                    subreddit={Community}
                   />) : (
                     <Post
                     _id={post._id}
@@ -157,6 +158,7 @@ async function changeSortType(value,time) {
                     isMod={isMod}
                     linkedSubreddit={post.linkedSubreddit}
                     isLocked={post.isLocked}
+                    subreddit={Community}
                   />
                   )}
           <h3 className="headings-titles text-uppercase fw-bold mb-1"></h3>
@@ -178,6 +180,7 @@ async function changeSortType(value,time) {
                     comments={randomPost.post.comments}
                     voteLength={randomPost.post.voteLength}
                     isLocked={randomPost.post.isLocked}
+                    subreddit={Community}
                   />) : (
                     <Post
                     _id={randomPost.post._id}
@@ -191,6 +194,7 @@ async function changeSortType(value,time) {
                     isMod={isMod}
                     linkedSubreddit={randomPost.post.linkedSubreddit}
                     isLocked={randomPost.post.isLocked}
+                    subreddit={Community}
                   />
                   )}
         </>

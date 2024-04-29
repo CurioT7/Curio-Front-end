@@ -16,7 +16,6 @@ function PostDetails(props) {
             const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`);
             if (response.status === 200 || response.status === 201){
                 setPostInfo(response.data.item);
-                console.log(postInfo);
             }
         }
         catch(err){

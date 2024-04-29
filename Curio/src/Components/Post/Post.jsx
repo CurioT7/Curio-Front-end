@@ -47,6 +47,7 @@ function Post(props) {
     const [blockedUsers, setBlockedUsers] = useState([]);
     const toast = useToast();
     const postId = props._id;
+    const [votes, setVotes] = useState(props.upvotes - props.downvotes);
     const handleHidePost = () => {
         setIsHidden(!isHidden);
     }
@@ -57,9 +58,28 @@ function Post(props) {
             setIsHidden(false);
         }      
     }, [props.hiddenPosts, props._id])
+    useEffect(() => {
+        setUpvoted(props.voteStatus === "upvoted" ? true : false);
+        setDownvoted(props.voteStatus === "downvoted" ? true : false);
+        setIsLocked(props.isLocked);
+        window.addEventListener('loginOrSignup', () => {
+            if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+            }
+        });
+        return () => {
+            window.removeEventListener('loginOrSignup', () => {
+               if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+               }
+            });
+        }
+    }, [props])
     const navigate = useNavigate();
-    const [upvoted, setUpvoted] = useState(false);
-    const [downvoted, setDownvoted] = useState(false);
+    const [upvoted, setUpvoted] = useState((localStorage.getItem('token') && props.voteStatus === "upvoted") ? true : false);
+    const [downvoted, setDownvoted] = useState((localStorage.getItem('token') && props.voteStatus === "downvoted") ? true : false);
     const [isLocked, setIsLocked] = useState(false);
     const [votepick, setVotepick] = useState("");
     const [hasVoted, setVoted] = useState(false);
@@ -101,20 +121,79 @@ function Post(props) {
 // }, []);
 
     
-    const makePostUpvoted = () => {
+    const makePostUpvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (upvoted) {
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         } else {
-            setUpvoted(true);
-            setDownvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(true);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         }
     }
-    const makePostDownvoted = () => {
+    const makePostDownvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (downvoted) {
-            setDownvoted(false);
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         } else {
-            setDownvoted(true);
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: -1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(true);
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         }
     }
     
@@ -217,7 +296,7 @@ const postCategory = async (postID) => {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: subredditName,
+                subreddit: props.subreddit,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
@@ -225,6 +304,7 @@ const postCategory = async (postID) => {
                 comments: props.comments,
                 savedPosts: props.savedPosts,
                 savedComments: props.savedComments,
+                voteStatus: upvoted ? "upvoted" : downvoted ? "downvoted" : "unvoted",
                 hiddenPosts: props.hiddenPosts,
                 isSpoiler: props.isSpoiler,
                 isMod: props.isMod,
@@ -253,7 +333,7 @@ const postCategory = async (postID) => {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: subredditName,
+                subreddit: props.linkedSubreddit,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
@@ -379,7 +459,7 @@ const postCategory = async (postID) => {
                                         {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
                                     </button>
                                     <div className='me-2'>
-                                        <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{(props.upvotes - props.downvotes > 0) ? (props.upvotes - props.downvotes) : 0}</span>
+                                        <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{votes}</span>
                                     </div>
                                     <button data-testid="downvotes" className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
                                         {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
@@ -411,7 +491,7 @@ const postCategory = async (postID) => {
                                 </Menu>
                             </Box>
 
-                            {props.isMod&& <Box display='flex'  justifyContent='end'>
+                            {props.isMod && <Box display='flex'  justifyContent='end'>
                                <PostLock isLocked={isLocked} id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             

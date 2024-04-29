@@ -93,7 +93,6 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         case 201:
           Toast('Post created successfully', 'success');
           const postId = response.data.postId;
-          console.log(postId);
           navigate(`/post/post-details/${postId}`);d
           break;
         default:

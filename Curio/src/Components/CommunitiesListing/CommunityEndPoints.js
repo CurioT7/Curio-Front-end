@@ -89,3 +89,16 @@ export async function fetchUserName() {
         console.error('Error fetching data from backend:', error);
     }
 }
+
+export async function getSubredditInfo(subreddit){
+    try{
+        const request = await axios.get(`${serverHost}/api/subredditOverview/${subreddit}`,{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        return request.data;
+    }catch(error){
+        console.error('Error fetching data from backend:', error);
+    }
+}
