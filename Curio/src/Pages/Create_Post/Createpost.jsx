@@ -25,7 +25,7 @@ function Createpost(props) {
       }
     }, []);
   return (
-    <div className='container-create-post'>
+    <div className='container-create-post' style={{marginTop:'3rem'}}>
       <div className="container container-create-post-2" style={{display:'flex'}}>
         <div className='left-container-post'>
             <Box className="cont-create-post">
