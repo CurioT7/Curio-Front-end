@@ -1,0 +1,20 @@
+.user-widget:hover {
+  background-color: #F2F4F5!important;
+  cursor: pointer;
+
+}
+
+.user-widget{
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.user-results{
+    font-size: 1rem;
+}
+
+.karma-results{
+    color: #576f76;
+    font-size: 0.75rem;
+    font-weight: 400;
+}

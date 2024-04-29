@@ -199,9 +199,9 @@ function PostContentDetails(post) {
     }
     useEffect(() => {
         async function fetchAndSetData() {
-            const postData = await fetchCommentsFromBackend(post._id);
-            if (postData) {
-                setComments(postData.comments);
+            const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
+            if (response.status === 200 || response.status === 201) {
+                setComments(response.data.comments);
             }
             else {
                 Toast();
@@ -214,7 +214,7 @@ function PostContentDetails(post) {
         return () => {
             window.removeEventListener('deleteComment', fetchAndSetData);
         }
-    }, []);
+    }, [post]);
 
     const handleChangedSort = async (value) => {
         setTimeout( async () => {
@@ -278,8 +278,8 @@ function PostContentDetails(post) {
                             <button onClick={handleBack} style={{backgroundColor: "#EAEDEF", width: "2.1rem", height: "2.1rem"}} className='back-button-post-content signup-back-button me-2 d-flex justify-content-center align-items-center'><BackButton/></button>
                             <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
                             <div className='d-flex flex-column'>
-                                <a className='community-post-name'>r/germany</a>
-                                <UserPopover user={post.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
+                                <a className='community-post-name'>r/{post.subreddit}</a>
+                                <UserPopover user={post.user || post.authorName} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
                                 handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="userPosting" />
                             </div>
                         </div>
@@ -320,7 +320,7 @@ function PostContentDetails(post) {
                                 </button>
                             </div>
                             <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                            <span className='share-post-text'>{post.comments.length}</span>
+                            <span className='share-post-text'>{comments.length}</span>
                             </Button>
                                 <Menu>
                                         <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>

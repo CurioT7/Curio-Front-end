@@ -10,3 +10,23 @@ export async function getTrending() {
         console.error(error);
     }
 }
+
+
+export async function getSearchSubreddits(searchInput) {
+
+    try{
+        const response = await axios.get(`${serverHost}/api/searchCommunities/${searchInput}`);
+        return response.data;
+    }catch(error){
+        console.error(error);
+    }
+}
+
+export async function getSearchPeople(searchInput) {
+    try{
+        const response = await axios.get(`${serverHost}/api/${searchInput}/searchUsers`);
+        return response.data;
+    }catch(error){
+        console.error(error);
+    }
+}

@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, useToast } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./ProfileImageUpload.css";
@@ -8,6 +8,18 @@ const serverHost = import.meta.env.VITE_SERVER_HOST;
 function ProfileImageUpload() {
   const [profileImage, setProfileImage] = useState(null);
   const [bannerImage, setBannerImage] = useState(null);
+  const [checkImageBanner, setCheckImageBanner] = useState(false);
+  const [checkImageProfile, setCheckImageProfile] = useState(false);
+  const toast = useToast();
+
+  function Toast(message){
+    toast({
+        description: message,
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      })
+  }
 
   useEffect(() => {
     fetchImages();
@@ -20,14 +32,13 @@ function ProfileImageUpload() {
           'authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      setBannerImage(response.data.banner); 
+      setBannerImage(response.data.banner);
       localStorage.setItem('bannerImage', response.data.banner);
       setProfileImage(response.data.profilePicture);
       localStorage.setItem('profileImage', response.data.profilePicture);
-      
+
     } catch (error) {
       if (error.response) {
-        // Handle error response here
         const status = error.response.status;
         if (status === 500) {
           console.error("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
@@ -40,17 +51,11 @@ function ProfileImageUpload() {
     }
   };
 
-  useEffect(() => {
-    // console.log("Profile Image:", profileImage);
-  }, [profileImage,bannerImage]);
-  
-
   const handleProfileImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
     setProfileImage(file);
-    // console.log("PP",profileImage);
-    // uploadImages();
+    setCheckImageProfile(true);
     if (file) {
       reader.readAsDataURL(file);
     }
@@ -59,18 +64,12 @@ function ProfileImageUpload() {
   const handleBannerImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-    // reader.onloadend = () => {
-    setBannerImage(file); // Store the file object, not the base64 data
-      // uploadImages();
-    // };
+    setBannerImage(file);
+    setCheckImageBanner(true);
     if (file) {
       reader.readAsDataURL(file);
     }
   };
-
-  useEffect(() => {
-    uploadImages();
-  }, [profileImage, bannerImage]); 
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -88,20 +87,26 @@ function ProfileImageUpload() {
     }
   };
 
+  useEffect(() => {
+    if (checkImageProfile || checkImageBanner) {
+      uploadImages();
+    }
+  }, [checkImageProfile, checkImageBanner]);
+
 
   const uploadImages = async () => {
     const formData = new FormData();
-  
-    if (profileImage) {
+    console.log("Insert Images");
+    if (checkImageProfile) {
       formData.append('profilePicture', 'Update');
       formData.append('media', profileImage);
     }
-  
-    if (bannerImage) {
+
+    if (checkImageBanner) {
       formData.append('banner', 'Update');
       formData.append('media', bannerImage);
     }
-  
+
     try {
       const response = await axios.patch(
         `${serverHost}/api/settings/v1/me/prefs`,
@@ -113,10 +118,30 @@ function ProfileImageUpload() {
           },
         }
       );
-  
+
       switch (response.status) {
         case 200:
-          console.log('User preferences updated successfully');
+          Toast('Changes Saved');
+          if (checkImageBanner) {
+            localStorage.setItem('bannerImage', response.data.banner);
+            const file = bannerImage;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setBannerImage(reader.result); 
+              setCheckImageBanner(false);
+            };
+            reader.readAsDataURL(file);
+          }
+          if (checkImageProfile) {
+            localStorage.setItem('profileImage', response.data.profilePicture);
+            const file = profileImage;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setProfileImage(reader.result);
+              setCheckImageProfile(false);
+            };
+            reader.readAsDataURL(file);
+          }
           break;
         case 404:
           console.log('User preferences not found');
@@ -139,7 +164,7 @@ function ProfileImageUpload() {
         console.error('Error sending data to backend:', error.message);
       }
     }
-  };  
+  };
 
   return (
     <form onSubmit={(e) => e.preventDefault()} encType="multipart/form-data" style={{ width: 650 }}>
@@ -154,16 +179,16 @@ function ProfileImageUpload() {
           <Box className="row-images">
             <Box className="column-profile-image" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, setProfileImage)}>
               <Box
-                  className="upload-profile-image h-100 ms-3 me-0 card text-center"
-                  data-testid="profile-image"
-                  style={{ backgroundImage: `url(${profileImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                className="upload-profile-image h-100 ms-3 me-0 card text-center"
+                data-testid="profile-image"
+                style={{ backgroundImage: `url(${profileImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
               >
                 <label htmlFor="profile-upload">
                   <Box className='upload-profile'>
-                    {profileImage ? <i className="fa fa-camera upload-image-icon-appear" aria-hidden="true"/> : <i className="fa fa-plus upload-image-icon" aria-hidden="true"/>}
+                    {profileImage ? <i className="fa fa-camera upload-image-icon-appear" aria-hidden="true" /> : <i className="fa fa-plus upload-image-icon" aria-hidden="true" />}
                   </Box>
                   <Box className='image-text'>
-                    {profileImage ? "" : <span>Drag and Drop or Upload <span aria-label="Profile Image" style={{fontWeight:"700"}}>Profile</span> Image</span>}
+                    {profileImage ? "" : <span>Drag and Drop or Upload <span aria-label="Profile Image" style={{ fontWeight: "700" }}>Profile</span> Image</span>}
                   </Box>
                   <Box className='upload-file-profile'>
                     <input type="file" role='img' name="profileIcon" id="profile-upload" accept="image/x-png,image/jpg" onChange={handleProfileImageChange} style={{ display: 'none' }} />
@@ -175,10 +200,10 @@ function ProfileImageUpload() {
               <Box className="banner-upload  ms-3 me-0 card text-center" style={{ backgroundImage: `url(${bannerImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <label htmlFor="banner-upload">
                   <Box className='banner-upload-container'>
-                    {bannerImage  ? <i className="fa fa-camera upload-image-icon-appear" aria-hidden="true"/> : <i className="fa fa-plus upload-image-icon" aria-hidden="true"/>}
+                    {bannerImage ? <i className="fa fa-camera upload-image-icon-appear" aria-hidden="true" /> : <i className="fa fa-plus upload-image-icon" aria-hidden="true" />}
                   </Box>
                   <Box className='image-text'>
-                    {bannerImage  ? '' : <span>Drag and Drop or Upload <span aria-label="Banner Image" style={{fontWeight:"700"}}>Banner</span> Image</span>}
+                    {bannerImage ? '' : <span>Drag and Drop or Upload <span aria-label="Banner Image" style={{ fontWeight: "700" }}>Banner</span> Image</span>}
                   </Box>
                   <Box className='upload-file-profile'>
                     <input type="file" name="profileBanner" id="banner-upload" accept="image/x-png,image/jpg" onChange={handleBannerImageChange} style={{ display: 'none' }} />
@@ -188,7 +213,7 @@ function ProfileImageUpload() {
             </Box>
           </Box>
         </Box>
-        <button type="button" onClick={uploadImages}>Upload Images</button> 
+        {/* <button type="button" onClick={uploadImages}>Upload Images</button> */}
       </Box>
     </form>
   );

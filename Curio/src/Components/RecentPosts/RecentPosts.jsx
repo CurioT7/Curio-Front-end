@@ -35,6 +35,10 @@ function RecentPosts() {
         }
     };
 
+    const handleNavigateToPostDetails = (id) => {
+        navigate(`/post/post-details/${id}`);
+    }
+
 
     useEffect(() => {
         checkAuthentication();
@@ -135,7 +139,7 @@ function RecentPosts() {
                                 <p onClick={() => handleNavigationToUserInformation(post.authorName)} className="d-flex align-items-center sub-recent-name">{post.authorName}</p>
                             </div>
                             <div className="col-md-12 mb-0">
-                                <p className="post-header">{post.title}</p>
+                                <p onClick={() => handleNavigateToPostDetails(post._id)} className="post-header">{post.title}</p>
                             </div>
                             <div className="d-flex justify-content-start col-md-12 mb-0" style={{ height: "1rem" }}>
                                 <p className="post-small-footer me-2">{(post.upvotes - post.downvotes > 0) ? (post.upvotes - post.downvotes) : 0} upvotes</p>
