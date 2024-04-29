@@ -11,6 +11,8 @@ import { LuShare } from "react-icons/lu";
 import Postsfooter from "../Post/Postsfooter";
 import Check from "../../styles/icons/Check";
 import axios from "axios";
+import { Text } from '@chakra-ui/react'
+
 
 
 function ShowPoll( props ) {
@@ -88,7 +90,8 @@ const handleVoted = () => {
         <div onClick={props.handleNavigation}>
       <div className="pollTitle">{props.pollTitle}</div>
           <div className="pollText">
-            {props.pollText}
+          <Text dangerouslySetInnerHTML={{ __html: props.pollText}}>
+          </Text>
           </div>
           </div>
         <Card className="mx-2 pollCard">

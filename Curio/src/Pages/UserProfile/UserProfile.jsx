@@ -50,7 +50,7 @@ function UserPage( props ) {
 
 
   return (
-      <div>
+      <div style={{marginTop: '6rem'}}>
           {isNextPage ? (
             <div className= 'h-screen absolute flex items-center top-0 w-100 text-center main-div'>
             <div className='w-100 h-100 flex items-center justify-content-center text-center'> 
