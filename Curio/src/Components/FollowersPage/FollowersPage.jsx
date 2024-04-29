@@ -32,6 +32,8 @@ import ProfileSideBar from "../ProfilePage/ProfileSideBar.jsx";
 import { Toast } from "react-bootstrap";
 import { get } from "mongoose";
 
+import axios from "axios";
+
 function FollowersPage(props) {
   const navigate = useNavigate();
   const { username } = useParams();
@@ -55,7 +57,7 @@ function FollowersPage(props) {
   }
 
   async function handleGetFollowers() {
-    const response = await getFollowers('followings');
+    const response = await getFollowers('followers');
     if (response) {
       setFollowers(response.data.friendsArray);
     }

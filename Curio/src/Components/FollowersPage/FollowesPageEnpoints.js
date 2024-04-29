@@ -4,7 +4,7 @@ import axios from "axios";
 async function getFollowers(friends) {
   const hostUrl = import.meta.env.VITE_SERVER_HOST;
   try {
-    const response = await axios.get(`${hostUrl}/api/${friends}`, {
+    const response = await axios.get(`${hostUrl}/api/getfriends/followings`, {
       friends: friends,
     },{
       headers: {
