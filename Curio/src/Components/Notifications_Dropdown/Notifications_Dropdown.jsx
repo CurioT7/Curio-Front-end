@@ -25,6 +25,7 @@ function Notifications_Dropdown() {
         if (data) {
             setNotifications(data.notifications || []);
             setUnreadNotifications(data.unreadNotifications || []);
+            console.log(notifications)
         }
     }
 

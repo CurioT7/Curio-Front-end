@@ -15,7 +15,9 @@ function PostDetails(props) {
             const hostUrl = import.meta.env.VITE_SERVER_HOST;
             const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`);
             if (response.status === 200 || response.status === 201){
+                console.log(response.data.item);
                 setPostInfo(response.data.item);
+                console.log(postInfo);
             }
         }
         catch(err){
