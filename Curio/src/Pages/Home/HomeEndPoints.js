@@ -9,9 +9,9 @@ export async function fetchPostsFromBackend() {
         console.error('Error fetching data from backend:', error);
     }
 }
-export async function SortHomePosts(type) {
+export async function SortHomePosts(type, pageNumber) {
     try {
-        const request = await axios.get(`${serverHost}/api/user/${type}`,{
+        const request = await axios.get(`${serverHost}/api/allpage/${type}?page=${pageNumber}`,{
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }

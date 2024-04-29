@@ -11,12 +11,15 @@ import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
 import { set } from 'mongoose'
 import ShowPoll from '../../Components/Poll/ShowPoll.jsx'
+import Pagination from 'react-bootstrap/Pagination';
 
 function Home() {
   const [savedPosts, setSavedPosts] = useState([]);
   const [savedComments, setSavedComments] = useState([]);
   const [hiddenPosts, setHiddenPosts] = useState([]); 
   const [blockedUsers, setBlockedUsers] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const toast = useToast();
 
   const getSaved = async () => {
@@ -116,29 +119,27 @@ function Home() {
 
 useEffect(() => {
   async function fetchAndSetData() {
-    let data;
-    if (localStorage.getItem('token')) {
-      data = await SortHomePosts("best");
-    } else {
-      data = await fetchPostsFromBackend();
-    }
+      const data = await SortHomePosts("best", pageNumber);
 
     if (data) {
-      setPosts(data.SortedPosts || data.posts);
+      setPosts(data.posts);
+      setTotalPages(Math.ceil(data.totalPosts / 10));
       setRandomPost({ ...randomPost, isSelected: false });
-      const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
-      console.log('Polls Data:', pollsData);
-      setPolls(pollsData);
+      window.scrollTo(0, 0); // Scroll to the top of the page
+      //const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
+      //console.log('Polls Data:', pollsData);
+      //setPolls(pollsData);
     }
   }
 
   window.addEventListener('deletePost', fetchAndSetData);
 
   fetchAndSetData();
+  console.log("posts", posts)
   return () => {
     window.removeEventListener('deletePost', fetchAndSetData);
   }
-}, []);
+}, [pageNumber]);
 
 
 useEffect(() => {
@@ -153,7 +154,7 @@ async function changeSortType(value,time) {
       if (value === 'Hot') {
           const data = await SortHomePosts("hot");
           if (data) {
-              setPosts(data.SortedPosts || data);
+              setPosts(data.posts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           } else{
             setPosts([]);
@@ -255,13 +256,13 @@ useEffect(() => {
     <>
     
       {/* Insert posts here (above recent posts) */}
-      <div className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
+      <div style={{marginTop: "70px"}} className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
         <div className='my-1'>
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false} onClick={handleShowPolls}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
             {((randomPost.isSelected==false) && posts) ? (
-              posts.slice(0, 5)
+              posts
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
                   <>
@@ -281,16 +282,17 @@ useEffect(() => {
                     voteLength={post.voteLength}
                   />) : (
                     <Post
-                    _id={post._id}
-                    title={post.title}
-                    body={post.body}
-                    user={post.authorName}
-                    upvotes={post.upvotes}
-                    downvotes={post.downvotes}
-                    comments={post.comments}
-                    content={post.content}
-                    isMod={isMod}
-                    linkedSubreddit={post.linkedSubreddit}
+                    _id={post.post._id}
+                    title={post.post.title}
+                    body={post.post.body}
+                    user={post.post.authorName}
+                    upvotes={post.post.upvotes}
+                    downvotes={post.post.downvotes}
+                    comments={post.post.comments}
+                    content={post.post.content}
+                    //isMod={isMod}
+                    linkedSubreddit={post.details.subredditName}
+                    voteStatus={post.details.voteStatus}
                   />
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
@@ -322,7 +324,7 @@ useEffect(() => {
                     downvotes={randomPost.post.downvotes}
                     comments={randomPost.post.comments}
                     content={randomPost.post.content}
-                    isMod={isMod}
+                    //isMod={isMod}
                     linkedSubreddit={randomPost.post.linkedSubreddit}
                   />
                   )}
@@ -334,6 +336,23 @@ useEffect(() => {
           <RecentPosts />
           <BackToTheTopButton/>
       </div>
+      <div style={{marginLeft: "20rem"}}>
+
+        <Pagination>
+          <Pagination.Prev onClick={() => setPageNumber(pageNumber - 1)} />
+          <Pagination.Ellipsis onClick={() => setPageNumber((pageNumber - 10) < 0 ? 1 : (pageNumber - 10))} />
+
+          <Pagination.Item active>{pageNumber}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 1)}>{pageNumber + 1}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 2)}>{pageNumber + 2}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 3)}>{pageNumber + 3}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 4)}>{pageNumber + 4}</Pagination.Item>
+
+          <Pagination.Ellipsis onClick={() => setPageNumber((pageNumber + 10) > totalPages ? totalPages : (pageNumber + 10))} />
+          <Pagination.Next onClick={() => setPageNumber(pageNumber + 1)} />
+        </Pagination>
+      </div>
+
     
     </>
   )
