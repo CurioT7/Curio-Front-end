@@ -173,8 +173,8 @@ function SignupHandler() {
   return (
       <>
           <div style={{borderRadius: '999px!important', color: "#000000!important"}} className="link-offcanvas signup-button new-dropdown-signup mt-0 p-0 d-flex justify-content-center">
-              {!isAuthenticated && <div onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3"><div className="col-2 me-2 pe-0 d-flex align-items-center"><Signup /></div><span className="ms-1 new-dropdown-label col-12">Login / Sign Up</span></div>}
-              {isAuthenticated && <div onClick={handleLogout} className="d-flex signup-button-item"><Signup />
+              {!isAuthenticated && <div onClick={handleSignupInfoClick} className="d-flex signup-button-item px-3" ><div className="col-2 me-2 pe-0 d-flex align-items-center"><Signup /></div><span className="ms-1 new-dropdown-label col-12">Login / Sign Up</span></div>}
+              {isAuthenticated && <div onClick={handleLogout} style={{width: '256px'}} className="d-flex signup-button-item logOutstyle"><Signup />
               <span className="ms-3 new-dropdown-label">
                 Log Out
                 </span>

@@ -11,12 +11,15 @@ import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
 import { set } from 'mongoose'
 import ShowPoll from '../../Components/Poll/ShowPoll.jsx'
+import Pagination from 'react-bootstrap/Pagination';
 
 function Home() {
   const [savedPosts, setSavedPosts] = useState([]);
   const [savedComments, setSavedComments] = useState([]);
   const [hiddenPosts, setHiddenPosts] = useState([]); 
   const [blockedUsers, setBlockedUsers] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const toast = useToast();
 
   const getSaved = async () => {
@@ -116,23 +119,23 @@ function Home() {
 
 useEffect(() => {
   async function fetchAndSetData() {
-      const data = await fetchPostsFromBackend();
-      
-      if (data) {
-          setPosts(data.SortedPosts || data);
-          setRandomPost({ ...randomPost, isSelected: false });
-          const pollsData = data.SortedPosts.filter(post => post.type === 'poll');
-          console.log('Polls Data:', pollsData);
-          setPolls(pollsData);
-      }
+      const data = await SortHomePosts("best", pageNumber);
+
+    if (data) {
+      setPosts(data.posts);
+      setTotalPages(Math.ceil(data.totalPosts / 10));
+      setRandomPost({ ...randomPost, isSelected: false });
+    }
   }
+
   window.addEventListener('deletePost', fetchAndSetData);
 
   fetchAndSetData();
   return () => {
-      window.removeEventListener('deletePost', fetchAndSetData);
+    window.removeEventListener('deletePost', fetchAndSetData);
   }
-}, []);
+}, [pageNumber]);
+
 
 useEffect(() => {
   console.log('Polls needed array:', polls);
@@ -146,7 +149,7 @@ async function changeSortType(value,time) {
       if (value === 'Hot') {
           const data = await SortHomePosts("hot");
           if (data) {
-              setPosts(data.SortedPosts || data);
+              setPosts(data.posts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           } else{
             setPosts([]);
@@ -205,14 +208,12 @@ async function changeSortType(value,time) {
               isClosable: true,
             })
           }
+          console.log('posts poll', posts.type)
       }
   }
   SetData();
 }
 
-function handleShowPolls(){
-  console.log(polls);
-}
 
 async function getBlocked() {
   try {
@@ -227,7 +228,7 @@ async function getBlocked() {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
       });
-      const blockedUsernames = response.data.viewBlockedPeople.map(user => user.username);
+      const blockedUsernames = response.data.viewBlockedPeople.map(user => user.blockedUsername);
       setBlockedUsers(blockedUsernames);
       return response.data
   } catch (error) {
@@ -248,67 +249,83 @@ useEffect(() => {
     <>
     
       {/* Insert posts here (above recent posts) */}
-      <div className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
+      <div style={{marginTop: "70px"}} className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
         <div className='my-1'>
-        <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false} onClick={handleShowPolls}/>
+        <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {polls.map((poll, index) => (
-          <><Post
-            key={index}
-            pollTitle={poll.title}
-            body={poll.body}
-            pollText={poll.content}
-            user={poll.authorName}
-            _id={poll._id}
-            type={poll.type}
-            optionNames={poll.options.map(option => option.name)}
-            votes={poll.options.map(option => option.votes)}
-            upvotes={poll.upvotes}
-            downvotes={poll.downvotes}
-            comments={poll.comments}
-            voteLength={poll.voteLength}
-          />
-          <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
-          </>
-        ))}
             {((randomPost.isSelected==false) && posts) ? (
-              posts.slice(0, 5)
+              posts
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
                   <>
+                    {post.post.type === 'poll' ? (
                     <Post
-                      _id={post._id}
-                      title={post.title}
-                      body={post.body}
-                      user={post.authorName}
-                      upvotes={post.upvotes}
-                      downvotes={post.downvotes}
-                      comments={post.comments}
-                      content={post.content}
-                      linkedSubreddit={post.linkedSubreddit}
-                      savedPosts={savedPosts}
-                      savedComments={savedComments}
-                      hiddenPosts={hiddenPosts}
-                    />
+                    pollTitle={post.post.title}
+                    body={post.post.body}
+                    pollText={post.post.content}
+                    user={post.post.authorName}
+                    _id={post.post._id}
+                    type={post.post.type}
+                    optionNames={post.post.options.map((option) => option.name)}
+                    votes={post.post.options.map((option) => option.votes)}
+                    upvotes={post.post.upvotes}
+                    downvotes={post.post.downvotes}
+                    comments={post.post.comments}
+                    voteLength={post.post.voteLength}
+                  />) : (
+                    <Post
+                    _id={post.post._id}
+                    title={post.post.title}
+                    body={post.post.body}
+                    user={post.post.authorName}
+                    upvotes={post.post.upvotes}
+                    downvotes={post.post.downvotes}
+                    comments={post.post.comments}
+                    content={post.post.content}
+                    //isMod={isMod}
+                    linkedSubreddit={post.details.subredditName}
+                    voteStatus={post.details.voteStatus}
+                    isLocked={post.post.isLocked}
+                    savedPosts={savedPosts}
+                    hiddenPosts={hiddenPosts}
+                  />
+                  )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
                   </>
                 ))
             ):(
               <>
-                <Post
-                  _id={randomPost.post._id}
-                  title={randomPost.post.title}
-                  body={randomPost.post.body}
-                  user={randomPost.post.authorName}
-                  upvotes={randomPost.post.upvotes}
-                  downvotes={randomPost.post.downvotes}
-                  comments={randomPost.post.comments}
-                  content={randomPost.post.content}
-                  linkedSubreddit={randomPost.linkedSubreddit}
-                  savedPosts={savedPosts}
-                  savedComments={savedComments}
-                />
+                    {randomPost.post.type === 'poll' ? (
+                    <Post
+                    pollTitle={randomPost.post.title}
+                    body={randomPost.post.body}
+                    pollText={randomPost.post.content}
+                    user={randomPost.post.authorName}
+                    _id={randomPost.post._id}
+                    type={randomPost.post.type}
+                    optionNames={randomPost.post.options.map((option) => option.name)}
+                    votes={randomPost.post.options.map((option) => option.votes)}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    voteLength={randomPost.post.voteLength}
+                    isLocked={randomPost.post.isLocked}
+                  />) : (
+                    <Post
+                    _id={randomPost.post._id}
+                    title={randomPost.post.title}
+                    body={randomPost.post.body}
+                    user={randomPost.post.authorName}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    content={randomPost.post.content}
+                    //isMod={isMod}
+                    linkedSubreddit={randomPost.post.linkedSubreddit}
+                    isLocked={randomPost.post.isLocked}
+                  />
+                  )}
                 <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
               </>
             )}
@@ -317,6 +334,23 @@ useEffect(() => {
           <RecentPosts />
           <BackToTheTopButton/>
       </div>
+      <div style={{marginLeft: "20rem"}}>
+
+        <Pagination>
+          <Pagination.Prev onClick={() => setPageNumber(pageNumber - 1)} />
+          <Pagination.Ellipsis onClick={() => setPageNumber((pageNumber - 10) < 0 ? 1 : (pageNumber - 10))} />
+
+          <Pagination.Item active>{pageNumber}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 1)}>{pageNumber + 1}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 2)}>{pageNumber + 2}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 3)}>{pageNumber + 3}</Pagination.Item>
+          <Pagination.Item onClick={() => setPageNumber(pageNumber + 4)}>{pageNumber + 4}</Pagination.Item>
+
+          <Pagination.Ellipsis onClick={() => setPageNumber((pageNumber + 10) > totalPages ? totalPages : (pageNumber + 10))} />
+          <Pagination.Next onClick={() => setPageNumber(pageNumber + 1)} />
+        </Pagination>
+      </div>
+
     
     </>
   )

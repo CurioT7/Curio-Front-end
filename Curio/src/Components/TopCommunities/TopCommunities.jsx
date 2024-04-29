@@ -10,17 +10,20 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import DropdownIcon from "../../styles/icons/DropdownIcon.svg";
 import UpwardsIcon from "../../styles/icons/Upwards.svg";
+import ShowMore from "../../styles/icons/ShowMore";
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 function TopCommunities(props) {
 
+  const pagesIndex = useParams();
+
   let pages = [];
 
   const [communityInfo, setCommunityInfo] = useState([]);
   const [communitiesnumber, setCommunitiesNumber] = useState(0);
-  const [isDropDown, toggleDropDown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showAllPages, setShowAllPages] = useState(false);
   const commPerPage = 10;
   useEffect(() => {
     showCommunityInformation(currentPage);
@@ -44,19 +47,13 @@ function TopCommunities(props) {
     }
 }
 
-  const lastCommIndex = currentPage * commPerPage;
-  const firstCommIndex = lastCommIndex - commPerPage;
-  const currentComms = communityInfo.slice(firstCommIndex, lastCommIndex);
-
 
   for (let i = 1; i <= Math.ceil(communitiesnumber / commPerPage); i++) {
     pages.push(i);
   }
 
-  console.log("Printed communities:", currentComms);
-
   return (
-    <div id="testtest2" className="container parentDiv">
+    <div className="container parentDiv">
       <h1 className="text-center best-of-reddit">Best of Curio</h1>
       <h2 className="top-communities">Top Communities</h2>
       <h2 className="browse">Browse Reddit's largest communities</h2>
@@ -71,18 +68,43 @@ function TopCommunities(props) {
               />
             ))}
           </div>
-      <div className="pagination">
-      <div className="d-flex align-items-xl-end justify-content-evenly mx-auto w-50">
-      {pages.map((page, index) => {
-          return (
-            <button key={index} onClick={() => setCurrentPage(page)} className={currentPage === page ? "selectedPage" : ""}>
+          <div className="pagination">
+      <div className="d-flex justify-content-evenly mx-auto w-50">
+        {pages.slice(0, 5).map((page, index) => (
+         <Link to={`/communities/best/${page}`}>
+          <button key={index} onClick={() => setCurrentPage(page)} className={` ${currentPage === page ? "selectedPage" : ""}`}>
+            {page}
+          </button>
+          </Link>
+
+        ))}
+            </div>
+      </div>
+      {!showAllPages && (
+        <div className="d-flex justify-content-evenly mx-auto w-50">
+          <button onClick={() => setShowAllPages(true)}><ShowMore /></button>
+        </div>
+      )}
+
+    {showAllPages && (
+      <div>
+      {Array.from({ length: Math.ceil((pages.length) / 5) }).map((_, lineIndex) => (
+        <div key={lineIndex} className="d-flex justify-content-evenly mx-auto w-50 mt-2">
+          {pages.slice(5 + lineIndex * 5, 10 + lineIndex * 5).map((page, index) => (
+            <Link to={`/communities/best/${page}`}>
+            <button key={index} onClick={() => setCurrentPage(page)} className={` ${currentPage === page ? "selectedPage" : ""}`}>
               {page}
             </button>
-          );
-        })}
+            </Link>
+          ))}
         </div>
+      ))}
+      <div className="d-flex justify-content-evenly mx-auto w-50">
+        <button onClick={() => setShowAllPages(false)}><img src={UpwardsIcon} style={{width: '10px', fill: 'black'}} /></button>
       </div>
     </div>
+  )}
+</div>
   );
 }
 

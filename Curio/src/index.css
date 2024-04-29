@@ -170,6 +170,3 @@ input:not(:placeholder-shown) + label
     transform: translateY(-10px);
     font-size: 0.8rem;
 }
-
-
-

@@ -13,11 +13,14 @@
     font-weight: 400;
     font-size: 15px;
 }
-.text-body-spoiler{
-    font-weight: 400;
-    font-size: 15px;
-    background-color: #000000;
-    
+.text-body-spoiler {
+    color: black;
+    background-color: black;
+}
+
+.text-body-spoiler.clicked {
+    color: black;
+    background-color: white;
 }
 .post-footer-button{
     background-color: #EAEDEF;
@@ -74,6 +77,7 @@
 
 .posts-content-container{
   margin-left: 22rem;
+  margin-top: 5rem;
 }
 
 .post-content-header{

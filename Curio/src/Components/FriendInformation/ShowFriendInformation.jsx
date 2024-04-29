@@ -5,7 +5,7 @@ import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
 import Chat from "../../styles/icons/Chat";
 import Ellipsis from "../../styles/icons/Elippsis";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Toast } from "react-bootstrap";
 import ShareIcon from "../../styles/icons/Share";
 import ReportIcon from "../../styles/icons/Report";
 import MessageIcon from "../../styles/icons/SendMessage";
@@ -28,13 +28,16 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
-    const [blockedUsers, setBlockedUsers] = useState([]);
+    // const [blockedUsers, setBlockedUsers] = useState([]);
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
+    const navigate = useNavigate();
+
+    // const navigate = useNavigate();
 
     function ToastError() {
         toastError({
@@ -46,10 +49,18 @@ function ShowFriendInformation(props) {
         });
     }
 
+    useEffect(() => {
+        const myUsername = localStorage.getItem('username');
+        if(props.username === myUsername){
+            setIsFollowing(true);
+            navigate(`/profile/${myUsername}`);
+        }
+    }, []);
+
     const toastsuccess = useToast()
-    function ToastSuccess() {
+    function ToastSuccess(description) {
         toastsuccess({
-            description: "User Blocked successfully",
+            description: description,
             status: 'success',
             duration: 3000,
             isClosable: true,
@@ -78,8 +89,6 @@ function ShowFriendInformation(props) {
     const handleReportPopupClose = () => {
         setShowReportMenu(false);
     };
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         handleGetFollower(props.username);
@@ -155,8 +164,7 @@ function ShowFriendInformation(props) {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setBlockedUsers(response.data.viewBlockedPeople || []);
-            if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.username === username)) {
+            if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.blockedUsername === username)) {
                 props.isUserBlocked();
             }
             return response.data
@@ -165,30 +173,14 @@ function ShowFriendInformation(props) {
         }
     }
 
-    const patchBlockUser = (name) => {
-        const response = axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-          viewBlockedPeople: [...blockedUsers, { username: name}]
-        },{
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if(response.status === 200){
-            const newUser = { username: name};
-            setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-        }
-      };
-
       const handleUserBlock = async (username) => {
         if (!token) {
             navigate('/login');
         } else {
             const result = await userBlock(username);
             if(result === 200){
-                patchBlockUser(username);
                 props.handleBlockPage();
-                ToastSuccess();
+                ToastSuccess('User Blocked Successfully');
             }
             if (result === 403) {
                 ToastError("You can't block somebody again within 24 hours of unblocking them");
@@ -207,34 +199,19 @@ function ShowFriendInformation(props) {
 
     const handleUserUnblock = async (username) => {
         try {
-            const index = blockedUsers.findIndex((user) => user.username === username);
-            if (index === -1) {
-                console.error('User not found');
-                return;
-            }
-    
-            const updatedBlockedUsers = [...blockedUsers];
-            updatedBlockedUsers.splice(index, 1);
-    
-
-            const response = await axios.patch(`${hostUrl}/api/settings/v1/me/prefs`, {
-                viewBlockedPeople: updatedBlockedUsers
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-    
-            if (response.status === 200) {
-                setBlockedUsers(updatedBlockedUsers);
+            const result = await userUnblock(username);
+            if(result){
                 props.handleUnblock();
-                userUnblock(username);
+                ToastSuccess('User unblocked successfully');
             }
-        } catch (error) {
-            console.error('Error:', error);
+            else if(result === 500){
+                console.error('An unexpected error occurred on the server. Please try again later.');
+            }
+            
+            }catch (error) {
+                console.error('Error:', error);
+            }
         }
-    };
     
 
     return (

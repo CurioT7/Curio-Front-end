@@ -44,11 +44,11 @@ function ProfileCategory({ userCategory }) {
           <Titles title='NSFW'
           description="This content is NSFW (may contain nudity, pornography, profanity, or inappropriate content for those under 18)"/>
           <Spacer/>
-          <Switch size='lg' isChecked={NSFW} onChange={handleSwitchChange}/>
+          <Switch size='lg' isChecked={NSFW} onChange={handleSwitchChange} data-testid="nsfw-switch"/>
       </Flex>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ModalOverlay />
-        <ModalContent>
+      <Modal data-testid="modal" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalOverlay  data-testid="modal"/>
+        <ModalContent >
           <ModalHeader>SWITCH ACCOUNT TO SFW</ModalHeader>
           <ModalCloseButton onClick={() => setIsChecked(true)} />
           <ModalBody>

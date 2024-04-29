@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Community_details.css";
 import logo from "../../../assets/Curio_logo.png";
-import { useToast } from "@chakra-ui/react";
+import { useToast, FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import axios from "axios"; 
 import { VscActivateBreakpoints } from "react-icons/vsc";
 import SocialLink from "../../profileSetting/Socialmodal/Socialmodal";
+import { Link } from "react-router-dom";
+import { fetchUserDataFromBackend } from "../../UserSetting/UserSettingsEndPoints";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 function Community_details({ community }) {
-    const [username, setUsername] = useState(localStorage.getItem('username'));
+    const icon = localStorage.getItem('profileImage');
+    const username = localStorage.getItem('username');
     const [subredditData, setSubredditData] = useState(null);
     const [isSwitch, setIsSwitch] = useState(true);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
-    const [isUser, setIsUser] = useState(false);
+    const [SocialLinks, setSocialLinks] = useState([]);
     const toast = useToast();  
 
     function Toast(){
@@ -28,7 +31,7 @@ function Community_details({ community }) {
     const buttonStyle = {
         borderRadius: "30px",
         padding: "10px 15px", 
-      };
+    };
 
     useEffect(() => {
         if (community.community !== null) {
@@ -44,7 +47,15 @@ function Community_details({ community }) {
                 }
             });
             setSubredditData(response.data);
-            console.log(subredditData);
+            const data = await fetchUserDataFromBackend();
+            if (data) {
+                setSocialLinks(data.socialLinks ? 
+                  data.socialLinks.map(link => ({
+                    url: link.url,
+                    displayName: link.displayName,
+                    platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+                  })) : []);  
+              }
         } catch (error) {
             console.error("Error fetching subreddit data:", error);
         }
@@ -139,7 +150,7 @@ function Community_details({ community }) {
                                         <label htmlFor="" className="post-label-username" style={{cursor: 'pointer'}}>
                                             <span class="icon-container-username">
                                                 <div className="username-icon-container">
-                                                    <img src={logo} 
+                                                    <img src={icon} 
                                                     alt="Username Icon" 
                                                     role="presentation" 
                                                     className="username-details-icon" 
@@ -165,7 +176,7 @@ function Community_details({ community }) {
                                         </label>
                                     </div>
                                 </div>
-                                <a href="#" className="settings-link-username"
+                                <Link to={"/settings/profile"} className="settings-link-username"
                                 style={{
                                     display:'inline-block',
                                     marginTop:'-16px',
@@ -174,13 +185,13 @@ function Community_details({ community }) {
                                     right: '12px'
                                 }}>
                                     <i className="fa-solid fa-gear setting-cards"/>
-                                </a>
+                                </Link>
                                 <h4 className="subreddit-title-username">
                                     {subredditData.displayName}
                                 </h4>
-                                <a href="#" className='username-link'>
+                                <Link to={`/profile/${username}`} className='username-link'>
                                     u/ {username}
-                                </a>
+                                </Link>
                                 <div>{subredditData.about}</div>
                         </>
                     )}
@@ -223,7 +234,8 @@ function Community_details({ community }) {
                             </div>
                         </div>
                     )}
-                        {/* <div className="community-details-actions">
+                     {community.community !== username ? ( 
+                        <div className="community-details-actions">
                             <button role="button" tabindex="0" className="community-details-options" onClick={toggleOptions}>
                                 Community options
                                 <i className={`fa-solid fa-caret-${isOptionsExpanded ? 'up' : 'down'}`}/>
@@ -241,10 +253,12 @@ function Community_details({ community }) {
                                     />
                                 </FormControl>
                             )}
-                        </div> */}
-                        <div style={{display:'flex',flexWrap:'wrap'}}>
-                            <SocialLink buttonStyle={buttonStyle} />
                         </div>
+                     ) : (
+                        <div style={{display:'flex',flexWrap:'wrap', gap:"0.5em"}}>
+                            <SocialLink buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+                        </div>
+                     )}
                     </div>
                 )}
             </div>

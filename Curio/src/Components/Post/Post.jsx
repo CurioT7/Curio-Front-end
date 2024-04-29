@@ -47,6 +47,7 @@ function Post(props) {
     const [blockedUsers, setBlockedUsers] = useState([]);
     const toast = useToast();
     const postId = props._id;
+    const [votes, setVotes] = useState(props.upvotes - props.downvotes);
     const handleHidePost = () => {
         setIsHidden(!isHidden);
     }
@@ -57,9 +58,28 @@ function Post(props) {
             setIsHidden(false);
         }      
     }, [props.hiddenPosts, props._id])
+    useEffect(() => {
+        setUpvoted(props.voteStatus === "upvoted" ? true : false);
+        setDownvoted(props.voteStatus === "downvoted" ? true : false);
+        setIsLocked(props.isLocked);
+        window.addEventListener('loginOrSignup', () => {
+            if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+            }
+        });
+        return () => {
+            window.removeEventListener('loginOrSignup', () => {
+               if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+               }
+            });
+        }
+    }, [props])
     const navigate = useNavigate();
-    const [upvoted, setUpvoted] = useState(false);
-    const [downvoted, setDownvoted] = useState(false);
+    const [upvoted, setUpvoted] = useState((localStorage.getItem('token') && props.voteStatus === "upvoted") ? true : false);
+    const [downvoted, setDownvoted] = useState((localStorage.getItem('token') && props.voteStatus === "downvoted") ? true : false);
     const [isLocked, setIsLocked] = useState(false);
     const [votepick, setVotepick] = useState("");
     const [hasVoted, setVoted] = useState(false);
@@ -70,31 +90,148 @@ function Post(props) {
 
   const handleVoted = () => {
     setVoted(true)
-    console.log(votepick);
-    console.log(props._id);
   }
 
+//   async function pollVote(_id, votepick){
+//     const hostUrl = import.meta.env.VITE_SERVER_HOST;
+//     try{
+//     const response = await axios.post(`${hostUrl}/api/pollVote`, {
+//       postId: _id,
+//       option: votepick
+//     },{
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//     });
+//     if(response === 200){
+//       setVoted(true);
+//     }
+//   }
+//     catch(error){
+//       console.error(error);
+//     }
+//   }
+
+//   useEffect(() => {
+//     async function checkVote(){
+//     await pollVote(props._id, votepick);
+//     }
+
+//     checkVote();
+// }, []);
+
     
-    const makePostUpvoted = () => {
+    const makePostUpvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (upvoted) {
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         } else {
-            setUpvoted(true);
-            setDownvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(true);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         }
     }
-    const makePostDownvoted = () => {
+    const makePostDownvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (downvoted) {
-            setDownvoted(false);
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         } else {
-            setDownvoted(true);
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: -1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(true);
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         }
     }
     
     const handleIsLocked = (value) => {
         setIsLocked(value);
     }
+  
+    
+const postCategory = async (postID) => {
+    
+    const url = `${VITE_SERVER_HOST}/api/saved_categories`;
+    const token = localStorage.getItem('token')
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
+        },
+    });
+    console.log(response);
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+
+    const postData = responseData.map(post => ({
+     
+        isSpoiler: post.isSpoiler,
+        
+    }));
+
+
+    return postData;
+};
+
     const handleUnhide = async () => {
         try{
             var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -137,6 +274,7 @@ function Post(props) {
       }
     }
   }
+
     // useEffect(() => {
     //     const fetchPostStatus = async () => {
     //         const postInfo = await FetchObjectInfo(props._id,"post");
@@ -158,7 +296,7 @@ function Post(props) {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: subredditName,
+                subreddit: props.subreddit,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
@@ -166,7 +304,9 @@ function Post(props) {
                 comments: props.comments,
                 savedPosts: props.savedPosts,
                 savedComments: props.savedComments,
+                voteStatus: upvoted ? "upvoted" : downvoted ? "downvoted" : "unvoted",
                 hiddenPosts: props.hiddenPosts,
+                isSpoiler: props.isSpoiler,
                 isMod: props.isMod,
                 isLocked: isLocked,
                 dateViewed: new Date().toISOString()
@@ -184,15 +324,31 @@ function Post(props) {
                 window.dispatchEvent(new Event('newRecentPost'));
                 navigate(`/post/post-details/${props._id}`, { state: { post } });
             }
+            if (response.status === 401){
+                navigate(`/post/post-details/${props._id}`, { state: { post } });
+            }
         }
         catch(err){
+            const post = {
+                _id: props._id,
+                user: props.user,
+                title: props.title,
+                subreddit: props.linkedSubreddit,
+                content: props.content,
+                image: props.image,
+                upvotes: props.upvotes,
+                downvotes: props.downvotes,
+                comments: props.comments,
+                savedPosts: props.savedPosts,
+                savedComments: props.savedComments,
+                hiddenPosts: props.hiddenPosts,
+                isMod: props.isMod,
+                isSpoiler: props.isSpoiler,
+                isLocked: isLocked,
+                dateViewed: new Date().toISOString()
+            }
             console.log(err);
-            toast({
-                description: "Server Error Occured.",               
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            })
+            navigate(`/post/post-details/${props._id}`, { state: { post } });
         }
     }
 
@@ -248,16 +404,26 @@ function Post(props) {
                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
-                            <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} />
+                            <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} isSpoiler={props.isSpoiler}  post={props.post}/>
                             </Flex>
                         </CardHeader>
                         {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
-                            pollText={props.pollText} voteLength={props.voteLength} handleVoted={handleVoted} handleVote={handleVote} votepick={votepick} hasVoted={hasVoted}
-                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments}/> ) : (
+                            pollText={props.pollText} voteLength={props.voteLength}
+                            handleNavigation={handleNavigationToDetails}/>  ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
-                            {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
-                            </Text>}
+                     {props.isSpoiler ? (
+                            <>
+                                <span className='text-body-spoiler' >
+                                    {props.content}
+                                </span>
+                            </>
+                        ) : (
+                            <>  
+                            <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}></Text>
+
+                            </>
+                        )}
                             {props.image && <Image
                                 objectFit='cover'
                                 src={props.image}
@@ -293,7 +459,7 @@ function Post(props) {
                                         {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
                                     </button>
                                     <div className='me-2'>
-                                        <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{(props.upvotes - props.downvotes > 0) ? (props.upvotes - props.downvotes) : 0}</span>
+                                        <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{votes}</span>
                                     </div>
                                     <button data-testid="downvotes" className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
                                         {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
@@ -325,7 +491,7 @@ function Post(props) {
                                 </Menu>
                             </Box>
 
-                            {props.isMod&& <Box display='flex'  justifyContent='end'>
+                            {props.isMod && <Box display='flex'  justifyContent='end'>
                                <PostLock isLocked={isLocked} id={props._id} onChangeLock={handleIsLocked} />
                             </Box>}
                             

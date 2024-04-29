@@ -9,6 +9,8 @@ import Post from '../Post/Post.jsx';
 import profile from "../../assets/avatar_default_6.png";
 import PostComments from '../Post/PostComments.jsx';
 import { Link } from 'react-router-dom';
+import SocialLink from '../profileSetting/Socialmodal/Socialmodal.jsx';
+import { fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints.js';
 
 function ProfilePage(){
 
@@ -26,6 +28,7 @@ function ProfilePage(){
   const [downvotedPosts, setDownvotedPosts] = useState([]);
   const [ upvotedComments, setUpvotedComments] = useState([]);
   const [downvotedComments, setDownvotedComments] = useState([]);
+  const [SocialLinks, setSocialLinks] = useState([]);
   const getSaved = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -49,6 +52,10 @@ function ProfilePage(){
       }
     }
 
+    const buttonStyle = {
+      borderRadius: "30px",
+      padding: "10px 15px", 
+    };
     const getHidden = async () => {
       try{
         var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -136,8 +143,27 @@ useEffect(() => {
     if (StoredUsername) {
       getUserAbout(StoredUsername).then(data => setUserAbout(data));
     }
-    console.log(userAbout);
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const data = await fetchUserDataFromBackend();
+            if (data) {
+                setSocialLinks(data.socialLinks ? 
+                    data.socialLinks.map(link => ({
+                        url: link.url,
+                        displayName: link.displayName,
+                        platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+                    })) : []);  
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    fetchData();
+}, []);
 
   const scrollLeft = () => {
       tabListRef.current.scrollLeft -= 100;
@@ -153,7 +179,7 @@ return(
 <div className="profileContainer">
 <div className="mainComponent">
 <div className="userInfo">
-<img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+<img src={profile} alt="profile picture" className="profileAvatar" />
 <h3 className='userName'> {userAbout.displayName}</h3>
 <h5 className="userName"> u/{username} </h5>
 <b>{userAbout.bio}</b>
@@ -187,25 +213,27 @@ return(
         <p>u/{username} hasn't posted or commented yet</p>
       ) : (
         <>
-          {userPosts.map(post => (
-            <div className='post-card' key={post.id}>
-               <Post
-            
-            _id={post._id}
-            title={post.title}
-            body={post.body}
-            user={post.authorName}
-            upvotes={post.upvotes}
-            downvotes={post.downvotes}
-            comments={post.comments}
-            content={post.content}
-            linkedSubreddit={post.linkedSubreddit}
-            savedPosts={savedPosts}
-            savedComments={savedComments}
-            hiddenPosts={hiddenPosts}
-          />
-            </div>
-          ))}
+        {userPosts.map(post => {
+    return (
+        <div className='post-card' key={post.id}>
+            <Post
+                _id={post.id}
+                title={post.title}
+                body={post.body}
+                user={post.authorName}
+                upvotes={post.upvotes}
+                downvotes={post.downvotes}
+                comments={post.comments}
+                content={post.content}
+                linkedSubreddit={post.linkedSubreddit}
+                isSpoiler={post.isSpoiler}
+                savedPosts={savedPosts}
+                savedComments={savedComments}
+                hiddenPosts={hiddenPosts}
+            />
+        </div>
+    );
+})}
           {userComments.map(comment => (
             <div className='comment-card' key={comment.id}>
               <h6>u/author    •   title</h6>
@@ -227,7 +255,6 @@ return(
     userPosts.map(post => (
       <div className='post-card' key={post.id}>
        <Post
-            
             _id={post._id}
             title={post.title}
             body={post.body}
@@ -236,6 +263,7 @@ return(
             downvotes={post.downvotes}
             comments={post.comments}
             content={post.content}
+            isSpoiler={post.isSpoiler}
             linkedSubreddit={post.linkedSubreddit}
             savedPosts={savedPosts}
             savedComments={savedComments}
@@ -313,6 +341,7 @@ return(
             comments={post.comments}
             content={post.content}
             subReddit={post.linkedSubreddit}
+            isSpoiler={post.isSpoiler}
             savedPosts={savedPosts}
             savedComments={savedComments}
             hiddenPosts={hiddenPosts}
@@ -334,7 +363,7 @@ return(
       {upvotedPosts.map(post => (
         <div className='post-card' key={post.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{post.authorName}</b>
           </div>
           <p>{post.content}</p>
@@ -343,7 +372,7 @@ return(
       {upvotedComments.map(comment => (
         <div className='comment-card' key={comment.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{comment.authorName}</b>
           </div>
           <p>{comment.content}</p>
@@ -361,7 +390,7 @@ return(
       {downvotedPosts.map(post => (
         <div className='post-card' key={post.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{post.authorName}</b>
           </div>
           <p>{post.content}</p>
@@ -370,7 +399,7 @@ return(
       {downvotedComments.map(comment => (
         <div className='comment-card' key={comment.id}>
           <div className='author'>
-            <img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+            <img src={profile} alt="profile picture" className="profileAvatar" />
             <b>u/{comment.authorName}</b>
           </div>
           <p>{comment.content}</p>
@@ -456,7 +485,7 @@ return(
 
  <p>Settings</p>
  <div className="profileSettings">
-<img src="../src/assets/Curio_logo.png" alt="profile" />
+<img src={profile} alt="profile" />
 <div className="textContainer">
         <h5>Profile</h5>
         <h6>Customise your profile</h6>
@@ -489,7 +518,9 @@ return(
 <p>Social Links</p>
 
 <div className='profileSettings'>
-<button> + Add Social Link</button>
+<div style={{display:'flex',flexWrap:'wrap', gap:"0.5em"}}>
+  <SocialLink buttonStyle={buttonStyle} SocialLinks={SocialLinks}/>
+</div>
 
 </div>
 

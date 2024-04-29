@@ -1,19 +1,20 @@
-import { Button,Switch, Box, Container, Flex, Text } from '@chakra-ui/react'
+import { Button,Switch, Box, Container, Flex} from '@chakra-ui/react'
 import React from "react"
 import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
-import { Input, FormControl, FormLabel, Image,Avatar } from "@chakra-ui/react";
+import { Input,Avatar } from "@chakra-ui/react";
 import Titles from '../../feedSettings/childs/Titles';
 import './formstyle.css'
 import PasswordErrorMessage from './PasswordErrorMessage';
 import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
+import logo from '../../../assets/Curio_logo.png'
 function ChangePass(props){
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast()
     function Toast(){
         toast({
             
-            description: "Changes Saved",
+            description: "Password Changed Successfully, you will be redirected",
             status: 'info',
             duration: 3000,
             isClosable: true,
@@ -51,9 +52,15 @@ function ChangePass(props){
     }
     function handleOldPassBlur(){
         setOldPass({...oldPassword,isTouched:true})
+        if(oldPassword.value.length<1){
+            setOldPass({...oldPassword,isCorrect: false})
+        }
     }
     function handleNewPassBlur(){
         setNewPass({...password,isTouched:true})
+        if(password.value.length<8){
+            setNewPass({...password,isCorrect: false})
+        }
     }
     function handleConfirmPassBlur(){
         setConfirmPass({...confirmPass,isTouched: true})
@@ -77,6 +84,9 @@ function ChangePass(props){
             setOldPass({...oldPassword, isCorrect: true});
             setNewPass({...password, isCorrect: true});
             Toast();
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
             clearForm();
             return response;
         } catch (error) {
@@ -138,40 +148,37 @@ function ChangePass(props){
                         <ModalContent>
                             
                             <ModalCloseButton />
-                            <ModalHeader></ModalHeader>
-                            <ModalBody mt={10} className='col-7'>
-                                <Container ms={10}>
+                            
+                            <ModalBody padding={0} className='row' >
+                                <div className='col-2 bg-secondary left-img-changepass'>
+
+                                </div>
+                                <Container mt={10} mb={10} ms={10}>
                                     <form onSubmit={handleSubmit}>
-                                        <Box display='flex' flexDirection='column'>
-                                        <Avatar src='Reddit_Icon_FullColor.png' mb={2}/>
+                                        <Box display='flex' paddingBottom={10} className='col-8' flexDirection='column'>
+                                        <Avatar size='lg' src={logo} mb={2}/>
 
                                         <h3 className="headings-settings fs-5 d-flex fw-500 mb-3">Update your password</h3> 
 
-                                        <Input isInvalid={!oldPassword.isCorrect || oldPassword.value<1} type='password' onBlur={handleOldPassBlur} value={oldPassword.value} onChange={handleOldPass} placeholder='OLD PASSWORD' mb={5} />
+                                        <Input isInvalid={!oldPassword.isCorrect} type='password' onBlur={handleOldPassBlur} value={oldPassword.value} onChange={handleOldPass} placeholder='OLD PASSWORD' mb={5} />
                                         {oldPassword.isTouched&&oldPassword.value<1 ?(<PasswordErrorMessage text="This field is required"/>): null }
-                                        {oldPassword.isCorrect==false && <PasswordErrorMessage text={errorMessage} />}
+                                        {oldPassword.isCorrect==false && errorMessage &&<PasswordErrorMessage text={errorMessage} />}
 
-                                        <Input isInvalid={!password.isCorrect || password.value.length<8} type='password' onBlur={handleNewPassBlur} value={password.value} onChange={handleNewPass} placeholder='NEW PASSWORD' mb={5} />
+                                        <Input isInvalid={!password.isCorrect} type='password' onBlur={handleNewPassBlur} value={password.value} onChange={handleNewPass} placeholder='NEW PASSWORD' mb={5} />
                                         {password.isTouched&&password.value.length<8 ?(<PasswordErrorMessage text="Password should have at least 8 characters"/>): null }
-                                        {password.isCorrect==false && <PasswordErrorMessage text={errorMessage} />}
+                                        {password.isCorrect==false && errorMessage && <PasswordErrorMessage text={errorMessage} />}
                                         
                                         <Input isInvalid={password.value != confirmPass.value} type='password' onBlur={handleConfirmPassBlur}  value={confirmPass.value} onChange={handleConfirmPass} placeholder='CONFRIM NEW PASSWORD' mb={5} />
                                         {confirmPass.isTouched&&password.value!=confirmPass.value ?(<PasswordErrorMessage text="Password must match"/>): null }
 
-                                        <Flex justifyContent='space-between' alignItems='center'>
-                                            <Titles title='Log me out everywhere'
-                                                    description='Changing your password logs you out of all browsers on your device(s). Checking this box also logs you out of all apps you have authorized.'/>
-                                            <Switch onChange={handleLogOut}/>
-                                        </Flex>
+                                        
                                         <Button width='10vw' colorScheme='blue' style={props.buttonStyle} type='submit'>Save</Button>
                                         </Box>
                                     </form>
                                 </Container>
                             </ModalBody>
 
-                            <ModalFooter height='100px'>
-                              
-                            </ModalFooter>
+                    
                     </ModalContent>
                 </Modal>
                 </Box>

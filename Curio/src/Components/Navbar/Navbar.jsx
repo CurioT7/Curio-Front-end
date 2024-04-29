@@ -6,34 +6,40 @@ import plus from "../../assets/Plus_navbar.png";
 import inbox from "../../assets/Inbox_navbar.png";
 import profile from "../../assets/avatar_default_6.png";
 import Settings from '../../styles/icons/Settings';
-import EditAvatar from '../../styles/icons/EditAvatar';
-import ContProgram from '../../styles/icons/ContributorProgram';
-import ModMode from '../../styles/icons/ModMode';
-import DarkMode from '../../styles/icons/DarkMode';
-import Advertisement from '../../styles/icons/Ad';
-import Premium from '../../styles/icons/Premium';
-import ContArrow from '../../styles/icons/ContArrow';
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
 import { useNavigate } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
 import { BsArrowUpRightCircle } from "react-icons/bs";
-import { Switch, Menu, MenuButton, Stack, MenuList, Tooltip } from '@chakra-ui/react'
+import { Menu, MenuButton, MenuList, Tooltip } from '@chakra-ui/react'
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
 } from '@chakra-ui/react'
-import { getTrending } from './SearchingEndPoints';
+import { CiSearch } from "react-icons/ci";
+import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
+import { getUnreadNotifications, getAllNotifications, markAsViweed } from '../Notifications_Dropdown/NotificationsEndpoints';
 
 import Trending from './Trending';
+import SearchBy from './SearchBy';
+import { set } from 'mongoose';
 
 
-function NavbarComponent() {
+
+function NavbarComponent(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [trending, setTrending] = React.useState([]);
+  const [searchCommunities, setSearchCommunities] = React.useState([]);
+  const [searchPeople, setSearchPeople] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('');
+  const [unreadNotifications, setUnreadNotifications] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [isRead, setIsRead] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -44,12 +50,70 @@ function NavbarComponent() {
     }
   };
 
+  async function handleUnreadNotifications(){
+    const unreadNotifications = await getUnreadNotifications();
+    if(unreadNotifications){
+      setUnreadNotifications(unreadNotifications.data.unreadCount);
+    }
+  }
+
+  async function handleAllNotifications() {
+    const response = await getAllNotifications();
+    if(response) {
+        setNotifications(response.data.notifications);
+    }
+}
+
+  async function handleMarkAsRead(){
+    const response = await markAsViweed();
+    if(response.success) {
+        setIsRead(true);
+    }
+}
+
+
+  function handleOpenNotifications(){
+    setUnreadNotifications(null);
+    setIsNotificationsOpen(true);
+    handleAllNotifications();
+  }
+
+  useEffect(() => {
+    handleUnreadNotifications();
+  }, []);
+
+
+
+
+  const handleSearchChange = async (e) => {
+    setSearchValue(e.target.value);
+    const searchCommunitiesData = await getSearchSubreddits(searchValue);
+    const searchPeopleData = await getSearchPeople(searchValue);
+    if(searchCommunitiesData){
+      setSearchCommunities(searchCommunitiesData.subreddits);
+    }
+    else{
+      setSearchCommunities([]);
+    }
+    if(searchPeopleData){
+      setSearchPeople(searchPeopleData.users);
+    }
+    else{
+      setSearchPeople([]);
+    }
+  }
   const navigateToLogin = () => {
     navigate('/login');
   }
 
   const inputRef = useRef();
   const popoverRef = useRef();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search/${searchValue}`);
+    setSearchValue('');
+  }
   
   useEffect(() => {
     if (inputRef.current && popoverRef.current) {
@@ -90,8 +154,10 @@ function NavbarComponent() {
   React.useEffect(() => {
       async function fetchData() {
           const trendingData = await getTrending();
+          
           setTrending(trendingData.posts);
-          console.log(trendingData.posts);
+         
+
       }
       fetchData();
   }, []);
@@ -120,8 +186,16 @@ function NavbarComponent() {
     }, 0);
   }
 }, [isOpen]);
+
+if (!props.NavbarVisibility) {
+  return null;
+}
+
   return (
-    <nav className='navbar-component'>
+    <nav className='navbar-component'
+    style={{
+      visibility: props.NavbarVisibility ? 'visible' : 'hidden',
+    }}>
       <input type="checkbox" name="" id="chk1"/>
       <div className="logo">
         <Link to={'/'} style={{ display: "flex" }}>
@@ -130,14 +204,17 @@ function NavbarComponent() {
         </Link>
       </div>
       <div className="search-box">
-        <form action="">
+        <form action="" onSubmit={handleSearch}>
             <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
               <PopoverTrigger>
-                <input onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+                <input className='inputTextnav' onChange={handleSearchChange} value={searchValue} onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
               <PopoverContent borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
-                  <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
+
+                  { !searchValue&&
+                  <div>
+                   <div className='trending-header'><BsArrowUpRightCircle/> <span>TRENDING TODAY</span></div>
                   { trending.map((trend) => (
                     <Trending
                       key={trend._id}
@@ -147,56 +224,89 @@ function NavbarComponent() {
                     />
                     ))
                   }
+                  </div>}
+                  { searchValue && <div>
+
+                    {searchCommunities && <div>
+                    <div className='searchBy-header'> Communities</div>
+                    <SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/>
+                    { searchCommunities.map((comm) => (
+                      <SearchBy
+                        key={comm._id}
+                        type="comm"
+                        avatar={comm.icon}
+                        name={comm.name}
+                        description={comm.members}
+                      />
+                      ))
+                    }
+                    </div>
+                    }
+                    {searchPeople && <div>
+                    <div className='searchBy-header'>People</div>
+                    <SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/>
+                    { searchPeople.map((user) => (
+                      <SearchBy
+                        key={user._id}
+                        type="user"
+                        avatar={user.profilePicture}
+                        name={user.username}
+                        description={user.karma}
+                      />
+                      ))
+                    }
+                     
+                    
+                    </div>
+                    }
+                    <div className='search-footer'> <CiSearch className='search-icon'/> <span> Search by  "{searchValue}"</span>
+                    </div>
+                  </div>}
+                  
                 </PopoverBody>
               </PopoverContent>
             </Popover>
           <button type="submit"><i className="search-icon fa fa-search" aria-hidden="true"></i></button>
         </form>
       </div>
-      <ul className='right-section-navbar'>
+      <div className='right-section-navbar'>
         {isAuthenticated && 
         <>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Advertise on Curio">
-              <a href="#" style={{ display: "flex" }} className='right-item-option'>
-                <Advertisement />
-              </a>
-            </Tooltip>
-          </li>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Open chat">
-              <a href="#" className='right-item-option' style={{ display: "flex" }}>
-                <img className='navImg' src={openchat} alt="logo"/>
-              </a>
-            </Tooltip>
-          </li>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Create post">
-              <Link to={'user/CreatePost/'} className='create-icon' style={{ display: "flex" }}>
+          <Tooltip label="Open chat">
+            <Link to={'/room/create'} className='sub-right-navbar'>
+              <li className='right-item-option' style={{ display: "flex" }}>
+                    <img className='navImg' src={openchat} alt="logo"/>
+              </li>
+            </Link>
+          </Tooltip>
+          <Tooltip label="Create post">
+            <Link to={'/user/CreatePost'} className='sub-right-navbar'>
+              <li className='create-icon' style={{ display: "flex" }}>
                 <img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
                 Create
-              </Link>
-            </Tooltip>
-          </li>
-          <li className='sub-right-navbar'>
-            <Tooltip label="Open inbox">
-              <a style={{ display: "flex" }} className='right-item-option'>
-              <Menu>
-                <MenuButton>
-                  <img className='navImg notificimg' src={inbox} alt="logo"/>
-                </MenuButton>
-                <MenuList 
-                style={{
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  boxShadow: 'none', 
-                }}>
-                  <Notifications_Dropdown/>
-                </MenuList>
-              </Menu>
-              </a>
-            </Tooltip>
-          </li>
+              </li>
+            </Link>
+          </Tooltip>
+          <Tooltip label="Open inbox">
+            <a className='sub-right-navbar notif' style={{position: 'relative'}} >
+              <li className='right-item-option' style={{ display: "flex" }} onClick={() => {handleOpenNotifications(); handleMarkAsRead()}}>
+                  <Menu>
+                    <MenuButton>
+                      <img className='navImg' src={inbox} alt="logo" />
+                      <span className='unread-notifs'>{unreadNotifications}</span>
+                    </MenuButton>
+                    <MenuList 
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      boxShadow: 'none', 
+                    }}>
+                      <Notifications_Dropdown notifications={notifications}/>
+                    </MenuList>
+                  </Menu>
+              </li>
+            </a>
+          </Tooltip>
           <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
             <Tooltip label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
@@ -220,7 +330,7 @@ function NavbarComponent() {
             </Tooltip>
           </div>
         }
-      </ul>
+      </div>
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
           <Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
@@ -233,7 +343,7 @@ function NavbarComponent() {
             </div>
           </Link>
           <div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
-            <SignupHandler/>
+            <SignupHandler />
           </div>
           <hr />
           <Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 
@@ -242,11 +352,11 @@ function NavbarComponent() {
           </Link>
         </div>
       </div>
-      <div className="menu">
+      {/* <div className="menu">
         <label htmlFor="chk1">
           <i className="fa fa-bars" aria-hidden="true"></i>
         </label>
-      </div>
+      </div> */}
     </nav>
   );
 }

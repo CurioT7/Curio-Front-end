@@ -25,21 +25,22 @@ const scrollToTop = () => {
   }, []);
 
   return (
-    <div className="back-to-top">
+    <div className="back-to-top" >
       {isVisible && (
        <button 
        onClick={scrollToTop} 
-         style={{background: "#EAEDEF",
+         style={{background: "#0079d3",
         position: "fixed",
         bottom: "50px",
         left: "70%",
-        color: "black",
-        fontSize: "2rem", 
+        color: "white",
+        fontSize: "0.75rem", 
         borderRadius: "20%",
-        width: "2rem",
+        width: "5%",
+        fontWeight: "bold",
         }
         }>
-        ^
+        Back to Top
         </button>
       )}
     </div>

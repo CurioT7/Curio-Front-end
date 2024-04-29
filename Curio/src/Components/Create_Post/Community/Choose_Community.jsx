@@ -9,13 +9,13 @@ import CreateCommunity from '../../Sidebar/CreateCommunity.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function Choose_Community({ onSelect }) {
-    const [inputValue, setInputValue] = useState('');
-    const [username, setUsername] = useState(null);
+function Choose_Community({ onSelect, subreddit }) {
+    const username = localStorage.getItem('username');
+    const [inputValue, setInputValue] = useState(subreddit ? subreddit : '');
     const [userCommunities, setUserCommunities] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
-    const [chosenItem, setChosenItem] = useState(null); 
+    const [chosenItem, setChosenItem] = useState(subreddit ? subreddit : null); 
     const [searchResults, setSearchResults] = useState([]);
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
@@ -55,6 +55,13 @@ function Choose_Community({ onSelect }) {
             setSearchResults([]); 
         }
     }, [inputValue]);
+
+    useEffect(() => {
+        if (subreddit !== null) {
+            handleItemClick(`r/${subreddit}`);
+        }
+    }, [subreddit]);
+    
     
     const fetchSearchResults = async (query) => {
         try {
@@ -93,19 +100,10 @@ function Choose_Community({ onSelect }) {
 
     const fetchUserData = async () => {
         try {
-            const userDataResponse  = await axios.get(
-                `${serverHost}/api/settings/v1/me/prefs`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            );
             const communityDataResponse = await axios.get(
-                `${serverHost}/api/user/${userDataResponse.data.username}/communities`
+                `${serverHost}/api/user/${username}/communities`
             );
-            return { userData: userDataResponse.data, communityData: communityDataResponse.data };
+            return { communityData: communityDataResponse.data };
         } catch (error) {
             if (error.response) {
                 // Handle different error status codes
@@ -124,9 +122,7 @@ function Choose_Community({ onSelect }) {
         const fetchData = async () => {
             const data = await fetchUserData();
             if (data) {
-                setUsername(data.userData.username);
                 setUserCommunities(data.communityData.communities);
-                // setMemberCount(data.communityData.communities);
             }
         };
     
@@ -135,9 +131,9 @@ function Choose_Community({ onSelect }) {
 
     const handleArrowClick = () => {
         if (dropdownVisible) {
-            setDropdownVisible(false); // Close the dropdown if it's already open
+            setDropdownVisible(false); 
         } else {
-            setDropdownVisible(true); // Open the dropdown if it's closed
+            setDropdownVisible(true); 
         }
     };
     
