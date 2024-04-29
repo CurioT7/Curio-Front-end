@@ -381,7 +381,7 @@ function PostContentDetails(post) {
                                     {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
                                 </button>
                                 <div className='me-2'>
-                                    <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{votes}</span>
+                                    <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{votes || (post.upvotes - post.downvotes)}</span>
                                 </div>
                                 <button className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
                                     {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
