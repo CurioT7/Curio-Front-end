@@ -21,10 +21,11 @@ import {
 } from '@chakra-ui/react'
 import { CiSearch } from "react-icons/ci";
 import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
-import { getUnreadNotifications, getAllNotifications } from '../Notifications_Dropdown/NotificationsEndpoints';
+import { getUnreadNotifications, getAllNotifications, markAsViweed } from '../Notifications_Dropdown/NotificationsEndpoints';
 
 import Trending from './Trending';
 import SearchBy from './SearchBy';
+import { set } from 'mongoose';
 
 
 
@@ -36,6 +37,7 @@ function NavbarComponent(props) {
   const [searchValue, setSearchValue] = React.useState('');
   const [unreadNotifications, setUnreadNotifications] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [isRead, setIsRead] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -61,6 +63,14 @@ function NavbarComponent(props) {
         setNotifications(response.data.notifications);
     }
 }
+
+  async function handleMarkAsRead(){
+    const response = await markAsViweed();
+    if(response.success) {
+        setIsRead(true);
+    }
+}
+
 
   function handleOpenNotifications(){
     setUnreadNotifications(null);
@@ -278,11 +288,11 @@ if (!props.NavbarVisibility) {
             </Link>
           </Tooltip>
           <Tooltip label="Open inbox">
-            <a className='sub-right-navbar notif' style={{position: 'relative'}} onClick={handleOpenNotifications}>
-              <li className='right-item-option' style={{ display: "flex" }}>
+            <a className='sub-right-navbar notif' style={{position: 'relative'}} >
+              <li className='right-item-option' style={{ display: "flex" }} onClick={() => {handleOpenNotifications(); handleMarkAsRead()}}>
                   <Menu>
                     <MenuButton>
-                      <img className='navImg' src={inbox} alt="logo"/>
+                      <img className='navImg' src={inbox} alt="logo" />
                       <span className='unread-notifs'>{unreadNotifications}</span>
                     </MenuButton>
                     <MenuList 

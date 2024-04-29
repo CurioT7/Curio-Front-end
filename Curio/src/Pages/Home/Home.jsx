@@ -211,14 +211,12 @@ async function changeSortType(value,time) {
               isClosable: true,
             })
           }
+          console.log('posts poll', posts.type)
       }
   }
   SetData();
 }
 
-function handleShowPolls(){
-  console.log(polls);
-}
 
 async function getBlocked() {
   try {
@@ -256,7 +254,7 @@ useEffect(() => {
       {/* Insert posts here (above recent posts) */}
       <div style={{marginTop: "70px"}} className='col-9 col-lg-6 col-md-6 d-flex p-3 posts-container flex-column'>
         <div className='my-1'>
-        <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false} onClick={handleShowPolls}/>
+        <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
             {((randomPost.isSelected==false) && posts) ? (
@@ -264,22 +262,20 @@ useEffect(() => {
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
                   <>
-                    {post.type === 'poll' ? (
+                    {post.post.type === 'poll' ? (
                     <Post
-                    pollTitle={post.title}
-                    body={post.body}
-                    pollText={post.content}
-                    user={post.authorName}
-                    _id={post._id}
-                    type={post.type}
-                    optionNames={post.options.map((option) => option.name)}
-                    votes={post.options.map((option) => option.votes)}
-                    upvotes={post.upvotes}
-                    downvotes={post.downvotes}
-                    comments={post.comments}
-                    voteLength={post.voteLength}
-                    linkedSubreddit={post.details.subredditName}
-                    isLocked={post.isLocked}
+                    pollTitle={post.post.title}
+                    body={post.post.body}
+                    pollText={post.post.content}
+                    user={post.post.authorName}
+                    _id={post.post._id}
+                    type={post.post.type}
+                    optionNames={post.post.options.map((option) => option.name)}
+                    votes={post.post.options.map((option) => option.votes)}
+                    upvotes={post.post.upvotes}
+                    downvotes={post.post.downvotes}
+                    comments={post.post.comments}
+                    voteLength={post.post.voteLength}
                   />) : (
                     <Post
                     _id={post.post._id}
