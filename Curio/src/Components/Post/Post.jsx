@@ -296,7 +296,7 @@ const postCategory = async (postID) => {
                 _id: props._id,
                 user: props.user,
                 title: props.title,
-                subreddit: props.subreddit,
+                subreddit: props.linkedSubreddit,
                 content: props.content,
                 image: props.image,
                 upvotes: props.upvotes,
@@ -475,7 +475,6 @@ const postCategory = async (postID) => {
                                 <MenuList>
                                 <MenuItem onClick={async () => {
                                     
-                                        console.log('postId:', postId);
                                     
                                         await navigator.clipboard.writeText(`http://localhost:5173/post/post-details/${postId}`);
                                         alert('Link copied to clipboard');
