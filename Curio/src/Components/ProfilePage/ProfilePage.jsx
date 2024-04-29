@@ -180,7 +180,7 @@ return(
 <div className="profileContainer">
 <div className="mainComponent">
 <div className="userInfo">
-<img src="../src/assets/Curio_logo.png" alt="profile picture" className="profileAvatar" />
+<img src={profile} alt="profile picture" className="profileAvatar" />
 <h3 className='userName'> {userAbout.displayName}</h3>
 <h5 className="userName"> u/{username} </h5>
 <b>{userAbout.bio}</b>
@@ -487,7 +487,7 @@ return(
 
  <p>Settings</p>
  <div className="profileSettings">
-<img src="../src/assets/Curio_logo.png" alt="profile" />
+<img src={profile} alt="profile" />
 <div className="textContainer">
         <h5>Profile</h5>
         <h6>Customise your profile</h6>
