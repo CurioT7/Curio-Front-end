@@ -50,7 +50,9 @@ function CommentInputForm(props) {
                 }
             });
             if (response.status === 200 || response.status === 201){
-                window.dispatchEvent(new Event('deletecomment'));
+                window.dispatchEvent(new Event('deleteComment'));
+                setInputText("");
+                setInputState(0);
             }   
         }
         catch (error) {
