@@ -58,9 +58,27 @@ function Post(props) {
             setIsHidden(false);
         }      
     }, [props.hiddenPosts, props._id])
+    useEffect(() => {
+        setUpvoted(props.voteStatus === "upvoted" ? true : false);
+        setDownvoted(props.voteStatus === "downvoted" ? true : false);
+        window.addEventListener('loginOrSignup', () => {
+            if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+            }
+        });
+        return () => {
+            window.removeEventListener('loginOrSignup', () => {
+               if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+               }
+            });
+        }
+    }, [props])
     const navigate = useNavigate();
-    const [upvoted, setUpvoted] = useState(props.voteStatus === "upvoted" ? true : false);
-    const [downvoted, setDownvoted] = useState(props.voteStatus === "downvoted" ? true : false);
+    const [upvoted, setUpvoted] = useState((localStorage.getItem('token') && props.voteStatus === "upvoted") ? true : false);
+    const [downvoted, setDownvoted] = useState((localStorage.getItem('token') && props.voteStatus === "downvoted") ? true : false);
     const [isLocked, setIsLocked] = useState(false);
     const [votepick, setVotepick] = useState("");
     const [hasVoted, setVoted] = useState(false);
