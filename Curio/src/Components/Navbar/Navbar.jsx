@@ -197,7 +197,7 @@ if (!props.NavbarVisibility) {
         <form action="" onSubmit={handleSearch}>
             <Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
               <PopoverTrigger>
-                <input onChange={handleSearchChange} value={searchValue} onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+                <input className='inputTextnav' onChange={handleSearchChange} value={searchValue} onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
               </PopoverTrigger>
               <PopoverContent borderRadius='20px' ref={popoverRef}>
                 <PopoverBody margin={0} padding={0} className="search-list">
@@ -259,7 +259,7 @@ if (!props.NavbarVisibility) {
           <button type="submit"><i className="search-icon fa fa-search" aria-hidden="true"></i></button>
         </form>
       </div>
-      <ul className='right-section-navbar'>
+      <div className='right-section-navbar'>
         {isAuthenticated && 
         <>
           <Tooltip label="Open chat">
@@ -278,11 +278,11 @@ if (!props.NavbarVisibility) {
             </Link>
           </Tooltip>
           <Tooltip label="Open inbox">
-            <a className='sub-right-navbar' style={{position: 'relative'}} onClick={handleOpenNotifications}>
+            <a className='sub-right-navbar notif' style={{position: 'relative'}} onClick={handleOpenNotifications}>
               <li className='right-item-option' style={{ display: "flex" }}>
                   <Menu>
                     <MenuButton>
-                      <img className='navImg notificimg' src={inbox} alt="logo"/>
+                      <img className='navImg' src={inbox} alt="logo"/>
                       <span className='unread-notifs'>{unreadNotifications}</span>
                     </MenuButton>
                     <MenuList 
@@ -320,7 +320,7 @@ if (!props.NavbarVisibility) {
             </Tooltip>
           </div>
         }
-      </ul>
+      </div>
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
           <Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>

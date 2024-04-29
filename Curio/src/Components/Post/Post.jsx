@@ -294,7 +294,7 @@ function Post(props) {
                         </CardHeader>
                         {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
                             pollText={props.pollText} voteLength={props.voteLength} handleVoted={handleVoted} handleVote={handleVote} votepick={votepick} hasVoted={hasVoted}
-                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments} pollVote={pollVote}/> ) : (
+                            upvotes={props.upvotes} downvotes={props.downvotes} comments={props.comments} pollVote={pollVote} handleNavigation={handleNavigationToDetails}/>  ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails}>
                             <Heading as='h3' size='md'>{props.title}</Heading>
                             {props.content && <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>
@@ -322,6 +322,7 @@ function Post(props) {
                             flexDirection='row'
                             justifyContent='space-between'
                             flexWrap='wrap'
+                            onClick={handleNavigationToDetails}
                             sx={{
                             '& > button': {
                                 minW: '136px',

@@ -16,6 +16,8 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 function TopCommunities(props) {
 
+  const pagesIndex = useParams();
+
   let pages = [];
 
   const [communityInfo, setCommunityInfo] = useState([]);
@@ -45,10 +47,6 @@ function TopCommunities(props) {
     }
 }
 
-  const lastCommIndex = currentPage * commPerPage;
-  const firstCommIndex = lastCommIndex - commPerPage;
-  const currentComms = communityInfo.slice(firstCommIndex, lastCommIndex);
-
 
   for (let i = 1; i <= Math.ceil(communitiesnumber / commPerPage); i++) {
     pages.push(i);
@@ -73,9 +71,12 @@ function TopCommunities(props) {
           <div className="pagination">
       <div className="d-flex justify-content-evenly mx-auto w-50">
         {pages.slice(0, 5).map((page, index) => (
+         <Link to={`/communities/best/${page}`}>
           <button key={index} onClick={() => setCurrentPage(page)} className={` ${currentPage === page ? "selectedPage" : ""}`}>
             {page}
           </button>
+          </Link>
+
         ))}
             </div>
       </div>
@@ -87,21 +88,23 @@ function TopCommunities(props) {
 
     {showAllPages && (
       <div>
-        {Array.from({ length: Math.ceil((pages.length - 5) / 5) }).map((_, lineIndex) => (
-          <div key={lineIndex} className="d-flex justify-content-evenly mx-auto w-50 mt-2">
-            {pages.slice(5 + lineIndex * 5, 10 + lineIndex * 5).map((page, index) => (
-              <button key={index} onClick={() => setCurrentPage(page)} className={` ${currentPage === page ? "selectedPage" : ""}`}>
-                {page}
-              </button>
-            ))}
-          </div>
-        ))}
-        <div className="d-flex justify-content-evenly mx-auto w-50">
-          <button onClick={() => setShowAllPages(false)}><img src={UpwardsIcon} style={{width: '10px', fill: 'black'}} /></button>
+      {Array.from({ length: Math.ceil((pages.length) / 5) }).map((_, lineIndex) => (
+        <div key={lineIndex} className="d-flex justify-content-evenly mx-auto w-50 mt-2">
+          {pages.slice(5 + lineIndex * 5, 10 + lineIndex * 5).map((page, index) => (
+            <Link to={`/communities/best/${page}`}>
+            <button key={index} onClick={() => setCurrentPage(page)} className={` ${currentPage === page ? "selectedPage" : ""}`}>
+              {page}
+            </button>
+            </Link>
+          ))}
         </div>
+      ))}
+      <div className="d-flex justify-content-evenly mx-auto w-50">
+        <button onClick={() => setShowAllPages(false)}><img src={UpwardsIcon} style={{width: '10px', fill: 'black'}} /></button>
       </div>
-    )}
-  </div>
+    </div>
+  )}
+</div>
   );
 }
 
