@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, useToast } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./ProfileImageUpload.css";
@@ -10,6 +10,16 @@ function ProfileImageUpload() {
   const [bannerImage, setBannerImage] = useState(null);
   const [checkImageBanner, setCheckImageBanner] = useState(false);
   const [checkImageProfile, setCheckImageProfile] = useState(false);
+  const toast = useToast();
+
+  function Toast(message){
+    toast({
+        description: message,
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      })
+  }
 
   useEffect(() => {
     fetchImages();
@@ -61,10 +71,6 @@ function ProfileImageUpload() {
     }
   };
 
-  useEffect(() => {
-    uploadImages();
-  }, [profileImage, bannerImage]);
-
   const handleDragOver = (event) => {
     event.preventDefault();
   };
@@ -80,6 +86,12 @@ function ProfileImageUpload() {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    if (checkImageProfile || checkImageBanner) {
+      uploadImages();
+    }
+  }, [checkImageProfile, checkImageBanner]);
 
 
   const uploadImages = async () => {
@@ -109,16 +121,27 @@ function ProfileImageUpload() {
 
       switch (response.status) {
         case 200:
-          console.log('User preferences updated successfully');
+          Toast('Changes Saved');
           if (checkImageBanner) {
             localStorage.setItem('bannerImage', response.data.banner);
-            setCheckImageBanner(false);
+            const file = bannerImage;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setBannerImage(reader.result); 
+              setCheckImageBanner(false);
+            };
+            reader.readAsDataURL(file);
           }
           if (checkImageProfile) {
             localStorage.setItem('profileImage', response.data.profilePicture);
-            setCheckImageProfile(false);
+            const file = profileImage;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setProfileImage(reader.result);
+              setCheckImageProfile(false);
+            };
+            reader.readAsDataURL(file);
           }
-          await fetchImages();
           break;
         case 404:
           console.log('User preferences not found');

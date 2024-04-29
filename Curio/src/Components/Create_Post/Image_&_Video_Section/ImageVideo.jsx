@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import './ImageVideo.css';
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
-
 function ImageVideo({ onImageUpload }) {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);

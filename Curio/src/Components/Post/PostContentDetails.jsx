@@ -276,7 +276,7 @@ function PostContentDetails(post) {
                             <button onClick={handleBack} style={{backgroundColor: "#EAEDEF", width: "2.1rem", height: "2.1rem"}} className='back-button-post-content signup-back-button me-2 d-flex justify-content-center align-items-center'><BackButton/></button>
                             <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
                             <div className='d-flex flex-column'>
-                                <a className='community-post-name'>r/germany</a>
+                                <a className='community-post-name'>r/{post.subreddit}</a>
                                 <UserPopover user={post.user || post.authorName} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
                                 handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="userPosting" />
                             </div>

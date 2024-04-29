@@ -6,6 +6,7 @@ import { fetchNotificationsFromBackend } from '../Notifications/NotificationsEnd
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
 
 
   useEffect(() => {
@@ -16,6 +17,7 @@ function Notifications() {
     const data = await fetchNotificationsFromBackend();
     if (data) {
       setNotifications(data.notifications || []);
+      setUnreadNotifications(data.unreadNotifications || []);
     }
   }
 
@@ -26,7 +28,7 @@ function Notifications() {
       </h1>
       <div className='notifications-content'>
         <HeadNotMesage />
-        <NotificationsPage notifications={notifications} />
+        <NotificationsPage notifications={notifications} unreadNotifications={unreadNotifications}/>
       </div>
     </div>
   );
