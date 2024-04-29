@@ -42,6 +42,8 @@ function PostContentDetails(post) {
     const [friendInfo, setFriendInfo] = useState({});
     const toast = useToast();
     const postId = post._id;
+    const [isClicked, setIsClicked] = useState(false);
+
 
     const handleIsLocked = (value) => {
         setIsLocked(value);
@@ -193,6 +195,7 @@ function PostContentDetails(post) {
         });
     }
     const handleBack = () => {
+        setIsClicked(false);
         navigate(-1);
     }
     useEffect(() => {
@@ -289,7 +292,23 @@ function PostContentDetails(post) {
                         </div>
                     </div>
                     <h3 className='post-content-header mb-3'>{post.title}</h3>
-                    <p className='post-details-content' dangerouslySetInnerHTML={{ __html: post.content }} />
+
+                    <div onClick={() => setIsClicked(true)}>
+                        {post.isSpoiler && !isClicked ? (
+                            <>
+                                <p className='text-body-spoiler'>
+                                    {post.content}
+                                </p>
+                                {console.log("spoiler", post.isSpoiler)}
+                            </>
+                        ) : (
+                            <>
+                                <p className='post-details-content'>{post.content}</p>
+                                {console.log("spoiler", post)}
+
+                            </>
+                        )}
+                    </div>
                     <Box className=' mb-5 col-12 ' display='flex' flexDirection='row' justifyContent='space-between'>
                             <Box display='flex' flexDirection='row'>
                             <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
