@@ -58,7 +58,6 @@ function FollowersPage(props) {
     const response = await getFollowers('followings');
     if (response) {
       setFollowers(response.data.friendsArray);
-      console.log(response.data.friendsArray);
     }
   }
 

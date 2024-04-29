@@ -12,10 +12,10 @@ function ProfileImageUpload() {
   const [checkImageProfile, setCheckImageProfile] = useState(false);
   const toast = useToast();
 
-  function Toast(message){
+  function Toast(message, info){
     toast({
         description: message,
-        status: 'info',
+        status: info,
         duration: 3000,
         isClosable: true,
       })
@@ -121,7 +121,7 @@ function ProfileImageUpload() {
 
       switch (response.status) {
         case 200:
-          Toast('Changes Saved');
+          Toast('Changes Saved','success');
           if (checkImageBanner) {
             localStorage.setItem('bannerImage', response.data.banner);
             const file = bannerImage;
@@ -144,18 +144,18 @@ function ProfileImageUpload() {
           }
           break;
         case 404:
-          console.log('User preferences not found');
+          Toast('User preferences not found','error');
           break;
         default:
-          console.log('Unexpected response status:', response.status);
+          console.error('Unexpected response status:', response.status);
           break;
       }
     } catch (error) {
       if (error.response) {
         const status = error.response.status;
         if (status === 500) {
-          console.log(
-            '500 Internal Server Error: An unexpected error occurred on the server. Please try again later.'
+          Toast(
+            '500 Internal Server Error: An unexpected error occurred on the server. Please try again later.','error'
           );
         } else {
           console.error('Error sending data to backend:', error.response.data);
@@ -213,7 +213,6 @@ function ProfileImageUpload() {
             </Box>
           </Box>
         </Box>
-        {/* <button type="button" onClick={uploadImages}>Upload Images</button> */}
       </Box>
     </form>
   );
