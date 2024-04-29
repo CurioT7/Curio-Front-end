@@ -6,7 +6,7 @@ import Post from '../../Components/Post/Post'
 import BackToTheTopButton from "./BackToTopButton.jsx";
 import Listing from '../../Components/CommunitiesListing/Listing.jsx'
 import Poll from '../../Components/Poll/ShowPoll.jsx'
-import { fetchPostsFromBackend,SortHomePosts } from './HomeEndPoints.js'
+import { SortHomePosts } from './HomeEndPoints.js'
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
 import { set } from 'mongoose'
@@ -20,6 +20,7 @@ function Home() {
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortType, setSortType] = useState('Best');
   const toast = useToast();
 
   const getSaved = async () => {
@@ -134,8 +135,25 @@ useEffect(() => {
   return () => {
     window.removeEventListener('deletePost', fetchAndSetData);
   }
-}, [pageNumber]);
+}, []);
 
+
+
+useEffect(() => {
+  async function fetchData() {
+  const data = await SortHomePosts(sortType, pageNumber);
+  if (data) {
+    if(sortType==='random'){
+      setRandomPost({ post: data.post, isSelected: true });
+    }
+    else{
+      setPosts(data.posts);
+      setRandomPost({ ...randomPost, isSelected: false });
+    }
+  }
+}
+  fetchData();
+}, [pageNumber]);
 
 useEffect(() => {
   console.log('Polls needed array:', polls);
@@ -147,7 +165,8 @@ async function changeSortType(value,time) {
   
   async function SetData() {
       if (value === 'Hot') {
-          const data = await SortHomePosts("hot");
+          const data = await SortHomePosts("hot", pageNumber);
+          setSortType("hot");
           if (data) {
               setPosts(data.posts || data);
               setRandomPost({ ...randomPost, isSelected: false });
@@ -162,9 +181,10 @@ async function changeSortType(value,time) {
           }
       }
       else if (value === 'New') {
-          const data = await SortHomePosts("new");
+          const data = await SortHomePosts("new", pageNumber);
+          setSortType("new");
           if (data) {
-              setPosts(data.SortedPosts || data);
+              setPosts(data.posts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           }
           else{
@@ -178,9 +198,10 @@ async function changeSortType(value,time) {
           }
       }
       else if (value === 'Top') {
-          const data = await SortHomePosts("top");
+          const data = await SortHomePosts("top", pageNumber);
+          setSortType("top");
           if (data) {
-              setPosts(data.SortedPosts || data);
+              setPosts(data.posts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           }
           else{
@@ -194,9 +215,10 @@ async function changeSortType(value,time) {
           }
       }
       else if (value === 'Best') {
-          const data = await fetchPostsFromBackend();
+          const data = await SortHomePosts("best", pageNumber);
+          setSortType("best");
           if (data) {
-              setPosts(data.SortedPosts || data);
+              setPosts(data.posts || data);
               setRandomPost({ ...randomPost, isSelected: false });
           }
           else{
@@ -208,8 +230,17 @@ async function changeSortType(value,time) {
               isClosable: true,
             })
           }
-          console.log('posts poll', posts.type)
-      }
+      }else if (value === 'Random') {
+        const data = await SortHomePosts("random", pageNumber);
+        setSortType("random");
+        if (data) {
+            setRandomPost({ post: data.post, isSelected: true });
+            
+        }
+        else{
+          setRandomPost({ post:{}, isSelected: true });
+        }
+    }
   }
   SetData();
 }
@@ -274,6 +305,7 @@ useEffect(() => {
                     comments={post.post.comments}
                     voteLength={post.post.voteLength}
                     linkedSubreddit={post.details.subredditName}
+                    isLocked={post.post.isLocked}
                   />) : (
                     <Post
                     _id={post.post._id}
