@@ -5,7 +5,7 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, But
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
-import { fetchNotificationsFromBackend, hideNotification } from "../../Pages/Notifications/NotificationsEndPoints.js";
+import { fetchNotificationsFromBackend, hideNotification, sendReadNotifications } from "../../Pages/Notifications/NotificationsEndPoints.js";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 
 function Notifications_Dropdown() {
@@ -23,20 +23,32 @@ function Notifications_Dropdown() {
     async function fetchAndSetData() {
         const data = await fetchNotificationsFromBackend();
         if (data) {
-            setNotifications(data.notifications || []);
+            setNotifications(data.notifications.reverse() || []);
             setUnreadNotifications(data.unreadNotifications || []);
-            console.log(notifications)
         }
     }
 
     async function handleHideNotification(notificationID) {
         try {
             await hideNotification({notificationID: notificationID});
-            fetchAndSetData();
+            setNotifications(notifications.filter(notification => notification._id !== notificationID));
         } catch (error) {
             console.error('Error hiding notification:', error.message);
         }
     }
+
+    async function handleNotificationClick(notificationID) {
+        try {
+            const isUnread = unreadNotifications.some(un => un._id === notificationID);
+            if (isUnread) {
+                await sendReadNotifications(notificationID); 
+                setUnreadNotifications(prevNotifications => prevNotifications.filter(notification => notification._id !== notificationID));
+            }            
+        } catch (error) {
+            console.error('Error marking notification as read:', error.message);
+        }
+    }
+    
     
     return (
         <div className="notifications-container">
@@ -70,7 +82,10 @@ function Notifications_Dropdown() {
                     </div>
                 </div>
                 {notifications.length > 0 && notifications.map(notification => (
-                    <div key={notification._id} className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}>
+                    <div key={notification._id} 
+                    className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`} 
+                    onClick={() => handleNotificationClick(notification._id)}
+                    >
                         <div className="notifications-item-link" style={{ cursor: 'pointer' }} >
                             <div className="notifications-item-content">
                                 <div className="notifications-item-avatar">

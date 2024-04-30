@@ -364,7 +364,6 @@ function PostContentDetails(post) {
                         ) : (
                             <>
                                 <p className='post-details-content' dangerouslySetInnerHTML={{ __html: post.content}} />
-                                {console.log("spoiler", post)}
 
                             </>
                         )}
