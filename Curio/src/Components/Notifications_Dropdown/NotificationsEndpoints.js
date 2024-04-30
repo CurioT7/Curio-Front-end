@@ -1,8 +1,7 @@
 import axios from "axios";
 
-
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
 async function getUnreadNotifications() {
-  const hostUrl = import.meta.env.VITE_SERVER_HOST;
   try{
   const response = await axios.get(`${hostUrl}/api/notifications/unread`, {
     headers: {
@@ -18,7 +17,6 @@ async function getUnreadNotifications() {
 
 
 async function getAllNotifications() {
-  const hostUrl = import.meta.env.VITE_SERVER_HOST;
   try{
   const response = await axios.get(`${hostUrl}/api/notifications/history`, {
     headers: {
@@ -34,12 +32,11 @@ async function getAllNotifications() {
 
 
 async function markAsViweed () {
-  const hostUrl = import.meta.env.VITE_SERVER_HOST;
   try{
   const response = await axios.patch(`${hostUrl}/api/notifications/mark-all-viewed`, {
     headers: {
       'Content-Type': 'application/json',
-      'authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   });
   return response;
