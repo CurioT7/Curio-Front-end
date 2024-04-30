@@ -11,6 +11,7 @@ import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 function Notifications_Dropdown() {
     const [notifications, setNotifications] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
+    const [isUpdatesDisabled, setIsUpdatesDisabled] = useState(false);
 
     const closeDropdown = () => {
         setDropdownOpen(false);
@@ -49,6 +50,9 @@ function Notifications_Dropdown() {
         }
     }
     
+    const handleToggleUpdates = () => {
+        setIsUpdatesDisabled(prevState => !prevState);
+    }
     
     return (
         <div className="notifications-container">
@@ -117,7 +121,9 @@ function Notifications_Dropdown() {
                                         <PopoverContent>
                                             <PopoverArrow />
                                             <PopoverBody className="popover-body"onClick={() => handleHideNotification(notification._id)}>Hide this notification</PopoverBody>
-                                            <PopoverBody className="popover-body">Disable updates from this community</PopoverBody>
+                                            <PopoverBody className="popover-body" onClick={handleToggleUpdates}>
+                                                {isUpdatesDisabled ? 'Enable updates from this community' : 'Disable updates from this community'}
+                                            </PopoverBody>
                                             <PopoverBody className="popover-body">Turn off this notification type</PopoverBody>
                                         </PopoverContent>
                                     </Popover>
