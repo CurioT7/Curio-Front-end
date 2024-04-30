@@ -95,8 +95,8 @@ function App() {
           <Route path='/r/:Community/Hot' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
           <Route path='/r/:Community/New' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
           <Route path='/r/:Community/Top' element={<CommuntiyPage setSubreddit={setSubreddit}/>} />
-          <Route path='/r/:Community/Random' element={<CommuntiyPage/>} />
-          <Route path='/profile/:username' element={<ProfilePage />}/>
+          <Route path='/r/:Community/Random' element={<CommuntiyPage/>}/>
+          <Route path='/profile/:username' element={<ProfilePage setSubreddit={setSubreddit}/>}/>
           <Route path='/post/post-details/:postID' element={<PostDetails/>}/>
           <Route path='/communities/best/:pagesIndex' element={<TopCommunities hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />
           <Route path='/user/:username' element={<UserPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>} />

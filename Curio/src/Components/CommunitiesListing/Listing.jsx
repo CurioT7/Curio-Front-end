@@ -40,7 +40,7 @@ function Listing(props) {
     const savedListValue = localStorage.getItem('listValue');
     
     if (props.isHome) {
-      setListValue(savedListValue);
+      setListValue('Best');
       if (savedListValue === null) {
         localStorage.setItem('listValue', 'Best');
        
