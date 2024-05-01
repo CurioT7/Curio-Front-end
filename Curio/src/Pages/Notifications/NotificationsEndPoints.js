@@ -103,7 +103,7 @@ export async function disableNotification(notificationID) {
     }
 }
 
-export async function markAsViewed() {
+export async function markasViewed() {
     try{
         const response = await axios.patch(`${serverHost}/api/notifications/mark-all-viewed`, {
             headers: {

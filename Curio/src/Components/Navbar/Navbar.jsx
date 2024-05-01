@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { CiSearch } from "react-icons/ci";
 import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
-import { fetchNotificationsFromBackend, markAsViweed } from '../../Pages/Notifications/NotificationsEndPoints';
+import { fetchNotificationsFromBackend, markasViewed } from '../../Pages/Notifications/NotificationsEndPoints';
 
 import Trending from './Trending';
 import SearchBy from './SearchBy';
@@ -65,7 +65,7 @@ function NavbarComponent(props) {
 }
 
   async function handleMarkAsRead(){
-    const response = await markAsViweed();
+    const response = await markasViewed();
     if(response.success) {
         setIsRead(true);
     }
