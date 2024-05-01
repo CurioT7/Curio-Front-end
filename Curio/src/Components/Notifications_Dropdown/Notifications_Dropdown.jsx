@@ -44,12 +44,11 @@ function Notifications_Dropdown() {
         try {
             const notification = notifications.find(notification => notification._id === notificationID);
             if (notification.type === "subreddit") {
-                console.log(notification.subredditName);
-                await disableNotification({ subredditName : notification.subredditName });
+                await disableNotification({ subredditName: notification.subredditName });
             } else if (notification.type === "post") {
-                await disableNotification({ PostId : notificationID });
+                await disableNotification({ PostId: notificationID });
             } else if (notification.type === "comment") {
-                await disableNotification({ commentId : notification.commentId });
+                await disableNotification({ commentId: notification.commentId });
             }
         } catch (error) {
             console.error('Error Disable notification:', error.message);
@@ -71,7 +70,7 @@ function Notifications_Dropdown() {
                 navigate(`/post/post-details/${notification.postId}`);
             } else if (notification.type === "comment") {
 
-            } else if (notification.type === "New Follower") {
+            } else if (notification.type === "Friend Request") {
                 navigate(`/profile/${username}`);
             }
         } catch (error) {
@@ -141,13 +140,16 @@ function Notifications_Dropdown() {
                                         <PopoverTrigger>
                                             <Button
                                                 variant='ghost'
-                                                colorScheme='gray'><SlOptions /></Button>
+                                                colorScheme='gray'
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}><SlOptions /></Button>
                                         </PopoverTrigger>
                                         <PopoverContent>
                                             <PopoverArrow />
                                             <PopoverBody className="popover-body" onClick={() => handleHideNotification(notification._id)}>Hide this notification</PopoverBody>
                                             <PopoverBody className="popover-body" onClick={() => handleEnableNotification(notification._id)}>
-                                                {notification.isDisabled === 0 ? 'Enable updates from this community' : 'Disable updates from this community'}
+                                                {notification.isDisabled === "true" ? 'Enable updates from this community' : 'Disable updates from this community'}
                                             </PopoverBody>
                                         </PopoverContent>
                                     </Popover>
