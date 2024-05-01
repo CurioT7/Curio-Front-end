@@ -35,8 +35,8 @@ function NavbarComponent(props) {
   const [searchCommunities, setSearchCommunities] = React.useState([]);
   const [searchPeople, setSearchPeople] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
-  const [unreadNotifications, setUnreadNotifications] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
   const [isRead, setIsRead] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
-import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo,fetchUserName } from "./CommunityEndPoints";
+import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo} from "./CommunityEndPoints";
 function CommunityBody(props) {
   const navigate = useNavigate();
   const[posts, setPosts] = React.useState([])
@@ -36,11 +36,11 @@ React.useEffect(() => {
 React.useEffect(() => {
   async function fetchAndSetData() {
       const subCurioData = await fetchSubCurioInfo(Community);
-      const userData = await fetchUserName();
-      if (subCurioData && userData) {
+      
+      if (subCurioData) {
           subCurioData.subreddit.moderators.map((mod)=>{
             
-            if(mod.username===userData.username){
+            if(mod.username===localStorage.getItem('username')){
               setIsMod(true);
             }
           })
