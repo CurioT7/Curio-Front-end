@@ -8,6 +8,12 @@ import Posting_Cards from "../../Components/Create_Post/Right_Section/Posting_Ca
 
 function Createpost(props) {
   const navigate = useNavigate();
+  const [selectedCommunity, setSelectedCommunity] = useState(null); 
+
+    const handleCommunitySelect = (community) => {
+        setSelectedCommunity(community);
+    };
+
   useEffect(() => {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -19,19 +25,21 @@ function Createpost(props) {
       }
     }, []);
   return (
-    <div className='container-create-post container'>
+    <div className='container-create-post' style={{marginTop:'3rem'}}>
+      <div className="container container-create-post-2" style={{display:'flex'}}>
         <div className='left-container-post'>
-          <Box className="cont-create-post">
-            <Text className='create-post-title'>Create Post</Text>
-          </Box>
-          <Community/>
-          <div className='new-post-form'>
-            <NewPostForm/>
+            <Box className="cont-create-post">
+              <Text className='create-post-title'>Create Post</Text>
+            </Box>
+            <Community onSelect={handleCommunitySelect} subreddit={props.subreddit}/>
+            <div className='new-post-form'>
+              <NewPostForm community={selectedCommunity ? selectedCommunity.replace(/^r\//, '').replace(/^u\//, '') : null} />
+            </div>
           </div>
-        </div>
-        <div className='right-container-post'>
-          <Posting_Cards/>
-        </div>
+          <div className='right-container-post'>
+            <Posting_Cards community={selectedCommunity}/>
+          </div>
+      </div>
     </div>
   );
 }

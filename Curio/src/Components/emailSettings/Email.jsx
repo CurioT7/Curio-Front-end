@@ -90,41 +90,31 @@ function Email (){
         fetchAndSetData();
     }, []);
     
-    // console test
-    console.log(` New user: ${newFollowerEmail}`)
-    console.log(`Chat: ${chatRequestEmail}`)
-    console.log(`Unsub: ${unsubscribeFromAllEmails}`)
-    // *-----------------------------------------------*//
     return(
-        <Box className='container'>
-            <Box className='settings-section col'>
-                <Box className="user-settings-header">
-                    <h2 className="settings-heading ">Manage Emails</h2>
-                    <h3 className="headings-titles text-uppercase fw-bold mb-3">messages</h3>
-                    <Flex mb={5} alignItems='center'>
-                        <Titles title='Chat requests'/>
-                        <Spacer/>
-                        <Switch  size='lg' isChecked={chatRequestEmail} onChange={handleChatRequestEmail}/>
-                    </Flex>
-                    <h3 className="headings-titles text-uppercase fw-bold mb-3">Activity</h3>
-                    <Flex mb={5} alignItems='center'>
-                        <Titles title='New user welcome'
-                                 />
-                        <Spacer/>
-                        <Switch size='lg' isChecked={newFollowerEmail} onChange={handleNewFollowerEmail}/>
+        <Box className="user-settings-header">
+            <h3 className="headings-titles text-uppercase fw-bold mb-3">messages</h3>
+            <Flex mb={5} alignItems='center'>
+                <Titles title='Chat requests'/>
+                <Spacer/>
+                <Switch  size='lg' isChecked={chatRequestEmail} onChange={handleChatRequestEmail}/>
+            </Flex>
+            <h3 className="headings-titles text-uppercase fw-bold mb-3">Activity</h3>
+            <Flex mb={5} alignItems='center'>
+                <Titles title='New user welcome'
+                            />
+                <Spacer/>
+                <Switch size='lg' isChecked={newFollowerEmail} onChange={handleNewFollowerEmail}/>
 
-                    </Flex>
-                    <h3 className="headings-titles text-uppercase fw-bold mb-3"></h3>
-                    <Flex mb={5} alignItems='center'>
-                        <Titles title='Unsubscribe from all emails'
-                                 />
-                        <Spacer/>
-                        <Switch size='lg' isChecked={unsubscribeFromAllEmails} onChange={handleUnsubscribeFromAllEmails}/>
+            </Flex>
+            <h3 className="headings-titles text-uppercase fw-bold mb-3"></h3>
+            <Flex mb={5} alignItems='center'>
+                <Titles title='Unsubscribe from all emails'
+                            />
+                <Spacer/>
+                <Switch size='lg' isChecked={unsubscribeFromAllEmails} onChange={handleUnsubscribeFromAllEmails}/>
 
-                    </Flex>
-                   
-                </Box>
-            </Box>
+            </Flex>
+            
         </Box>
     )
 }

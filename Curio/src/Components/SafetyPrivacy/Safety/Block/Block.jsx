@@ -1,8 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Button, Flex, useToast } from '@chakra-ui/react';
-// import "./Safety.css";
 import axios from 'axios';
+import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../../UserSetting/UserSettingsEndPoints';
+import { Link } from 'react-router-dom';
+
 
 function Safety() {
   const serverHost = import.meta.env.VITE_SERVER_HOST;
@@ -19,49 +21,34 @@ function Safety() {
       })
   }
   /////////////////////////////////// Fetch //////////////////////////////
-  useEffect(() => {
-    async function fetchBlockedUsers() {
-        try {
-            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`,
-            {
-              headers: {
-                  authorization: `Bearer ${localStorage.getItem('token')}` 
-              }
-            });
-            // setBlockedUsers(response.data.block); // Set blocked users directly
-            setBlockedUsers(response.data.viewBlockedPeople || []);
-        } catch (error) {
-            if (error.response){
-                switch (error.response.status) {
-                    case 404:
-                        Toast('User preferences not found');
-                        break;    
-                    case 500:
-                        Toast('An unexpected error occurred on the server. Please try again later.');
-                        break;
-                    default:
-                        break;
-                    }
-            }
+  async function fetchBlockedUsers() {
+    try {
+        const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`,
+        {
+          headers: {
+              authorization: `Bearer ${localStorage.getItem('token')}` 
+          }
+        });
+        setBlockedUsers(response.data.viewBlockedPeople || []);
+        
+    } catch (error) {
+        if (error.response){
+            switch (error.response.status) {
+                case 404:
+                    Toast('User preferences not found');
+                    break;    
+                case 500:
+                    Toast('An unexpected error occurred on the server. Please try again later.');
+                    break;
+                default:
+                    break;
+                }
         }
     }
+}
+  useEffect(() => {
     fetchBlockedUsers();
   }, []);
-
-  /////////////////////////////////// Block User ////////////////////////////////
-  const patchBlockUser = (name) => {
-    axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
-      viewBlockedPeople: [...blockedUsers, { username: name}]//, blockedAt: new Date(), timeAgo: 'just now' }]
-    },{
-      headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}` 
-      }
-    }).then(response => {
-    })
-    .catch(error => {
-    });
-  };
-
   
   const postBlockUser = async (username) => {
     try {
@@ -89,7 +76,7 @@ function Safety() {
             Toast(`${username} already blocked`);
             break;
           case 500:
-            Toast(`An unexpected error occurred on the server. Please try again later.`);
+            Toast(`Request is unsuccessful.`);
             break;
           default:
             break;
@@ -101,17 +88,21 @@ function Safety() {
   
   const handleAddBlockedUser = async () => {
     if (blockedUserInput.trim() !== '') {
-      const blockResult = await postBlockUser(blockedUserInput);
-      if (blockResult === true) {
-        patchBlockUser(blockedUserInput);
-        const newUser = { username: blockedUserInput };
-        setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, newUser]);
-        setBlockedUserInput('');
-      }
+        const blockResult = await postBlockUser(blockedUserInput);
+        // if (blockResult === true) {
+        //     const data = {
+        //         viewBlockedPeople: [...blockedUsers, { username: blockedUserInput }]
+        //     };
+            // if(blockedUserInput === localStorage.getItem('username')){
+            //     Toast('You can not block yourself');
+            // }
+            setBlockedUserInput('');
+            fetchBlockedUsers();
+        }
     }
-  };
-//////////////////////////////////// Unblock /////////////////////////////////
-    const postunBlockUser = (username) => {
+
+
+  const postunBlockUser = (username) => {
         axios.post(`${serverHost}/api/User/unblock`, {
             usernameToUnblock: username
         },{
@@ -139,26 +130,11 @@ function Safety() {
         });
     };
 
-    const patchUnblockUser = (name) => {
-      const updatedBlockedUsers = blockedUsers.filter(user => user.username !== name);
-      axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
-        viewBlockedPeople: updatedBlockedUsers
-      }, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }).then(response => {
-      }).catch(error => {
-      });
-    };
-
 
     const handleRemoveBlockedUser = index => {
         const updatedBlockedUsers = [...blockedUsers];
-        const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].username;
+        const unblockedUser = updatedBlockedUsers.splice(index, 1)[0].blockedUsername;
         setBlockedUsers(updatedBlockedUsers);
-        patchUnblockUser(unblockedUser);
-        // Call postunBlockUser here after removing the user
         postunBlockUser(unblockedUser);
     };
 
@@ -172,7 +148,9 @@ function Safety() {
     </Box>
     {blockedUsers.length > 0 && blockedUsers.map((user, index) => (
         <Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
-          <Text>{user.username}</Text> 
+          <Link to={`/user/${user.blockedUsername}`} className="settings-link">
+          <Text>{user.blockedUsername}</Text> 
+          </Link>
           <Button className="btn btn-primary" onClick={() => {handleRemoveBlockedUser(index); handleUnblockUser();}} bg="transparent" border="none">Remove</Button>
         </Flex>
     ))}

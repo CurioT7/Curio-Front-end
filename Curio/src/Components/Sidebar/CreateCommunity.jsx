@@ -62,6 +62,7 @@ function CreateCommunity(props) {
       const response = await createCommunity({data});
       if (response.status === 200 || response.status === 201) {
         window.dispatchEvent(new Event('communityCreated'));
+        navigate(`/r/${communityName}`);
         props.onHide();
       }
       if (response.response.status === 400){
@@ -154,7 +155,7 @@ function CreateCommunity(props) {
                   {type === 'private' && (selectedType === type ? <PrivateActive /> : <PrivateUnactive />)}
                   <div className="mx-3 d-flex flex-column">
                     <p style={{ color: '#000000', fontSize: '0.875rem', fontWeight: '0!important' }} className='mb-0 mt-0'>{type.charAt(0).toUpperCase() + type.slice(1)}</p>
-                    <p className='create-community-muted-secondary m-0'>Anyone can view, post, and comment to this community.</p>
+                    <p className='create-community-muted-secondary m-0'>{type === "public" ? "Anyone can view, post, and comment to this community" : type === "restricted" ? "Anyone can view, but only approved users can contribute" : "Only approved users can view and submit to this community"}</p>
                   </div>
                   <div className='ms-auto'>
                   {type === 'public' && (selectedType === type ? <RadioButtonActive /> : <RadioButtonUnactive />)}
@@ -168,8 +169,8 @@ function CreateCommunity(props) {
         <hr className='w-100'></hr>
         <div className="d-flex p-3 px-4 radio-menu-item" onClick={handleMatureChange}>
             <Mature />
-            <div className="mx-3 d-flex flex-column">
-              <h6 style={{ color: '#000000', fontSize: '0.875rem' }} className='mb-0'>Mature (18+)</h6>
+            <div className="mx-3 d-flex flex-column justify-items-start align-items-start">
+              <h6 style={{ color: '#000000', fontSize: '0.875rem', position: "static" }} className='mt-0 mb-2'>Mature (18+)</h6>
               <p className='create-community-muted-secondary m-0'>Must be over 18 to view and contribute</p>
             </div>
             <div className='form-check form-switch ms-auto d-flex align-items-center'>

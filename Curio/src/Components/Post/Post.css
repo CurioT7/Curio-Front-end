@@ -13,11 +13,14 @@
     font-weight: 400;
     font-size: 15px;
 }
-.text-body-spoiler{
-    font-weight: 400;
-    font-size: 15px;
-    background-color: #000000;
-    
+.text-body-spoiler {
+    color: black;
+    background-color: black;
+}
+
+.text-body-spoiler.clicked {
+    color: black;
+    background-color: white;
 }
 .post-footer-button{
     background-color: #EAEDEF;
@@ -56,6 +59,13 @@
     font-size: 0.9rem;
     font-weight: 600;
 }
+
+.userPosting{
+    color: "#2a3c42";
+    font-size: 12px;
+    font-weight: 300;
+}
+
 .community-post-name:hover{
     color: #0045ac;
     cursor: pointer;
@@ -67,6 +77,7 @@
 
 .posts-content-container{
   margin-left: 22rem;
+  margin-top: 5rem;
 }
 
 .post-content-header{
@@ -239,3 +250,60 @@
     font-size: 12px;
     margin-top: 0.55rem;
 }
+
+.popoverAvatar{
+    margin-top: 20px;
+}
+
+#overlay2 .popover-arrow {
+    display: none;
+  }
+
+#overlay2 {
+    background-color: rgb(249, 250, 251);
+    color: rgb(19, 19, 19);
+    width: 288px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+    height: 220px;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .popOverUsername{
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .numberHeader{
+    font-size: 12px;
+  }
+
+  .membersText{
+    font-size: 12px;
+  }
+
+  .popOverCake{
+    font-size: 12px;
+    color: rgb(90, 105, 118);
+  }
+
+  .popoverFollow{
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .karmaText{
+    color: #0045AC;
+    font-size: 12px;
+  }
+
+  .popoverChat{
+    background-color: #eaedef;
+    border: none;    
+    border-radius: 99px;
+    color: black;
+    font-weight: 600;
+    font-size: 12px;
+    
+  }

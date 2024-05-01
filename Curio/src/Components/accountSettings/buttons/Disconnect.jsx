@@ -5,14 +5,12 @@ import PasswordErrorMessage from './PasswordErrorMessage'
 import { MdMarkEmailUnread } from "react-icons/md";
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-function Disconnect(props){
+function Disconnect(){
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")
     const [wrongPass,setWrongPass]=React.useState(false)
     const serverHost = import.meta.env.VITE_SERVER_HOST;
     const toast = useToast()
-    const navigate = useNavigate();
     function Toast(){
         toast({
             title: "account disconnected successfully",
@@ -33,7 +31,8 @@ function Disconnect(props){
               setWrongPass(false)
               onClose()
               Toast()
-              window.location.reload();
+              setTimeout(() => {
+              window.location.reload();}, 500);
             
         } catch(error){
            
@@ -59,7 +58,7 @@ function Disconnect(props){
     function handleSubmit(e){
         e.preventDefault();
         sendDataToBackend();
-        console.log("ddadw")
+        
         
     }
     const buttonStyle ={

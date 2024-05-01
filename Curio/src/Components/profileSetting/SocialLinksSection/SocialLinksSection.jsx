@@ -1,7 +1,7 @@
 import { Box, Text, Spacer } from '@chakra-ui/react';
 import Socialmodal from '../Socialmodal/Socialmodal';
 
-function SocialLinksSection() {
+function SocialLinksSection({ SocialLinks }) {
   const buttonStyle = {
     borderRadius: "30px",
     padding: "10px 15px", 
@@ -18,7 +18,9 @@ function SocialLinksSection() {
           <ul className='list-unstyled d-flex flex-wrap gap-2'>
             <li className='social-link d-flex align-items-center rounded-pill px-3 py-2'>
               <Spacer />
-              <Socialmodal buttonStyle={buttonStyle} />
+              <div style={{display:'flex', flexWrap:'wrap', gap:'0.5em'}}>
+                <Socialmodal buttonStyle={buttonStyle} SocialLinks={SocialLinks} validate={'withCancel'}/>
+              </div>
             </li>
           </ul>
         </nav>

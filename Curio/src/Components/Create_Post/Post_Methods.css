@@ -13,10 +13,21 @@
 .button-post-method{
     width: 245px;
     font-size: 14px;
-    /* border: 1px solid black;
-    border-radius: 0; */
 }
 .button-post-method:hover{
     background-color: lightblue;
 }
+.post-methods {
+    overflow-x: auto; /* Allow horizontal scrolling */
+    white-space: nowrap; /* Prevent button wrapping */
+  }
+@media(max-width: 774px){
+    .button-method {
+        display: inline-block; /* Display buttons as inline blocks */
+      }
+    .button-post-method {
+      flex: 0 0 auto; /* Ensure buttons don't shrink */
+    }
+  }
+  
   

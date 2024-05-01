@@ -4,7 +4,8 @@ import  './ResetPass.css'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import logo from "../../assets/Curio_logo.png";
 import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
-import { useParams } from 'react-router-dom';
+import { useParams , useNavigate} from 'react-router-dom';
+import { useToast, } from '@chakra-ui/react';
 
 function ResetPass(props) {
     const [password, setPassword] = useState('');
@@ -12,6 +13,20 @@ function ResetPass(props) {
     const [checked, setChecked] = useState(false);
     const [match, setMatch] = useState(true);
     const {token} = useParams();
+    localStorage.setItem('resetToken', token);
+    const navigate = useNavigate();
+    const toast = useToast()
+    function Toast(){
+        toast({
+            
+            description: "Password reset Failed",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
+
+    
 
     useEffect(() => {
         if(password !== newPassword){
@@ -21,16 +36,20 @@ function ResetPass(props) {
         }
     }, [password, newPassword]);
 
-    const handleResetPassword = async (event) => {
-        event.preventDefault();
 
-        try {
-            const response = await resetPassword(password);
-            console.log('Success:', response);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+
+const handleResetPassword = async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await resetPassword(password);
+    console.log('Success:', response);
+    navigate('/login');
+  } catch (error) {
+    console.error('Error:', error);
+    Toast() 
+ }
+};
 
     useEffect(() => {
         props.hideSidebar();

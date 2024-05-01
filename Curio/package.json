@@ -37,11 +37,12 @@
     "react-modal": "^3.16.1",
     "react-pro-sidebar": "^1.1.0",
     "react-quill": "^2.0.0",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.24.0",
-    "@babel/preset-react": "^7.23.3",
+    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-react": "^7.24.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.3.1",
     "@types/react": "^18.2.56",

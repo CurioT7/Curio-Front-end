@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Avatar, IconButton, Box, Button } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import { LuShare } from "react-icons/lu";
@@ -29,8 +29,25 @@ function PostComments(props) {
     const [reportReason, setReportReason] = useState('');
     const [isSaved, setIsSaved] = useState(false);
     const [isCommentAuthor, setIsCommentAuthor] = useState(false);
+    const [votes, setVotes] = useState(props.commentUpvotes);
+    const dropdownRef = useRef(null);
+
     const toast = useToast();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowControls(false);
+        }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdownRef]);
+
     const handleOpenReportModal = () => {
         setReportReasonModalOpen(true);
     }
@@ -60,20 +77,83 @@ function PostComments(props) {
         setShowControls(!showControls);
     };
 
-    const makeCommentUpvoted = () => {
+    
+
+    const makeCommentUpvoted = async () => {
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (upvoted) {
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
         } else {
-            setUpvoted(true);
-            setDownvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: 1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(true);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         }
     }
-    const makeCommentDownvoted = () => {
+    const makeCommentDownvoted = async () => {
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (downvoted) {
-            setDownvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
         } else {
-            setDownvoted(true);
-            setUpvoted(false);
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props.id,
+                itemName: "comment",
+                direction: -1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setDownvoted(true);
+                setVotes(votes - 1);
+            }
         }
     }
     const handleSave = async () => {
@@ -140,6 +220,7 @@ function PostComments(props) {
             isClosable: true,
             })
             setIsSaved(false);
+            window.dispatchEvent(new Event('hideOrSave'));
         }
         }
         catch(err){
@@ -229,7 +310,7 @@ function PostComments(props) {
                 <div className="votes-hover-effect d-flex justify-content-center align-items-center p-3">
                     <button onClick={makeCommentUpvoted} className=" upvotes-footer-button d-flex justify-content-center align-items-center">{!upvoted && <Upvotes />} {upvoted && <FilledUpvote colorFill="#D93A00"/>}</button>
                 </div>
-                <span className="comment-upvotes">{props.commentUpvotes}</span>
+                <span className="comment-upvotes">{votes}</span>
                 <div className="votes-hover-effect d-flex justify-content-center align-items-center p-3">
                     <button onClick={makeCommentDownvoted} className=" downvotes-footer-button d-flex justify-content-center align-items-center">{!downvoted && <Downvotes />}{downvoted && <FilledDownvote colorFill="#6A5CFF"/>}</button>
                 </div>
@@ -241,7 +322,7 @@ function PostComments(props) {
                 <button className="post-dropdown-control d-flex justify-content-center align-items-center p-2" onClick={handleEllipsisClick}>
                     <Ellipsis className="ellipsis-img" />
                 </button>
-                {showControls && <div className="post-dropdown" style={{ 
+                {showControls && <div className="post-dropdown" ref={dropdownRef} style={{ 
                                                     display: showControls ? 'flex' : 'none',
                                                     flexDirection: 'column',
                                                     alignItems: 'flex-start',

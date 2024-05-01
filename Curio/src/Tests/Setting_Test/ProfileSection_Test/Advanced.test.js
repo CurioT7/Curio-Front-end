@@ -1,54 +1,58 @@
 import React from 'react';
-import { render, fireEvent, getByRole  } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Advanced from '../../../Components/profileSetting/Advanced/Advanced';
+import { sendUserDataToBackend } from '../../../Components/UserSetting/UserSettingsEndPoints';
 
-test('renders advanced settings properly', () => {
-  const { getByText } = render(<Advanced />);
-  
-  // Test if headings and descriptions are rendered correctly
-  expect(getByText('Allow people to follow you')).toBeInTheDocument();
-  expect(getByText('Followers will be notified about posts you make to your profile and see them in their home feed.')).toBeInTheDocument();
-  expect(getByText('Content visibility')).toBeInTheDocument();
-//   expect(getByTestId('heading-descrip')).toBeInTheDocument();
-  expect(getByText('Active in communities visibility')).toBeInTheDocument();
-  expect(getByText('Show which communities I am active in on my profile.')).toBeInTheDocument();
-//   expect(getByText('Clear history')).toBeInTheDocument();
-//   expect(getByRole('button', { name: 'Clear history' })).toBeInTheDocument();
-});
+jest.mock('../../../Components/UserSetting/UserSettingsEndPoints', () => ({
+  sendUserDataToBackend: jest.fn(),
+}));
 
-test('follow checkbox toggles properly', () => {
-  const { getByTestId } = render(<Advanced />);
-  const followCheckbox = getByTestId('follow-checkbox');
-  
-  // Test if initial state is true
-  expect(followCheckbox.checked).toBe(true);
-  
-  // Click checkbox and test if state changes to false
-  fireEvent.click(followCheckbox);
-  expect(followCheckbox.checked).toBe(false);
-});
+describe('<Advanced />', () => {
+  test('renders without crashing', () => {
+    render(<Advanced userData={{}} />);
+  });
 
-test('content visibility checkbox toggles properly', () => {
-  const { getByTestId } = render(<Advanced />);
-  const contentVisibilityCheckbox = getByTestId('content-visibility-checkbox');
+  test('displays correct titles and descriptions', () => {
+    const { getByText } = render(<Advanced userData={{}} />);
+    expect(getByText('Allow people to follow you')).toBeInTheDocument();
+    expect(getByText('Followers will be notified about posts you make to your profile and see them in their home feed.')).toBeInTheDocument();
+    expect(getByText('Content visibility')).toBeInTheDocument();
+    expect(getByText('Active in communities visibility')).toBeInTheDocument();
+    expect(getByText('Show which communities I am active in on my profile.')).toBeInTheDocument();
+    expect(getByText('Delete your post views history.')).toBeInTheDocument();
+  });  
   
-  // Test if initial state is true
-  expect(contentVisibilityCheckbox.checked).toBe(true);
-  
-  // Click checkbox and test if state changes to false
-  fireEvent.click(contentVisibilityCheckbox);
-  expect(contentVisibilityCheckbox.checked).toBe(false);
-});
 
-test('communities visibility checkbox toggles properly', () => {
-  const { getByTestId } = render(<Advanced />);
-  const communitiesVisibilityCheckbox = getByTestId('communities-visibility-checkbox');
-  
-  // Test if initial state is true
-  expect(communitiesVisibilityCheckbox.checked).toBe(true);
-  
-  // Click checkbox and test if state changes to false
-  fireEvent.click(communitiesVisibilityCheckbox);
-  expect(communitiesVisibilityCheckbox.checked).toBe(false);
+  test('allows toggling "Allow people to follow you"', async () => {
+    const { getByTestId } = render(<Advanced userData={{ allowFollow: true }} />);
+    const followSwitch = getByTestId('follow-switch');
+    
+    fireEvent.click(followSwitch);
+    expect(sendUserDataToBackend).toHaveBeenCalledWith({ allowFollow: false });
+  });
+
+  test('allows toggling "Content visibility"', async () => {
+    const { getByTestId } = render(<Advanced userData={{ contentVisibility: true }} />);
+    const contentVisibilitySwitch = getByTestId('content-visibility-switch');
+
+    fireEvent.click(contentVisibilitySwitch);
+    expect(sendUserDataToBackend).toHaveBeenCalledWith({ contentVisibility: false });
+  });
+
+  test('allows toggling "Active in communities visibility"', async () => {
+    const { getByTestId } = render(<Advanced userData={{ activeInCommunityVisibility: true }} />);
+    const communitiesVisibilitySwitch = getByTestId('communities-visibility-switch');
+
+    fireEvent.click(communitiesVisibilitySwitch);
+    expect(sendUserDataToBackend).toHaveBeenCalledWith({ activeInCommunityVisibility: false });
+  });
+
+  test('allows clicking "Clear history" button', async () => {
+    const { getByTestId } = render(<Advanced userData={{ clearHistory: false }} />);
+    const clearHistoryButton = getByTestId('Clear-history');
+
+    fireEvent.click(clearHistoryButton);
+    expect(sendUserDataToBackend).toHaveBeenCalledWith({ clearHistory: true });
+  });
 });
