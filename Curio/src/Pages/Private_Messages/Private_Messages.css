@@ -1,0 +1,31 @@
+.private_message_content{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #edeff1;
+    height: 100vh;
+}
+.private_message_table{
+    background-color: white;
+    padding: 10px 20px;
+    width: 920px;
+    height: 530px;
+}
+.private_message_title{
+    font-size: 18px;
+    font-weight: normal;
+    margin: 10px 0;
+    font-weight: 450;
+}
+.private_message_body{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.send_private_message{
+    text-transform: uppercase;
+    font-weight: bold;
+    width: 70px;
+}

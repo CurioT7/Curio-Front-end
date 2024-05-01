@@ -14,12 +14,9 @@ export async function fetchNotificationsFromBackend() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log("Try Test")
-        console.log(responseUnreadNotification)
-        console.log("responseUnreadNotification.data.unreadNotifications")
         return {
             notifications: responseAllNotification.data.notifications,
-            unreadNotifications: responseUnreadNotification.data.filteredNotifications,
+            unreadNotifications: responseUnreadNotification.data.unreadNotifications,
             unreadNumber: responseUnreadNotification.data.unreadCount,
         };
         
@@ -48,6 +45,20 @@ export async function hideNotification(notificationID) {
         throw error;
     }
 }
+
+// export async function disableNotification(notificationID) {
+//     try {
+//         const response = await axios.post(`${serverHost}/api/notifications/hide`, notificationID, {
+//             headers: {
+//                 Authorization: `Bearer ${localStorage.getItem('token')}`
+//             }
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error('Error hiding notification:', error.message);
+//         throw error;
+//     }
+// }
 
 export async function sendReadNotifications(notificationID) {
     try {
