@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { CiSearch } from "react-icons/ci";
 import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
-import { getUnreadNotifications, getAllNotifications, markAsViweed } from '../Notifications_Dropdown/NotificationsEndpoints';
+import { fetchNotificationsFromBackend, markAsViweed } from '../../Pages/Notifications/NotificationsEndPoints';
 
 import Trending from './Trending';
 import SearchBy from './SearchBy';
@@ -51,14 +51,14 @@ function NavbarComponent(props) {
   };
 
   async function handleUnreadNotifications(){
-    const unreadNotifications = await getUnreadNotifications();
-    if(unreadNotifications){
-      setUnreadNotifications(unreadNotifications.data.unreadCount);
+    const response = await fetchNotificationsFromBackend();
+    if(response){
+      setUnreadNotifications(response.unreadNumber);
     }
   }
 
   async function handleAllNotifications() {
-    const response = await getAllNotifications();
+    const response = await fetchNotificationsFromBackend();
     if(response) {
         setNotifications(response.data.notifications);
     }

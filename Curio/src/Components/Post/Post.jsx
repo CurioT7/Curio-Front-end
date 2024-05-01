@@ -309,6 +309,15 @@ const postCategory = async (postID) => {
                 isSpoiler: props.isSpoiler,
                 isMod: props.isMod,
                 isLocked: isLocked,
+                voteLength: props.voteLength,
+                pollTitle: props.pollTitle,
+                pollText: props.pollText,
+                optionNames: props.optionNames,
+                votes: props.votes,
+                didVote: props.didVote,
+                optionSelected: props.optionSelected,
+                type: props.type,
+                pollEnded: props.pollEnded,
                 dateViewed: new Date().toISOString()
             }
             const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -345,6 +354,15 @@ const postCategory = async (postID) => {
                 isMod: props.isMod,
                 isSpoiler: props.isSpoiler,
                 isLocked: isLocked,
+                voteLength: props.voteLength,
+                pollTitle: props.pollTitle,
+                pollText: props.pollText,
+                optionNames: props.optionNames,
+                votes: props.votes,
+                didVote: props.didVote,
+                optionSelected: props.optionSelected,
+                type: props.type,
+                pollEnded: props.pollEnded,
                 dateViewed: new Date().toISOString()
             }
             console.log(err);
@@ -408,9 +426,9 @@ const postCategory = async (postID) => {
                             </Flex>
                         </CardHeader>
                         {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
-                            pollText={props.pollText} voteLength={props.voteLength}
-                            handleNavigation={handleNavigationToDetails}/>  ) : (
-                        <CardBody className='py-0' onClick={handleNavigationToDetails}>
+                            pollText={props.pollText} voteLength={props.voteLength} handleNavigation={handleNavigationToDetails}
+                            didVote={props.didVote} optionSelected={props.optionSelected} pollEnded={props.pollEnded} /> ) : (
+                        <CardBody className='py-0' onClick={handleNavigationToDetails} >
                             <Heading as='h3' size='md'>{props.title}</Heading>
                      {props.isSpoiler ? (
                             <>

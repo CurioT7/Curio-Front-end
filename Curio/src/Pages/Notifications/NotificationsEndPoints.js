@@ -16,7 +16,8 @@ export async function fetchNotificationsFromBackend() {
         });        
         return {
             notifications: responseAllNotification.data.notifications,
-            unreadNotifications: responseUnreadNotification.data.unreadNotifications
+            unreadNotifications: responseUnreadNotification.data.unreadNotifications,
+            unreadNumber: responseUnreadNotification.data.unreadCount
         };
     } catch (error) {
         if (error.response && error.response.status === 401) {
@@ -57,3 +58,19 @@ export async function disableNotification(notificationID) {
         throw error;
     }
 }
+
+export async function markAsViweed () {
+    try{
+    const response = await axios.patch(`${serverHost}/api/notifications/mark-all-viewed`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return response;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  
+  }
+

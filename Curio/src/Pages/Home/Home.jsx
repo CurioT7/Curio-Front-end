@@ -21,6 +21,7 @@ function Home() {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortType, setSortType] = useState('Best');
+  const [didVote, setDidVote] = useState(false);
   const toast = useToast();
 
   const getSaved = async () => {
@@ -275,6 +276,17 @@ useEffect(() => {
   handleBlocked();
 }, []);
 
+useEffect(() => {
+  if (posts) {
+    const votes = [];
+    posts.forEach(post => {
+      votes[post.post._id] = post.details.pollVote !== null;
+    });
+    setDidVote(votes);
+    console.log('Votes:', votes);
+  }
+}, [posts]);
+
 
   return (
     <>
@@ -285,10 +297,11 @@ useEffect(() => {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-            {((randomPost.isSelected==false) && posts) ? (
+        {((randomPost.isSelected==false) && posts) ? (
               posts
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
+                  console.log("Option selected for post with ID", post.post._id, ":", post.details.pollVote),
                   <>
                     {post.post.type === 'poll' ? (
                     <Post
@@ -306,7 +319,10 @@ useEffect(() => {
                     voteLength={post.post.voteLength}
                     linkedSubreddit={post.details.subredditName}
                     isLocked={post.post.isLocked}
-                  />) : (
+                    didVote={didVote[post.post._id]}
+                    optionSelected={post.details.pollVote}
+                    pollEnded={post.details.pollEnded}
+                   />) : (
                     <Post
                     _id={post.post._id}
                     title={post.post.title}

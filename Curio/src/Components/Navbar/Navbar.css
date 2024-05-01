@@ -84,13 +84,13 @@
 
 .unread-notifs{
     position: absolute;
-    top: 5px;
-    right: -5px;
+    top: -3px;
+    right: -6px;
     background-color: #ff0000; 
     border-radius: 20px;
     font-size: 12px;
     color: white;
-    padding: 0px 6px;
+    padding: 0px 3px;
     margin-left: 15px;
 }
 
