@@ -293,7 +293,7 @@ if (!props.NavbarVisibility) {
                   <Menu>
                     <MenuButton>
                       <img className='navImg' src={inbox} alt="logo" />
-                      <span className='unread-notifs'>{unreadNotifications}</span>
+                      {unreadNotifications === 0 ? null : <span className='unread-notifs'>{unreadNotifications}</span>}
                     </MenuButton>
                     <MenuList 
                     style={{

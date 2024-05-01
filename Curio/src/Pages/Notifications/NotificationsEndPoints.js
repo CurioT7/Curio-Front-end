@@ -92,18 +92,16 @@ export async function disableNotification(notificationID) {
     }
 }
 
-export async function markAsViweed () {
+export async function markAsViewed() {
     try{
-    const response = await axios.patch(`${serverHost}/api/notifications/mark-all-viewed`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    return response;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  
-  }
-
+        const response = await axios.patch(`${serverHost}/api/notifications/mark-all-viewed`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response;
+        } catch (error) {
+            console.error('Error marking notification as viewed:', error.message);
+            throw error;
+        }
+    }   
