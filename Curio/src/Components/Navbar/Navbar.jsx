@@ -36,7 +36,7 @@ function NavbarComponent(props) {
   const [searchPeople, setSearchPeople] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
   const [notifications, setNotifications] = useState([]);
-  const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [unreadNotificationsNum, setUnreadNotificationsNum] = useState(0);
   const [isRead, setIsRead] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
@@ -50,39 +50,26 @@ function NavbarComponent(props) {
     }
   };
 
-  async function handleUnreadNotifications(){
-    const response = await fetchNotificationsFromBackend();
-    if(response){
-      setUnreadNotifications(response.unreadNumber);
-    }
-  }
-
-  async function handleAllNotifications() {
-    const response = await fetchNotificationsFromBackend();
-    if(response) {
-        setNotifications(response.data.notifications);
-    }
-}
 
   async function handleMarkAsRead(){
     const response = await markasViewed();
     if(response.success) {
-        setIsRead(true);
+        console.log("Marked as read");
     }
 }
 
 
   function handleOpenNotifications(){
-    setUnreadNotifications(null);
+    if(!isNotificationsOpen){
+    setUnreadNotificationsNum(0);
+    handleMarkAsRead();
     setIsNotificationsOpen(true);
-    handleAllNotifications();
+    }
+    else
+    {
+      setIsNotificationsOpen(false);
+    }
   }
-
-  useEffect(() => {
-    handleUnreadNotifications();
-  }, []);
-
-
 
 
   const handleSearchChange = async (e) => {
@@ -289,11 +276,11 @@ if (!props.NavbarVisibility) {
           </Tooltip>
           <Tooltip label="Open inbox">
             <a className='sub-right-navbar notif' style={{position: 'relative'}} >
-              <li className='right-item-option' style={{ display: "flex" }} onClick={() => {handleOpenNotifications(); handleMarkAsRead()}}>
+              <li className='right-item-option' style={{ display: "flex" }} onClick={handleOpenNotifications}>
                   <Menu>
                     <MenuButton>
                       <img className='navImg' src={inbox} alt="logo" />
-                      {unreadNotifications === 0 ? null : <span className='unread-notifs'>{unreadNotifications}</span>}
+                      {unreadNotificationsNum === 0 ? null : <span className='unread-notifs'>{unreadNotificationsNum}</span>}
                     </MenuButton>
                     <MenuList 
                     style={{
@@ -301,7 +288,7 @@ if (!props.NavbarVisibility) {
                       border: 'none',
                       boxShadow: 'none', 
                     }}>
-                      <Notifications_Dropdown notifications={notifications}/>
+                      <Notifications_Dropdown notifications={notifications} setUnreadNotificationsNum={setUnreadNotificationsNum}/>
                     </MenuList>
                   </Menu>
               </li>

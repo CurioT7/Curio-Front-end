@@ -8,7 +8,7 @@ import { SlOptions } from "react-icons/sl";
 import { fetchNotificationsFromBackend, hideNotification, sendReadNotifications } from "../../Pages/Notifications/NotificationsEndPoints.js";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 
-function Notifications_Dropdown() {
+function Notifications_Dropdown( {setUnreadNotificationsNum} ) {
     const [notifications, setNotifications] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
     // const [disablesNotifications, setDisablesNotifications] = useState([]);
@@ -27,6 +27,7 @@ function Notifications_Dropdown() {
         if (data) {
             setNotifications(data.notifications || []);
             setUnreadNotifications(data.unreadNotifications || []);
+            setUnreadNotificationsNum(data.unreadNumber);
         }
     }
 
