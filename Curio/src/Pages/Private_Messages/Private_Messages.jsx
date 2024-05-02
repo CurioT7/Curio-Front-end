@@ -5,8 +5,8 @@ import FromMessage from "../../Components/Private_Messages/from_message/from_mes
 import ToMessage from "../../Components/Private_Messages/to_message/to_message.jsx";
 import SubjectMessage from "../../Components/Private_Messages/subject_message/subject_message.jsx";
 import Message from '../../Components/Private_Messages/message/message.jsx';
-import { Button } from '@chakra-ui/react';
-import {useNavigate} from 'react-router-dom';
+import { Button, useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -14,6 +14,17 @@ function Private_Messages(props) {
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
   const [userCommunities, setUserCommunities] = useState([]);
+  const [subreddit, setSubreddit] = useState(""); 
+  const toast = useToast();
+
+  function Toast(message, state) {
+    toast({
+      description: message,
+      status: state,
+      duration: 3000,
+      isClosable: true,
+    })
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -46,19 +57,63 @@ function Private_Messages(props) {
       }
     }
   };
-  
 
+  const handlePrivateMessage = async () => {
+    try {
+      let finalSubreddit = subreddit;
+      if (finalSubreddit === username) {
+        finalSubreddit = null;
+      }
+      console.log(finalSubreddit);
+      const messageData = {
+        subreddit: finalSubreddit,
+        // Add your message data here
+      };
+
+      const response = await axios.post(
+        `${serverHost}/api/message/compose`,
+        messageData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      switch (response.status) {
+        case 200:
+          Toast('Message sent successfully', 'success');
+          break;
+        default:
+          console.error("Unexpected response status:", response.status);
+          break;
+      }
+    } catch (error) {
+      const status = error.response ? error.response.status : null;
+      switch (status) {
+        case 404:
+          Toast('No subreddit found with that name', 'error');
+          break;
+        case 500:
+          Toast('Error retrieving search results', 'error');
+          break;
+        default:
+          console.error("Unexpected error:", error);
+          break;
+      }
+    }
+  };
 
   return (
     <div className='private_message_content'>
       <div className='private_message_table'>
         <h2 className='private_message_title'>Send A Private Message</h2>
         <div className='private_message_body'>
-          <FromMessage userCommunities={userCommunities}/>
+          <FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit}/>
           <ToMessage />
           <SubjectMessage />
           <Message />
-          <Button className="send_private_message" colorScheme='blue' size='sm'>
+          <Button className="send_private_message" colorScheme='blue' size='sm' onClick={handlePrivateMessage}>
             Send
           </Button>
         </div>
