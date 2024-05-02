@@ -32,11 +32,15 @@ function Notifications() {
 
   async function handleNotificationClick(notificationID) {
     try {
-      await sendReadNotifications(notificationID);
+        const isUnread = unreadNotifications.some(un => un._id === notificationID);
+        if (isUnread) {
+            await sendReadNotifications(notificationID); 
+            setUnreadNotifications(prevNotifications => prevNotifications.filter(notification => notification._id !== notificationID));
+        }            
     } catch (error) {
-      console.error('Error marking notification as read:', error.message);
+        console.error('Error marking notification as read:', error.message);
     }
-  }
+}
 
 
   return (
