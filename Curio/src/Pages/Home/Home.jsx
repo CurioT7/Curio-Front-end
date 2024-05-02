@@ -318,6 +318,7 @@ useEffect(() => {
                     upvotes={post.post.upvotes}
                     downvotes={post.post.downvotes}
                     comments={post.post.comments}
+                    isLocked={post.post.isLocked}
                     voteLength={post.post.voteLength}
                     linkedSubreddit={post.details?.subredditName}
                     didVote={didVote[post.post._id]}
