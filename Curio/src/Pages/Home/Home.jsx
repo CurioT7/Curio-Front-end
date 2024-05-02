@@ -6,7 +6,7 @@ import Post from '../../Components/Post/Post'
 import BackToTheTopButton from "./BackToTopButton.jsx";
 import Listing from '../../Components/CommunitiesListing/Listing.jsx'
 import Poll from '../../Components/Poll/ShowPoll.jsx'
-import { SortHomePosts } from './HomeEndPoints.js'
+import { SortHomePosts } from './HomeEndPoints.jsx'
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
 import { set } from 'mongoose'
@@ -131,10 +131,12 @@ useEffect(() => {
   }
 
   window.addEventListener('deletePost', fetchAndSetData);
+  window.addEventListener('loginOrSignup', fetchAndSetData);
 
   fetchAndSetData();
   return () => {
     window.removeEventListener('deletePost', fetchAndSetData);
+    window.removeEventListener('loginOrSignup', fetchAndSetData);
   }
 }, []);
 
@@ -317,8 +319,7 @@ useEffect(() => {
                     downvotes={post.post.downvotes}
                     comments={post.post.comments}
                     voteLength={post.post.voteLength}
-                    linkedSubreddit={post.details.subredditName}
-                    isLocked={post.post.isLocked}
+                    linkedSubreddit={post.details?.subredditName}
                     didVote={didVote[post.post._id]}
                     optionSelected={post.details.pollVote}
                     pollEnded={post.details.pollEnded}
@@ -333,8 +334,8 @@ useEffect(() => {
                     comments={post.post.comments}
                     content={post.post.content}
                     //isMod={isMod}
-                    linkedSubreddit={post.details.subredditName}
-                    voteStatus={post.details.voteStatus}
+                    linkedSubreddit={post.details?.subredditName}
+                    voteStatus={post.details?.voteStatus}
                     isLocked={post.post.isLocked}
                     savedPosts={savedPosts}
                     hiddenPosts={hiddenPosts}

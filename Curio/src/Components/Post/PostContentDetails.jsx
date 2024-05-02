@@ -159,10 +159,27 @@ function PostContentDetails(post) {
         setIsLocked(post.isLocked);
     },[post])
 
-    const [upvoted, setUpvoted] = useState(post.voteStatus === "upvoted" ? true : false);
-    const [downvoted, setDownvoted] = useState(post.voteStatus === "downvoted" ? true : false);
+    const [upvoted, setUpvoted] = useState((post.voteStatus || (post.details && post.details[0].voteStatus)) === "upvoted" ? true : false);
+    const [downvoted, setDownvoted] = useState((post.voteStatus || (post.details && post.details[0].voteStatus)) === "downvoted" ? true : false);
     const [savedComments, setSavedComments] = useState([]);
     const navigate = useNavigate();
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            if (post.voteStatus){
+                return;
+            }
+            else if (post.details && post.details[0].voteStatus){
+                if (post.details[0].voteStatus === "upvoted"){
+                    setUpvoted(true);
+                    setDownvoted(false);
+                }
+                else if (post.details[0].voteStatus === "downvoted"){
+                    setDownvoted(true);    
+                    setUpvoted(false);         
+                }
+            }
+        }
+    }, [post]);
     const makePostUpvoted = async () => {
         if (localStorage.getItem('token') === null) {
             navigate('/login');
@@ -341,7 +358,7 @@ function PostContentDetails(post) {
                             <button onClick={handleBack} style={{backgroundColor: "#EAEDEF", width: "2.1rem", height: "2.1rem"}} className='back-button-post-content signup-back-button me-2 d-flex justify-content-center align-items-center'><BackButton/></button>
                             <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
                             <div className='d-flex flex-column'>
-                                <a onClick={handleNavigationToSubreddit} className='community-post-name'>r/{post.subreddit || "germany"}</a>
+                                <a onClick={handleNavigationToSubreddit} className='community-post-name'>r/{post.subreddit || (post.details && post.details[0].subredditName)}</a>
                                 <UserPopover user={post.user || post.authorName} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
                                 handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="userPosting" />
                             </div>

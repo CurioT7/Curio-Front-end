@@ -14,6 +14,8 @@ export async function fetchNotificationsFromBackend() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
+        console.log(responseAllNotification);
+
         return {
             notifications: responseAllNotification.data.notifications,
             unreadNotifications: responseUnreadNotification.data.unreadNotifications,
@@ -46,19 +48,19 @@ export async function hideNotification(notificationID) {
     }
 }
 
-// export async function disableNotification(notificationID) {
-//     try {
-//         const response = await axios.post(`${serverHost}/api/notifications/hide`, notificationID, {
-//             headers: {
-//                 Authorization: `Bearer ${localStorage.getItem('token')}`
-//             }
-//         });
-//         return response.data;
-//     } catch (error) {
-//         console.error('Error hiding notification:', error.message);
-//         throw error;
-//     }
-// }
+export async function disableNotification(data) {
+    try {
+        const response = await axios.post(`${serverHost}/api/notifications/settings/disable`, data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error disabling notification:', error.message);
+        throw error;
+    }
+}
 
 export async function sendReadNotifications(notificationID) {
     try {
