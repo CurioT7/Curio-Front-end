@@ -93,7 +93,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         case 201:
           Toast('Post created successfully', 'success');
           const postId = response.data.postId;
-          navigate(`/post/post-details/${postId}`);d
+          navigate(`/post/post-details/${postId}`);
           break;
         default:
           console.error("Unexpected response status:", response.status);

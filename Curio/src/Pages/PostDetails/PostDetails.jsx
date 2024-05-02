@@ -11,20 +11,44 @@ function PostDetails(props) {
   const { postID } = useParams();
   const toast = useToast();
   const getInfo = async () => {
-        try{
-            const hostUrl = import.meta.env.VITE_SERVER_HOST;
-            const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`);
-            if (response.status === 200 || response.status === 201){
-                setPostInfo(response.data.item);
-            }
+        if (localStorage.getItem('token') === null){
+          try{
+              const hostUrl = import.meta.env.VITE_SERVER_HOST;
+              const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`);
+              if (response.status === 200 || response.status === 201){
+                  setPostInfo(response.data.item);
+              }
+          }
+          catch(err){
+              toast({
+                  description: "Server Error Occured.",
+                  status: 'error',
+                  duration: 5000,
+                  isClosable: true,
+              })
+          }
         }
-        catch(err){
-            toast({
-                description: "Server Error Occured.",
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            })
+        else{
+          try{
+              const hostUrl = import.meta.env.VITE_SERVER_HOST;
+              const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`,{
+                  headers: {
+                      Authorization: `Bearer ${localStorage.getItem('token')}`
+                  }
+              });
+              if (response.status === 200 || response.status === 201){
+                  setPostInfo(response.data.item);
+                  console.log(response.data.item)
+              }
+          }
+          catch(err){
+              toast({
+                  description: "Server Error Occured.",
+                  status: 'error',
+                  duration: 5000,
+                  isClosable: true,
+              })
+          }
         }
     }
     React.useEffect(() => {
