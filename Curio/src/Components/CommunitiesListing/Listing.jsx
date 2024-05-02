@@ -62,11 +62,14 @@ function Listing(props) {
     React.useEffect(() => {
       
       setListValue('Hot');
-      
+      setSortTop('Today');
     }, [Community]);
     React.useEffect(() => {
       setCommunity(Community);
     }, [Community]);
+    React.useEffect(() => {
+      setSortTop('Today');
+    },[listValue])
   }
  
   function changeListValue(value) {
