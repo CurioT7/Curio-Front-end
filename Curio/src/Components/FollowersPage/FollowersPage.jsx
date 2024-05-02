@@ -24,6 +24,7 @@ import {
 } from "../ProfilePage/ProfilePageEndpoints.js";
 import profile from "../../assets/avatar_default_6.png";
 import { userFollow, userUnfollow } from "../FriendInformation/ShowFriendInformationEndpoints.js";
+import { getFollowers } from "./FollowesPageEnpoints.js";
 
 import { Link } from "react-router-dom";
 import "../ProfilePage/ProfileSideBar.jsx";
@@ -31,16 +32,17 @@ import ProfileSideBar from "../ProfilePage/ProfileSideBar.jsx";
 import { Toast } from "react-bootstrap";
 import { get } from "mongoose";
 
+import axios from "axios";
+
 function FollowersPage(props) {
   const navigate = useNavigate();
   const { username } = useParams();
   const [isFollowing, setIsFollowing] = useState(false);
   const [userAbout, setUserAbout] = useState({});
   const [friendAbout, setFriendAbout] = useState({});
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
-  const followers = ['freddy', 'Lively_Infinity_8489'];
-
-  const following = ['Holly_Walsh6', 'freddy'];
 
   const token = localStorage.getItem("token");
   const toastsuccess = useToast()
@@ -53,6 +55,18 @@ function FollowersPage(props) {
           position: 'bottom',
       });
   }
+
+  async function handleGetFollowers() {
+    const response = await getFollowers('followers');
+    if (response) {
+      setFollowers(response.data.friendsArray);
+    }
+  }
+
+  useEffect(() => {
+    handleGetFollowers();
+
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -98,7 +112,7 @@ function handleFriendInformation(username) {
 }
 
   return (
-    <div className="d-flex">
+    <div className="d-flex followersPageCont">
       <div className="d-flex p-3 mx-auto flex-column followersPageDiv">
         <div className="d-flex flex-column followersSearchDiv p-2">
           <span className="Followers">Followers</span>

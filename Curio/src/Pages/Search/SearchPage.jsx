@@ -6,12 +6,19 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import UserResults from "./UserResults";
 import CommunityResults from "./CommunityResults";
+import Post from '../../Components/Post/Post';
+import PostComments from '../../Components/Post/PostComments';
 
 function SearchPage(){
     const { searchTerm } = useParams();
     const navigate = useNavigate();
     const [userResults, setUserResults] = useState([]);
     const [communityResults, setCommunityResults] = useState([]);
+    const [postResults, setPostResults] = useState([]);
+    const [commentResults, setCommentResults] = useState([]);
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [savedComments, setSavedComments] = useState([]);
+    const [hiddenPosts, setHiddenPosts] = useState([]); 
 
     const handleUserResults = async () => {
         try{
@@ -36,9 +43,79 @@ function SearchPage(){
 
     }
 
+    const handlePostResults = async () => {
+        try{
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.get(`${hostUrl}/api/search/${searchTerm}`);
+            setPostResults(response.data.posts);
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    const handleCommentResults = async () => {
+        try{
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.get(`${hostUrl}/api/searchComments/${searchTerm}/comment/relevance/all`);
+            setCommentResults(response.data.content);
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    const getSaved = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setSavedPosts(response.data.savedPosts);
+        }
+      }
+      catch(err){
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          toast({
+            description: "Server Error Occured.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+      }
+    }
+
     useEffect(() => {
         handleUserResults();
         handleCommunityResults();
+        handlePostResults();
+        handleCommentResults();
+        getSaved();
+        getHidden();
     }, [searchTerm]);
 
 
@@ -58,9 +135,34 @@ function SearchPage(){
                                 <Tab>People</Tab>
                             </TabList>
                     </div>
-                    <div>
-                        <TabPanels>
-                            <TabPanel>
+                    <div className="m-0 p-0">
+                        <TabPanels className="m-0 p-0">
+                            <TabPanel className="px-0 me-5">
+                                {postResults.length === 0 ? (
+                                    <p>No Search Results</p>
+                                ) : (
+                                    <>
+                                    {postResults.map(post => (
+                                        <>
+                                            <Post
+                                                _id={post._id}
+                                                title={post.title}
+                                                body={post.body}
+                                                user={post.authorName}
+                                                upvotes={post.upvotes}
+                                                downvotes={post.downvotes}
+                                                comments={post.comments}
+                                                content={post.content}
+                                                linkedSubreddit={post.linkedSubreddit}
+                                                savedPosts={savedPosts}
+                                                hiddenPosts={hiddenPosts}
+                                                savedComments={savedComments}
+                                            />
+                                            <hr className='col-md-6 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+                                        </>
+                                    ))}
+                                    </>
+                                )}
                             </TabPanel>
                             <TabPanel>
                                 {communityResults.length === 0 ? (
@@ -77,6 +179,25 @@ function SearchPage(){
                                 )}
                             </TabPanel>
                             <TabPanel>
+                                {commentResults.length === 0 ? (
+                                    <p>No search results</p>
+                                ) : (
+                                    <>
+                                        {commentResults.map(comment => (
+                                            <>
+                                                <PostComments
+                                                    key={comment._id}
+                                                    id={comment._id}
+                                                    savedComments={savedComments}
+                                                    username={comment.authorName}
+                                                    commentUpvotes={comment.upvotes-comment.downvotes}
+                                                    comment={comment.content}
+                                                />
+                                                <hr className='col-md-6 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+                                            </>
+                                        ))}
+                                    </>
+                                )}
                             </TabPanel>
                             <TabPanel>
                                 {userResults.length === 0 ? (

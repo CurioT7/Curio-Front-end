@@ -1,3 +1,4 @@
+
 *{
     margin: 0;
     padding: 0;
@@ -12,9 +13,10 @@
     height: 56px;
     padding: 0 16px;
     display: flex;
+    margin-bottom: 100px;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 99;
     box-shadow: 0 0 10px #000;
@@ -38,6 +40,11 @@
     flex: 1;
     position: relative;
 }
+
+.search-box{
+    min-width: 75px;
+}
+
 .search-box input{
     width: 100%;
     height: 40px;
@@ -70,17 +77,48 @@
     display: flex;
     align-items: center;
 }
+
+.notif{
+    position: relative;
+}
+
+.unread-notifs{
+    position: absolute;
+    top: 5px;
+    right: -5px;
+    background-color: #ff0000; 
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+    padding: 0px 6px;
+    margin-left: 15px;
+}
+
+.sub-right-navbar-notification{
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+
+
 .navbar-component .right-section-navbar{
-    flex: 1;
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    align-items: center;
+    /* margin-top: 20px; */
     gap: 1em;
 }
-.navbar-component .right-section-navbar .sub-right-navbar{
+
+.right-section-navbar{
+    flex: 1;
+}
+
+
+.navbar-component .right-section-navbar .sub-right-navbar .sub-right-navbar-notification{
     list-style: none;
 }
-.navbar-component .right-section-navbar .sub-right-navbar a{
+.navbar-component .right-section-navbar .sub-right-navbar .sub-right-navbar-notification a{
     padding: 10px 10px;
 }
 .create-icon,
@@ -92,6 +130,12 @@
     background-color: #edeff1;
     border-radius: 999px;
 }
+
+.sub-right-navbar-notification:hover{
+    background-color: #edeff1;
+    border-radius: 999px;
+}
+
 .navbar-component .menu{
     font-size: 2.5em;
     display: none;
@@ -103,6 +147,7 @@
     position: absolute;
     top: 100%;
     right: 1%;
+    right: 0;
     width: 256px;
     max-height: 0px;
     overflow: hidden;
@@ -191,6 +236,10 @@
     display: inline-block;
 }
 
+.right-section-navbar{
+    right: 0;
+}
+
 .last-item1{
     display: flex;
     align-items: center;
@@ -207,7 +256,7 @@
     background-color: #edeff1;
 }
 
-@media(max-width:1000px) {
+/* @media(max-width:1000px) {
     .navbar-component .right-section-navbar{
         background: gray;
         height: 100vh;
@@ -222,6 +271,15 @@
         justify-content: center;
     }
     .sub-right-navbar:hover{
+        cursor: pointer;
+        background-color:  #edeff1;
+    }
+    .sub-right-navbar-notification{
+        width: 100%;
+        height: 60px;
+        justify-content: center;
+    }
+    .sub-right-navbar-.sub-right-navbar-notification{
         cursor: pointer;
         background-color:  #edeff1;
     }
@@ -246,8 +304,14 @@
     #chk1:checked ~ ul{
         right: 0;
     }
+} */
+@media(max-width:1000px){
+    .navbar-component{
+        width: 100%;
+    }
 }
-@media(max-width:600px){
+
+ @media(max-width:600px){
     .navbar-component .logo{
         font-size: 10px;
         margin-left: 8px;
@@ -255,12 +319,64 @@
     .navbar-component ul{
         width: 100%;
     }
-}
+} 
 @media(max-width:960px){
     .navbar-component .logo h1{
         display: none;
     }
 }
+
+@media(max-width:850px){
+    /* .search-box{
+        margin-right: 5rem;
+    } */
+    .right-item-option{
+        flex: 0 0 auto;
+        position: relative;
+    }
+    .unread-notifs{
+        position: absolute;
+        top: -5px;
+        right: -5px;
+    }
+    .right-section-navbar li{
+        margin-right: 1rem;
+    }
+     .create-icon{
+        flex: 0 0 auto;
+    } 
+    
+}
+
+
+
+@media (max-width: 160px) {
+    .sub-right-navbar .right-item-option .navImg {
+        display: none;
+    }
+}
+
+
+@media(max-width:540px){
+    .search-box{
+        position: fixed;
+    }
+    .navbar-component .logo{
+        flex: 0 0 auto;
+    }
+    /* .right-section-navbar{
+        margin-right: 7rem;
+    } */
+    }
+
+    @media(max-width:700px){
+       /* .right-section-navbar{
+        margin-right: 20px;
+       } */
+       .inputTextnav::placeholder {
+        content: "Search";
+    }
+        }
 
 .dropdown-toggle::after{
     display: none;
@@ -273,6 +389,20 @@
 .new-dropdown-label:hover{
     color: #0d6efd;
 }
+
+/* @media(max-width:800){
+    .navbar-component .logo h1{
+        display: none;
+    }
+    .sub-right-navbar .right-item-option .navImg{
+        width: 3px;
+    }
+    .create-icon {
+        display: none;
+        width: 3px;
+    }
+} */
+
 
 
 .logged-out-button{
@@ -399,4 +529,4 @@
 
 .logOutstyle:hover{
     color: #0d6efd;
-}
+} 

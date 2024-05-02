@@ -11,6 +11,21 @@
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.5);
     border-radius: 20px;
 }
+.popover-body {
+    cursor: pointer;
+}
+
+.popover-body:hover {
+    background-color: lightgray;
+}
+
+.notifications-item.unread {
+    background-color: rgba(36,160,237,.1);; 
+}
+
+.notifications-item.read {
+    background-color: transparent; 
+}
 
 .notifications-header{
     font-size: .875rem;
@@ -165,6 +180,7 @@
     border-left-width: 0;
     border-right-width: 0;
     display: block;
+    margin-top: 10px;
 }
 
 .see-all-button{

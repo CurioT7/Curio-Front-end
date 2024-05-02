@@ -10,6 +10,7 @@ import { fetchUserDataFromBackend } from "../../UserSetting/UserSettingsEndPoint
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 function Community_details({ community }) {
+    const icon = localStorage.getItem('profileImage');
     const username = localStorage.getItem('username');
     const [subredditData, setSubredditData] = useState(null);
     const [isSwitch, setIsSwitch] = useState(true);
@@ -149,7 +150,7 @@ function Community_details({ community }) {
                                         <label htmlFor="" className="post-label-username" style={{cursor: 'pointer'}}>
                                             <span class="icon-container-username">
                                                 <div className="username-icon-container">
-                                                    <img src={logo} 
+                                                    <img src={icon} 
                                                     alt="Username Icon" 
                                                     role="presentation" 
                                                     className="username-details-icon" 

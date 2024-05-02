@@ -25,13 +25,13 @@ function Createpost(props) {
       }
     }, []);
   return (
-    <div className='container-create-post'>
+    <div className='container-create-post' style={{marginTop:'3rem'}}>
       <div className="container container-create-post-2" style={{display:'flex'}}>
         <div className='left-container-post'>
             <Box className="cont-create-post">
               <Text className='create-post-title'>Create Post</Text>
             </Box>
-            <Community onSelect={handleCommunitySelect}/>
+            <Community onSelect={handleCommunitySelect} subreddit={props.subreddit}/>
             <div className='new-post-form'>
               <NewPostForm community={selectedCommunity ? selectedCommunity.replace(/^r\//, '').replace(/^u\//, '') : null} />
             </div>

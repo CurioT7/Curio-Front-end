@@ -1,0 +1,10 @@
+.message_container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.message_private_textarea{
+    max-width: 492px;
+    min-height: 74px;
+}
