@@ -7,9 +7,9 @@ function FromMessage({ userCommunities, setSubreddit }) {
   const [selectedOption, setSelectedOption] = useState(`u/${username}`);
 
   const handleOptionChange = (e) => {
-    const value = e.target.value.startsWith('r/') ? e.target.value.substring(2) : e.target.value.substring(2); // Remove 'r/' or 'u/' from the selected option
+    const value = e.target.value.startsWith('r/') ? e.target.value.substring(2) : e.target.value.substring(2); 
     setSelectedOption(e.target.value);
-    setSubreddit(value); // Pass the formatted recipient to the parent component
+    setSubreddit(value); 
   };
 
   return (
