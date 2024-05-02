@@ -16,6 +16,7 @@ function Private_Messages(props) {
   const [userCommunities, setUserCommunities] = useState([]);
   const [subreddit, setSubreddit] = useState(""); 
   const [subject, setSubject] = useState(""); 
+  const [message, setMessage] = useState("");
   const toast = useToast();
 
   function Toast(message, state) {
@@ -65,10 +66,11 @@ function Private_Messages(props) {
       if (finalSubreddit === username) {
         finalSubreddit = null;
       }
-      // console.log(subject);
+      console.log(message);
       const messageData = {
         subreddit: finalSubreddit,
         subject: subject,
+        message: message
         // Add your message data here
       };
 
@@ -114,7 +116,7 @@ function Private_Messages(props) {
           <FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit}/>
           <ToMessage />
           <SubjectMessage setSubject={setSubject}/>
-          <Message />
+          <Message setMessage={setMessage}/>
           <Button className="send_private_message" colorScheme='blue' size='sm' onClick={handlePrivateMessage}>
             Send
           </Button>
