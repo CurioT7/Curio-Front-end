@@ -8,7 +8,7 @@ function subject_message() {
   return (
     <div className='subject_message_container'>
       <label htmlFor="selectOption" style={{fontSize:'large'}}>subject</label>
-      <Input size='sm' width='492px' />
+      <Input size='sm' maxWidth='492px' />
     </div>
   );
 }

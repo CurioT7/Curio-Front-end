@@ -61,6 +61,20 @@ export async function disableNotification(data) {
     }
 }
 
+export async function enableNotification(data) {
+    try {
+        const response = await axios.post(`${serverHost}/api/notifications/settings/enable`, data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error enabling notification:', error.message);
+        throw error;
+    }
+}
+
 export async function sendReadNotifications(notificationID) {
     try {
         const response = await axios.post(

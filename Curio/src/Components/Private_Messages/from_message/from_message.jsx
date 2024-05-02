@@ -8,7 +8,7 @@ function from_message({ userCommunities }) {
   return (
     <div className='from_message_container'>
       <label htmlFor="selectOption" style={{ fontSize: 'large' }}>from</label>
-      <Select placeholder={`/u/${username}`} size='sm' width='492px'>
+      <Select placeholder={`/u/${username}`} size='sm' maxWidth='492px'>
         {userCommunities.map((community, index) => (
           <option key={index} value={`r/${community}`} >
             r/{community}
