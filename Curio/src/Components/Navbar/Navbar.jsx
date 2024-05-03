@@ -9,7 +9,7 @@ import Settings from '../../styles/icons/Settings';
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
 import { BsArrowUpRightCircle } from "react-icons/bs";
 import { Menu, MenuButton, MenuList, Tooltip } from '@chakra-ui/react'
@@ -20,9 +20,8 @@ import {
   PopoverBody,
 } from '@chakra-ui/react'
 import { CiSearch } from "react-icons/ci";
-import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
+import { getTrending,getSearchSuggestion } from './SearchingEndPoints';
 import { getUnreadNotifications, getAllNotifications, markAsViweed } from '../Notifications_Dropdown/NotificationsEndpoints';
-
 import Trending from './Trending';
 import SearchBy from './SearchBy';
 import { set } from 'mongoose';
@@ -39,7 +38,7 @@ function NavbarComponent(props) {
   const [unreadNotifications, setUnreadNotifications] = useState([]);
   const [isRead, setIsRead] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
+  const location = useLocation();
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -87,20 +86,12 @@ function NavbarComponent(props) {
 
   const handleSearchChange = async (e) => {
     setSearchValue(e.target.value);
-    const searchCommunitiesData = await getSearchSubreddits(searchValue);
-    const searchPeopleData = await getSearchPeople(searchValue);
-    if(searchCommunitiesData){
-      setSearchCommunities(searchCommunitiesData.subreddits);
+    const searchSuggestionsData = await getSearchSuggestion(searchValue);
+    if(searchSuggestionsData){
+      setSearchCommunities(searchSuggestionsData.subreddits);
+      setSearchPeople(searchSuggestionsData.users);
     }
-    else{
-      setSearchCommunities([]);
-    }
-    if(searchPeopleData){
-      setSearchPeople(searchPeopleData.users);
-    }
-    else{
-      setSearchPeople([]);
-    }
+    
   }
   const navigateToLogin = () => {
     navigate('/login');
@@ -112,6 +103,10 @@ function NavbarComponent(props) {
   const handleSearch = (e) => {
     e.preventDefault();
     navigate(`/search/${searchValue}`);
+    setSearchValue('');
+  }
+  const handleSearchFor = () => {
+    window.location.href = `/search/${searchValue}`;
     setSearchValue('');
   }
   
@@ -179,6 +174,7 @@ function NavbarComponent(props) {
     };
   }, []);
 
+
  useEffect(() => {
   if (isOpen) {
     setTimeout(() => {
@@ -227,9 +223,9 @@ if (!props.NavbarVisibility) {
                   </div>}
                   { searchValue && <div>
 
-                    {searchCommunities && <div>
+                    {searchCommunities.length>0 && <div>
                     <div className='searchBy-header'> Communities</div>
-                    <SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/>
+                    {/* <SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/> */}
                     { searchCommunities.map((comm) => (
                       <SearchBy
                         key={comm._id}
@@ -242,9 +238,9 @@ if (!props.NavbarVisibility) {
                     }
                     </div>
                     }
-                    {searchPeople && <div>
-                    <div className='searchBy-header'>People</div>
-                    <SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/>
+                    {searchPeople.length>0 && <div>
+                    <div onClick={handleSearch} className='searchBy-header'>People</div>
+                    {/* <SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/> */}
                     { searchPeople.map((user) => (
                       <SearchBy
                         key={user._id}
@@ -259,7 +255,7 @@ if (!props.NavbarVisibility) {
                     
                     </div>
                     }
-                    <div className='search-footer'> <CiSearch className='search-icon'/> <span> Search by  "{searchValue}"</span>
+                    <div onClick={handleSearchFor} className='search-footer'> <CiSearch className='search-icon'/> <span> Search by  "{searchValue}"</span>
                     </div>
                   </div>}
                   

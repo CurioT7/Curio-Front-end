@@ -2,14 +2,21 @@ import { Card, CardBody} from '@chakra-ui/react'
 import { Avatar } from '@chakra-ui/react';
 import './searchList.css';
 function SearchBy(props){
-
+    const handleNavigate = () => {
+        if(props.type==="user"){
+            window.location.href = `/user/${props.name}`;
+        }
+        else if(props.type==="comm"){
+            window.location.href = `/r/${props.name}`;
+        }
+    }
     return (
         <Card variant='ghost'>
-            <div className=' search-body'>
+            <div onClick={handleNavigate}  className=' search-body'>
                 <CardBody padding={3} paddingTop={3} marginTop={0} className=' searchBy-body-content'>
                     <div>
-                        {console.log(props.avatar)}
-                        {props.avatar&&<Avatar src={toString(props.avatar)} size='xs'/>}
+                        
+                        {props.avatar&&<Avatar name={props.name} src={toString(props.avatar)} size='xs'/>}
                     </div>
                     { props.type==="user" &&<div className='searchBy-details'>
                         

@@ -12,7 +12,7 @@ const serverHost = import.meta.env.VITE_SERVER_HOST;
 export async function SortHomePosts(type, pageNumber) {
     if (localStorage.getItem('token') === null){
         try {
-            const request = await axios.get(`${serverHost}/api/allpage/${type}?page=${pageNumber}`);
+            const request = await axios.get(`${serverHost}/api/allpage/${pageNumber}/${type.toLowerCase()}/year`);
             return request.data;
         } catch (error) {
             console.error('Error fetching data from backend:', error);
@@ -20,7 +20,7 @@ export async function SortHomePosts(type, pageNumber) {
     }
     else{
         try {
-            const request = await axios.get(`${serverHost}/api/allpage/${type}?page=${pageNumber}`,{
+            const request = await axios.get(`${serverHost}/api/allpage/${pageNumber}/${type.toLowerCase()}/year`,{
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
