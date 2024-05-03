@@ -158,9 +158,6 @@ useEffect(() => {
   fetchData();
 }, [pageNumber]);
 
-useEffect(() => {
-  console.log('Polls needed array:', polls);
-}, [polls]);
 
 
 async function changeSortType(value,time) {
@@ -285,7 +282,6 @@ useEffect(() => {
       votes[post.post._id] = post.details.pollVote !== null;
     });
     setDidVote(votes);
-    console.log('Votes:', votes);
   }
 }, [posts]);
 
@@ -303,7 +299,6 @@ useEffect(() => {
               posts
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
-                  console.log("Option selected for post with ID", post.post._id, ":", post.details.pollVote),
                   <>
                     {post.post.type === 'poll' ? (
                     <Post

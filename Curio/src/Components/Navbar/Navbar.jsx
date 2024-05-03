@@ -21,8 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { CiSearch } from "react-icons/ci";
 import { getTrending,getSearchSuggestion } from './SearchingEndPoints';
-import { getUnreadNotifications, getAllNotifications, markAsViweed } from '../Notifications_Dropdown/NotificationsEndpoints';
-import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
+// import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
 import { fetchNotificationsFromBackend, markasViewed } from '../../Pages/Notifications/NotificationsEndPoints';
 
 import Trending from './Trending';

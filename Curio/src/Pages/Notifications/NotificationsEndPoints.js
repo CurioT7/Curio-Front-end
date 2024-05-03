@@ -105,19 +105,7 @@ export async function sendReadNotifications(notificationID) {
 }
 
 
-export async function disableNotification(notificationID) {
-    try {
-        const response = await axios.post(`${serverHost}/api/notifications/hide`, notificationID, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error hiding notification:', error.message);
-        throw error;
-    }
-}
+
 
 export async function markasViewed() {
     try{
