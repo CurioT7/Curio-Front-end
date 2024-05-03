@@ -1,0 +1,37 @@
+.sent_message_content{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+    background-color: #edeff1;
+    height: 100vh;
+}
+.sent_message_table{
+    background-color: white;
+    margin-top: 70px;
+    padding: 10px 15px;
+    width: 70%;
+    height: 130px;
+}
+
+@media screen and (max-width: 500px) {
+
+    .sent_message_table {
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 315px) {
+
+    .sent_message_table {
+        height: 170px;
+    }
+}
+
+@media screen and (max-width: 215px) {
+
+    .sent_message_table {
+        height: 190px;
+    }
+}

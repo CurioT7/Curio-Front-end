@@ -9,7 +9,7 @@
 .private_message_table{
     background-color: white;
     padding: 10px 20px;
-    width: 920px;
+    width: 70%;
     height: 530px;
 }
 .private_message_title{
@@ -28,22 +28,4 @@
     text-transform: uppercase;
     font-weight: bold;
     width: 70px;
-}
-
-@media screen and (max-width: 970px) {
-    .private_message_table{
-        width: 600px;
-    }
-}
-
-@media screen and (max-width: 620px) {
-    .private_message_table{
-        width: 400px;
-    }
-}
-
-@media screen and (max-width: 420px) {
-    .private_message_table{
-        width: 250px;
-    }
 }
