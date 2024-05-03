@@ -1,20 +1,24 @@
-.sent_message_table_content{
+.sent_message_table_content {
     display: flex;
     flex-direction: column;
 }
-.subject_sent_messages{
+
+.subject_sent_messages {
     font-weight: bold;
     font-size: larger;
     margin-bottom: 1em;
 }
-.sent_message_time{
-margin-left: 0.5em;
+
+.sent_message_time {
+    margin-left: 0.5em;
 }
-.sent_message_details{
+
+.sent_message_details {
     color: #878a8c;
     font-size: smaller;
 }
-.message_name_detail{
+
+.message_name_detail {
     line-height: 1.5em;
     font-size: 1em;
 }
