@@ -7,7 +7,7 @@ function to_message() {
   return (
     <div className='to_message_container'>
       <label htmlFor="selectOption"><span style={{fontSize:'large'}}>to</span> <span style={{fontSize:'smaller', color:'#878a8c'}}> (username, or /r/name for that subreddit's moderators)</span></label>
-      <Input size='sm' width='492px' />
+      <Input size='sm' maxWidth='492px' />
     </div>
   );
 }

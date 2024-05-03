@@ -30,14 +30,14 @@ function Private_Messages(props) {
   const fetchUserData = async () => {
     try {
       const communityDataResponse = await axios.get(
-        `${serverHost}/api/user/${username}/communities`
+        `${serverHost}/api/user/${username}/about`
       );
-      const communityNames = communityDataResponse.data.communities.map(community => community.name);
+      const communityNames = communityDataResponse.data.moderatedSubreddits.map(community => community.name);
       setUserCommunities(communityNames);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
-          console.error('User preferences not found');
+          console.error('User not found');
         } else if (error.response.status === 500) {
           console.error('An unexpected error occurred on the server. Please try again later.');
         }

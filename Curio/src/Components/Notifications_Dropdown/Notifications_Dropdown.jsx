@@ -5,7 +5,13 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, But
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
-import { fetchNotificationsFromBackend, hideNotification, sendReadNotifications, disableNotification } from "../../Pages/Notifications/NotificationsEndPoints.js";
+import {
+    fetchNotificationsFromBackend,
+    hideNotification,
+    sendReadNotifications,
+    disableNotification,
+    enableNotification
+} from "../../Pages/Notifications/NotificationsEndPoints.js";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 import { useNavigate } from 'react-router-dom';
 
@@ -44,11 +50,23 @@ function Notifications_Dropdown() {
         try {
             const notification = notifications.find(notification => notification._id === notificationID);
             if (notification.type === "subreddit") {
-                await disableNotification({ subredditName: notification.subredditName });
+                if (notification.isDisabled === false) {
+                    await disableNotification({ subredditName: notification.subredditName });
+                } else {
+                    await enableNotification({ subredditName: notification.subredditName });
+                }
             } else if (notification.type === "post") {
-                await disableNotification({ PostId: notificationID });
+                if (notification.isDisabled === false) {
+                    await disableNotification({ PostId: notificationID });
+                } else {
+                    await enableNotification({ PostId: notificationID });
+                }
             } else if (notification.type === "comment") {
-                await disableNotification({ commentId: notification.commentId });
+                if (notification.isDisabled === false) {
+                    await disableNotification({ commentId: notification.commentId });
+                } else {
+                    await enableNotification({ commentId: notification.commentId });
+                }
             }
         } catch (error) {
             console.error('Error Disable notification:', error.message);
@@ -147,10 +165,19 @@ function Notifications_Dropdown() {
                                         </PopoverTrigger>
                                         <PopoverContent>
                                             <PopoverArrow />
-                                            <PopoverBody className="popover-body" onClick={() => handleHideNotification(notification._id)}>Hide this notification</PopoverBody>
-                                            <PopoverBody className="popover-body" onClick={() => handleEnableNotification(notification._id)}>
-                                                {notification.isDisabled === "true" ? 'Enable updates from this community' : 'Disable updates from this community'}
-                                            </PopoverBody>
+                                            <PopoverBody className="popover-body" onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleHideNotification(notification._id);
+                                            }}>Hide this notification</PopoverBody>
+                                            {
+                                                notification.type !== "Friend Request" &&
+                                                <PopoverBody className="popover-body" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEnableNotification(notification._id);
+                                                }}>
+                                                    {notification.isDisabled === true ? 'Enable updates from this community' : 'Disable updates from this community'}
+                                                </PopoverBody>
+                                            }
                                         </PopoverContent>
                                     </Popover>
                                 </div>
