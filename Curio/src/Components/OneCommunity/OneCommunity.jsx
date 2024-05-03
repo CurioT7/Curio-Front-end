@@ -77,7 +77,7 @@ function Community({ index, name, category, members, picture }) {
   </OverlayTrigger>
 </>
         <h6 className="commCategory">{category}</h6>
-        <h6 className="commMembers">{members} members</h6>
+        <h6 data-testid="member-count" className="commMembers">{members} members</h6>
       </div>
     </div>
   );

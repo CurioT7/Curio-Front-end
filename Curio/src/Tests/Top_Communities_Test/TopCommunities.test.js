@@ -1,58 +1,55 @@
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import ShowFriendInformation from '../../Components/FriendInformation/ShowFriendInformation';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, screen, waitFor } from '@testing-library/react';
-import TopCommunities from '../../Components/TopCommunities/TopCommunities.jsx';
-import { showCommunityInformation } from '../../Components/TopCommunities/TopCommunitiesEnpoints.js';
-import { BrowserRouter as Router } from 'react-router-dom';
-import OneCommunity from '../../Components/OneCommunity/OneCommunity.jsx';
 
-
+const mockData = {
+    displayName: "Test User",
+    postKarma: 1234,
+    commentKarma: 5678,
+    cakeDay: "2022-01-01",
+    moderatedSubreddits: [
+        {
+            privacyMode: "public",
+            icon: "https://example.com/icon.png",
+            name: "Example Subreddit",
+            members: [1, 2, 3, 4, 5] // Dummy array for members
+        }
+    ]
+};
 
 jest.mock('../../Components/FriendInformation/ShowFriendInformationEndpoints.js', () => ({
+  getFriendInfo: jest.fn().mockResolvedValue(mockData),
+}));
+
+jest.mock('../../Components/ModalPages/ModalPagesEndpoints.js', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-jest.mock('../../Components/TopCommunities/TopCommunitiesEnpoints.js', () => ({
+jest.mock('../../Components/Post/Post', () => ({
   __esModule: true,
-  showCommunityInformation: jest.fn(),
+  default: jest.fn(),
 }));
 
+describe('ShowFriendInformation', () => {
+  it('changes follow button text to "Unfollow" when clicked', async () => {
+    const { getByText } = render(
+      <Router>
+        <ShowFriendInformation username="testuser" />
+      </Router>
+    );
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
-}));
+    await waitFor(() => {
+      expect(getByText('Test User')).toBeInTheDocument();
+    });
 
-jest.mock('../../Components/OneCommunity/OneCommunity.jsx', () => {
-  return function MockOneCommunity(props) {
-    return <div data-testid="community">MockOneCommunity</div>;
-  };
-});
+    const followButton = getByText('Follow');
+    fireEvent.click(followButton);
 
-const hideSidebar = jest.fn();
-const showSidebar = jest.fn();
-
-test('renders top communities without crashing"', async () => {
-  render(
-    <Router>
-      <TopCommunities hideSidebar={hideSidebar} showSidebar={showSidebar} />
-    </Router>
-  );
-});
-
-test('renders 10 community components per page', async () => {
-
-
-  const mockCommunities = Array(50).fill().map((_, i) => ({ name: `Community ${i + 1}`, category: 'Category', members: i + 1 }));
-  showCommunityInformation.mockResolvedValueOnce({ data: { communities: mockCommunities, totalCommunitiesCount: 50 } });
-
-  render(
-    <Router>
-      <TopCommunities hideSidebar={hideSidebar} showSidebar={showSidebar} />
-    </Router>
-  );
-
-  const communityElements = await waitFor(() => screen.getAllByTestId('community'));
-  expect(communityElements).toHaveLength(50);
+    await waitFor(() => {
+      expect(getByText('Unfollow')).toBeInTheDocument();
+    });
+  });
 });

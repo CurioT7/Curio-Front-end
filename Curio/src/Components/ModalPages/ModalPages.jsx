@@ -7,8 +7,7 @@ import Back from '../../styles/icons/Back'
 import axios from "axios";
 import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
 import { useToast } from '@chakra-ui/react';
-import { reportUser } from './ModalPagesEndpoints.jsx';
-import { set } from 'mongoose';
+import { reportUser } from './ModalPagesEndpoints.js';
 
 
 
