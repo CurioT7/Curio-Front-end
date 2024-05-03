@@ -274,34 +274,24 @@ function PostContentDetails(post) {
     useEffect(() => {
         async function fetchAndSetData() {
             if (localStorage.getItem('token') === null) {
-                try{
-                    const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
-                    if (response.status === 200 || response.status === 201) {
-                        setComments(response.data);
-                    }
-                    else {
-                        Toast();
-                    }
+                const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
+                if (response.status === 200 || response.status === 201) {
+                    setComments(response.data);
                 }
-                catch(err){
+                else {
                     Toast();
                 }
             }
             else{
-                try{
-                    const response = await axios.get(`${hostUrl}/api/comments/${post._id}`,{
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`
-                        }
-                    });
-                    if (response.status === 200 || response.status === 201) {
-                        setComments(response.data);
+                const response = await axios.get(`${hostUrl}/api/comments/${post._id}`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
-                    else {
-                        Toast();
-                    }
+                });
+                if (response.status === 200 || response.status === 201) {
+                    setComments(response.data);
                 }
-                catch(err){
+                else {
                     Toast();
                 }
             }       
