@@ -5,14 +5,21 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, But
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
-import { fetchNotificationsFromBackend, hideNotification, sendReadNotifications } from "../../Pages/Notifications/NotificationsEndPoints.js";
+import {
+    fetchNotificationsFromBackend,
+    hideNotification,
+    sendReadNotifications,
+    disableNotification,
+    enableNotification
+} from "../../Pages/Notifications/NotificationsEndPoints.js";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
+import { useNavigate } from 'react-router-dom';
 
 function Notifications_Dropdown() {
+    const navigate = useNavigate();
+    const username = localStorage.getItem('username');
     const [notifications, setNotifications] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
-    // const [disablesNotifications, setDisablesNotifications] = useState([]);
-    // const [isUpdatesDisabled, setIsUpdatesDisabled] = useState(false);
 
     const closeDropdown = () => {
         setDropdownOpen(false);
@@ -32,38 +39,63 @@ function Notifications_Dropdown() {
 
     async function handleHideNotification(notificationID) {
         try {
-            await hideNotification({notificationID: notificationID});
+            await hideNotification({ notificationID: notificationID });
             setNotifications(notifications.filter(notification => notification._id !== notificationID));
         } catch (error) {
             console.error('Error hiding notification:', error.message);
         }
     }
 
-    // async function handleDisableNotification(notificationID) {
-    //     try {
-    //         await disableNotification({notificationID: notificationID});
-    //         setNotifications(notifications.filter(notification => notification._id !== notificationID));
-    //     } catch (error) {
-    //         console.error('Error hiding notification:', error.message);
-    //     }
-    // }
+    async function handleEnableNotification(notificationID) {
+        try {
+            const notification = notifications.find(notification => notification._id === notificationID);
+            if (notification.type === "subreddit") {
+                if (notification.isDisabled === false) {
+                    await disableNotification({ subredditName: notification.subredditName });
+                } else {
+                    await enableNotification({ subredditName: notification.subredditName });
+                }
+            } else if (notification.type === "post") {
+                if (notification.isDisabled === false) {
+                    await disableNotification({ PostId: notificationID });
+                } else {
+                    await enableNotification({ PostId: notificationID });
+                }
+            } else if (notification.type === "comment") {
+                if (notification.isDisabled === false) {
+                    await disableNotification({ commentId: notification.commentId });
+                } else {
+                    await enableNotification({ commentId: notification.commentId });
+                }
+            }
+        } catch (error) {
+            console.error('Error Disable notification:', error.message);
+        }
+    }
 
     async function handleNotificationClick(notificationID) {
         try {
+            const notification = notifications.find(notification => notification._id === notificationID);
             const isUnread = unreadNotifications.some(un => un._id === notificationID);
             if (isUnread) {
-                await sendReadNotifications(notificationID); 
+                await sendReadNotifications(notificationID);
                 setUnreadNotifications(prevNotifications => prevNotifications.filter(notification => notification._id !== notificationID));
-            }            
+            }
+            console.log(notification.type)
+            if (notification.type === "subreddit") {
+                navigate(`/r/${notification.subredditName}`);
+            } else if (notification.type === "post") {
+                navigate(`/post/post-details/${notification.postId}`);
+            } else if (notification.type === "comment") {
+
+            } else if (notification.type === "Friend Request") {
+                navigate(`/profile/${username}`);
+            }
         } catch (error) {
             console.error('Error marking notification as read:', error.message);
         }
     }
-    
-    // const handleToggleUpdates = () => {
-    //     setIsUpdatesDisabled(prevState => !prevState);
-    // }
-    
+
     return (
         <div className="notifications-container">
             <div className="notifications-header">
@@ -79,7 +111,7 @@ function Notifications_Dropdown() {
                 <div className="messages-extra"></div>
             </div>
             <div className="notifications-body">
-                <div className="notifications-actions" style={{marginBottom:'10px'}}>
+                <div className="notifications-actions" style={{ marginBottom: '10px' }}>
                     <div className="notifications-mark-all">
                         <button className="mark-all-button">
                             <span className="mark-all-text">Mark all as read</span>
@@ -96,9 +128,9 @@ function Notifications_Dropdown() {
                     </div>
                 </div>
                 {notifications.length > 0 && notifications.map(notification => (
-                    <div key={notification._id} 
-                    className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`} 
-                    onClick={() => handleNotificationClick(notification._id)}
+                    <div key={notification._id}
+                        className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}
+                        onClick={() => handleNotificationClick(notification._id)}
                     >
                         <div className="notifications-item-link" style={{ cursor: 'pointer' }} >
                             <div className="notifications-item-content">
@@ -126,16 +158,26 @@ function Notifications_Dropdown() {
                                         <PopoverTrigger>
                                             <Button
                                                 variant='ghost'
-                                                colorScheme='gray'><SlOptions /></Button>
+                                                colorScheme='gray'
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}><SlOptions /></Button>
                                         </PopoverTrigger>
                                         <PopoverContent>
                                             <PopoverArrow />
-                                            <PopoverBody className="popover-body"onClick={() => handleHideNotification(notification._id)}>Hide this notification</PopoverBody>
-                                            {/* <PopoverBody className="popover-body" onClick={handleToggleUpdates}>
-                                                {isUpdatesDisabled ? 'Enable updates from this community' : 'Disable updates from this community'}
-                                            </PopoverBody> */}
-                                            <PopoverBody className="popover-body">Enable updates from this community</PopoverBody>
-                                            <PopoverBody className="popover-body">Turn off this notification type</PopoverBody>
+                                            <PopoverBody className="popover-body" onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleHideNotification(notification._id);
+                                            }}>Hide this notification</PopoverBody>
+                                            {
+                                                notification.type !== "Friend Request" &&
+                                                <PopoverBody className="popover-body" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEnableNotification(notification._id);
+                                                }}>
+                                                    {notification.isDisabled === true ? 'Enable updates from this community' : 'Disable updates from this community'}
+                                                </PopoverBody>
+                                            }
                                         </PopoverContent>
                                     </Popover>
                                 </div>
