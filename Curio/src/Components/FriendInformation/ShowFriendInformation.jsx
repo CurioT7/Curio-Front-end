@@ -389,10 +389,10 @@ function ShowFriendInformation(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-4 ms-lg-5 d-flex flex-column flex-lg-row ms-0 align-items-start">
-                        <button onClick={() => setOverviewState(0)} className="btn control-button me-2 p-1 p-sm-3">Overview</button>
-                        <button onClick={() => setOverviewState(1)} className="btn control-button me-2 p-1 p-sm-3">Posts</button>
-                        <button onClick={() => setOverviewState(2)} className="btn control-button me-2 p-1 p-sm-3">Comments</button>
+                    <div className="mt-4 ms-lg-5 d-flex flex-column flex-lg-row ms-0 mb-2 align-items-start">
+                        <button onClick={() => setOverviewState(0)} style={{backgroundColor: overviewState === 0 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Overview</button>
+                        <button onClick={() => setOverviewState(1)} style={{backgroundColor: overviewState === 1 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Posts</button>
+                        <button onClick={() => setOverviewState(2)} style={{backgroundColor: overviewState === 2 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
                 <hr style={{backgroundColor: "#0000008F"}} className="d-flex justify-content-center col-12 col-md-7 ms-0 ms-lg-5"></hr>
                 {props.isBlocked ? (
