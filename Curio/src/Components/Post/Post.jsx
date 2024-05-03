@@ -45,6 +45,7 @@ function Post(props) {
     const [isFollowing, setIsFollowing] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
     const [blockedUsers, setBlockedUsers] = useState([]);
+    const [isUserMember, setIsUserMember] = useState();
     const toast = useToast();
     const postId = props._id;
     const [votes, setVotes] = useState(props.upvotes - props.downvotes);
@@ -62,6 +63,7 @@ function Post(props) {
         setUpvoted(props.voteStatus === "upvoted" ? true : false);
         setDownvoted(props.voteStatus === "downvoted" ? true : false);
         setIsLocked(props.isLocked);
+        setIsUserMember(props.isUserMember);
         window.addEventListener('loginOrSignup', () => {
             if (localStorage.getItem('token') === null){
                 setUpvoted(false);
@@ -387,6 +389,39 @@ const postCategory = async (postID) => {
         }
       }
 
+    async function handleJoinCommunity() {
+        if (localStorage.getItem('token') === null){
+            navigate('/login');
+        } else {
+            if (!isUserMember){
+                const response = await axios.post(`${hostUrl}/api/friend`, {
+                    subreddit: props.linkedSubreddit
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200){
+                    setIsUserMember(!isUserMember);
+                }
+            }
+            else {
+                const response = await axios.post(`${hostUrl}/api/unfriend`, {
+                        subreddit: props.linkedSubreddit
+                    },{
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                );
+                if (response.status === 200){
+                    setIsUserMember(!isUserMember);
+                }
+            }
+        }
+    }
+
 
  
 
@@ -396,6 +431,7 @@ const postCategory = async (postID) => {
             {!isHidden &&
                 <div>
                     <Card className='Post' variant='ghost' >
+                        <p onClick={() => navigate(`r/${props.linkedSubreddit}`)} style={{marginLeft: "70px"}} className='mb-0 subreddit-post-name'>r/{props.linkedSubreddit}</p>
                         <CardHeader className='py-0'>
                             <Flex spacing='4'>
                             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
@@ -404,6 +440,7 @@ const postCategory = async (postID) => {
                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
+                            <button onClick={handleJoinCommunity} className='join-button mt-1'>{!isUserMember ? "Join" : "Leave"}</button>
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} isSpoiler={props.isSpoiler}  post={props.post}/>
                             </Flex>
                         </CardHeader>
@@ -421,7 +458,6 @@ const postCategory = async (postID) => {
                         ) : (
                             <>  
                             <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}></Text>
-
                             </>
                         )}
                             {props.image && <Image

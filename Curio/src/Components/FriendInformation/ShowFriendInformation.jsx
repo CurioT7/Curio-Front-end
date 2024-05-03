@@ -272,6 +272,20 @@ function ShowFriendInformation(props) {
                 console.error('Error:', error);
             }
         }
+
+    const handleJoinCommunity = async (communityName) => {
+       const response = await axios.post(`${hostUrl}/api/friend`, {
+            subreddit: communityName
+        },
+        {
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (response.status === 200){
+            setIsUserMember(!isUserMember);
+        }
+    }
     
 
     return (
@@ -383,7 +397,7 @@ function ShowFriendInformation(props) {
                                         <p className="mod-community-name mb-0">{community.name}</p>
                                         <p className="mod-community-subscribers secondary-subheader">{community.members.length} members</p>
                                     </div>
-                                    <button className="join-button">Join</button>
+                                    <button onClick={() => handleJoinCommunity(community.name)} className="join-button">Join</button>
                                     </div>           
                                 ))}
                             </div>
