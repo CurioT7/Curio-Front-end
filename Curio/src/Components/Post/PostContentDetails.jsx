@@ -217,7 +217,6 @@ function PostContentDetails(post) {
         }
     }
     const makePostDownvoted = async () => {
-        console.log("hello")
         if (localStorage.getItem('token') === null) {
             navigate('/login');
         }
@@ -274,14 +273,38 @@ function PostContentDetails(post) {
     }
     useEffect(() => {
         async function fetchAndSetData() {
-            const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
-            if (response.status === 200 || response.status === 201) {
-                setComments(response.data.comments);
+            if (localStorage.getItem('token') === null) {
+                try{
+                    const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
+                    if (response.status === 200 || response.status === 201) {
+                        setComments(response.data);
+                    }
+                    else {
+                        Toast();
+                    }
+                }
+                catch(err){
+                    Toast();
+                }
             }
-            else {
-                Toast();
-            }
-            
+            else{
+                try{
+                    const response = await axios.get(`${hostUrl}/api/comments/${post._id}`,{
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                    if (response.status === 200 || response.status === 201) {
+                        setComments(response.data);
+                    }
+                    else {
+                        Toast();
+                    }
+                }
+                catch(err){
+                    Toast();
+                }
+            }       
         }
         window.addEventListener('deleteComment', fetchAndSetData);
     
@@ -399,7 +422,7 @@ function PostContentDetails(post) {
                                 </button>
                             </div>
                             <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                            <span className='share-post-text'>{comments.length}</span>
+                            <span className='share-post-text'>{comments?.length}</span>
                             </Button>
                                 <Menu>
                                         <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>
@@ -434,8 +457,8 @@ function PostContentDetails(post) {
                 }
                 <CommentInputForm type={"createComment"} ID={postId} />
                 <SortingComments onChangeSort={handleChangedSort} />
-            {comments.map((comment, index) => (
-                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+            {comments && comments.map((comment, index) => (
+                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} voteStatus={comment.details.voteStatus} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
         </>
     )
