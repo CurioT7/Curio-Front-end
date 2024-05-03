@@ -39,7 +39,7 @@ function FollowersPage(props) {
   }
 
   async function handleGetFollowers() {
-    const response = await getFollowers('followers');
+    const response = await getFollowers('asfasfasfafaf');
     if (response) {
       setFollowers(response.data.friendsArray);
     }

@@ -15,7 +15,7 @@ import {
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 import { useNavigate } from 'react-router-dom';
 
-function Notifications_Dropdown() {
+function Notifications_Dropdown( {setUnreadNotificationsNum} ) {
     const navigate = useNavigate();
     const username = localStorage.getItem('username');
     const [notifications, setNotifications] = useState([]);
@@ -34,6 +34,7 @@ function Notifications_Dropdown() {
         if (data) {
             setNotifications(data.notifications || []);
             setUnreadNotifications(data.unreadNotifications || []);
+            setUnreadNotificationsNum(data.unreadNumber);
         }
     }
 
