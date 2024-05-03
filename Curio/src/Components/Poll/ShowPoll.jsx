@@ -52,6 +52,7 @@ const handleVoted = () => {
     if(response.sucess){
       setVoted(true);
   }
+}
 
   return (
     <>
