@@ -19,7 +19,8 @@ import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
 import { useNavigate } from "react-router-dom";
 import { useToast } from '@chakra-ui/react';
-import redditPic from "../../styles/icons/hmm-snoo.png"
+import redditPic from "../../styles/icons/hmm-snoo.png";
+import PostComments from "../Post/PostComments.jsx";
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
@@ -32,6 +33,12 @@ function ShowFriendInformation(props) {
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
+    const [userPosts, setUserPosts] = useState([]);
+    const [userComments, setUserComments] = useState([]);
+    const [overviewState, setOverviewState] = useState(0);
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [hiddenPosts, setHiddenPosts] = useState([]);
+    const [savedComments, setSavedComments] = useState([]);
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
@@ -68,6 +75,19 @@ function ShowFriendInformation(props) {
         });
     }
 
+    const getUserOverview = async () => {
+        try{
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.get(`${hostUrl}/api/user/${props.username}/overview`);
+            if (response.status === 200 || response.status === 201) {
+                setUserPosts(response.data.userPosts);
+                setUserComments(response.data.userComments);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }   
+
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
@@ -86,6 +106,41 @@ function ShowFriendInformation(props) {
         setShowReportMenu(true);
     };
 
+    const getSaved = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setSavedPosts(response.data.savedPosts);
+            setSavedComments(response.data.savedComments);  
+        }
+      }
+      catch(err){
+        console.error(err);
+      }
+    }
+
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          console.error(err);
+      }
+    }
+
     const handleReportPopupClose = () => {
         setShowReportMenu(false);
     };
@@ -93,6 +148,11 @@ function ShowFriendInformation(props) {
     useEffect(() => {
         handleGetFollower(props.username);
         getBlocked(props.username);
+        getUserOverview();
+        if (localStorage.getItem('token')) {
+            getSaved();
+            getHidden();
+        }
     }, [props.username]);
 
 
@@ -330,48 +390,9 @@ function ShowFriendInformation(props) {
                         </div>
                     </div>
                     <div className="mt-4 ms-lg-5 d-flex flex-column flex-lg-row ms-0 align-items-start">
-                        <button className="btn control-button me-2 p-1 p-sm-3">Overview</button>
-                        <button className="btn control-button me-2 p-1 p-sm-3">Posts</button>
-                        <button className="btn control-button me-2 p-1 p-sm-3">Comments</button>
-                    </div>
-                    <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2 ms-0 ms-lg-4">
-                        <div className="pt-0 w-75 d-flex">
-                            <button className="d-flex justify-content-center ms-2 sort-button p-2" style={{backgroundColor : showSortings ? "#D2DADD" : ""}} onClick={handleSortingsClick}>{sortingState === 0 ? "Hot" : sortingState === 1 ? "New" : "Top"}<div className="ms-1"><DownArrow /></div></button>
-
-                            <div className="" style={{ 
-                                        display: showSortings ? 'flex' : 'none',
-                                        flexDirection: 'column',
-                                        alignItems: 'flex-start',
-                                        position: 'absolute',
-                                        translateY: '-20%!important',
-                                        translateX: '0%',
-                                        backgroundColor: '#FFFFFF',
-                                        borderRadius: '10px',
-                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
-                                        marginTop: '2rem',
-                                        marginRight: '1rem',
-                                        padding: '0px',
-                                        width: '4rem !important',
-                                        zIndex: '1'
-                                    }}>
-                                        <ul className='drop-down-list'>
-                                            <li className="drop-down-item">
-                                                    <div className="d-flex justify-content-center"><p className='text-text sort-by mb-0 p-2 ms-0'>Sort By</p></div>
-                                            </li>
-                                        </ul>
-                                        <ul className='drop-down-list w-100 p-0'>
-                                            <li className="drop-down-item dropdown-hover-effect mb-0 pt-2" style={{backgroundColor: (sortingState === 0) ? "#EAEDEF" : ""}} onClick={() => setSortingState(0)}>
-                                                    <div className="pt-2"><p className='text-text'>Hot</p></div>
-                                            </li>
-                                            <li className="drop-down-item dropdown-hover-effect p-0 pt-2 mb-0" style={{backgroundColor: (sortingState === 1) ? "#EAEDEF" : ""}} onClick={() => setSortingState(1)}>
-                                                    <div className="pt-2"><p className='text-text'>New</p></div>
-                                            </li>
-                                            <li className="drop-down-item dropdown-hover-effect mb-1 p-0 pt-2" style={{backgroundColor: (sortingState === 2) ? "#EAEDEF" : ""}} onClick={() => setSortingState(2)}>
-                                                    <div className="pt-2"><p className='text-text'>Top</p></div>
-                                            </li>
-                                        </ul>   
-                                    </div>
-                        </div>
+                        <button onClick={() => setOverviewState(0)} className="btn control-button me-2 p-1 p-sm-3">Overview</button>
+                        <button onClick={() => setOverviewState(1)} className="btn control-button me-2 p-1 p-sm-3">Posts</button>
+                        <button onClick={() => setOverviewState(2)} className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
                 <hr style={{backgroundColor: "#0000008F"}} className="d-flex justify-content-center col-12 col-md-7 ms-0 ms-lg-5"></hr>
                 {props.isBlocked ? (
@@ -381,30 +402,38 @@ function ShowFriendInformation(props) {
                 </div>
                 ) :(
                 <div className="ms-0 ms-lg-5 mt-4 col-md-7">
-                    <Post
-                        user="r/netherlands"
-                        title="Second Post"
-                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
-                        upvotes={10}
-                        downvotes={1}
-                        comments={[4, 5]} // Dummy array for comments
-                    />
-                    <Post
-                        user="r/netherlands"
-                        title="Second Post"
-                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
-                        upvotes={10}
-                        downvotes={1}
-                        comments={[4, 5]} // Dummy array for comments
-                    />
-                    <Post
-                        user="r/netherlands"
-                        title="Second Post"
-                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
-                        upvotes={10}
-                        downvotes={1}
-                        comments={[4, 5]} // Dummy array for comments
-                    />
+                    {overviewState === 0 && userPosts.map((post, index) => (
+                        <Post _id={post._id}
+                            title={post.title}
+                            body={post.content}
+                            user={post.authorName}
+                            upvotes={post.upvotes}
+                            downvotes={post.downvotes}
+                            comments={post.comments}
+                            content={post.content}
+                            //isMod={isMod}
+                            savedPosts={savedPosts}
+                            hiddenPosts={hiddenPosts} />
+                            ))}
+                    {overviewState === 0 && userComments.map((comment, index) => (
+                        <PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
+                    ))}
+                   {overviewState === 1 && userPosts.map((post, index) => (
+                        <Post _id={post._id}
+                            title={post.title}
+                            body={post.content}
+                            user={post.authorName}
+                            upvotes={post.upvotes}
+                            downvotes={post.downvotes}
+                            comments={post.comments}
+                            content={post.content}
+                            //isMod={isMod}
+                            savedPosts={savedPosts}
+                            hiddenPosts={hiddenPosts} />
+                            ))}
+                            {overviewState === 2 && userComments.map((comment, index) => (
+                                <PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
+                            ))}
                 </div>)}
                 </div>
             </>
