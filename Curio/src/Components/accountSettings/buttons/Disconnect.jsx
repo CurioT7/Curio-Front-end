@@ -25,7 +25,7 @@ function Disconnect(){
                 password:yourPass
             }, {
                 headers: {
-                  authorization: `Bearer ${localStorage.getItem('token')}` // replace with your token retrieval method
+                  authorization: `Bearer ${localStorage.getItem('token')}`
                 }
               })
               setWrongPass(false)
