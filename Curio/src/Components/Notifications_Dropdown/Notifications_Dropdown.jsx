@@ -5,12 +5,14 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, But
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
-import { fetchNotificationsFromBackend, hideNotification } from "../../Pages/Notifications/NotificationsEndPoints.js";
+import { fetchNotificationsFromBackend, hideNotification, sendReadNotifications } from "../../Pages/Notifications/NotificationsEndPoints.js";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 
 function Notifications_Dropdown() {
     const [notifications, setNotifications] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
+    // const [disablesNotifications, setDisablesNotifications] = useState([]);
+    // const [isUpdatesDisabled, setIsUpdatesDisabled] = useState(false);
 
     const closeDropdown = () => {
         setDropdownOpen(false);
@@ -25,18 +27,42 @@ function Notifications_Dropdown() {
         if (data) {
             setNotifications(data.notifications || []);
             setUnreadNotifications(data.unreadNotifications || []);
-            console.log(notifications)
         }
     }
 
     async function handleHideNotification(notificationID) {
         try {
             await hideNotification({notificationID: notificationID});
-            fetchAndSetData();
+            setNotifications(notifications.filter(notification => notification._id !== notificationID));
         } catch (error) {
             console.error('Error hiding notification:', error.message);
         }
     }
+
+    // async function handleDisableNotification(notificationID) {
+    //     try {
+    //         await disableNotification({notificationID: notificationID});
+    //         setNotifications(notifications.filter(notification => notification._id !== notificationID));
+    //     } catch (error) {
+    //         console.error('Error hiding notification:', error.message);
+    //     }
+    // }
+
+    async function handleNotificationClick(notificationID) {
+        try {
+            const isUnread = unreadNotifications.some(un => un._id === notificationID);
+            if (isUnread) {
+                await sendReadNotifications(notificationID); 
+                setUnreadNotifications(prevNotifications => prevNotifications.filter(notification => notification._id !== notificationID));
+            }            
+        } catch (error) {
+            console.error('Error marking notification as read:', error.message);
+        }
+    }
+    
+    // const handleToggleUpdates = () => {
+    //     setIsUpdatesDisabled(prevState => !prevState);
+    // }
     
     return (
         <div className="notifications-container">
@@ -70,7 +96,10 @@ function Notifications_Dropdown() {
                     </div>
                 </div>
                 {notifications.length > 0 && notifications.map(notification => (
-                    <div key={notification._id} className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}>
+                    <div key={notification._id} 
+                    className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`} 
+                    onClick={() => handleNotificationClick(notification._id)}
+                    >
                         <div className="notifications-item-link" style={{ cursor: 'pointer' }} >
                             <div className="notifications-item-content">
                                 <div className="notifications-item-avatar">
@@ -102,7 +131,10 @@ function Notifications_Dropdown() {
                                         <PopoverContent>
                                             <PopoverArrow />
                                             <PopoverBody className="popover-body"onClick={() => handleHideNotification(notification._id)}>Hide this notification</PopoverBody>
-                                            <PopoverBody className="popover-body">Disable updates from this community</PopoverBody>
+                                            {/* <PopoverBody className="popover-body" onClick={handleToggleUpdates}>
+                                                {isUpdatesDisabled ? 'Enable updates from this community' : 'Disable updates from this community'}
+                                            </PopoverBody> */}
+                                            <PopoverBody className="popover-body">Enable updates from this community</PopoverBody>
                                             <PopoverBody className="popover-body">Turn off this notification type</PopoverBody>
                                         </PopoverContent>
                                     </Popover>

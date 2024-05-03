@@ -19,9 +19,8 @@
     background-color: lightgray;
 }
 
-
 .notifications-item.unread {
-    background-color: #f2f2f2; 
+    background-color: rgba(36,160,237,.1);; 
 }
 
 .notifications-item.read {

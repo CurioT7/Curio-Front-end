@@ -13,11 +13,12 @@ export async function fetchNotificationsFromBackend() {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-        });        
+        });
         return {
             notifications: responseAllNotification.data.notifications,
-            unreadNotifications: responseUnreadNotification.data.unreadNotifications
+            unreadNotifications: responseUnreadNotification.data.unreadNotifications,
         };
+        
     } catch (error) {
         if (error.response && error.response.status === 401) {
             console.error('Unauthorized');
@@ -43,6 +44,49 @@ export async function hideNotification(notificationID) {
         throw error;
     }
 }
+
+// export async function disableNotification(notificationID) {
+//     try {
+//         const response = await axios.post(`${serverHost}/api/notifications/hide`, notificationID, {
+//             headers: {
+//                 Authorization: `Bearer ${localStorage.getItem('token')}`
+//             }
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error('Error hiding notification:', error.message);
+//         throw error;
+//     }
+// }
+
+export async function sendReadNotifications(notificationID) {
+    try {
+        const response = await axios.post(
+            `${serverHost}/api/notifications/read-notification`,
+            { notificationID: notificationID },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            console.error('Unauthorized');
+        } else if (error.request && error.request.status === 400) {
+            console.error('Notification is already read');
+        } else if (error.request && error.request.status === 404) {
+            console.error('Notification not found');
+        } else if (error.request && error.request.status === 500) {
+            console.error('Internal Server error');
+        }else {
+            console.error('Error', error.message);
+        }
+    }
+}
+
 
 export async function disableNotification(notificationID) {
     try {

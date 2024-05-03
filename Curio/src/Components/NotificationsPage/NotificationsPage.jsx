@@ -7,7 +7,8 @@ import { SlOptions } from "react-icons/sl";
 import "./NotificationsPage.css";
 import { getTimeDifference } from "../../Components/getTimeDifference/getTimeDifference";
 
-function NotificationsPage({ notifications, unreadNotifications }) {
+
+function NotificationsPage({ notifications, unreadNotifications, onHideNotification, onNotificationClick }) {
     return (
         <div className="notifications-page">
             <div className='notifications-header-page'>
@@ -36,8 +37,10 @@ function NotificationsPage({ notifications, unreadNotifications }) {
                 </div>
             </div>
             <div className='notification-content'>
-            {notifications.length > 0 && notifications.map(notification => (
-                    <div key={notification._id} className={`notification-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}>
+                {notifications.length > 0 && notifications.map(notification => (
+                    <div key={notification._id}
+                        className={`notification-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}
+                        onClick={() => onNotificationClick(notification._id)}>
                         <div className='avatar'>
                             <span className='avatar-image'>
                                 <img src={logo} alt="avatar for notification" style={{ marginBottom: "0" }} />
@@ -52,7 +55,7 @@ function NotificationsPage({ notifications, unreadNotifications }) {
                                     {notification.title}
                                 </span>
                                 <span className="notifications-item-info-date">
-                                    {getTimeDifference(notification.timestamp)} 
+                                    {getTimeDifference(notification.timestamp)}
                                 </span>
                             </div>
                             <div className="notifications-item-message">
@@ -70,7 +73,7 @@ function NotificationsPage({ notifications, unreadNotifications }) {
                                 </PopoverTrigger>
                                 <PopoverContent>
                                     <PopoverArrow />
-                                    <PopoverBody>Hide this notification</PopoverBody>
+                                    <PopoverBody onClick={() => onHideNotification(notification._id)}>Hide this notification</PopoverBody>
                                     <PopoverBody>Disable updates from this community</PopoverBody>
                                     <PopoverBody>Turn off this notification type</PopoverBody>
                                 </PopoverContent>
