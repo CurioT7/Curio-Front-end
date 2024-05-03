@@ -17,6 +17,7 @@ function Private_Messages(props) {
   const [subreddit, setSubreddit] = useState(""); 
   const [subject, setSubject] = useState(""); 
   const [message, setMessage] = useState("");
+  const [recipient, setRecipient] = useState("");
   const toast = useToast();
 
   function Toast(message, state) {
@@ -66,12 +67,18 @@ function Private_Messages(props) {
       if (finalSubreddit === username) {
         finalSubreddit = null;
       }
-      console.log(message);
+      let finalRecipient = recipient;
+      let isSubreddit = false;
+      if (finalRecipient.startsWith("r/")) {
+        finalRecipient = finalRecipient.substring(2);
+        isSubreddit = true;
+      }
       const messageData = {
         subreddit: finalSubreddit,
         subject: subject,
-        message: message
-        // Add your message data here
+        message: message,
+        Recipient: finalRecipient,
+        isSubreddit: isSubreddit
       };
 
       const response = await axios.post(
@@ -98,6 +105,9 @@ function Private_Messages(props) {
         case 404:
           Toast('No subreddit found with that name', 'error');
           break;
+        case 400:
+          Toast('No user found with that username', 'error');
+          break;
         case 500:
           Toast('Error retrieving search results', 'error');
           break;
@@ -114,7 +124,7 @@ function Private_Messages(props) {
         <h2 className='private_message_title'>Send A Private Message</h2>
         <div className='private_message_body'>
           <FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit}/>
-          <ToMessage />
+          <ToMessage setRecipient={setRecipient}/>
           <SubjectMessage setSubject={setSubject}/>
           <Message setMessage={setMessage}/>
           <Button className="send_private_message" colorScheme='blue' size='sm' onClick={handlePrivateMessage}>
