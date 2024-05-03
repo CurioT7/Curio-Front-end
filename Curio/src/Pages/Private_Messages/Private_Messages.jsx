@@ -62,13 +62,13 @@ function Private_Messages(props) {
   };
 
   const handlePrivateMessage = async () => {
+    let isSubreddit = false;
     try {
       let finalSubreddit = subreddit;
       if (finalSubreddit === username) {
         finalSubreddit = null;
       }
       let finalRecipient = recipient;
-      let isSubreddit = false;
       if (finalRecipient.startsWith("r/")) {
         finalRecipient = finalRecipient.substring(2);
         isSubreddit = true;
@@ -77,8 +77,8 @@ function Private_Messages(props) {
         subreddit: finalSubreddit,
         subject: subject,
         message: message,
-        Recipient: finalRecipient,
-        isSubreddit: isSubreddit
+        recipient: finalRecipient,
+        sendToSubreddit: isSubreddit
       };
 
       const response = await axios.post(
@@ -102,11 +102,12 @@ function Private_Messages(props) {
     } catch (error) {
       const status = error.response ? error.response.status : null;
       switch (status) {
-        case 404:
-          Toast('No subreddit found with that name', 'error');
-          break;
         case 400:
-          Toast('No user found with that username', 'error');
+          if (isSubreddit){
+            Toast('No subreddit found with that name', 'error');
+          } else {
+            Toast('No user found with that username', 'error');
+          }
           break;
         case 500:
           Toast('Error retrieving search results', 'error');
