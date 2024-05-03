@@ -27,7 +27,7 @@ function Community({ index, name, category, members, picture }) {
   };
 
   return (
-    <div className={`col col-12 col-fixed-width d-flex justify-content-start align-items-center ${getBackgroundColor(index)}`}>
+    <div data-testid="community" className={`col col-12 col-fixed-width d-flex justify-content-start align-items-center ${getBackgroundColor(index)}`}>
       <div className="d-flex p-1 align-items-center number">
         {index + 1}
       </div>

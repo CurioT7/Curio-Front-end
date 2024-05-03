@@ -12,10 +12,11 @@ import DropdownIcon from "../../styles/icons/DropdownIcon.svg";
 import UpwardsIcon from "../../styles/icons/Upwards.svg";
 import ShowMore from "../../styles/icons/ShowMore";
 
-const hostUrl = import.meta.env.VITE_SERVER_HOST;
+import { showCommunityInformation } from "./TopCommunitiesEnpoints.js";
+
+
 
 function TopCommunities(props) {
-
   const pagesIndex = useParams();
 
   let pages = [];
@@ -26,7 +27,7 @@ function TopCommunities(props) {
   const [showAllPages, setShowAllPages] = useState(false);
   const commPerPage = 10;
   useEffect(() => {
-    showCommunityInformation(currentPage);
+    handleGetCommunities(currentPage);
   }, [currentPage]);
 
   useEffect(() => {
@@ -36,16 +37,14 @@ function TopCommunities(props) {
     };
   }, []);
 
-  async function showCommunityInformation(page) {
-    try {
-      const response = await axios.get(`${hostUrl}/api/best/communities?page=${page}`);
-        console.log(response.data.communities);
-        setCommunityInfo(response.data.communities);
-        setCommunitiesNumber(response.data.totalCommunitiesCount);
-    } catch (error) {
-        console.error('Error:', error);
+
+  async function handleGetCommunities(page) {
+    const response = await showCommunityInformation(page);
+    if (response) {
+      setCommunityInfo(response.data.communities);
+      setCommunitiesNumber(response.data.totalCommunitiesCount);
     }
-}
+  }
 
 
   for (let i = 1; i <= Math.ceil(communitiesnumber / commPerPage); i++) {

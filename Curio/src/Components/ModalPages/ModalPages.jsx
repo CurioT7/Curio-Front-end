@@ -8,9 +8,9 @@ import axios from "axios";
 import { userBlock , userUnblock } from '../FriendInformation/ShowFriendInformationEndpoints.js'
 import { useToast } from '@chakra-ui/react';
 import { reportUser } from './ModalPagesEndpoints.jsx';
+import { set } from 'mongoose';
 
 
-const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 const MultiPageFormModal = (props) => {
     const [step, setStep] = useState(1);
@@ -119,6 +119,7 @@ const MultiPageFormModal = (props) => {
             const result = await userBlock(username);
             if(result === 200){
                 ToastSuccess();
+                setIsBlocked(true);
             }
             else {
                 if (result === 403) {
@@ -136,6 +137,7 @@ const MultiPageFormModal = (props) => {
                 else{
                     ToastError("Something is wrong, please try again later.");
                 }
+                setIsBlockedError(true);
             }
         }
 
@@ -145,6 +147,7 @@ const MultiPageFormModal = (props) => {
                 const result = await userUnblock(username);
                 if(result){
                     ToastSuccess();
+                    setIsBlocked(false);
                 }
                 else if(result === 500){
                     console.error('An unexpected error occurred on the server. Please try again later.');
@@ -157,13 +160,15 @@ const MultiPageFormModal = (props) => {
 
 
     const handleBlockToggle = async (username) => {
+        if(!isBlockedError){
         if (!isBlocked) {
             handleUserBlock(username);
             }
             else{
                 handleUserUnblock(username);
             }
-            setIsBlocked(!isBlocked);
+        }
+        setIsBlockedError(false);
     }
 
 

@@ -41,10 +41,8 @@ const token = localStorage.getItem('token');
 function Post(props) {
     const [subredditName, setSubredditName] = useState("");
     const [isHidden, setIsHidden] = useState(false);
-    const [showPopover, setShowPopover] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
-    const [blockedUsers, setBlockedUsers] = useState([]);
     const toast = useToast();
     const postId = props._id;
     const [votes, setVotes] = useState(props.upvotes - props.downvotes);
@@ -81,44 +79,6 @@ function Post(props) {
     const [upvoted, setUpvoted] = useState((localStorage.getItem('token') && props.voteStatus === "upvoted") ? true : false);
     const [downvoted, setDownvoted] = useState((localStorage.getItem('token') && props.voteStatus === "downvoted") ? true : false);
     const [isLocked, setIsLocked] = useState(false);
-    const [votepick, setVotepick] = useState("");
-    const [hasVoted, setVoted] = useState(false);
-
-      const handleVote = (event) => {
-    setVotepick(event.target.value);
-  };
-
-  const handleVoted = () => {
-    setVoted(true)
-  }
-
-//   async function pollVote(_id, votepick){
-//     const hostUrl = import.meta.env.VITE_SERVER_HOST;
-//     try{
-//     const response = await axios.post(`${hostUrl}/api/pollVote`, {
-//       postId: _id,
-//       option: votepick
-//     },{
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem("token")}`,
-//       },
-//     });
-//     if(response === 200){
-//       setVoted(true);
-//     }
-//   }
-//     catch(error){
-//       console.error(error);
-//     }
-//   }
-
-//   useEffect(() => {
-//     async function checkVote(){
-//     await pollVote(props._id, votepick);
-//     }
-
-//     checkVote();
-// }, []);
 
     
     const makePostUpvoted = async () => {
@@ -368,17 +328,14 @@ const postCategory = async (postID) => {
     }
 
     async function handleGetFollower(username) {
-        try {
-            const result = await getFollower(username);
-            if (result) {
-                setIsFollowing(true);
-            } else {
-                console.error('Error:', result.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        const result = await getFollower(username);
+        if (result) {
+            setIsFollowing(true);
+        } else {
+            console.error('Error occurred in getFollower');
         }
     }
+    
 
     async function showFriendInfo(username) {
         const result = await showFriendInformation(username);
