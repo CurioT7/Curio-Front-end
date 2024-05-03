@@ -5,8 +5,8 @@ import FromMessage from "../../Components/Private_Messages/from_message/from_mes
 import ToMessage from "../../Components/Private_Messages/to_message/to_message.jsx";
 import SubjectMessage from "../../Components/Private_Messages/subject_message/subject_message.jsx";
 import Message from '../../Components/Private_Messages/message/message.jsx';
-import { Button } from '@chakra-ui/react';
-import {useNavigate} from 'react-router-dom';
+import { Button, useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -14,6 +14,20 @@ function Private_Messages(props) {
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
   const [userCommunities, setUserCommunities] = useState([]);
+  const [subreddit, setSubreddit] = useState(""); 
+  const [subject, setSubject] = useState(""); 
+  const [message, setMessage] = useState("");
+  const [recipient, setRecipient] = useState("");
+  const toast = useToast();
+
+  function Toast(message, state) {
+    toast({
+      description: message,
+      status: state,
+      duration: 3000,
+      isClosable: true,
+    })
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -30,14 +44,14 @@ function Private_Messages(props) {
   const fetchUserData = async () => {
     try {
       const communityDataResponse = await axios.get(
-        `${serverHost}/api/user/${username}/communities`
+        `${serverHost}/api/user/${username}/about`
       );
-      const communityNames = communityDataResponse.data.communities.map(community => community.name);
+      const communityNames = communityDataResponse.data.moderatedSubreddits.map(community => community.name);
       setUserCommunities(communityNames);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
-          console.error('User preferences not found');
+          console.error('User not found');
         } else if (error.response.status === 500) {
           console.error('An unexpected error occurred on the server. Please try again later.');
         }
@@ -46,19 +60,75 @@ function Private_Messages(props) {
       }
     }
   };
-  
 
+  const handlePrivateMessage = async () => {
+    let isSubreddit = false;
+    try {
+      let finalSubreddit = subreddit;
+      if (finalSubreddit === username) {
+        finalSubreddit = null;
+      }
+      let finalRecipient = recipient;
+      if (finalRecipient.startsWith("r/")) {
+        finalRecipient = finalRecipient.substring(2);
+        isSubreddit = true;
+      }
+      const messageData = {
+        subreddit: finalSubreddit,
+        subject: subject,
+        message: message,
+        recipient: finalRecipient,
+        sendToSubreddit: isSubreddit
+      };
+
+      const response = await axios.post(
+        `${serverHost}/api/message/compose`,
+        messageData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      switch (response.status) {
+        case 200:
+          Toast('Message sent successfully', 'success');
+          break;
+        default:
+          console.error("Unexpected response status:", response.status);
+          break;
+      }
+    } catch (error) {
+      const status = error.response ? error.response.status : null;
+      switch (status) {
+        case 400:
+          if (isSubreddit){
+            Toast('No subreddit found with that name', 'error');
+          } else {
+            Toast('No user found with that username', 'error');
+          }
+          break;
+        case 500:
+          Toast('Error retrieving search results', 'error');
+          break;
+        default:
+          console.error("Unexpected error:", error);
+          break;
+      }
+    }
+  };
 
   return (
     <div className='private_message_content'>
       <div className='private_message_table'>
         <h2 className='private_message_title'>Send A Private Message</h2>
         <div className='private_message_body'>
-          <FromMessage userCommunities={userCommunities}/>
-          <ToMessage />
-          <SubjectMessage />
-          <Message />
-          <Button className="send_private_message" colorScheme='blue' size='sm'>
+          <FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit}/>
+          <ToMessage setRecipient={setRecipient}/>
+          <SubjectMessage setSubject={setSubject}/>
+          <Message setMessage={setMessage}/>
+          <Button className="send_private_message" colorScheme='blue' size='sm' onClick={handlePrivateMessage}>
             Send
           </Button>
         </div>

@@ -85,7 +85,7 @@ async function changeSortType(value,time) {
           if(time==="All Time"){
             const data = await fetchTopFromBackend(Community);
             if (data) {
-              setPosts(data.post);
+              setPosts(data.posts);
               setRandomPost({ ...randomPost, isSelected: false });
           }
           else{
@@ -96,7 +96,7 @@ async function changeSortType(value,time) {
           else{
             const data = await fetchTopTimeFromBackend(Community,time);
             if (data) {
-              setPosts(data.post);
+              setPosts(data.posts);
               setRandomPost({ ...randomPost, isSelected: false });
               }
               else{
@@ -109,11 +109,14 @@ async function changeSortType(value,time) {
         else if (value === 'Random') {
             const data = await fetchRisingFromBackend(Community);
             if (data) {
-                setRandomPost({ post: data.post, isSelected: true });
-                
+                // setRandomPost({ post: data.post, isSelected: true });
+                setPosts(data.post);
+                setRandomPost({ ...randomPost, isSelected: false });
             }
             else{
-              setRandomPost({ post:{}, isSelected: true });
+              // setRandomPost({ post:{}, isSelected: true });
+              setPosts([]);
+              setRandomPost({ ...randomPost, isSelected: false });
             }
         }
     

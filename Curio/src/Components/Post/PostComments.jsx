@@ -36,6 +36,17 @@ function PostComments(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (props.voteStatus === "upvoted"){
+            setUpvoted(true);
+            setDownvoted(false);
+        }
+        else if (props.voteStatus === "downvoted"){
+            setDownvoted(true);
+            setUpvoted(false);
+        }
+    }, [])
+
+    useEffect(() => {
         function handleClickOutside(event) {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setShowControls(false);
@@ -157,7 +168,6 @@ function PostComments(props) {
         }
     }
     const handleSave = async () => {
-        console.log(props.key);
         try{
             var hostUrl = import.meta.env.VITE_SERVER_HOST;
             const response = await axios.post(`${hostUrl}/api/save`, {
