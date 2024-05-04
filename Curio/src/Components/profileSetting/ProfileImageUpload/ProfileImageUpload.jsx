@@ -96,7 +96,6 @@ function ProfileImageUpload() {
 
   const uploadImages = async () => {
     const formData = new FormData();
-    console.log("Insert Images");
     if (checkImageProfile) {
       formData.append('profilePicture', 'Update');
       formData.append('media', profileImage);
