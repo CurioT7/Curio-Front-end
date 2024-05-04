@@ -12,6 +12,7 @@ import Postsfooter from "../Post/Postsfooter";
 import Check from "../../styles/icons/Check";
 import axios from "axios";
 import { Text } from '@chakra-ui/react'
+import { pollVote } from "./ShowPollEndpoints";
 
 
 
@@ -41,25 +42,17 @@ function ShowPoll( props ) {
   setVotepick(event.target.value);
 };
 
+const handleVoted = () => {
+  setVoted(true)
+}
 
-  async function pollVote(_id, votepick){
-    const hostUrl = import.meta.env.VITE_SERVER_HOST;
-    try{
-    const response = await axios.post(`${hostUrl}/api/pollVote`, {
-      postId: _id,
-      option: votepick
-    },{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+
+  async function handlepollVote(_id, votepick){
+    const response = await pollVote(_id, votepick)
+    if(response.sucess){
       setVoted(true);
   }
-    catch(error){
-      console.error(error);
-    }
-  }
-
+}
 
   return (
     <>
@@ -128,7 +121,7 @@ function ShowPoll( props ) {
                 }`}
                 id="voteButton"
                 disabled={votepick === "" ? true : false}
-                onClick={() => {pollVote(props._id, votepick)}}
+                onClick={() => {handleVoted(); handlepollVote(props._id, votepick)}}
               >
                 Vote
               </button>
