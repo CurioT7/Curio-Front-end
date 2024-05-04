@@ -134,10 +134,24 @@ async function userUnblock(usernameToUnblock) {
             usernameToUnblock
         }, {
             headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
+                authorization: `Bearer ${token}`
             }
         });
         return true;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function getBlocked() {
+    try {
+        const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response
     } catch (error) {
         console.error('Error:', error);
     }
@@ -148,4 +162,4 @@ async function userUnblock(usernameToUnblock) {
 
 
 
-export {userBlock, userUnblock, showFriendInformation, userFollow, userUnfollow, getFollower};
+export {userBlock, userUnblock, showFriendInformation, userFollow, userUnfollow, getFollower, getBlocked};

@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import AccountSettings from '../../../Components/accountSettings/AccountSettings';
 import { FindUserInformation } from '../../../Components/UserSetting/UserSettingsEndPoints';
 
+
 jest.mock('../../../Components/UserSetting/UserSettingsEndPoints', () => ({
     __esModule: true,
     default: jest.fn(),

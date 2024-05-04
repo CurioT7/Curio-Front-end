@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import './ShowFriendInformation.css';
 import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
@@ -13,7 +13,7 @@ import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {userBlock , userUnblock, userFollow, userUnfollow, getFollower} from "./ShowFriendInformationEndpoints.js";
+import {userBlock , userUnblock, userFollow, userUnfollow, getFollower, getBlocked} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
@@ -28,6 +28,7 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
     const [isFollowing, setIsFollowing] = useState(false);
     // const [blockedUsers, setBlockedUsers] = useState([]);
     const [showReportMenu, setShowReportMenu] = useState(false);
@@ -147,6 +148,7 @@ function ShowFriendInformation(props) {
 
     useEffect(() => {
         handleGetFollower(props.username);
+        handleGetBlocked(props.username);
         getBlocked(props.username);
         getUserOverview();
         if (localStorage.getItem('token')) {
@@ -157,17 +159,14 @@ function ShowFriendInformation(props) {
 
 
     async function handleGetFollower(username) {
-        try {
-            const result = await getFollower(username);
-            if (result) {
-                setIsFollowing(true);
-            } else {
-                console.error('Error:', result.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        const result = await getFollower(username);
+        if (result) {
+            setIsFollowing(true);
+        } else {
+            console.error('Error occurred in getFollower');
         }
     }
+    
     
 
     const handleFollowToggle = async () => {
@@ -211,23 +210,17 @@ function ShowFriendInformation(props) {
     }
     
 
-    async function getBlocked(username) {
+    async function handleGetBlocked(username) {
         try {
             if (!token) {
                 console.error('Token not found');
                 return;
             }
     
-            const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await getBlocked();
             if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.blockedUsername === username)) {
                 props.isUserBlocked();
             }
-            return response.data
         } catch (error) {
             console.error('Error:', error);
         }
@@ -265,11 +258,12 @@ function ShowFriendInformation(props) {
                 ToastSuccess('User unblocked successfully');
             }
             else if(result === 500){
-                console.error('An unexpected error occurred on the server. Please try again later.');
+                ToastError('An unexpected error occurred on the server. Please try again later.');
             }
             
             }catch (error) {
                 console.error('Error:', error);
+                ToastError('Request has failed, please try again later.')
             }
         }
 
@@ -312,7 +306,8 @@ function ShowFriendInformation(props) {
                                         <button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick}>
                                         <Ellipsis className="ellipsis-img" />
                                     </button>
-                                    <div className="dropdown-menu1" style={{ 
+                                    <div ref={dropdownRef} className="dropdown-menu1" 
+                                        style={{ 
                                         display: showDropdown ? 'flex' : 'none',
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',
