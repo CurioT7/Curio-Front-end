@@ -7,13 +7,16 @@ import cover from "../../assets/cover.png";
 
 
 function Trending(props) {
-   
+    const handleNavigate = () => {
+    
+        window.location.href = `/search/${props.description}`;
+    }
     return (
         <Card variant='ghost'>
             {/* <CardHeader paddingBottom={1} className='trending-header'>
             <BsArrowUpRightCircle/> <span>TRENDING TODAY</span>
             </CardHeader> */}
-            <div className=' search-body'>
+            <div onClick={handleNavigate} className=' search-body'>
             <CardBody padding={3} paddingTop={3} marginTop={0} className=' trending-body-content'>
                 <div>
                     <h5>  {props.title} </h5>
