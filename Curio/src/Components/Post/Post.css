@@ -307,3 +307,9 @@
     font-size: 12px;
     
   }
+
+.subreddit-post-name{
+    color: "#333d42";
+    font-size: 0.75rem;
+    font-weight: 600;
+}

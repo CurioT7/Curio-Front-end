@@ -41,10 +41,9 @@ const token = localStorage.getItem('token');
 function Post(props) {
     const [subredditName, setSubredditName] = useState("");
     const [isHidden, setIsHidden] = useState(false);
-    const [showPopover, setShowPopover] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
-    const [blockedUsers, setBlockedUsers] = useState([]);
+    const [isUserMember, setIsUserMember] = useState();
     const toast = useToast();
     const postId = props._id;
     const [votes, setVotes] = useState(props.upvotes - props.downvotes);
@@ -62,6 +61,7 @@ function Post(props) {
         setUpvoted(props.voteStatus === "upvoted" ? true : false);
         setDownvoted(props.voteStatus === "downvoted" ? true : false);
         setIsLocked(props.isLocked);
+        setIsUserMember(props.isUserMember);
         window.addEventListener('loginOrSignup', () => {
             if (localStorage.getItem('token') === null){
                 setUpvoted(false);
@@ -81,44 +81,6 @@ function Post(props) {
     const [upvoted, setUpvoted] = useState((localStorage.getItem('token') && props.voteStatus === "upvoted") ? true : false);
     const [downvoted, setDownvoted] = useState((localStorage.getItem('token') && props.voteStatus === "downvoted") ? true : false);
     const [isLocked, setIsLocked] = useState(false);
-    const [votepick, setVotepick] = useState("");
-    const [hasVoted, setVoted] = useState(false);
-
-      const handleVote = (event) => {
-    setVotepick(event.target.value);
-  };
-
-  const handleVoted = () => {
-    setVoted(true)
-  }
-
-//   async function pollVote(_id, votepick){
-//     const hostUrl = import.meta.env.VITE_SERVER_HOST;
-//     try{
-//     const response = await axios.post(`${hostUrl}/api/pollVote`, {
-//       postId: _id,
-//       option: votepick
-//     },{
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem("token")}`,
-//       },
-//     });
-//     if(response === 200){
-//       setVoted(true);
-//     }
-//   }
-//     catch(error){
-//       console.error(error);
-//     }
-//   }
-
-//   useEffect(() => {
-//     async function checkVote(){
-//     await pollVote(props._id, votepick);
-//     }
-
-//     checkVote();
-// }, []);
 
     
     const makePostUpvoted = async () => {
@@ -309,6 +271,15 @@ const postCategory = async (postID) => {
                 isSpoiler: props.isSpoiler,
                 isMod: props.isMod,
                 isLocked: isLocked,
+                voteLength: props.voteLength,
+                pollTitle: props.pollTitle,
+                pollText: props.pollText,
+                optionNames: props.optionNames,
+                votes: props.votes,
+                didVote: props.didVote,
+                optionSelected: props.optionSelected,
+                type: props.type,
+                pollEnded: props.pollEnded,
                 dateViewed: new Date().toISOString()
             }
             const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -345,6 +316,15 @@ const postCategory = async (postID) => {
                 isMod: props.isMod,
                 isSpoiler: props.isSpoiler,
                 isLocked: isLocked,
+                voteLength: props.voteLength,
+                pollTitle: props.pollTitle,
+                pollText: props.pollText,
+                optionNames: props.optionNames,
+                votes: props.votes,
+                didVote: props.didVote,
+                optionSelected: props.optionSelected,
+                type: props.type,
+                pollEnded: props.pollEnded,
                 dateViewed: new Date().toISOString()
             }
             console.log(err);
@@ -368,17 +348,14 @@ const postCategory = async (postID) => {
     }
 
     async function handleGetFollower(username) {
-        try {
-            const result = await getFollower(username);
-            if (result) {
-                setIsFollowing(true);
-            } else {
-                console.error('Error:', result.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        const result = await getFollower(username);
+        if (result) {
+            setIsFollowing(true);
+        } else {
+            console.error('Error occurred in getFollower');
         }
     }
+    
 
     async function showFriendInfo(username) {
         const result = await showFriendInformation(username);
@@ -386,6 +363,39 @@ const postCategory = async (postID) => {
           setFriendInfo(result.data);
         }
       }
+
+    async function handleJoinCommunity() {
+        if (localStorage.getItem('token') === null){
+            navigate('/login');
+        } else {
+            if (!isUserMember){
+                const response = await axios.post(`${hostUrl}/api/friend`, {
+                    subreddit: props.linkedSubreddit
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200){
+                    setIsUserMember(!isUserMember);
+                }
+            }
+            else {
+                const response = await axios.post(`${hostUrl}/api/unfriend`, {
+                        subreddit: props.linkedSubreddit
+                    },{
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                );
+                if (response.status === 200){
+                    setIsUserMember(!isUserMember);
+                }
+            }
+        }
+    }
 
 
  
@@ -396,6 +406,7 @@ const postCategory = async (postID) => {
             {!isHidden &&
                 <div>
                     <Card className='Post' variant='ghost' >
+                        <p onClick={() => navigate(`r/${props.linkedSubreddit}`)} style={{marginLeft: "70px"}} className='mb-0 subreddit-post-name'>r/{props.linkedSubreddit}</p>
                         <CardHeader className='py-0'>
                             <Flex spacing='4'>
                             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
@@ -404,13 +415,14 @@ const postCategory = async (postID) => {
                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
+                            <button onClick={handleJoinCommunity} className='join-button mt-1'>{!isUserMember ? "Join" : "Leave"}</button>
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} isSpoiler={props.isSpoiler}  post={props.post}/>
                             </Flex>
                         </CardHeader>
                         {props.type === 'poll' ? (<Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
-                            pollText={props.pollText} voteLength={props.voteLength}
-                            handleNavigation={handleNavigationToDetails}/>  ) : (
-                        <CardBody className='py-0' onClick={handleNavigationToDetails}>
+                            pollText={props.pollText} voteLength={props.voteLength} handleNavigation={handleNavigationToDetails}
+                            didVote={props.didVote} optionSelected={props.optionSelected} pollEnded={props.pollEnded} /> ) : (
+                        <CardBody className='py-0' onClick={handleNavigationToDetails} >
                             <Heading as='h3' size='md'>{props.title}</Heading>
                      {props.isSpoiler ? (
                             <>
@@ -421,7 +433,6 @@ const postCategory = async (postID) => {
                         ) : (
                             <>  
                             <Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}></Text>
-
                             </>
                         )}
                             {props.image && <Image

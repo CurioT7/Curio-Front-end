@@ -32,7 +32,9 @@ import Notifications from "./Pages/Notifications/Notifications.jsx";
 import NewChat from "./Pages/Right_Side_Chat/Right_Side_Chat.jsx";
 import SearchPage from "./Pages/Search/SearchPage.jsx";
 import Private_Messages from "./Pages/Private_Messages/Private_Messages.jsx";
+import MessagesInbox from "./Pages/Messages/MessagesInbox.jsx";
 import Sent_Messages from "./Pages/Sent_Messages/Sent_Messages.jsx";
+import Moderation from "./Pages/Moderation/Moderation.jsx";
 
 function App() {
   const location = useLocation();
@@ -110,7 +112,10 @@ function App() {
           <Route path='/chat/General_Boat_962' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
           <Route path='/search/:searchTerm' element={<SearchPage />}></Route>
           <Route path='/message/compose' element={<Private_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/inbox' element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} />}/>
           <Route path='/message/sent' element={<Sent_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+
         </Routes>
       </ChakraProvider>
     </div>

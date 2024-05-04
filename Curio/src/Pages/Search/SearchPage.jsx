@@ -8,6 +8,7 @@ import UserResults from "./UserResults";
 import CommunityResults from "./CommunityResults";
 import Post from '../../Components/Post/Post';
 import PostComments from '../../Components/Post/PostComments';
+import SearchListing from "./SearchListing";
 
 function SearchPage(){
     const { searchTerm } = useParams();
@@ -121,7 +122,7 @@ function SearchPage(){
 
     const tabListRef = useRef();
     return (
-        <div className="posts-content-container mt-5">
+        <div className="posts-content-container pt-4 mt-5">
             <Tabs variant='soft-rounded'>
                 <div className="d-flex flex-column">
                     <div className="d-flex">
@@ -135,6 +136,7 @@ function SearchPage(){
                                 <Tab>People</Tab>
                             </TabList>
                     </div>
+                    <SearchListing />
                     <div className="m-0 p-0">
                         <TabPanels className="m-0 p-0">
                             <TabPanel className="px-0 me-5">

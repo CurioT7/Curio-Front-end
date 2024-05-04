@@ -12,12 +12,11 @@ import Postsfooter from "../Post/Postsfooter";
 import Check from "../../styles/icons/Check";
 import axios from "axios";
 import { Text } from '@chakra-ui/react'
+import { pollVote } from "./ShowPollEndpoints";
 
 
 
 function ShowPoll( props ) {
-  // const [votepick, setVotepick] = useState("");
-  // const [hasVoted, setVoted] = useState(false);
   const _id = props._id;
 
   const maxVoteNumber = Math.max(...props.votes);
@@ -48,40 +47,12 @@ const handleVoted = () => {
 }
 
 
-  // const handleVote = (event) => {
-  //   setVotepick(event.target.value);
-  // };
-
-  // const handleVoted = () => {
-  //   setVoted(true)
-  //   console.log(votepick);
-  //   console.log(props._id);
-  // }
-
-  async function pollVote(_id, votepick){
-    const hostUrl = import.meta.env.VITE_SERVER_HOST;
-    try{
-    const response = await axios.post(`${hostUrl}/api/pollVote`, {
-      postId: _id,
-      option: votepick
-    },{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    if(response === 200){
+  async function handlepollVote(_id, votepick){
+    const response = await pollVote(_id, votepick)
+    if(response.sucess){
       setVoted(true);
-    }
   }
-    catch(error){
-      console.error(error);
-    }
-  }
-
-
-
-
-
+}
 
   return (
     <>
@@ -96,7 +67,8 @@ const handleVoted = () => {
           </div>
         <Card className="mx-2 pollCard">
           <Card.Header className="d-flex cardheaderDiv align-items-center">
-            <span className="openorClose">Open</span>
+            
+            <span className="openorClose">{props.pollEnded? 'Closed' : 'Open'}</span>
             <span className="ms-1 middleDot1"> &#183;</span>
             {hasVoted? (
             <span className="postTime ms-1"> {totalVotesnum + 1} total votes</span>
@@ -107,12 +79,12 @@ const handleVoted = () => {
             
           </Card.Header>
           <Card.Body>
-          {hasVoted ? (
+          {hasVoted || props.didVote || props.pollEnded ? (
   <>
     {props.optionNames.map((option, index) => {
       const voteCount = votepick === option ? props.votes[index] + 1 : props.votes[index];
       const backgroundColor = voteCount >= maxVoteNumber ? 'rgb(255, 190, 166)' : 'rgb(226, 231, 233)';
-
+      console.log('Option Selected:', props.optionSelected)
       return (
         <div
           style={{ backgroundColor, width: `${newArray[index]}px`, borderRadius: '4px' }}
@@ -122,7 +94,7 @@ const handleVoted = () => {
           <div className="d-flex">
             <span className="me-4 voteNumbers">{voteCount}</span>
             <span className="voteText me-2">{option}</span>
-            {votepick === option ? <Check /> : null}
+            {votepick === option || props.optionSelected === option ? <Check /> : null}
           </div>
         </div>
       );
@@ -149,7 +121,7 @@ const handleVoted = () => {
                 }`}
                 id="voteButton"
                 disabled={votepick === "" ? true : false}
-                onClick={() => {handleVoted(); pollVote(props._id, votepick)}}
+                onClick={() => {handleVoted(); handlepollVote(props._id, votepick)}}
               >
                 Vote
               </button>

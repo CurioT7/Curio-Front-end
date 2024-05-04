@@ -3,35 +3,17 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./FollowersPage.css";
 import SearchIcon from "../../styles/icons/SearchIcon.jsx";
-import avatar1 from "../../assets/avatar_default_6.png";
-import avatar2 from "../../assets/avatar_default_2.png";
+
 import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Divider,
   useToast
 } from "@chakra-ui/react";
 import {
   getUserAbout,
-  getUserComments,
-  getUserOverview,
-  getUserSubmitted,
-  getUserDownvoted,
-  getUserUpvoted,
 } from "../ProfilePage/ProfilePageEndpoints.js";
-import profile from "../../assets/avatar_default_6.png";
 import { userFollow, userUnfollow } from "../FriendInformation/ShowFriendInformationEndpoints.js";
 import { getFollowers } from "./FollowesPageEnpoints.js";
-
-import { Link } from "react-router-dom";
 import "../ProfilePage/ProfileSideBar.jsx";
 import ProfileSideBar from "../ProfilePage/ProfileSideBar.jsx";
-import { Toast } from "react-bootstrap";
-import { get } from "mongoose";
-
 import axios from "axios";
 
 function FollowersPage(props) {
@@ -57,7 +39,7 @@ function FollowersPage(props) {
   }
 
   async function handleGetFollowers() {
-    const response = await getFollowers('followers');
+    const response = await getFollowers('asfasfasfafaf');
     if (response) {
       setFollowers(response.data.friendsArray);
     }

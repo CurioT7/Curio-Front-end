@@ -18,6 +18,7 @@ export async function fetchNotificationsFromBackend() {
         return {
             notifications: responseAllNotification.data.notifications,
             unreadNotifications: responseUnreadNotification.data.unreadNotifications,
+            unreadNumber: responseUnreadNotification.data.unreadCount,
         };
         
     } catch (error) {
@@ -101,3 +102,20 @@ export async function sendReadNotifications(notificationID) {
         }
     }
 }
+
+
+
+
+export async function markasViewed() {
+    try{
+        const response = await axios.patch(`${serverHost}/api/notifications/mark-all-viewed`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response;
+        } catch (error) {
+            console.error('Error marking notification as viewed:', error.message);
+            throw error;
+        }
+    }   

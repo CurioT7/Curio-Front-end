@@ -24,6 +24,7 @@ import { set } from 'mongoose';
 import UserPopover from '../UserPopover/UserPopover.jsx';
 import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import { FetchSubredditName } from './PostEndPoints';
+import Polls from '../Poll/ShowPoll.jsx'
 
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -217,7 +218,6 @@ function PostContentDetails(post) {
         }
     }
     const makePostDownvoted = async () => {
-        console.log("hello")
         if (localStorage.getItem('token') === null) {
             navigate('/login');
         }
@@ -274,14 +274,28 @@ function PostContentDetails(post) {
     }
     useEffect(() => {
         async function fetchAndSetData() {
-            const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
-            if (response.status === 200 || response.status === 201) {
-                setComments(response.data.comments);
+            if (localStorage.getItem('token') === null) {
+                const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
+                if (response.status === 200 || response.status === 201) {
+                    setComments(response.data);
+                }
+                else {
+                    Toast();
+                }
             }
-            else {
-                Toast();
-            }
-            
+            else{
+                const response = await axios.get(`${hostUrl}/api/comments/${post._id}`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200 || response.status === 201) {
+                    setComments(response.data);
+                }
+                else {
+                    Toast();
+                }
+            }       
         }
         window.addEventListener('deleteComment', fetchAndSetData);
     
@@ -369,6 +383,9 @@ function PostContentDetails(post) {
                             <PostControl hidePost={handleHidePost} postDetails={true} hiddenPosts={hiddenPosts} savedPosts={savedPosts} savedComments={savedComments} username={post.user} _id={post._id} />
                         </div>
                     </div>
+                    { post.type === "poll" ? (<Polls optionNames={post.optionNames} user={post.user} votes={post.votes} _id={post._id} pollTitle={post.pollTitle}
+                            pollText={post.pollText} voteLength={post.voteLength} didVote={post.didVote} optionSelected={post.optionSelected}/>) : (
+                    <>
                     <h3 className='post-content-header mb-3'>{post.title}</h3>
 
                     <div onClick={() => setIsClicked(true)}>
@@ -384,7 +401,9 @@ function PostContentDetails(post) {
 
                             </>
                         )}
-                    </div>
+                        </div>
+                        </>
+                        )}
                     <Box className=' mb-5 col-12 ' display='flex' flexDirection='row' justifyContent='space-between'>
                             <Box display='flex' flexDirection='row'>
                             <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
@@ -399,7 +418,7 @@ function PostContentDetails(post) {
                                 </button>
                             </div>
                             <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                            <span className='share-post-text'>{comments.length}</span>
+                            <span className='share-post-text'>{comments?.length}</span>
                             </Button>
                                 <Menu>
                                         <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>
@@ -434,8 +453,8 @@ function PostContentDetails(post) {
                 }
                 <CommentInputForm type={"createComment"} ID={postId} />
                 <SortingComments onChangeSort={handleChangedSort} />
-            {comments.map((comment, index) => (
-                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+            {comments && comments.map((comment, index) => (
+                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} voteStatus={comment.details.voteStatus} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
         </>
     )

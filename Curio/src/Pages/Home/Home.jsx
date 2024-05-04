@@ -21,6 +21,7 @@ function Home() {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortType, setSortType] = useState('Best');
+  const [didVote, setDidVote] = useState(false);
   const toast = useToast();
 
   const getSaved = async () => {
@@ -137,7 +138,7 @@ useEffect(() => {
     window.removeEventListener('deletePost', fetchAndSetData);
     window.removeEventListener('loginOrSignup', fetchAndSetData);
   }
-}, []);
+}, [pageNumber]);
 
 
 
@@ -157,9 +158,6 @@ useEffect(() => {
   fetchData();
 }, [pageNumber]);
 
-useEffect(() => {
-  console.log('Polls needed array:', polls);
-}, [polls]);
 
 
 async function changeSortType(value,time) {
@@ -277,6 +275,16 @@ useEffect(() => {
   handleBlocked();
 }, []);
 
+useEffect(() => {
+  if (posts) {
+    const votes = [];
+    posts.forEach(post => {
+      votes[post.post._id] = post.details.pollVote !== null;
+    });
+    setDidVote(votes);
+  }
+}, [posts]);
+
 
   return (
     <>
@@ -287,7 +295,7 @@ useEffect(() => {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-            {((randomPost.isSelected==false) && posts) ? (
+        {((randomPost.isSelected==false) && posts) ? (
               posts
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
@@ -305,9 +313,13 @@ useEffect(() => {
                     upvotes={post.post.upvotes}
                     downvotes={post.post.downvotes}
                     comments={post.post.comments}
+                    isLocked={post.post.isLocked}
                     voteLength={post.post.voteLength}
                     linkedSubreddit={post.details?.subredditName}
-                  />) : (
+                    didVote={didVote[post.post._id]}
+                    optionSelected={post.details.pollVote}
+                    pollEnded={post.details.pollEnded}
+                   />) : (
                     <Post
                     _id={post.post._id}
                     title={post.post.title}
@@ -317,12 +329,14 @@ useEffect(() => {
                     downvotes={post.post.downvotes}
                     comments={post.post.comments}
                     content={post.post.content}
+                    media={post.post.media}
                     //isMod={isMod}
                     linkedSubreddit={post.details?.subredditName}
                     voteStatus={post.details?.voteStatus}
                     isLocked={post.post.isLocked}
                     savedPosts={savedPosts}
                     hiddenPosts={hiddenPosts}
+                    isUserMember={post.details?.isUserMemberOfItemSubreddit}
                   />
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
