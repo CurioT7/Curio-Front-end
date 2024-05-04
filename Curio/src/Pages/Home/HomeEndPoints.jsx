@@ -9,7 +9,7 @@ const serverHost = import.meta.env.VITE_SERVER_HOST;
 //         console.error('Error fetching data from backend:', error);
 //     }
 // }
-export async function SortHomePosts(type, pageNumber) {
+export async function SortHomePosts(type, pageNumber,timeframe) {
     if (localStorage.getItem('token') === null){
         try {
             const request = await axios.get(`${serverHost}/api/allpage/${type}?page=${pageNumber}`);

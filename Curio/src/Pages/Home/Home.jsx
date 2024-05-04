@@ -145,13 +145,13 @@ useEffect(() => {
   async function fetchData() {
   const data = await SortHomePosts(sortType, pageNumber);
   if (data) {
-    if(sortType==='random'){
-      setRandomPost({ post: data.post, isSelected: true });
-    }
-    else{
+    // if(sortType==='random'){
+    //   setRandomPost({ post: data.post, isSelected: true });
+    // }
+    // else{
       setPosts(data.posts);
       setRandomPost({ ...randomPost, isSelected: false });
-    }
+    // }
   }
 }
   fetchData();
@@ -236,11 +236,13 @@ async function changeSortType(value,time) {
         const data = await SortHomePosts("random", pageNumber);
         setSortType("random");
         if (data) {
-            setRandomPost({ post: data.post, isSelected: true });
+          setPosts(data.posts || data);
+          setRandomPost({ ...randomPost, isSelected: false });
             
         }
         else{
-          setRandomPost({ post:{}, isSelected: true });
+          setPosts([]);
+          setRandomPost({ ...randomPost, isSelected: false });
         }
     }
   }

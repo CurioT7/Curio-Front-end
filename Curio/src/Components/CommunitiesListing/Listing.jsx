@@ -30,7 +30,6 @@ function Listing(props) {
   const commSortArr = ["Hot", "New", "Top", "Random"];
   const topSortArr = ["Now", "Today", "This Week", "This Month", "This Year", "All Time"];
   const homeSortArr = ["Best", "Hot", "New", "Top","Random"];
-  const profileSortArr = ["Hot", "New", "Top"];
   const { Community } = useParams();
   const [listValue, setListValue] = React.useState('Hot');
   const [community, setCommunity] = React.useState("Community");
@@ -123,6 +122,9 @@ function Listing(props) {
           <p className="Sort-title">Sort By</p>
           {props.isCommunity &&<>{topSortArr.map((Sort)=>(
             <Link to={`/r/${community}/Top`} onClick={() => changeSortTop(Sort)} className="link-sort">{Sort}</Link>
+          ))} </>  }
+          {props.isHome &&<>{topSortArr.map((Sort)=>(
+            <Link to={`/Top`} onClick={() => changeSortTop(Sort)} className="link-sort">{Sort}</Link>
           ))} </>  }
           
           
