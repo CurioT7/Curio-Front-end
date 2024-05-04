@@ -44,6 +44,13 @@
     font-weight: 600;
     font-size: 0.75rem;
     justify-content: center;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    width: 100%;
+
 }
 
 .chat-live-input{
@@ -66,4 +73,31 @@
     position: absolute;
     bottom: 50px;
     right: 0;
+}
+
+.date-line-beside{
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    content: "";
+    flex: 1 1;
+    margin: auto;
+    height: 1px;
+    width: 100%;
+}
+
+.message-content-live-chat-container{
+    display: flex;
+    flex-direction: row;
+    gap: .75rem;
+    padding: 0.25rem .75rem;
+    position: relative;
+    width: 100%;
+}
+
+.sender-name-live-chat{
+    font-weight: 700;
+}
+
+.sender-time-live-chat{
+    color: #434343;
+    font-size: 12px;
 }

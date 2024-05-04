@@ -12,7 +12,7 @@
     flex: 1 1 0%;
     flex-direction: column;
     width: 100%;
-    background-color: #eaedef;
+    background-color: hwb(204 92% 6% / 0.699);
     overflow: hidden auto;
 }
 
