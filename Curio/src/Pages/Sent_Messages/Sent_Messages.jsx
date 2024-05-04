@@ -9,6 +9,8 @@ const serverHost = import.meta.env.VITE_SERVER_HOST;
 function Sent_Messages(props) {
     const navigate = useNavigate();
     const [sentMessages, setSentMessages] = useState([]);
+    const [details, setDetails] = useState([]);
+    const username = localStorage.getItem('username');
 
 
     useEffect(() => {
@@ -30,7 +32,9 @@ function Sent_Messages(props) {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
+            const aboutresponse = await axios.get(`${serverHost}/api/user/${username}/about`);
             setSentMessages(response.data.messages);
+            setDetails(aboutresponse.data);
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 500) {
@@ -63,6 +67,7 @@ function Sent_Messages(props) {
                                 sender={message.sender !== null ? message.sender.username: message.senderSubreddit.name}
                                 recipient={message.recipient !==null ? message.recipient.username: message.recipientSubreddit.name}
                                 isRecipientNull={!message.recipient}
+                                displayName={details.displayName}
                                  />
                         </div>
                     </div>
