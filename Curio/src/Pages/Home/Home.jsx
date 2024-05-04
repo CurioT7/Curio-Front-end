@@ -137,7 +137,7 @@ useEffect(() => {
     window.removeEventListener('deletePost', fetchAndSetData);
     window.removeEventListener('loginOrSignup', fetchAndSetData);
   }
-}, []);
+}, [pageNumber]);
 
 
 
@@ -317,12 +317,14 @@ useEffect(() => {
                     downvotes={post.post.downvotes}
                     comments={post.post.comments}
                     content={post.post.content}
+                    media={post.post.media}
                     //isMod={isMod}
                     linkedSubreddit={post.details?.subredditName}
                     voteStatus={post.details?.voteStatus}
                     isLocked={post.post.isLocked}
                     savedPosts={savedPosts}
                     hiddenPosts={hiddenPosts}
+                    isUserMember={post.details?.isUserMemberOfItemSubreddit}
                   />
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
