@@ -20,6 +20,7 @@ function SearchPage(){
     const [savedPosts, setSavedPosts] = useState([]);
     const [savedComments, setSavedComments] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]); 
+    const [displaySort, setDisplaySort] = useState(1);
 
     const handleUserResults = async () => {
         try{
@@ -130,13 +131,13 @@ function SearchPage(){
                             <h2 style={{color: "#576f76", fontSize: "0.75rem", fontWeight: "600"}}>SEARCH RESULTS</h2>
                         </div>
                             <TabList className="scrollableTabList" ref={tabListRef}>
-                                <Tab>Posts</Tab>
-                                <Tab>Communities</Tab>
-                                <Tab>Comments</Tab>
-                                <Tab>People</Tab>
+                                <Tab onClick={()=>{setDisplaySort(1)}}>Posts</Tab>
+                                <Tab onClick={()=>{setDisplaySort(0)}}>Communities</Tab>
+                                <Tab onClick={()=>{setDisplaySort(2)}}>Comments</Tab>
+                                <Tab onClick={()=>{setDisplaySort(0)}}>People</Tab>
                             </TabList>
                     </div>
-                    <SearchListing />
+                    <SearchListing displaySort={displaySort} />
                     <div className="m-0 p-0">
                         <TabPanels className="m-0 p-0">
                             <TabPanel className="px-0 me-5">
