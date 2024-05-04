@@ -57,11 +57,11 @@ function Notifications_Dropdown() {
                 }
             } else if (notification.type === "post") {
                 if (notification.isDisabled === false) {
-                    await disableNotification({ PostId: notificationID });
+                    await disableNotification({ postId: notification.postId });
                 } else {
-                    await enableNotification({ PostId: notificationID });
+                    await enableNotification({ postId: notification.postId });
                 }
-            } else if (notification.type === "comment") {
+            } else if (notification.type === "Comment") {
                 if (notification.isDisabled === false) {
                     await disableNotification({ commentId: notification.commentId });
                 } else {
@@ -86,7 +86,7 @@ function Notifications_Dropdown() {
                 navigate(`/r/${notification.subredditName}`);
             } else if (notification.type === "post") {
                 navigate(`/post/post-details/${notification.postId}`);
-            } else if (notification.type === "comment") {
+            } else if (notification.type === "Comment") {
 
             } else if (notification.type === "Friend Request") {
                 navigate(`/profile/${username}`);
