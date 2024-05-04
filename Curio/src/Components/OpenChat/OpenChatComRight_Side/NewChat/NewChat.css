@@ -12,7 +12,7 @@
     flex: 1 1 0%;
     flex-direction: column;
     width: 100%;
-    background-color: hwb(204 92% 6% / 0.699);
+    background-color: #eaedef;
     overflow: hidden auto;
 }
 
@@ -80,7 +80,6 @@
     background-color: #f8f8f8;
     border-top: 1px solid #f2f2f2;
     display: flex;
-    /* flex-wrap: wrap; */
     flex-direction: row-reverse;
     padding: .75rem 1rem;
 }

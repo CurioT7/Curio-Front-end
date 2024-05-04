@@ -8,6 +8,7 @@ import HeaderChatRight_Side from "../../HeaderChatRight_Side/HeaderChatRight_Sid
 
 function NewChat() {
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [groupName, setGroupName] = useState('');
 
     const handleToggleUser = (image, username) => {
         const isUserSelected = selectedUsers.some(user => user.username === username);
@@ -24,33 +25,38 @@ function NewChat() {
 
     return (
         <div className='chat-div'>
-            <HeaderChatRight_Side header='New Chat' />
+            <HeaderChatRight_Side header='New Chat' check='false'/>
             <form className='chat-form'>
                 <main className='chat-main'>
                     <div>
                         <span>
                             <div>
-                                <div className="form-floating" style={{ marginBottom: '.5rem' }}>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="floatingInput"
-                                        style={{
-                                            borderRadius: '1rem',
-                                            background: 'transparent',
-                                            transition: 'background 0.3s'
-                                        }}
-                                        onMouseEnter={(e) => e.target.style.background = '#eaedefb2'}
-                                        onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                                    />
-                                    <label htmlFor="floatingInput">Group Name<span style={{ color: 'red' }}>*</span></label>
-                                </div>
-
+                                {selectedUsers.length > 1 && (
+                                    <div className="form-floating" style={{ marginBottom: '.5rem' }}>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="floatingInput"
+                                            placeholder="Group Name"
+                                            style={{
+                                                borderRadius: '1rem',
+                                                background: 'transparent',
+                                                transition: 'background 0.3s'
+                                            }}
+                                            onMouseEnter={(e) => e.target.style.background = '#ccc'}
+                                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                                            value={groupName}
+                                            onChange={(e) => setGroupName(e.target.value)}
+                                        />
+                                        <label htmlFor="floatingInput">Group Name<span style={{ color: 'red' }}>*</span></label>
+                                    </div>
+                                )}
                                 <div className="form-floating">
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="floatingInput"
+                                        placeholder="Type username(s)"
                                         style={{ borderRadius: '1rem' }}
                                         value={inputValue}
                                     />
@@ -118,9 +124,24 @@ function NewChat() {
                 <div className='buttons-section-chat'>
                     <Stack spacing={4} direction='row-reverse' align='center'>
                         <Spacer />
-                        <Button colorScheme='gray' size='sm' borderRadius="20px">
-                            Start Chat
-                        </Button>
+                        {selectedUsers.length > 1 ? (
+                            <Button
+                                colorScheme='gray'
+                                color={groupName.trim() === '' ? 'gray' : undefined}
+                                variant={groupName.trim() === '' ? 'none' : 'ghost'}
+                                size='sm'
+                                borderRadius="20px"
+                                style={{
+                                    cursor: groupName.trim() === '' ? 'default' : 'pointer'
+                                }}
+                            >
+                                Start Group Chat
+                            </Button>
+                        ) : (
+                            <Button colorScheme='gray' size='sm' borderRadius="20px">
+                                Start Chat
+                            </Button>
+                        )}
                         <Button colorScheme='gray' size='sm' borderRadius="20px">
                             Cancel
                         </Button>

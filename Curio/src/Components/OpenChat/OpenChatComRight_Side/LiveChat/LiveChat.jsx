@@ -24,7 +24,7 @@ function LiveChat() {
 
     return (
         <div className='chat-div'>
-            <HeaderChatRight_Side header='General_Boat_962' />
+            <HeaderChatRight_Side header='General_Boat_962' check='true'/>
             <div className='Live-chat-form'>
                 <div className='Live-chat-profile-data'>
                     <a style={{
