@@ -57,3 +57,10 @@
   align-items: center;
   gap: 10px;
 }
+
+@media (max-width: 650px){
+  
+  hr{
+    display: none;
+  }
+}

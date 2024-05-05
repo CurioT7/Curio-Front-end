@@ -85,7 +85,7 @@ async function changeSortType(value,time) {
           if(time==="All Time"){
             const data = await fetchTopFromBackend(Community);
             if (data) {
-              setPosts(data.posts);
+              setPosts(data.topPosts);
               setRandomPost({ ...randomPost, isSelected: false });
           }
           else{
