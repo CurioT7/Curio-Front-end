@@ -383,7 +383,7 @@ function PostContentDetails(post) {
                             <PostControl hidePost={handleHidePost} postDetails={true} hiddenPosts={hiddenPosts} savedPosts={savedPosts} savedComments={savedComments} username={post.user} _id={post._id} />
                         </div>
                     </div>
-                    { post.type === "poll" ? (<Polls optionNames={post.optionNames} user={post.user} votes={post.votes} _id={post._id} pollTitle={post.pollTitle}
+                    { post.type === "poll" ? (<Polls optionNames={post.optionNames} user={post.user} _id={post._id} pollTitle={post.pollTitle}
                             pollText={post.pollText} voteLength={post.voteLength} didVote={post.didVote} optionSelected={post.optionSelected}/>) : (
                     <>
                     <h3 className='post-content-header mb-3'>{post.title}</h3>
