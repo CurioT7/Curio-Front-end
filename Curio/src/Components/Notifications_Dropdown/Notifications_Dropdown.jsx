@@ -14,7 +14,6 @@ import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
 import {
     fetchNotificationsFromBackend,
-    sendReadNotifications
 } from "../../Pages/Notifications/NotificationsEndPoints.js";
 import {
     handleHideNotification,
