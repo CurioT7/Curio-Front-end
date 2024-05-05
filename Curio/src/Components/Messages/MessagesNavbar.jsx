@@ -9,7 +9,7 @@ function MessagesNavbar() {
             <TabList>
                 <Tab onClick={() => navigate("/message/compose")}>Send a Private Message</Tab>
                 <Tab onClick={() => navigate("/message/inbox")}>Inbox</Tab>
-                <Tab>Sent</Tab>
+                <Tab onClick={() => navigate("/message/sent")}>Sent</Tab>
             </TabList>
         </Tabs>
     );
