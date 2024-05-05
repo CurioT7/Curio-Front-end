@@ -7,7 +7,7 @@ import HeaderChatRight_Side from "../../HeaderChatRight_Side/HeaderChatRight_Sid
 function Threads() {
     return (
         <div className='chat-div'>
-            <HeaderChatRight_Side header='Threads' />
+            <HeaderChatRight_Side header='Threads' check='false'/>
             <div className='chat-form'
                 style={{
                     alignSelf: 'center',

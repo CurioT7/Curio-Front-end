@@ -1,5 +1,4 @@
 .private_message_content{
-    align-items: center;
     display: flex;
     justify-content: center;
     overflow: hidden;
@@ -9,8 +8,9 @@
 .private_message_table{
     background-color: white;
     padding: 10px 20px;
-    width: 920px;
+    width: 70%;
     height: 530px;
+    margin-top: 20px;
 }
 .private_message_title{
     font-size: 18px;
@@ -28,22 +28,4 @@
     text-transform: uppercase;
     font-weight: bold;
     width: 70px;
-}
-
-@media screen and (max-width: 970px) {
-    .private_message_table{
-        width: 600px;
-    }
-}
-
-@media screen and (max-width: 620px) {
-    .private_message_table{
-        width: 400px;
-    }
-}
-
-@media screen and (max-width: 420px) {
-    .private_message_table{
-        width: 250px;
-    }
 }

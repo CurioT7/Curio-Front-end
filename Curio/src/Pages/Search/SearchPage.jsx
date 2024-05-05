@@ -8,6 +8,7 @@ import UserResults from "./UserResults";
 import CommunityResults from "./CommunityResults";
 import Post from '../../Components/Post/Post';
 import PostComments from '../../Components/Post/PostComments';
+import SearchListing from "./SearchListing";
 
 function SearchPage(){
     const { searchTerm } = useParams();
@@ -19,6 +20,7 @@ function SearchPage(){
     const [savedPosts, setSavedPosts] = useState([]);
     const [savedComments, setSavedComments] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]); 
+    const [displaySort, setDisplaySort] = useState(1);
 
     const handleUserResults = async () => {
         try{
@@ -121,7 +123,7 @@ function SearchPage(){
 
     const tabListRef = useRef();
     return (
-        <div className="posts-content-container mt-5">
+        <div className="posts-content-container pt-4 mt-5">
             <Tabs variant='soft-rounded'>
                 <div className="d-flex flex-column">
                     <div className="d-flex">
@@ -129,12 +131,13 @@ function SearchPage(){
                             <h2 style={{color: "#576f76", fontSize: "0.75rem", fontWeight: "600"}}>SEARCH RESULTS</h2>
                         </div>
                             <TabList className="scrollableTabList" ref={tabListRef}>
-                                <Tab>Posts</Tab>
-                                <Tab>Communities</Tab>
-                                <Tab>Comments</Tab>
-                                <Tab>People</Tab>
+                                <Tab onClick={()=>{setDisplaySort(1)}}>Posts</Tab>
+                                <Tab onClick={()=>{setDisplaySort(0)}}>Communities</Tab>
+                                <Tab onClick={()=>{setDisplaySort(2)}}>Comments</Tab>
+                                <Tab onClick={()=>{setDisplaySort(0)}}>People</Tab>
                             </TabList>
                     </div>
+                    <SearchListing displaySort={displaySort} />
                     <div className="m-0 p-0">
                         <TabPanels className="m-0 p-0">
                             <TabPanel className="px-0 me-5">

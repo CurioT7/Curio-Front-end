@@ -14,8 +14,7 @@ export async function fetchNotificationsFromBackend() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(responseAllNotification);
-
+console.log(responseAllNotification)
         return {
             notifications: responseAllNotification.data.notifications,
             unreadNotifications: responseUnreadNotification.data.unreadNotifications,

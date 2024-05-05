@@ -7,6 +7,7 @@ import SubjectMessage from "../../Components/Private_Messages/subject_message/su
 import Message from '../../Components/Private_Messages/message/message.jsx';
 import { Button, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import MessagesNavbar from '../../Components/Messages/MessagesNavbar.jsx';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -14,8 +15,8 @@ function Private_Messages(props) {
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
   const [userCommunities, setUserCommunities] = useState([]);
-  const [subreddit, setSubreddit] = useState(""); 
-  const [subject, setSubject] = useState(""); 
+  const [subreddit, setSubreddit] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [recipient, setRecipient] = useState("");
   const toast = useToast();
@@ -103,7 +104,7 @@ function Private_Messages(props) {
       const status = error.response ? error.response.status : null;
       switch (status) {
         case 400:
-          if (isSubreddit){
+          if (isSubreddit) {
             Toast('No subreddit found with that name', 'error');
           } else {
             Toast('No user found with that username', 'error');
@@ -120,17 +121,20 @@ function Private_Messages(props) {
   };
 
   return (
-    <div className='private_message_content'>
-      <div className='private_message_table'>
-        <h2 className='private_message_title'>Send A Private Message</h2>
-        <div className='private_message_body'>
-          <FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit}/>
-          <ToMessage setRecipient={setRecipient}/>
-          <SubjectMessage setSubject={setSubject}/>
-          <Message setMessage={setMessage}/>
-          <Button className="send_private_message" colorScheme='blue' size='sm' onClick={handlePrivateMessage}>
-            Send
-          </Button>
+    <div style={{ marginTop: "60px" }}>
+      <MessagesNavbar />
+      <div className='private_message_content'>
+        <div className='private_message_table'>
+          <h2 className='private_message_title'>Send A Private Message</h2>
+          <div className='private_message_body'>
+            <FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit} />
+            <ToMessage setRecipient={setRecipient} />
+            <SubjectMessage setSubject={setSubject} />
+            <Message setMessage={setMessage} />
+            <Button className="send_private_message" colorScheme='blue' size='sm' onClick={handlePrivateMessage}>
+              Send
+            </Button>
+          </div>
         </div>
       </div>
     </div>

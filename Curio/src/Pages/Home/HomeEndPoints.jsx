@@ -9,23 +9,37 @@ const serverHost = import.meta.env.VITE_SERVER_HOST;
 //         console.error('Error fetching data from backend:', error);
 //     }
 // }
-export async function SortHomePosts(type, pageNumber) {
+export async function SortHomePosts(type, pageNumber,timeinterval) {
     if (localStorage.getItem('token') === null){
         try {
-            const request = await axios.get(`${serverHost}/api/allpage/${pageNumber}/${type.toLowerCase()}/year`);
-            return request.data;
+            if(timeinterval){
+                const request = await axios.get(`${serverHost}/api/allpage/${type.toLowerCase()}/${timeinterval}?page=${pageNumber}`);
+                return request.data;}
+                else{
+                    const request = await axios.get(`${serverHost}/api/allpage/${type.toLowerCase()}?page=${pageNumber}`);
+                    return request.data;
+                }
         } catch (error) {
             console.error('Error fetching data from backend:', error);
         }
     }
     else{
         try {
-            const request = await axios.get(`${serverHost}/api/allpage/${pageNumber}/${type.toLowerCase()}/year`,{
+            if(timeinterval){
+            const request = await axios.get(`${serverHost}/api/homepage/${type.toLowerCase()}/${timeinterval}?page=${pageNumber}`,{
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            return request.data;
+            return request.data;}
+            else{
+                const request = await axios.get(`${serverHost}/api/homepage/${type.toLowerCase()}?page=${pageNumber}`,{
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                return request.data;
+            }
         } catch (error) {
             console.error('Error fetching data from backend:', error);
         }
