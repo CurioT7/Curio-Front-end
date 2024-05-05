@@ -19,3 +19,60 @@
 .changeButtons1{
   background-color: #E2E7E9;
 }
+
+
+.showCommsbtn{
+  position: relative;
+}
+
+#communitiescomms .popover-arrow {
+  display: none;
+}
+
+#communitiescomms {
+  background-color: rgb(249, 250, 251);
+  color: rgb(19, 19, 19);
+  width: 200px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+  height: 220px;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.ApplyButton{
+  width: 100%;
+  background-color: #0045AC;
+  border-radius: 999px;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.CancelButton{
+  width: 100%;
+  background-color: #EAEDEF;
+  border-radius: 999px;
+  color: black;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+#popover2 .popover-arrow {
+  display: none;
+}
+
+
+#popover2 {
+  background-color: rgb(249, 250, 251);
+  color: rgb(19, 19, 19);
+  width: fit-content;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+  height: fit-content;
+  padding: 15px;
+  border-radius: 15px;
+}
