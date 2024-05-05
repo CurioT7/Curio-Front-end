@@ -1,0 +1,45 @@
+.about-drawer-body{
+    background: #eaedef;
+}
+
+.members-invite-about{
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+
+.member-section-about,
+.invite-section-about{
+    margin-top: 14px;
+    margin-bottom: 14px;
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.admin-member-about,
+.admin-invite-about{
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+
+.detail-admin-member-about{
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.admin-name-chat-group{
+    font-size: 1rem;
+    line-height: 1.25rem;
+    margin-bottom: 0;
+}
+
+.detail-admin-invite-about{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
