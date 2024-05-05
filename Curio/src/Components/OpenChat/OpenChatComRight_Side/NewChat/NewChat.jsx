@@ -10,7 +10,7 @@ function NewChat() {
     const [groupName, setGroupName] = useState('');
     const [inputValue, setInputValue] = useState('');
 
-    const handleUserToggle = (username, image) => {
+    const handleUserToggle = (image, username) => {
         handleToggleUser(selectedUsers, setSelectedUsers, setInputValue, username, image);
     };
 
@@ -49,7 +49,7 @@ function NewChat() {
                                 <TypeUsername
                                     inputValue={inputValue}
                                     handleInputChange={handleInputChange}
-                                    handleToggleUser={handleUserToggle} // Passing the new function
+                                    handleToggleUser={handleUserToggle}
                                     selectedUsers={selectedUsers}
                                 />
                             </div>
