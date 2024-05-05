@@ -1,22 +1,24 @@
-.sent_message_content{
-    align-items: center;
+.sent_message_content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
     background-color: #edeff1;
-    min-height: 150px;
-    /* height: 100vj; */
+    height: 100vh;
     overflow-y: auto;
 }
-.sent_message_table{
-    /* background-color: white; */
+
+.sent_message_table {
     display: flex;
     flex-direction: column;
-    /* margin-top: 70px; */
     padding: 10px 15px;
     height: 130px;
+}
+
+.error-message {
+    min-width: unset;
+    width: 70%;
+    background: white;
+    margin: 20px auto;
 }
 
 @media screen and (max-width: 500px) {
