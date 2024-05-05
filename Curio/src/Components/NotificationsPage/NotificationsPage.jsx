@@ -2,20 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import logo from "../../assets/Profile_navbar.png";
-import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, Button } from '@chakra-ui/react';
+import { Popover, 
+    PopoverTrigger, 
+    PopoverContent, 
+    PopoverBody, 
+    PopoverArrow, 
+    Button } from '@chakra-ui/react';
 import { SlOptions } from "react-icons/sl";
 import "./NotificationsPage.css";
 import { getTimeDifference } from "../../Components/getTimeDifference/getTimeDifference";
+import { useNavigate } from 'react-router-dom';
 
 
-function NotificationsPage({ notifications, unreadNotifications, onHideNotification, onNotificationClick }) {
+function NotificationsPage({ notifications, unreadNotifications, onHideNotification, onNotificationClick, onEnableNotification, setNotifications, setUnreadNotifications, markAllAsRead }) {
+    const navigate = useNavigate();
     return (
         <div className="notifications-page">
             <div className='notifications-header-page'>
                 <div className='notifications-date'>
                     <span className='notifications-time'>Today</span>
                     <div className="notifications-mark-all">
-                        <button className="mark-all-button" style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button className="mark-all-button" 
+                        style={{ display: 'flex', gap: '0.5rem' }} 
+                        onClick={() => markAllAsRead(notifications, unreadNotifications, setUnreadNotifications)}>
                             <span className="mark-all-text">Mark all as read</span>
                             <div className='sperator-notifications' />
                         </button>
@@ -40,7 +49,7 @@ function NotificationsPage({ notifications, unreadNotifications, onHideNotificat
                 {notifications.length > 0 && notifications.map(notification => (
                     <div key={notification._id}
                         className={`notification-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}
-                        onClick={() => onNotificationClick(notification._id)}>
+                        onClick={() => onNotificationClick(notification._id, notifications, unreadNotifications, setUnreadNotifications, navigate)}>
                         <div className='avatar'>
                             <span className='avatar-image'>
                                 <img src={logo} alt="avatar for notification" style={{ marginBottom: "0" }} />
@@ -69,13 +78,32 @@ function NotificationsPage({ notifications, unreadNotifications, onHideNotificat
                                 <PopoverTrigger>
                                     <Button
                                         variant='ghost'
-                                        colorScheme='gray'><SlOptions /></Button>
+                                        colorScheme='gray'
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                        }}><SlOptions /></Button>
                                 </PopoverTrigger>
                                 <PopoverContent>
-                                    <PopoverArrow />
-                                    <PopoverBody onClick={() => onHideNotification(notification._id)}>Hide this notification</PopoverBody>
-                                    <PopoverBody>Disable updates from this community</PopoverBody>
-                                    <PopoverBody>Turn off this notification type</PopoverBody>
+                                <PopoverArrow />
+                                    <PopoverBody className="popover-body" onClick={(e) => {
+                                        e.stopPropagation();
+                                        onHideNotification(notification._id, notifications, setNotifications);
+                                    }}>Hide this notification</PopoverBody>
+                                    {
+                                        notification.type !== "Friend Request" &&
+                                        <PopoverBody className="popover-body" onClick={(e) => {
+                                            e.stopPropagation();
+                                            onEnableNotification(notification._id, notifications, setNotifications);
+                                        }}>
+                                            {notification.type === "Comment" ?
+                                                        (notification.isDisabled ? 'Enable updates from this comment' : 'Disable updates from this comment') :
+                                                        notification.type === "post" ?
+                                                            (notification.isDisabled ? 'Enable updates from this post' : 'Disable updates from this post') :
+                                                            notification.type === "subreddit" ?
+                                                                (notification.isDisabled ? 'Enable updates from this community' : 'Disable updates from this community') :
+                                                                null}
+                                        </PopoverBody>
+                                    }
                                 </PopoverContent>
                             </Popover>
                         </div>
