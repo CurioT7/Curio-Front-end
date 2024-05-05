@@ -276,7 +276,7 @@ useEffect(() => {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {(posts) ? (
+        {localStorage.getItem('token') ? (
               posts
                 .filter(post => !blockedUsers.includes(post.authorName))
                 .map((post) => (
@@ -298,8 +298,8 @@ useEffect(() => {
                     voteLength={post.post.voteLength}
                     linkedSubreddit={post.details?.subredditName}
                     didVote={didVote[post.post._id]}
-                    optionSelected={post.details.pollVote}
-                    pollEnded={post.details.pollEnded}
+                    optionSelected={post.details?.pollVote}
+                    pollEnded={post.details?.pollEnded}
                    />) : (
                     <Post
                     _id={post.post._id}
@@ -324,7 +324,52 @@ useEffect(() => {
                   </>
                 ))
             ):(
-              null
+              posts
+                .filter(post => !blockedUsers.includes(post.authorName))
+                .map((post) => (
+                  <>
+                    {post.post.type === 'poll' ? (
+                    <Post
+                    pollTitle={post.post.title}
+                    body={post.post.body}
+                    pollText={post.post.content}
+                    user={post.post.authorName}
+                    _id={post.post._id}
+                    type={post.post.type}
+                    optionNames={post.post.options.map((option) => option.name)}
+                    votes={post.post.options.map((option) => option.votes)}
+                    upvotes={post.post.upvotes}
+                    downvotes={post.post.downvotes}
+                    comments={post.post.comments}
+                    isLocked={post.post.isLocked}
+                    voteLength={post.post.voteLength}
+                    linkedSubreddit={post.post.linkedSubreddit.name}
+                    didVote={didVote[post.post._id]}
+                    optionSelected={post.details?.pollVote}
+                    pollEnded={post.details?.pollEnded}
+                   />) : (
+                    <Post
+                    _id={post.post._id}
+                    title={post.post.title}
+                    body={post.post.body}
+                    user={post.post.authorName}
+                    upvotes={post.post.upvotes}
+                    downvotes={post.post.downvotes}
+                    comments={post.post.comments}
+                    content={post.post.content}
+                    media={post.post.media}
+                    //isMod={isMod}
+                    linkedSubreddit={post.post.linkedSubreddit.name}
+                    voteStatus={post.details?.voteStatus}
+                    isLocked={post.post.isLocked}
+                    savedPosts={savedPosts}
+                    hiddenPosts={hiddenPosts}
+                    isUserMember={post.details?.isUserMemberOfItemSubreddit}
+                  />
+                  )}
+                    <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+                  </>
+                ))
             )}
       </div>
       <div className='d-flex justify-content-end ms-auto mb-4 fixed-container' style={{marginRight: "3rem", paddingTop: "1.2rem", height: "100vh", overflowY: "auto", width: "20%"}}>
