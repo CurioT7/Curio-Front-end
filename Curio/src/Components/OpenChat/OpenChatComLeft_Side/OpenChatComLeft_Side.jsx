@@ -95,7 +95,7 @@ function OpenChatCom({handleNewPage}) {
             </Link>
             <div>
                 <div>
-                    <a href="#" className='message-container-text'>
+                    <Link to={`/chat/General_Boat_962`} className='message-container-text' onClick={() => handleNewPage("Chat")}>
                         <span className='image-chat-message'>
                             <img src={profile} alt="" style={{ borderRadius: '20px' }} />
                         </span>
@@ -108,7 +108,7 @@ function OpenChatCom({handleNewPage}) {
                                 <span className='last-message'> You: a </span>
                             </div>
                         </div>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </Flex>

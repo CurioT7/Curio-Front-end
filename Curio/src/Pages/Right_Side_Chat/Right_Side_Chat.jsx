@@ -3,6 +3,8 @@ import OpenChatCom from "../../Components/OpenChat/OpenChatComLeft_Side/OpenChat
 import NewChat_Com from "../../Components/OpenChat/OpenChatComRight_Side/NewChat/NewChat";
 import "./Right_Side_Chat.css";
 import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
+import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat';
+import LiveChatInput from "../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChatInput";
 import { useNavigate } from 'react-router-dom';
 
 function Right_Side_Chat(props) {
@@ -37,6 +39,11 @@ function Right_Side_Chat(props) {
                     <NewChat_Com />
                 ) : newPage === "Threads" ? (
                     <Threads />
+                ) : newPage === "Chat" ? (
+                    <>
+                    <LiveChat />
+                    {/* <LiveChatInput /> */}
+                    </>
                 ) : null}
             </div>
         </div>
