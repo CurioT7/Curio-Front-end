@@ -1,5 +1,4 @@
 .private_message_content{
-    align-items: center;
     display: flex;
     justify-content: center;
     overflow: hidden;
@@ -11,6 +10,7 @@
     padding: 10px 20px;
     width: 70%;
     height: 530px;
+    margin-top: 20px;
 }
 .private_message_title{
     font-size: 18px;
