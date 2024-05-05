@@ -9,6 +9,7 @@ import CommunityResults from "./CommunityResults";
 import Post from '../../Components/Post/Post';
 import PostComments from '../../Components/Post/PostComments';
 import SearchListing from "./SearchListing";
+import { SortSearchContent } from "./SortingSearchEndPoints";
 
 function SearchPage(){
     const { searchTerm } = useParams();
@@ -59,7 +60,7 @@ function SearchPage(){
     const handleCommentResults = async () => {
         try{
             const hostUrl = import.meta.env.VITE_SERVER_HOST;
-            const response = await axios.get(`${hostUrl}/api/searchComments/${searchTerm}/comment/relevance/all`);
+            const response = await axios.get(`${hostUrl}/api/searchCommentsOrPosts/${searchTerm}/comment/relevance`);
             setCommentResults(response.data.content);
         }
         catch(error){
@@ -110,6 +111,10 @@ function SearchPage(){
           })
       }
     }
+    useEffect(() => {
+        if(displaySort == 1) handlePostResults();
+        if (displaySort== 2) handleCommentResults();
+    },[displaySort]);
 
     useEffect(() => {
         handleUserResults();
@@ -120,6 +125,23 @@ function SearchPage(){
         getHidden();
     }, [searchTerm]);
 
+    const handleChangeSort = async (sortType, timeinterval) => {
+        if(displaySort == 2){
+        const commentResult  = await SortSearchContent('comment', sortType, searchTerm);
+        if(commentResult){
+            setCommentResults(commentResult.content);
+            }
+        }
+        if(displaySort == 1){
+            if(timeinterval){
+                const postResult = await SortSearchContent('post', sortType, searchTerm, timeinterval);
+                if(postResult){
+                    setPostResults(postResult.content);
+                }
+            }
+           
+        }
+    }
 
     const tabListRef = useRef();
     return (
@@ -137,7 +159,7 @@ function SearchPage(){
                                 <Tab onClick={()=>{setDisplaySort(0)}}>People</Tab>
                             </TabList>
                     </div>
-                    <SearchListing displaySort={displaySort} />
+                    <SearchListing searchTerm={searchTerm} displaySort={displaySort} onChangeSort={handleChangeSort} />
                     <div className="m-0 p-0">
                         <TabPanels className="m-0 p-0">
                             <TabPanel className="px-0 me-5">
