@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import "./Notifications.css";
 import NotificationsPage from '../../Components/NotificationsPage/NotificationsPage';
 import HeadNotMesage from '../../Components/HeadNotMesage/HeadNotMesage';
-import { fetchNotificationsFromBackend, hideNotification, sendReadNotifications } from '../Notifications/NotificationsEndPoints';
-
+import {
+  fetchNotificationsFromBackend,
+} from '../Notifications/NotificationsEndPoints';
+import {
+  handleHideNotification,
+  handleEnableNotification,
+  handleNotificationClick,
+  markAllAsRead
+} from "./Notifications_Functions"
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState([]);
@@ -16,32 +23,10 @@ function Notifications() {
   async function fetchAndSetData() {
     const data = await fetchNotificationsFromBackend();
     if (data) {
-      setNotifications(data.notifications.reverse() || []);
+      setNotifications(data.notifications || []);
       setUnreadNotifications(data.unreadNotifications || []);
     }
   }
-
-  async function handleHideNotification(notificationID) {
-    try {
-      await hideNotification({ notificationID: notificationID });
-      setNotifications(notifications.filter(notification => notification._id !== notificationID));
-    } catch (error) {
-      console.error('Error hiding notification:', error.message);
-    }
-  }
-
-  async function handleNotificationClick(notificationID) {
-    try {
-        const isUnread = unreadNotifications.some(un => un._id === notificationID);
-        if (isUnread) {
-            await sendReadNotifications(notificationID); 
-            setUnreadNotifications(prevNotifications => prevNotifications.filter(notification => notification._id !== notificationID));
-        }            
-    } catch (error) {
-        console.error('Error marking notification as read:', error.message);
-    }
-}
-
 
   return (
     <div className='Notifications-page-conatainer' style={{ marginTop: '3rem' }}>
@@ -55,6 +40,10 @@ function Notifications() {
           unreadNotifications={unreadNotifications}
           onHideNotification={handleHideNotification}
           onNotificationClick={handleNotificationClick}
+          onEnableNotification={handleEnableNotification}
+          setNotifications={setNotifications}
+          setUnreadNotifications={setUnreadNotifications}
+          markAllAsRead={markAllAsRead}
         />
       </div>
     </div>

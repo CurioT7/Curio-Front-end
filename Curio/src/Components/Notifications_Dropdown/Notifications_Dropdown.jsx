@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css";
 import logo from "../../assets/Profile_navbar.png";
-import { Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, Button } from '@chakra-ui/react';
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverBody,
+    PopoverArrow,
+    Button
+} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
 import {
     fetchNotificationsFromBackend,
-    hideNotification,
-    sendReadNotifications,
-    disableNotification,
-    enableNotification
+    sendReadNotifications
 } from "../../Pages/Notifications/NotificationsEndPoints.js";
+import {
+    handleHideNotification,
+    handleEnableNotification,
+    handleNotificationClick,
+    markAllAsRead
+} from "../../Pages/Notifications/Notifications_Functions.js";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference.js'
 import { useNavigate } from 'react-router-dom';
 
-function Notifications_Dropdown( {setUnreadNotificationsNum} ) {
+function Notifications_Dropdown({ setUnreadNotificationsNum }) {
     const navigate = useNavigate();
-    const username = localStorage.getItem('username');
     const [notifications, setNotifications] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
 
@@ -38,65 +47,6 @@ function Notifications_Dropdown( {setUnreadNotificationsNum} ) {
         }
     }
 
-    async function handleHideNotification(notificationID) {
-        try {
-            await hideNotification({ notificationID: notificationID });
-            setNotifications(notifications.filter(notification => notification._id !== notificationID));
-        } catch (error) {
-            console.error('Error hiding notification:', error.message);
-        }
-    }
-
-    async function handleEnableNotification(notificationID) {
-        try {
-            const notification = notifications.find(notification => notification._id === notificationID);
-            if (notification.type === "subreddit") {
-                if (notification.isDisabled === false) {
-                    await disableNotification({ subredditName: notification.subredditName });
-                } else {
-                    await enableNotification({ subredditName: notification.subredditName });
-                }
-            } else if (notification.type === "post") {
-                if (notification.isDisabled === false) {
-                    await disableNotification({ postId: notification.postId });
-                } else {
-                    await enableNotification({ postId: notification.postId });
-                }
-            } else if (notification.type === "Comment") {
-                if (notification.isDisabled === false) {
-                    await disableNotification({ commentId: notification.commentId });
-                } else {
-                    await enableNotification({ commentId: notification.commentId });
-                }
-            }
-        } catch (error) {
-            console.error('Error Disable notification:', error.message);
-        }
-    }
-
-    async function handleNotificationClick(notificationID) {
-        try {
-            const notification = notifications.find(notification => notification._id === notificationID);
-            const isUnread = unreadNotifications.some(un => un._id === notificationID);
-            if (isUnread) {
-                await sendReadNotifications(notificationID);
-                setUnreadNotifications(prevNotifications => prevNotifications.filter(notification => notification._id !== notificationID));
-            }
-            console.log(notification.type)
-            if (notification.type === "subreddit") {
-                navigate(`/r/${notification.subredditName}`);
-            } else if (notification.type === "post") {
-                navigate(`/post/post-details/${notification.postId}`);
-            } else if (notification.type === "Comment") {
-
-            } else if (notification.type === "Friend Request") {
-                navigate(`/profile/${username}`);
-            }
-        } catch (error) {
-            console.error('Error marking notification as read:', error.message);
-        }
-    }
-
     return (
         <div className="notifications-container">
             <div className="notifications-header">
@@ -114,7 +64,7 @@ function Notifications_Dropdown( {setUnreadNotificationsNum} ) {
             <div className="notifications-body">
                 <div className="notifications-actions" style={{ marginBottom: '10px' }}>
                     <div className="notifications-mark-all">
-                        <button className="mark-all-button">
+                        <button className="mark-all-button" onClick={() => markAllAsRead(notifications, unreadNotifications, setUnreadNotifications)}>
                             <span className="mark-all-text">Mark all as read</span>
                         </button>
                     </div>
@@ -131,7 +81,7 @@ function Notifications_Dropdown( {setUnreadNotificationsNum} ) {
                 {notifications.length > 0 && notifications.map(notification => (
                     <div key={notification._id}
                         className={`notifications-item ${unreadNotifications.some(un => un._id === notification._id) ? 'unread' : 'read'}`}
-                        onClick={() => handleNotificationClick(notification._id)}
+                        onClick={() => handleNotificationClick(notification._id, notifications, unreadNotifications, setUnreadNotifications, navigate)}
                     >
                         <div className="notifications-item-link" style={{ cursor: 'pointer' }} >
                             <div className="notifications-item-content">
@@ -168,15 +118,21 @@ function Notifications_Dropdown( {setUnreadNotificationsNum} ) {
                                             <PopoverArrow />
                                             <PopoverBody className="popover-body" onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleHideNotification(notification._id);
+                                                handleHideNotification(notification._id, notifications, setNotifications);
                                             }}>Hide this notification</PopoverBody>
                                             {
                                                 notification.type !== "Friend Request" &&
                                                 <PopoverBody className="popover-body" onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleEnableNotification(notification._id);
+                                                    handleEnableNotification(notification._id, notifications, setNotifications);
                                                 }}>
-                                                    {notification.isDisabled === true ? 'Enable updates from this community' : 'Disable updates from this community'}
+                                                    {notification.type === "Comment" ?
+                                                        (notification.isDisabled ? 'Enable updates from this comment' : 'Disable updates from this comment') :
+                                                        notification.type === "post" ?
+                                                            (notification.isDisabled ? 'Enable updates from this post' : 'Disable updates from this post') :
+                                                            notification.type === "subreddit" ?
+                                                                (notification.isDisabled ? 'Enable updates from this community' : 'Disable updates from this community') :
+                                                                null}
                                                 </PopoverBody>
                                             }
                                         </PopoverContent>
