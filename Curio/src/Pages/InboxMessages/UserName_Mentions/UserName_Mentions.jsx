@@ -72,7 +72,7 @@ function UserName_Mentions(props) {
                                         background: index % 2 === 0 ? "#f6f7f8" : "white"
                                     }}>
                                     <UserName_Mentions_Com
-                                        title={message.postId.title}
+                                        title={message.postId ? message.postId.title : null}
                                         noComments={message.commentNumber}
                                         sender={message.sender.username}
                                         timestamp={message.timestamp}
