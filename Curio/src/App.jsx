@@ -40,7 +40,7 @@ import ContentControl from "./Components/ModerationComponents/ContentControl/Con
 import ModSettings from "./Components/ModerationComponents/ModSettings/ModSettings.jsx";
 
 function App() {
-  const location = useLocation();
+  // const location = useLocation();
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [subreddit, setSubreddit] = useState(null);
@@ -61,11 +61,11 @@ function App() {
     setIsNavbarVisible(true);
   };
 
-  React.useEffect(() => {
-    if (location.pathname !== '/user/CreatePost') {
-      setSubreddit(null);
-    }
-  }, [location.pathname]);
+  // React.useEffect(() => {
+  //   if (location.pathname !== '/user/CreatePost') {
+  //     setSubreddit(null);
+  //   }
+  // }, [location.pathname]);
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
  

@@ -3,20 +3,45 @@ import { useState, useEffect } from "react";
 import "./ShowPoll.css";
 import profilephoto from "../../assets/profilephoto.webp";
 import Card from "react-bootstrap/Card";
-import FilledUpvote from "../../styles/icons/FilledUpvote";
-import Upvotes from "../../styles/icons/Upvotes";
-import Downvotes from "../../styles/icons/Downvotes";
-import { FaRegCommentAlt } from "react-icons/fa";
-import { LuShare } from "react-icons/lu";
-import Postsfooter from "../Post/Postsfooter";
 import Check from "../../styles/icons/Check";
-import axios from "axios";
 import { Text } from '@chakra-ui/react'
-import { pollVote } from "./ShowPollEndpoints";
+import { pollVote, getPollInfo } from "./ShowPollEndpoints";
+import { get } from "mongoose";
+import { useNavigate } from "react-router-dom";
 
 
 
 function ShowPoll( props ) {
+  const [votepick, setVotepick] = useState("");
+  const [hasVoted, setVoted] = useState(false);
+  const [votes, setVotes] = useState([]);
+  const navigate = useNavigate();
+
+  const handleVote = (event) => {
+    setVotepick(event.target.value);
+  };
+  
+  const handleVoted = () => {
+    setVoted(true)
+  }
+  
+  
+    async function handlepollVote(_id, votepick){
+      if(!localStorage.getItem('token')){
+        navigate('/login');
+      }
+      else{
+      const response = await pollVote(_id, votepick)
+      if(response.success){
+        const newVotes = await getPollInfo(_id);
+        if(newVotes.success){
+          setVotes(newVotes.item.options.map((option) => option.votes));
+          handleVoted();
+        }
+      }
+    }
+  }
+
   const _id = props._id;
 
   const maxVoteNumber = Math.max(...props.votes);
@@ -31,28 +56,15 @@ function ShowPoll( props ) {
     return numbers.map((number) => (number / avg) * 100);
   };
 
-  const newArray = normalizeNumbers(props.votes);
+  const voteArray = normalizeNumbers(votes);
+
+  const displayArray = normalizeNumbers(props.votes);
+
+  const newtotalVotesnum = votes.reduce((acc, number) => acc + number, 0);
 
   const totalVotesnum = props.votes.reduce((acc, number) => acc + number, 0);
 
-  const [votepick, setVotepick] = useState("");
-  const [hasVoted, setVoted] = useState(false);
 
-    const handleVote = (event) => {
-  setVotepick(event.target.value);
-};
-
-const handleVoted = () => {
-  setVoted(true)
-}
-
-
-  async function handlepollVote(_id, votepick){
-    const response = await pollVote(_id, votepick)
-    if(response.sucess){
-      setVoted(true);
-  }
-}
 
   return (
     <>
@@ -71,7 +83,7 @@ const handleVoted = () => {
             <span className="openorClose">{props.pollEnded? 'Closed' : 'Open'}</span>
             <span className="ms-1 middleDot1"> &#183;</span>
             {hasVoted? (
-            <span className="postTime ms-1"> {totalVotesnum + 1} total votes</span>
+            <span className="postTime ms-1"> {newtotalVotesnum} total votes</span>
             ):
             (
             <span className="postTime ms-1"> {totalVotesnum} votes</span>
@@ -87,8 +99,8 @@ const handleVoted = () => {
       console.log('Option Selected:', props.optionSelected)
       return (
         <div
-          style={{ backgroundColor, width: `${newArray[index]}px`, borderRadius: '4px' }}
-          className="d-flex mb-2 ms-2"
+        style={{ backgroundColor, width: `${hasVoted ? voteArray[index] : displayArray[index]}px`, borderRadius: '4px' }}          
+        className="d-flex mb-2 ms-2"
           key={index}
         >
           <div className="d-flex">
@@ -121,7 +133,7 @@ const handleVoted = () => {
                 }`}
                 id="voteButton"
                 disabled={votepick === "" ? true : false}
-                onClick={() => {handleVoted(); handlepollVote(props._id, votepick)}}
+                onClick={() => {handlepollVote(props._id, votepick)}}
               >
                 Vote
               </button>

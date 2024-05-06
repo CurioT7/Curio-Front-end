@@ -2,6 +2,7 @@ import axios from "axios";
 
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
+const token = localStorage.getItem('token');
 
 
 async function pollVote(_id, votepick){
@@ -14,11 +15,26 @@ async function pollVote(_id, votepick){
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
-  return response;
+  return response.data;
 }
   catch(error){
     console.error(error);
   }
 }
 
-export { pollVote };
+
+async function getPollInfo(postID){
+    try{
+        const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`,{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+       return response.data;
+    }
+    catch(error){
+        console.error(error);
+    }
+  }
+
+export { pollVote, getPollInfo };
