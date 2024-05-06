@@ -11,10 +11,7 @@ function Sent_Messages(props) {
     const { isRecipientNull } = props;
 
     const renderTooltip = () => (
-        <Popover
-            onMouseEnter={() => setShowPopover(true)}
-            onMouseLeave={() => setShowPopover(false)}
-            className="custom-tooltip">
+        <Popover className="custom-tooltip">
             <div className='popover_details'>
                 <h3 className='popover_details_header'>{props.displayName}</h3>
                 <a href="">u/{username}</a>
@@ -28,19 +25,17 @@ function Sent_Messages(props) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 <span className='sent_message_details'>to
                     <OverlayTrigger
-                        trigger={["hover", "focus"]}
+                        trigger={['hover', 'focus']}
                         placement="bottom"
-                        show={showPopover}
-                        overlay={renderTooltip}
+                        overlay={renderTooltip()}
+                        onMouseEnter={() => setShowPopover(true)}
+                        onMouseLeave={() => setShowPopover(false)}
                     >
-                        <span href="" style={{
+                        <span style={{
                             color: "#80bce9",
                             cursor: 'pointer',
                             position: 'relative'
-                        }}
-                            onMouseEnter={() => setShowPopover(true)}
-                            onMouseLeave={() => setShowPopover(false)}
-                        >
+                        }}>
                             {isRecipientNull === true ?
                                 "/u/" : "/r/"
                             }{props.recipient}

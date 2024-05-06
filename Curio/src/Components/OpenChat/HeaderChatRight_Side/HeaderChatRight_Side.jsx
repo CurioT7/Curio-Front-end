@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./HeaderChatRight_Side.css";
 import {
     Button,
@@ -14,8 +14,21 @@ import { RiNotificationFill, RiNotificationOffLine } from "react-icons/ri";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import AboutDrawer from "./AboutDrawer/AboutDrawer";
+import InviteDrawer from './InviteDrawer/InviteDrawer';
 
 function HeaderChatRight_Side(props) {
+    const [isAboutDrawerOpen, setIsAboutDrawerOpen] = useState(false);
+    const [isInviteDrawerOpen, setIsInviteDrawerOpen] = useState(false);
+
+    const toggleAboutDrawer = () => {
+        setIsAboutDrawerOpen(!isAboutDrawerOpen);
+    };
+
+    const toggleInviteDrawer = () => {
+        setIsInviteDrawerOpen(!isInviteDrawerOpen);
+    };
+
 
     return (
         <header className='chat-header'>
@@ -23,27 +36,28 @@ function HeaderChatRight_Side(props) {
                 {props.header}
             </div>
             {props.check === "true" && (
+                <>
                 <Popover placement='top-start'>
                     <PopoverTrigger>
                         <Button colorScheme='teal' variant='ghost'><i className="fa-solid fa-gear" /></Button>
                     </PopoverTrigger>
                     <PopoverContent>
-                        {/* <PopoverBody className='settings-live-chat-popover'>
-                        <div className='settings-live-chat-popover-option'>
-                            <div className='icon-settings-live-popover'>
-                                <AiOutlineInfoCircle />
+                        <PopoverBody className='settings-live-chat-popover'>
+                            <div className='settings-live-chat-popover-option' onClick={toggleAboutDrawer}>
+                                <div className='icon-settings-live-popover'>
+                                    <AiOutlineInfoCircle />
+                                </div>
+                                <span>About</span>
                             </div>
-                            <span>About</span>
-                        </div>
-                    </PopoverBody>
-                    <PopoverBody className='settings-live-chat-popover'>
-                        <div className='settings-live-chat-popover-option'>
-                            <div className='icon-settings-live-popover'>
-                                <MdPersonAddAlt1 />
+                        </PopoverBody>
+                        <PopoverBody className='settings-live-chat-popover'>
+                            <div className='settings-live-chat-popover-option' onClick={toggleInviteDrawer}>
+                                <div className='icon-settings-live-popover'>
+                                    <MdPersonAddAlt1 />
+                                </div>
+                                <span>Invite</span>
                             </div>
-                            <span>Invite</span>
-                        </div>
-                    </PopoverBody> */}
+                        </PopoverBody>
                         <PopoverBody className='settings-live-chat-popover'>
                             <div className='settings-live-chat-popover-option'>
                                 <div className='icon-settings-live-popover'>
@@ -70,6 +84,9 @@ function HeaderChatRight_Side(props) {
                     </PopoverBody> */}
                     </PopoverContent>
                 </Popover>
+                <AboutDrawer isOpen={isAboutDrawerOpen} onClose={toggleAboutDrawer} />
+                <InviteDrawer isOpen={isInviteDrawerOpen} onClose={toggleInviteDrawer} />
+                </>
             )}
         </header>
     );
