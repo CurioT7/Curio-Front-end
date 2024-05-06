@@ -5,6 +5,7 @@ import { Avatar,Button,Image,useToast } from '@chakra-ui/react';
 import React from 'react';
 import { FaPlus } from "react-icons/fa6";
 import { getSubredditInfo,getJoinedCommunities,joinSubCurio,unJoinSubCurio} from './CommunityEndPoints';
+import { Link } from 'react-router-dom';
 
 
 
@@ -104,6 +105,11 @@ function CommunityHeader( props ) {
           <div className='d-flex mt-3 gap-2 '>
             <Button onClick={handleCreatePost}  borderColor=' rgb(45, 53, 55)'  borderRadius={20}  variant='outline' className=' comm-black-button d-flex gap-2'> <FaPlus/> Create a Post</Button>
             {isJonied ?(<Button onClick={handleUnJoin} borderRadius={20} borderColor=' rgb(45, 53, 55)' className=' comm-black-button' variant='outline' >Joined</Button>):(<Button borderRadius={20} className='comm-join-button' onClick={handleJoin}>Join</Button>)}
+            {props.isModerator ? (
+            <Link to={`/r/${Community}/about/modqueue`} >
+            <Button borderRadius={20} className='comm-join-button' variant='outline'>Mod tools</Button>
+            </Link>) :
+            null}
           </div>
         </div>
         
