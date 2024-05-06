@@ -17,7 +17,7 @@ import {
 import { FaRegSquare } from "react-icons/fa";
 import { BsCheckSquareFill } from "react-icons/bs";
 
-function OpenChatCom({handleNewPage}) {
+function OpenChatCom() {
     const [chatChannelsChecked, setChatChannelsChecked] = useState(true);
     const [groupChatsChecked, setGroupChatsChecked] = useState(true);
     const [directChatsChecked, setDirectChatsChecked] = useState(true);
@@ -44,7 +44,7 @@ function OpenChatCom({handleNewPage}) {
                 }}>Chats</Box >
                 <Spacer />
                 <Box className='chat-icons-header'>
-                    <Link to={'/room/create'} className='add-chat' onClick={() => handleNewPage("New Chat")}>
+                    <Link to={'/room/create'} className='add-chat'>
                         <IoChatbubbleSharp style={{
                             width: '2rem',
                         }} />
@@ -82,7 +82,7 @@ function OpenChatCom({handleNewPage}) {
                     </div>
                 </Box>
             </Flex>
-            <Link to={'/threads'} className="threads-container" onClick={() => handleNewPage("Threads")}>
+            <Link to={'/threads'} className="threads-container">
                 <div className='threads-list'>
                     <span className='left-section-thread'>
                         <span className='threads-arrow-leftup'><PiArrowBendUpLeft /></span>
@@ -95,7 +95,7 @@ function OpenChatCom({handleNewPage}) {
             </Link>
             <div>
                 <div>
-                    <Link to={`/chat/General_Boat_962`} className='message-container-text' onClick={() => handleNewPage("Chat")}>
+                    <Link to={`/chat/General_Boat_962`} className='message-container-text'>
                         <span className='image-chat-message'>
                             <img src={profile} alt="" style={{ borderRadius: '20px' }} />
                         </span>

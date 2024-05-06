@@ -8,9 +8,9 @@ function LiveChatInput() {
     return (
         <div className='chat-live-input'>
             <form action="">
-            <Button colorScheme='teal' variant='outline'>
-    Call us
-  </Button>
+                <Button colorScheme='teal' variant='outline'>
+                    Call us
+                </Button>
             </form>
         </div>
     );

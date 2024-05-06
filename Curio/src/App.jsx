@@ -109,9 +109,9 @@ function App() {
           <Route path="/notifications" element={<Notifications/>}/>
           <Route path='/polls' element={<ShowPoll/>} />
           <Route path='/user/:username/followers' element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-          <Route path='/room/create' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
-          <Route path='/threads' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
-          <Route path='/chat/:usernamechat' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/room/create' element={<NewChat newPage='New Chat'hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/threads' element={<NewChat newPage='Threads' hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/chat/:username' element={<NewChat newPage='Chat' hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
           <Route path='/search/:searchTerm' element={<SearchPage />}></Route>
           <Route path='/message/compose' element={<Private_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/inbox' element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} />}/>

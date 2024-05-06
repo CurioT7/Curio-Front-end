@@ -35,6 +35,7 @@ function Sent_Messages(props) {
             });
             const aboutresponse = await axios.get(`${serverHost}/api/user/${username}/about`);
             setSentMessages(response.data.messages);
+            console.log(response)
             setDetails(aboutresponse.data);
             if (response.data.messages.length === 0) {
                 setError(true);
@@ -78,7 +79,11 @@ function Sent_Messages(props) {
                                         subject={message.subject}
                                         message={message.message}
                                         timestamp={message.timestamp}
-                                        sender={message.sender !== null ? message.sender.username : message.senderSubreddit.name}
+                                        sender={
+                                            message.senderSubreddit
+                                              ? message.senderSubreddit.name
+                                              : message.sender.username
+                                          }
                                         recipient={message.recipient !== null ? message.recipient.username : message.recipientSubreddit.name}
                                         isRecipientNull={!message.recipient}
                                         displayName={details.displayName}

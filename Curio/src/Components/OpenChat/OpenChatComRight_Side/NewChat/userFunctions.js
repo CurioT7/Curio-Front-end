@@ -1,4 +1,3 @@
-// userFunctions.js
 export const handleToggleUser = (selectedUsers, setSelectedUsers, setInputValue, username, image) => {
     const isUserSelected = selectedUsers.some(user => user.username === username);
     if (isUserSelected) {

@@ -7,7 +7,7 @@ import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/L
 import { useNavigate } from 'react-router-dom';
 
 function Right_Side_Chat(props) {
-    const [newPage, setNewPage] = useState('New Chat');
+    const [recipient, setRecipient] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -23,24 +23,24 @@ function Right_Side_Chat(props) {
         };
     }, []);
 
-
-    const handleNewPage = (PageName) => {
-        setNewPage(PageName);
+    const handleRecipient = (newrecipient) => {
+        setRecipient(newrecipient);
     };
 
     return (
         <div className='open-chat-container'>
+            
             <div className='side-bar-chat-page'>
-                <OpenChatCom handleNewPage={handleNewPage} />
+                <OpenChatCom />
             </div>
             <div className='right-side-main-chat'>
-                {newPage === "New Chat" ? (
-                    <NewChat_Com />
-                ) : newPage === "Threads" ? (
+                {props.newPage === "New Chat" ? (
+                    <NewChat_Com handleRecipient={handleRecipient}/>
+                ) : props.newPage === "Threads" ? (
                     <Threads />
-                ) : newPage === "Chat" ? (
+                ) : props.newPage === "Chat" ? (
                     <>
-                    <LiveChat />
+                    <LiveChat recipient={recipient}/>
                     {/* <LiveChatInput /> */}
                     </>
                 ) : null}

@@ -7,8 +7,9 @@ import { IoMdCamera, IoMdSend } from "react-icons/io";
 import { BsFillEmojiSmileFill } from "react-icons/bs";
 import EmojiPicker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
+import { createChatRequest } from '../../../../Pages/Open_Chat_Page/Open_Chat_Page';
 
-function LiveChat() {
+function LiveChat(props) {
     const [isPickerVisible, setPickerVisible] = useState(false);
     const [message, setMessage] = useState('');
 
@@ -16,6 +17,18 @@ function LiveChat() {
 
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
+    };
+
+    const handleSend = async () => {
+        if (message.trim() !== '') {
+            try {
+                const response = await createChatRequest(props.recipient,message);
+                console.log('Chat created:', response);
+                setMessage('');
+            } catch (error) {
+                console.error('Error creating chat:', error);
+            }
+        }
     };
 
     const handleEmojiSelect = (emoji) => {
@@ -132,7 +145,8 @@ function LiveChat() {
                             width: '40px',
                             borderRadius: '100%',
                             cursor: message ? 'pointer' : 'default'
-                        }}>
+                        }}
+                        onClick={handleSend}>
                         <IoMdSend style={{
                             height: '40px',
                             width: '40px',
