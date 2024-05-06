@@ -23,22 +23,25 @@
     font-size: 1em;
 }
 
-.custom-tooltip{
-    background-color: #f6f7f8;
-    color: black; 
-    width: 100%;
-    position: absolute;
-    padding: 10px;
+.popover_details{
+    margin-bottom: 15px;
 }
-
-/* .popover_details{
-    /* display: flex; 
-} */
 
 .popover_details_header{
     margin: 0;
     color: #373C3F;
-    font-size: 16px;
+    font-size: 20px;
     line-height: 26px;
     font-weight: normal;
+}
+
+#popover-sent-messages{
+    background-color: #f6f7f8;
+    color: black; 
+    position: absolute;
+    padding: 15px 15px 10px 15px;
+}
+
+.username-popover-sent:hover {
+    text-decoration: underline;
 }

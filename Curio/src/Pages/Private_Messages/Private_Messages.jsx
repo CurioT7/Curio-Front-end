@@ -108,10 +108,13 @@ function Private_Messages(props) {
             Toast('No subreddit found with that name', 'error');
           } else {
             Toast('No user found with that username', 'error');
-          }
+          } 
           break;
         case 500:
           Toast('Error retrieving search results', 'error');
+          break;
+        case 401:
+          Toast('Unauthorized', 'error');
           break;
         default:
           console.error("Unexpected error:", error);
