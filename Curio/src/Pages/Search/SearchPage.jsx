@@ -22,6 +22,11 @@ function SearchPage(){
     const [savedComments, setSavedComments] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]); 
     const [displaySort, setDisplaySort] = useState(1);
+    const [hashtag,setHashtag] = useState({
+        posts: [],
+        comments: [],
+        type:'Posts'
+    });
 
     const handleUserResults = async () => {
         try{
@@ -114,13 +119,13 @@ function SearchPage(){
     useEffect(() => {
         if(displaySort == 1) handlePostResults();
         if (displaySort== 2) handleCommentResults();
-    },[displaySort]);
+    },[displaySort,searchTerm]);
 
     useEffect(() => {
         handleUserResults();
         handleCommunityResults();
-        handlePostResults();
-        handleCommentResults();
+       
+        
         getSaved();
         getHidden();
     }, [searchTerm]);
@@ -157,6 +162,7 @@ function SearchPage(){
                                 <Tab onClick={()=>{setDisplaySort(0)}}>Communities</Tab>
                                 <Tab onClick={()=>{setDisplaySort(2)}}>Comments</Tab>
                                 <Tab onClick={()=>{setDisplaySort(0)}}>People</Tab>
+                                <Tab onClick={()=>{setDisplaySort(3)}}>HashTag</Tab>
                             </TabList>
                     </div>
                     <SearchListing searchTerm={searchTerm} displaySort={displaySort} onChangeSort={handleChangeSort} />
@@ -237,6 +243,57 @@ function SearchPage(){
                                         ))}
                                     </>
                                 )}
+                            </TabPanel>
+                            <TabPanel>
+                              { hashtag.type==='Posts' &&
+                              <>
+                                { hashtag.posts.length == 0?( <p> No search result</p>):( <>
+                                    {hashtag.posts.map(post => (
+                                        <>
+                                            <Post
+                                                _id={post._id}
+                                                title={post.title}
+                                                body={post.body}
+                                                user={post.authorName}
+                                                upvotes={post.upvotes}
+                                                downvotes={post.downvotes}
+                                                comments={post.comments}
+                                                content={post.content}
+                                                linkedSubreddit={post.linkedSubreddit}
+                                                savedPosts={savedPosts}
+                                                hiddenPosts={hiddenPosts}
+                                                savedComments={savedComments}
+                                            />
+                                            <hr className='col-md-6 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+                                        </>
+                                    ))}
+                                </>)
+                                } 
+                              </>
+
+                              }
+                              { hashtag.type==='Comments' &&
+                              <>
+                                { hashtag.comments.length == 0?( <p> No search result</p>):( <>
+                                    {hashtag.comments.map(comment => (
+                                        <>
+                                            <PostComments
+                                                key={comment._id}
+                                                id={comment._id}
+                                                savedComments={savedComments}
+                                                username={comment.authorName}
+                                                commentUpvotes={comment.upvotes-comment.downvotes}
+                                                comment={comment.content}
+                                            />
+                                            <hr className='col-md-6 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+                                        </>
+                                    ))}
+                                </>)
+                                }
+                              </>
+
+                              }
+                                
                             </TabPanel>
                         </TabPanels>
                     </div>
