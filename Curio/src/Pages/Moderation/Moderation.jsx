@@ -10,8 +10,8 @@ import Unmoderated from "../../Components/ModerationComponents/Unmoderated";
 import Activity from "../../Components/ModerationComponents/Activity";
 import DropDownArrow from "../../styles/icons/DropDownArrow";
 import { Overlay, OverlayTrigger, Popover } from "react-bootstrap";
-import ModSidebar from "./ModerationSidebar/ModSidebar";
 import Header from "./header";
+import ModSidebar from "./ModerationSidebar/ModSidebar";
 
 function Moderation(props) {
   const { Community } = useParams();
@@ -103,7 +103,7 @@ function Moderation(props) {
               </button>
             </div>
             <div
-              className="col-5 d-flex align-items-center justify-content-end " 
+              className="col-4 d-flex align-items-center"
               style={{ position: "relative" }}
             >
               <OverlayTrigger

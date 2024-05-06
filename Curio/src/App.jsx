@@ -28,19 +28,21 @@ import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 import FollowersPage from "./Components/FollowersPage/FollowersPage.jsx";
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Pages/Notifications/Notifications.jsx";
-import NewChat from "./Pages/Right_Side_Chat/Right_Side_Chat.jsx";
+import NewChat from "./Pages/Open_Chat_Page/Open_Chat_Page.jsx";
 import SearchPage from "./Pages/Search/SearchPage.jsx";
 import Private_Messages from "./Pages/Private_Messages/Private_Messages.jsx";
-import MessagesInbox from "./Pages/Messages/MessagesInbox.jsx";
+import MessagesInbox from "./Pages/InboxMessages/MessagesInbox.jsx";
 import Sent_Messages from "./Pages/Sent_Messages/Sent_Messages.jsx";
 import Moderation from "./Pages/Moderation/Moderation.jsx";
+import UserName_Mentions from "./Pages/InboxMessages/UserName_Mentions/UserName_Mentions.jsx";
+import Post_Replies from "./Pages/InboxMessages/Post_Replies/Post_Replies.jsx";
 import ScheduledPosts from "./Components/ModerationComponents/ScheduledPosts/ScheduledPosts.jsx";
 import UserManage from "./Components/ModerationComponents/UserManagement/UserManage.jsx";
 import ContentControl from "./Components/ModerationComponents/ContentControl/ContentControl.jsx";
 import ModSettings from "./Components/ModerationComponents/ModSettings/ModSettings.jsx";
 
 function App() {
-  // const location = useLocation();
+  const location = useLocation();
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [subreddit, setSubreddit] = useState(null);
@@ -61,11 +63,13 @@ function App() {
     setIsNavbarVisible(true);
   };
 
-  // React.useEffect(() => {
-  //   if (location.pathname !== '/user/CreatePost') {
-  //     setSubreddit(null);
-  //   }
-  // }, [location.pathname]);
+    React.useEffect(() => {
+    if (location.pathname !== '/user/CreatePost') {
+      setSubreddit(null);
+    }
+  }, [location.pathname]);
+
+
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
  
@@ -122,6 +126,9 @@ function App() {
           <Route path='/r/:Community/about/usermanagement' element={<UserManage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/r/:Community/about/rules/contentcontrols' element={<ContentControl hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/r/:Community/about/settings' element={<ModSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/mentions' element={<UserName_Mentions hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/selfreply' element={<Post_Replies hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
         </Routes>
       </ChakraProvider>
     </div>

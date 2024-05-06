@@ -9,6 +9,8 @@ import CommunityResults from "./CommunityResults";
 import Post from '../../Components/Post/Post';
 import PostComments from '../../Components/Post/PostComments';
 import SearchListing from "./SearchListing";
+import { SortSearchContent,SortSearchContentByHashtag } from "./SortingSearchEndPoints";
+import { set } from "mongoose";
 
 function SearchPage(){
     const { searchTerm } = useParams();
@@ -21,6 +23,11 @@ function SearchPage(){
     const [savedComments, setSavedComments] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]); 
     const [displaySort, setDisplaySort] = useState(1);
+    const [hashtag,setHashtag] = useState({
+        posts: [],
+        comments: [],
+        type:'Posts'
+    });
 
     const handleUserResults = async () => {
         try{
@@ -41,6 +48,7 @@ function SearchPage(){
         }
         catch(error){
             console.log(error);
+            setCommunityResults([]);
         }
 
     }
@@ -53,17 +61,19 @@ function SearchPage(){
         }
         catch(error){
             console.log(error);
+            setPostResults([]);
         }
     }
 
     const handleCommentResults = async () => {
         try{
             const hostUrl = import.meta.env.VITE_SERVER_HOST;
-            const response = await axios.get(`${hostUrl}/api/searchComments/${searchTerm}/comment/relevance/all`);
+            const response = await axios.get(`${hostUrl}/api/searchCommentsOrPosts/${searchTerm}/comment/relevance`);
             setCommentResults(response.data.content);
         }
         catch(error){
             console.log(error);
+            setCommentResults([]);
         }
     }
 
@@ -110,16 +120,47 @@ function SearchPage(){
           })
       }
     }
+    useEffect(() => {
+        if(displaySort == 1) handlePostResults();
+        if (displaySort== 2) handleCommentResults();
+    },[displaySort,searchTerm]);
 
     useEffect(() => {
         handleUserResults();
         handleCommunityResults();
         handlePostResults();
-        handleCommentResults();
+        handleHashtagResults();
         getSaved();
         getHidden();
     }, [searchTerm]);
 
+    const handleHashtagResults = async () => {
+        const data = await SortSearchContentByHashtag(searchTerm);
+        if(data){
+            setHashtag({type:"Posts",posts:data.posts,comments:data.comments});
+        }
+    }
+
+    const handleChangeSort = async (sortType, timeinterval) => {
+        if(displaySort == 2){
+        const commentResult  = await SortSearchContent('comment', sortType, searchTerm);
+        if(commentResult){
+            setCommentResults(commentResult.content);
+            }
+        }
+        if(displaySort == 1){
+            if(timeinterval){
+                const postResult = await SortSearchContent('post', sortType, searchTerm, timeinterval);
+                if(postResult){
+                    setPostResults(postResult.content);
+                }
+            }
+           
+        }
+        if(displaySort == 3){
+            setHashtag({...hashtag,type:sortType})
+        }
+    }
 
     const tabListRef = useRef();
     return (
@@ -135,9 +176,10 @@ function SearchPage(){
                                 <Tab onClick={()=>{setDisplaySort(0)}}>Communities</Tab>
                                 <Tab onClick={()=>{setDisplaySort(2)}}>Comments</Tab>
                                 <Tab onClick={()=>{setDisplaySort(0)}}>People</Tab>
+                                <Tab onClick={()=>{setDisplaySort(3)}}>HashTag</Tab>
                             </TabList>
                     </div>
-                    <SearchListing displaySort={displaySort} />
+                    <SearchListing searchTerm={searchTerm} displaySort={displaySort} onChangeSort={handleChangeSort} />
                     <div className="m-0 p-0">
                         <TabPanels className="m-0 p-0">
                             <TabPanel className="px-0 me-5">
@@ -215,6 +257,57 @@ function SearchPage(){
                                         ))}
                                     </>
                                 )}
+                            </TabPanel>
+                            <TabPanel>
+                              { hashtag.type==='Posts' &&
+                              <>
+                                { hashtag.posts.length == 0?( <p> No search result</p>):( <>
+                                    {hashtag.posts.map(post => (
+                                        <>
+                                            <Post
+                                                _id={post._id}
+                                                title={post.title}
+                                                body={post.body}
+                                                user={post.authorName}
+                                                upvotes={post.upvotes}
+                                                downvotes={post.downvotes}
+                                                comments={post.comments}
+                                                content={post.content}
+                                                linkedSubreddit={post.linkedSubreddit}
+                                                savedPosts={savedPosts}
+                                                hiddenPosts={hiddenPosts}
+                                                savedComments={savedComments}
+                                            />
+                                            <hr className='col-md-6 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+                                        </>
+                                    ))}
+                                </>)
+                                } 
+                              </>
+
+                              }
+                              { hashtag.type==='Comments' &&
+                              <>
+                                { hashtag.comments.length == 0?( <p> No search result</p>):( <>
+                                    {hashtag.comments.map(comment => (
+                                        <>
+                                            <PostComments
+                                                key={comment._id}
+                                                id={comment._id}
+                                                savedComments={savedComments}
+                                                username={comment.authorName}
+                                                commentUpvotes={comment.upvotes-comment.downvotes}
+                                                comment={comment.content}
+                                            />
+                                            <hr className='col-md-6 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
+                                        </>
+                                    ))}
+                                </>)
+                                }
+                              </>
+
+                              }
+                                
                             </TabPanel>
                         </TabPanels>
                     </div>

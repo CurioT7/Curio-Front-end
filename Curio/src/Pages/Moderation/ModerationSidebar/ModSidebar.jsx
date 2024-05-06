@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import './ModSidebar.css'
+import './ModSidebar.css';
 import BackButton from '../../../styles/icons/BackButton';
 import GoBack from '../../../styles/icons/GoBack';
 import { Link } from 'react-router-dom';

@@ -82,6 +82,10 @@ function Sent_Messages(props) {
                                         recipient={message.recipient !== null ? message.recipient.username : message.recipientSubreddit.name}
                                         isRecipientNull={!message.recipient}
                                         displayName={details.displayName}
+                                        postkarma={details.postKarma}
+                                        commentkarma={details.commentKarma}
+                                        cakeDay={details.cakeDay}
+                                        bio={details.bio}
                                     />
                                 </div>
                             </div>
