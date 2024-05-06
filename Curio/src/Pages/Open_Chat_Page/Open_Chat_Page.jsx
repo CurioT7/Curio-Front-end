@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import OpenChatCom from "../../Components/OpenChat/OpenChatComLeft_Side/OpenChatComLeft_Side";
 import NewChat_Com from "../../Components/OpenChat/OpenChatComRight_Side/NewChat/NewChat";
-import "./Right_Side_Chat.css";
+import "./Open_Chat_Page.css";
 import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
 import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat';
-import LiveChatInput from "../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChatInput";
 import { useNavigate } from 'react-router-dom';
 
 function Right_Side_Chat(props) {

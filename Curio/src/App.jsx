@@ -29,7 +29,7 @@ import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 import FollowersPage from "./Components/FollowersPage/FollowersPage.jsx";
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Pages/Notifications/Notifications.jsx";
-import NewChat from "./Pages/Right_Side_Chat/Right_Side_Chat.jsx";
+import NewChat from "./Pages/Open_Chat_Page/Open_Chat_Page.jsx";
 import SearchPage from "./Pages/Search/SearchPage.jsx";
 import Private_Messages from "./Pages/Private_Messages/Private_Messages.jsx";
 import MessagesInbox from "./Pages/InboxMessages/MessagesInbox.jsx";
