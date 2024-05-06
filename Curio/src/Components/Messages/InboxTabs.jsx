@@ -15,7 +15,7 @@ function InboxTabs() {
             <Tab _selected={{borderBottom: "1px", borderColor: "white"}} _hover={{borderBottom: "1px", borderColor: "white"}} style={{fontSize: "0.8rem"}} onClick={() => handleTabClick("")}>All</Tab>
             <Tab _selected={{borderBottom: "1px", borderColor: "white"}} _hover={{borderBottom: "1px", borderColor: "white"}} style={{fontSize: "0.8rem"}} onClick={() => handleTabClick("")}>Unread</Tab>
             <Tab _selected={{borderBottom: "1px", borderColor: "white"}} _hover={{borderBottom: "1px", borderColor: "white"}} style={{fontSize: "0.8rem"}} onClick={() => handleTabClick("")}>Messages</Tab>
-            <Tab _selected={{borderBottom: "1px", borderColor: "white"}} _hover={{borderBottom: "1px", borderColor: "white"}} style={{fontSize: "0.8rem"}} onClick={() => handleTabClick("/message/selfreply")}>Comment Replies</Tab>
+            <Tab _selected={{borderBottom: "1px", borderColor: "white"}} _hover={{borderBottom: "1px", borderColor: "white"}} style={{fontSize: "0.8rem"}} onClick={() => handleTabClick("/message/selfreply")}>Post Replies</Tab>
             <Tab _selected={{borderBottom: "1px", borderColor: "white"}} _hover={{borderBottom: "1px", borderColor: "white"}} style={{fontSize: "0.8rem"}} onClick={() => handleTabClick("/message/mentions")}>Username Mentions</Tab>
         </TabList>
          <TabIndicator mt='-1px' height='1px' bg='white.500' borderRadius='1px' />
