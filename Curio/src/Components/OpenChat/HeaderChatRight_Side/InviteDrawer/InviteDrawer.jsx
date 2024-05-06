@@ -35,6 +35,7 @@ function InviteDrawer({ isOpen, onClose }) {
                 <DrawerHeader>Invite to chat</DrawerHeader>
                 <DrawerBody className='about-drawer-body' padding='12px'>
                     <TypeUsername
+                        setInputValue={setInputValue}
                         inputValue={inputValue}
                         handleInputChange={handleInputChange}
                         handleToggleUser={handleUserToggle}
@@ -48,25 +49,25 @@ function InviteDrawer({ isOpen, onClose }) {
                     </span>
                 </DrawerBody>
                 <DrawerFooter>
-                <Button 
-                    colorScheme='gray'
-                    mr={3} 
-                    size='sm' 
-                    borderRadius="20px" 
-                    onClick={onClose}
+                    <Button
+                        colorScheme='gray'
+                        mr={3}
+                        size='sm'
+                        borderRadius="20px"
+                        onClick={onClose}
                     >
                         Cancel
                     </Button>
-                    <Button 
-                    colorScheme='blue'
-                    size='sm'
-                    borderRadius="20px" 
-                    style={{
-                        // cursor: groupName.trim() ? 'pointer' : 'default'
-                    }}
+                    <Button
+                        colorScheme='blue'
+                        size='sm'
+                        borderRadius="20px"
+                        style={{
+                            // cursor: groupName.trim() ? 'pointer' : 'default'
+                        }}
                     >
                         Send Invite
-                        </Button>
+                    </Button>
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>

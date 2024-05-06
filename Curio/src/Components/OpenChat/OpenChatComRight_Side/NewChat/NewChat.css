@@ -33,7 +33,6 @@
     background-color: white;
     flex: 0 0 auto;
     max-height: 50%;
-    min-height: 100px;
     overflow-y: auto;
     border-radius: .5rem;
     margin-top: 1rem;

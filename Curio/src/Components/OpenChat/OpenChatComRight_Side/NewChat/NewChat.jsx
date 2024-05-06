@@ -20,7 +20,7 @@ function NewChat() {
 
     return (
         <div className='chat-div'>
-            <HeaderChatRight_Side header='New Chat' check='false'/>
+            <HeaderChatRight_Side header='New Chat' check='false' />
             <form className='chat-form'>
                 <main className='chat-main'>
                     <div>
@@ -47,6 +47,7 @@ function NewChat() {
                                     </div>
                                 )}
                                 <TypeUsername
+                                    setInputValue={setInputValue}
                                     inputValue={inputValue}
                                     handleInputChange={handleInputChange}
                                     handleToggleUser={handleUserToggle}

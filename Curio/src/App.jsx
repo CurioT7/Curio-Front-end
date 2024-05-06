@@ -111,7 +111,7 @@ function App() {
           <Route path='/user/:username/followers' element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/room/create' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
           <Route path='/threads' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
-          <Route path='/chat/General_Boat_962' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/chat/:usernamechat' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
           <Route path='/search/:searchTerm' element={<SearchPage />}></Route>
           <Route path='/message/compose' element={<Private_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/inbox' element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} />}/>
