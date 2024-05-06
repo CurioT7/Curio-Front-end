@@ -1,0 +1,25 @@
+.avatarimg{
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+.mainContainer{
+  width: 800px;
+}
+
+.UserNameText{
+  color: rgb(42, 60, 66);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.TitleText2{
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.PostText{
+  margin-top: 20px;
+}

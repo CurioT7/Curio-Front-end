@@ -6,12 +6,12 @@ import InfoIcon from "../../../styles/icons/InfoIcon";
 import SixDots from "../../../styles/icons/SixDots";
 import Remove from "../../../styles/icons/Remove";
 
-function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options }) {
+function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options, onContentChange }) {
 
 
   return (
     <div className="flex-wrap pollPage">
-      <Text_Editor />
+      <Text_Editor onContentChange={onContentChange} />
       <div className="container flex-wrap cont-div">
         <div className="row row-cols-2" style={{height: 'fit-content'}}>
           <div className="col-8">
