@@ -11,6 +11,8 @@ import Unmoderated from "../../Components/ModerationComponents/Unmoderated";
 import Activity from "../../Components/ModerationComponents/Activity";
 import DropDownArrow from "../../styles/icons/DropDownArrow";
 import { Overlay, OverlayTrigger, Popover } from "react-bootstrap";
+import ModSidebar from "./ModerationSidebar/ModSidebar";
+import Header from "./header";
 
 function Moderation(props) {
   const [type, setType] = useState("needs review");
@@ -59,8 +61,11 @@ function Moderation(props) {
   }
 
   return (
-    <div style={{ marginTop: "5rem" }}>
-      <div className="row g-3">
+  <div style={{marginTop:"4rem"}}>
+    <Header />
+    <ModSidebar />
+    <div style={{marginLeft: "17rem" }}>
+      <div className="row g-3 ">
         <div className="col-9 ps-5">
           <h1 className="queueTitle">Queue</h1>
           <p className="">
@@ -68,7 +73,7 @@ function Moderation(props) {
             review
           </p>
           <div className="row" style={{ height: "fit-content" }}>
-            <div className="col-8 d-flex align-items-center">
+            <div className="col-7 d-flex align-items-center">
               <button
                 className={`me-4 ${
                   type === "needs review" ? "changeButtons1" : "changeButtons"
@@ -121,7 +126,7 @@ function Moderation(props) {
               </button>
             </div>
             <div
-              className="col-4 d-flex align-items-center"
+              className="col-5 d-flex align-items-center justify-content-end " 
               style={{ position: "relative" }}
             >
               <OverlayTrigger
@@ -207,6 +212,7 @@ function Moderation(props) {
           <Activity />
         </div>
       </div>
+    </div>
     </div>
   );
 }
