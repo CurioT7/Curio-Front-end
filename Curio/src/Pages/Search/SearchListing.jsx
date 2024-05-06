@@ -26,11 +26,16 @@ function SearchListing (props)  {
     const [icon,setIcon] = React.useState(<BsRocket fontSize={18} />)
     const [isOpen, setIsOpen] = React.useState(false);
     const [timeOpen, setTimeOpen] = React.useState(false);
+    const [hashtagType, setHashtagType] = React.useState('Posts')
+    const [HashtagTypeOpen, setHashtagTypeOpen] = React.useState(false);
     function handleClose(){
         setIsOpen(false);
       };
     function handleTimeClose (){
         setTimeOpen(false);
+    }
+    function handleHashtagTypeClose(){
+        setHashtagTypeOpen(false);
     }
     function changeListVal(val){
         setValue(val)
@@ -69,14 +74,21 @@ function SearchListing (props)  {
         handleTimeClose();
     }
 
+    function changeHashtagType(val){
+        setHashtagType(val)
+        props.onChangeSort(val)
+        handleHashtagTypeClose()
+    }
+
     React.useEffect(() => {
         setValue('Relevance')
         setTimeInterval({time:'all',value:'All time'})
         setIcon(<BsRocket fontSize={18} />)
+        setHashtagType('Posts')
     }, [props.displaySort,props.searchTerm])
   return (
     <div className='search-sorting'>
-        {(props.displaySort==1 || props.displaySort==2 ) &&<p> Sort By:</p>}
+        {(props.displaySort==1 || props.displaySort==2 || props.displaySort==3 ) &&<p> Sort By:</p>}
         {(props.displaySort==1 || props.displaySort==2 ) &&<Popover isOpen={isOpen} onClose={handleClose} >
             <PopoverTrigger>
                 <Button variant='ghost' onClick={() => setIsOpen(true)}  borderRadius={20} size='sm'> <span className='fw-normal text-secondary d-flex gap-2'> {icon} {value} <IoIosArrowDown className='mt-1'/></span> </Button>
@@ -102,6 +114,17 @@ function SearchListing (props)  {
                     <Text margin={0} padding={0} onClick={()=>changeTimeInterval('Past Month','month')}><div className=' search-sorting-item'><span>Past Month</span></div></Text>
                     <Text margin={0} padding={0} onClick={()=>changeTimeInterval('Past 24 Hours','day')}><div className=' search-sorting-item'><span>Past 24 Hours</span></div></Text>
                     <Text margin={0} padding={0} onClick={()=>changeTimeInterval('Past Hours','hour')}><div className=' search-sorting-item'><span>Past Hours</span></div></Text>
+                </PopoverBody>
+            </PopoverContent>
+        </Popover>}
+        {(props.displaySort==3) &&<Popover isOpen={HashtagTypeOpen} onClose={handleHashtagTypeClose}>
+            <PopoverTrigger>
+            <Button variant='ghost' onClick={()=>setHashtagTypeOpen(true)} borderRadius={20} size='sm'><span className='fw-normal align-items-center text-secondary d-flex gap-2'><AiOutlineSchedule fontSize={18}/>{hashtagType} <IoIosArrowDown className='mt-1'/></span> </Button>
+            </PopoverTrigger>
+            <PopoverContent margin={0} padding={0}  width='fit-content' className='shadow'>
+                <PopoverBody margin={0} padding={0} className='search-sorting-content' >
+                    <Text margin={0} padding={0} onClick={()=>changeHashtagType('Posts')}><div className=' search-sorting-item'><span>Posts</span></div></Text>
+                    <Text margin={0} padding={0} onClick={()=>changeHashtagType('Comments')}><div className=' search-sorting-item'><span>Comments</span></div></Text>
                 </PopoverBody>
             </PopoverContent>
         </Popover>}
