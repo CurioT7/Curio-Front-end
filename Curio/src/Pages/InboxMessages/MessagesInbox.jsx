@@ -18,9 +18,9 @@ function MessagesInbox(props) {
 
 
     return (
-        <div style={{marginTop: "60px"}}>
+        <div style={{ marginTop: "60px" }}>
             <MessagesNavbar />
-            <InboxTabs />
+            <InboxTabs/>
         </div>
     );
 }
