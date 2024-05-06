@@ -4,8 +4,6 @@ import "./Moderation.css";
 import { chakra } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import NeedsReview from "../../Components/ModerationComponents/NeedsReview";
-import Reported from "../../Components/ModerationComponents/Reported";
 import Removed from "../../Components/ModerationComponents/Removed";
 import Edited from "../../Components/ModerationComponents/Edited";
 import Unmoderated from "../../Components/ModerationComponents/Unmoderated";
@@ -17,7 +15,7 @@ import Header from "./header";
 
 function Moderation(props) {
   const { Community } = useParams();
-  const [type, setType] = useState("needs review");
+  const [type, setType] = useState("removed");
   const [communityChoice, setCommunityChoice] = useState("Communities");
   const [contentChoice, setcontentChoice] = useState("All Content");
   const [newestChoice, setNewestChoice] = useState("Newest First");
@@ -50,11 +48,7 @@ function Moderation(props) {
   }, []);
 
   function returntype() {
-    if (type === "needs review") {
-      return <NeedsReview />;
-    } else if (type === "reported") {
-      return <Reported />;
-    } else if (type === "removed") {
+    if (type === "removed") {
       return <Removed />;
     } else if (type === "edited") {
       return <Edited />;
@@ -69,7 +63,7 @@ function Moderation(props) {
     <ModSidebar communityName= {Community}/>
     <div style={{marginLeft: "17rem" }}>
       <div className="row g-3 ">
-        <div className="col-9 ps-5">
+        <div className="col-12 ps-5">
           <h1 className="queueTitle">Queue</h1>
           <p className="">
             Anything that needs the moderator attention will show up in needs
@@ -77,26 +71,6 @@ function Moderation(props) {
           </p>
           <div className="row" style={{ height: "fit-content" }}>
             <div className="col-7 d-flex align-items-center">
-              <button
-                className={`me-4 ${
-                  type === "needs review" ? "changeButtons1" : "changeButtons"
-                }`}
-                onClick={() => {
-                  setType("needs review");
-                }}
-              >
-                Needs Review
-              </button>
-              <button
-                className={`me-4 ${
-                  type === "reported" ? "changeButtons1" : "changeButtons"
-                }`}
-                onClick={() => {
-                  setType("reported");
-                }}
-              >
-                Reported
-              </button>
               <button
                 className={`me-4 ${
                   type === "removed" ? "changeButtons1" : "changeButtons"
@@ -210,9 +184,6 @@ function Moderation(props) {
           </div>
           <hr style={{ width: "100%", left: 0 }} />
           {returntype()}
-        </div>
-        <div className="col-3">
-          <Activity />
         </div>
       </div>
     </div>
