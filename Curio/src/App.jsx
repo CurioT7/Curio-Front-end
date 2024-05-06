@@ -118,6 +118,7 @@ function App() {
           <Route path='/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/mentions' element={<UserName_Mentions hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/selfreply' element={<Post_Replies hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
         </Routes>
       </ChakraProvider>
     </div>
