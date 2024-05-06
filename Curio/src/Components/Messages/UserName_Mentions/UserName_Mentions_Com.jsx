@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./UserName_Mentions_Com.css";
 import { Flex, Box } from "@chakra-ui/react";
 import Upvotes from '../../../styles/icons/Upvotes.jsx';
@@ -17,11 +17,11 @@ function UserName_Mentions_Com(props) {
     useEffect(() => {
         const isDownvoted = props.downvotedcomments.some(comment => comment._id === props.itemId);
         const isUpvoted = props.upvotedcomments.some(comment => comment._id === props.itemId);
-        
+
         setDownvoted(isDownvoted);
         setUpvoted(isUpvoted);
     }, [props.downvotedcomments, props.upvotedcomments, props.itemId]);
-    
+
 
     return (
         <div className='username-mentions-table'>
