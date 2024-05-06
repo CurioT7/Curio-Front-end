@@ -144,3 +144,17 @@ export async function unJoinSubCurio(subreddit){
         console.error('Error fetching data from backend:', error);
     }
 }
+
+export async function getModerators( Community ){
+    try{
+        const response = await axios.get(`${serverHost}/api/getModerators/${Community}`,{
+            headers: {
+                'content-type': 'application/json',
+                'authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        return response.data;
+    }catch(error){
+        console.error('Error fetching data from backend:', error);
+    }
+}

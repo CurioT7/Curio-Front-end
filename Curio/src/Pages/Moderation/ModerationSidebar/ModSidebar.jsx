@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import Queues from '../../../styles/icons/Queues';
 
 
-function ModSidebar( {communityName}) {
+function ModSidebar({ communityName }) {
   return (
     <Sidebar backgroundColor='#FFFFFF' rootStyles={{
       color: '#000000',
@@ -22,21 +22,29 @@ function ModSidebar( {communityName}) {
       overflowY: 'auto',
       borderRight: '1px solid #0000001a',
     }}>
-      <Menu style={{marginRight: '10px'}}>
+      <Menu style={{ marginRight: '10px' }}>
         <Link to='/home' style={{ textDecoration: 'none' }}>
-        <MenuItem className='ExitModTools' id='exitmodID' style={{paddingLeft: '5 px'}}><GoBack /> Exit mod tools</MenuItem>
+          <MenuItem className='ExitModTools' id='exitmodID' style={{ paddingLeft: '5 px' }}><GoBack /> Exit mod tools</MenuItem>
         </Link>
         <span className='overviewText'>OVERVIEW</span>
-        <MenuItem component={<Link to={`/r/${communityName}/about/modqueue`}/>} className='normalModItem'><Queues />Queues</MenuItem>
-        <Link to={`/r/${communityName}/about/scheduledposts`} style={{ textDecoration: 'none' }}>
-        <MenuItem className='normalModItem'>Scheduled Posts</MenuItem>
+        <Link to={`/r/${communityName}/about/modqueue`} style={{ textDecoration: 'none' }}>
+          <MenuItem className='normalModItem'><Queues />Queues</MenuItem>
         </Link>
-        <MenuItem component={<Link to={`/r/${communityName}/about/usermanagement`}/>} className='normalModItem'>User Management</MenuItem>
-        <p className='overviewText' style={{paddingTop: '40px'}}>MODERATION</p>
-        <MenuItem  className='normalModItem'>Rules and removal reasons</MenuItem>
-        <MenuItem component={<Link to={`/r/${communityName}/about/rules/contentcontrols`}/>} className='normalModItem'>Content Controls</MenuItem>
-        <p className='overviewText' style={{paddingTop: '40px'}}>SETTINGS</p>
-        <MenuItem component={<Link to={`/r/${communityName}/about/settings`}/>} className='normalModItem'>General Settings</MenuItem>
+        <Link to={`/r/${communityName}/about/scheduledposts`} style={{ textDecoration: 'none' }}>
+          <MenuItem className='normalModItem'>Scheduled Posts</MenuItem>
+        </Link>
+        <Link to={`/r/${communityName}/about/usermanagement`} style={{ textDecoration: 'none' }}>
+          <MenuItem className='normalModItem'>User Management</MenuItem>
+        </Link>
+        <p className='overviewText' style={{ paddingTop: '40px' }}>MODERATION</p>
+        <MenuItem className='normalModItem'>Rules and removal reasons</MenuItem>
+        <Link to={`/r/${communityName}/about/rules/contentcontrols`} style={{ textDecoration: 'none' }}>
+          <MenuItem className='normalModItem'>Content Controls</MenuItem>
+        </Link>
+        <p className='overviewText' style={{ paddingTop: '40px' }}>SETTINGS</p>
+        <Link to={`/r/${communityName}/about/settings`} style={{ textDecoration: 'none' }}>
+          <MenuItem className='normalModItem'>General Settings</MenuItem>
+        </Link>
       </Menu>
     </Sidebar>
   );

@@ -2,10 +2,10 @@ import React from "react";
 import Header from "../../../Pages/Moderation/header";
 import ModSidebar from "../../../Pages/Moderation/ModerationSidebar/ModSidebar";
 import { useEffect } from "react";
-
+import { useParams } from "react-router-dom";
 
 function UserManage( props ) {
-
+  const { Community } = useParams();
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -21,7 +21,7 @@ function UserManage( props ) {
   return (
     <div style={{marginTop:"4rem"}}>
     <Header />
-    <ModSidebar/>
+    <ModSidebar communityName={Community}/>
     <div style={{marginLeft: "17rem" }}>
       <h1>User Management</h1>
       </div>
