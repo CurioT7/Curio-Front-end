@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "./Moderation.css";
 import { chakra } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import NeedsReview from "../../Components/ModerationComponents/NeedsReview";
 import Reported from "../../Components/ModerationComponents/Reported";
 import Removed from "../../Components/ModerationComponents/Removed";
@@ -15,6 +16,7 @@ import ModSidebar from "./ModerationSidebar/ModSidebar";
 import Header from "./header";
 
 function Moderation(props) {
+  const { Community } = useParams();
   const [type, setType] = useState("needs review");
   const [communityChoice, setCommunityChoice] = useState("Communities");
   const [contentChoice, setcontentChoice] = useState("All Content");
@@ -25,6 +27,7 @@ function Moderation(props) {
 
   function handleShowCommunities() {
     setShowCommunities(!showCommunities);
+    console.log(Community);
   }
 
   function handleShowContent() {
@@ -63,7 +66,7 @@ function Moderation(props) {
   return (
   <div style={{marginTop:"4rem"}}>
     <Header />
-    <ModSidebar />
+    <ModSidebar communityName= {Community}/>
     <div style={{marginLeft: "17rem" }}>
       <div className="row g-3 ">
         <div className="col-9 ps-5">

@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import Queues from '../../../styles/icons/Queues';
 
 
-function ModSidebar() {
+function ModSidebar( {communityName}) {
   return (
     <Sidebar backgroundColor='#FFFFFF' rootStyles={{
       color: '#000000',
@@ -27,14 +27,16 @@ function ModSidebar() {
         <MenuItem className='ExitModTools' id='exitmodID' style={{paddingLeft: '5 px'}}><GoBack /> Exit mod tools</MenuItem>
         </Link>
         <span className='overviewText'>OVERVIEW</span>
-        <MenuItem className='normalModItem'><Queues />Queues</MenuItem>
+        <MenuItem component={<Link to={`/r/${communityName}/about/modqueue`}/>} className='normalModItem'><Queues />Queues</MenuItem>
+        <Link to={`/r/${communityName}/about/scheduledposts`} style={{ textDecoration: 'none' }}>
         <MenuItem className='normalModItem'>Scheduled Posts</MenuItem>
-        <MenuItem className='normalModItem'>User Management</MenuItem>
+        </Link>
+        <MenuItem component={<Link to={`/r/${communityName}/about/usermanagement`}/>} className='normalModItem'>User Management</MenuItem>
         <p className='overviewText' style={{paddingTop: '40px'}}>MODERATION</p>
-        <MenuItem className='normalModItem'>Rules and removal reasons</MenuItem>
-        <MenuItem className='normalModItem'>Content Controls</MenuItem>
+        <MenuItem  className='normalModItem'>Rules and removal reasons</MenuItem>
+        <MenuItem component={<Link to={`/r/${communityName}/about/rules/contentcontrols`}/>} className='normalModItem'>Content Controls</MenuItem>
         <p className='overviewText' style={{paddingTop: '40px'}}>SETTINGS</p>
-        <MenuItem className='normalModItem'>General Settings</MenuItem>
+        <MenuItem component={<Link to={`/r/${communityName}/about/settings`}/>} className='normalModItem'>General Settings</MenuItem>
       </Menu>
     </Sidebar>
   );

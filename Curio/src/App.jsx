@@ -11,7 +11,6 @@ import FeedingSettings from "./Pages/feedSettings/FeedingSettings.jsx";
 import EmailSettings from "./Pages/emailSettings/EmailSettings.jsx";
 import ChatAndMessagingSettings from "./Pages/ChatAndMassegingSettings/ChatAndMassegingSettings.jsx";
 import SidebarComponent from "./Components/Sidebar/SidebarComponent.jsx";
-import ShowFriendInformation from "./Components/FriendInformation/ShowFriendInformation.jsx";
 import NavbarComponent from "./Components/Navbar/Navbar.jsx";
 import ForgotUser from "./Components/ForgotUser/ForgotUser.jsx";
 import LoginPage from "./Components/Login/Loginpage.jsx";
@@ -35,6 +34,10 @@ import Private_Messages from "./Pages/Private_Messages/Private_Messages.jsx";
 import MessagesInbox from "./Pages/Messages/MessagesInbox.jsx";
 import Sent_Messages from "./Pages/Sent_Messages/Sent_Messages.jsx";
 import Moderation from "./Pages/Moderation/Moderation.jsx";
+import ScheduledPosts from "./Components/ModerationComponents/ScheduledPosts/ScheduledPosts.jsx";
+import UserManage from "./Components/ModerationComponents/UserManagement/UserManage.jsx";
+import ContentControl from "./Components/ModerationComponents/ContentControl/ContentControl.jsx";
+import ModSettings from "./Components/ModerationComponents/ModSettings/ModSettings.jsx";
 
 function App() {
   const location = useLocation();
@@ -115,7 +118,10 @@ function App() {
           <Route path='/message/inbox' element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} />}/>
           <Route path='/message/sent' element={<Sent_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/r/:Community/about/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-
+          <Route path='/r/:Community/about/scheduledposts' element={<ScheduledPosts hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/usermanagement' element={<UserManage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/rules/contentcontrols' element={<ContentControl hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/settings' element={<ModSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
         </Routes>
       </ChakraProvider>
     </div>
