@@ -9,7 +9,8 @@ import CommunityResults from "./CommunityResults";
 import Post from '../../Components/Post/Post';
 import PostComments from '../../Components/Post/PostComments';
 import SearchListing from "./SearchListing";
-import { SortSearchContent } from "./SortingSearchEndPoints";
+import { SortSearchContent,SortSearchContentByHashtag } from "./SortingSearchEndPoints";
+import { set } from "mongoose";
 
 function SearchPage(){
     const { searchTerm } = useParams();
@@ -47,6 +48,7 @@ function SearchPage(){
         }
         catch(error){
             console.log(error);
+            setCommunityResults([]);
         }
 
     }
@@ -59,6 +61,7 @@ function SearchPage(){
         }
         catch(error){
             console.log(error);
+            setPostResults([]);
         }
     }
 
@@ -70,6 +73,7 @@ function SearchPage(){
         }
         catch(error){
             console.log(error);
+            setCommentResults([]);
         }
     }
 
@@ -124,11 +128,18 @@ function SearchPage(){
     useEffect(() => {
         handleUserResults();
         handleCommunityResults();
-       
-        
+        handlePostResults();
+        handleHashtagResults();
         getSaved();
         getHidden();
     }, [searchTerm]);
+
+    const handleHashtagResults = async () => {
+        const data = await SortSearchContentByHashtag(searchTerm);
+        if(data){
+            setHashtag({type:"Posts",posts:data.posts,comments:data.comments});
+        }
+    }
 
     const handleChangeSort = async (sortType, timeinterval) => {
         if(displaySort == 2){
@@ -145,6 +156,9 @@ function SearchPage(){
                 }
             }
            
+        }
+        if(displaySort == 3){
+            setHashtag({...hashtag,type:sortType})
         }
     }
 

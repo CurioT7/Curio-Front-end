@@ -18,3 +18,12 @@ export async function SortSearchContent(contentType, sortType,searchTerm, timein
     }
 
 }
+
+export async function SortSearchContentByHashtag(searchTerm) {
+    try{
+        const request = await axios.get(`${serverHost}/api/searchHashtags/%23sd${searchTerm}`);
+        return request.data;
+    }catch(error){
+        console.error('Error fetching data from backend:', error);
+    }
+}
