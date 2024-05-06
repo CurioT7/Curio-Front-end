@@ -32,10 +32,11 @@ import Notifications from "./Pages/Notifications/Notifications.jsx";
 import NewChat from "./Pages/Right_Side_Chat/Right_Side_Chat.jsx";
 import SearchPage from "./Pages/Search/SearchPage.jsx";
 import Private_Messages from "./Pages/Private_Messages/Private_Messages.jsx";
-import MessagesInbox from "./Pages/Messages/MessagesInbox.jsx";
+import MessagesInbox from "./Pages/InboxMessages/MessagesInbox.jsx";
 import Sent_Messages from "./Pages/Sent_Messages/Sent_Messages.jsx";
 import Moderation from "./Pages/Moderation/Moderation.jsx";
-
+import UserName_Mentions from "./Pages/InboxMessages/UserName_Mentions/UserName_Mentions.jsx";
+import Post_Replies from "./Pages/InboxMessages/Post_Replies/Post_Replies.jsx";
 function App() {
   const location = useLocation();
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -114,8 +115,10 @@ function App() {
           <Route path='/message/compose' element={<Private_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/inbox' element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} />}/>
           <Route path='/message/sent' element={<Sent_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/mentions' element={<UserName_Mentions hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/selfreply' element={<Post_Replies hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/r/:Community/about/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-
         </Routes>
       </ChakraProvider>
     </div>
