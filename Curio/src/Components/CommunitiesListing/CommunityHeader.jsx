@@ -17,7 +17,7 @@ function CommunityHeader( props ) {
   const [isJonied, setIsJoined] = React.useState(false);
   const[banner,setBanner] = React.useState("");
   const[icon,setIcon] = React.useState("");
-  
+ 
   function Toast(message,type){
     toast({
       description: message,
@@ -104,12 +104,15 @@ function CommunityHeader( props ) {
           </div> 
           <div className='d-flex mt-3 gap-2 '>
             <Button onClick={handleCreatePost}  borderColor=' rgb(45, 53, 55)'  borderRadius={20}  variant='outline' className=' comm-black-button d-flex gap-2'> <FaPlus/> Create a Post</Button>
-            {isJonied ?(<Button onClick={handleUnJoin} borderRadius={20} borderColor=' rgb(45, 53, 55)' className=' comm-black-button' variant='outline' >Joined</Button>):(<Button borderRadius={20} className='comm-join-button' onClick={handleJoin}>Join</Button>)}
+            
+            
             {props.isModerator ? (
             <Link to={`/r/${Community}/about/modqueue`} >
             <Button borderRadius={20} className='comm-join-button' variant='outline'>Mod tools</Button>
             </Link>) :
-            null}
+            (<>
+            {isJonied ?(<Button onClick={handleUnJoin} borderRadius={20} borderColor=' rgb(45, 53, 55)' className=' comm-black-button' variant='outline' >Joined</Button>):(<Button borderRadius={20} className='comm-join-button' onClick={handleJoin}>Join</Button>)}
+            </>)}
           </div>
         </div>
         
