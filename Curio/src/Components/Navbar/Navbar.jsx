@@ -27,6 +27,7 @@ import { fetchNotificationsFromBackend, markasViewed } from '../../Pages/Notific
 import Trending from './Trending';
 import SearchBy from './SearchBy';
 import { set } from 'mongoose';
+import axios from 'axios';
 
 
 
@@ -40,6 +41,7 @@ function NavbarComponent(props) {
   const [unreadNotificationsNum, setUnreadNotificationsNum] = useState(0);
   const [isRead, setIsRead] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
   const checkAuthentication = () => {
@@ -105,14 +107,31 @@ function NavbarComponent(props) {
     }
   }, []);
 
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     window.addEventListener("loginOrSignup", checkAuthentication);
     setIsAuthenticated(!!token);
+    if (token) {
+      getPrefs();
+    }
+    window.addEventListener("prefsChanged", getPrefs);
     return () => {
       window.removeEventListener("loginOrSignup", checkAuthentication);
+      window.removeEventListener("prefsChanged", getPrefs);
     };
   }, []);
 
@@ -295,7 +314,7 @@ if (!props.NavbarVisibility) {
           <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
             <Tooltip label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
-                <img className='profileImg' src={profile} alt="logo"/>
+                <img className='profileImg' src={profileImage || profile} alt="logo"/>
               </a>
             </Tooltip>
           </li>
@@ -319,7 +338,7 @@ if (!props.NavbarVisibility) {
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
           <Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
-            <img className='profileImg' src={profile} alt="logo"/>
+            <img className='profileImg' src={localStorage.getItem("profileImage") || profile} alt="logo"/>
             <div className="d-flex flex-column">
               <span className="drop-down-profile-description">View Profile</span>
                 <div className='d-flex flex-start align-items-center ArrowandNumber'>
