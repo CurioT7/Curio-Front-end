@@ -11,7 +11,8 @@ import {
   } from '@chakra-ui/react'
   import { Button,Input} from "@chakra-ui/react";
   import InvCheckBox from './InvCheckBox';
-function InvMode(){
+  import { FaPencil } from "react-icons/fa6";
+function InvMode(props){
     const { isOpen, onOpen, onClose } = useDisclosure()
     const[inputUsername,setInputUsername]=React.useState('')
     const[everything,setEverything]=React.useState(false)
@@ -40,16 +41,16 @@ function InvMode(){
     }
   return (
     <div>
-        <Button onClick={onOpen} fontWeight={700} borderRadius={20} size='sm' colorScheme="blue"> Invite user as mod </Button>
-
+        {!props.edit&&<Button onClick={onOpen} fontWeight={700} borderRadius={20} size='sm' colorScheme="blue"> Invite user as mod </Button>}
+        {props.edit&&<FaPencil onClick={onOpen} style={{cursor:"pointer"}} />}
         <Modal isCentered size='xl' isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-            <ModalHeader className="border-bottom mb-1">Invite Moderators</ModalHeader>
+            <ModalHeader className="border-bottom mb-1">{!props.edit?(<>Invite Moderators</>):(<>Edit:u/user</>)}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
                 <div className=' border-bottom mb-4'>
-                    <Input  placeholder='Enter Username' onChange={handleInputUsername} value={inputUsername}/>
+                    {!props.edit &&<Input  placeholder='Enter Username' onChange={handleInputUsername} value={inputUsername}/>}
                     <p className='fw-bold mt-2'>Give them access to...</p>
                     <InvCheckBox onChange={handleChangeParent} isChecked={everything} setChecked={setEverything} label="Everything" description="Full access including the ability to manage moderator access and permissions." />
                 </div>
@@ -64,7 +65,8 @@ function InvMode(){
                 <Button size='sm' borderRadius={20} variant='outline' colorScheme='blue' mr={3} onClick={onClose}>
                     cancel
                 </Button>
-                <Button isDisabled={inputUsername.length<3 || inputUsername.length>=21} onClick={onClose} size='sm' colorScheme="blue" borderRadius={20}  >Invite</Button>
+                {!props.edit &&<Button isDisabled={inputUsername.length<3 || inputUsername.length>=21} onClick={onClose} size='sm' colorScheme="blue" borderRadius={20}  >Invite</Button>}
+                {props.edit &&<Button size='sm' onClick={onClose} colorScheme="blue" borderRadius={20}  >Save</Button>}
             </ModalFooter>
         </ModalContent>
         </Modal>
