@@ -36,10 +36,13 @@ import Sent_Messages from "./Pages/Sent_Messages/Sent_Messages.jsx";
 import Moderation from "./Pages/Moderation/Moderation.jsx";
 import UserName_Mentions from "./Pages/InboxMessages/UserName_Mentions/UserName_Mentions.jsx";
 import Post_Replies from "./Pages/InboxMessages/Post_Replies/Post_Replies.jsx";
+import AllInbox from "./Pages/InboxMessages/AllInbox.jsx";
+import UnreadInbox from "./Pages/InboxMessages/UnreadInbox.jsx";
 import ScheduledPosts from "./Components/ModerationComponents/ScheduledPosts/ScheduledPosts.jsx";
 import UserManage from "./Components/ModerationComponents/UserManagement/UserManage.jsx";
 import ContentControl from "./Components/ModerationComponents/ContentControl/ContentControl.jsx";
 import ModSettings from "./Components/ModerationComponents/ModSettings/ModSettings.jsx";
+import UnreadMessages from "./Pages/InboxMessages/UnreadMessages.jsx";
 
 function App() {
   const location = useLocation();
@@ -129,6 +132,10 @@ function App() {
           <Route path='/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/mentions' element={<UserName_Mentions hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/selfreply' element={<Post_Replies hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/message/messages" element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/messages/all" element={<AllInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/messages/unread" element={<UnreadInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/message/unread" element={<UnreadMessages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
         </Routes>
       </ChakraProvider>
     </div>

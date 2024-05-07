@@ -33,6 +33,7 @@ function ProfilePage(props) {
   const [userBio, setUserBio] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
   const [SocialLinks, setSocialLinks] = useState([]);
+  const [profileImage, setProfileImage] = useState('');
   const getSaved = async () => {
     try {
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -82,6 +83,18 @@ function ProfilePage(props) {
     }
   }
 
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
 
   useEffect(() => {
     window.addEventListener('hideOrSave', () => {
@@ -102,6 +115,7 @@ function ProfilePage(props) {
     getUserOverview(username)
       .then(data => setUserPosts(data.userPosts))
       .catch(error => console.error(error));
+    getPrefs();
   }, [username]);
 
   useEffect(() => {
