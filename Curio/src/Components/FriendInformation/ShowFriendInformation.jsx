@@ -330,7 +330,7 @@ function ShowFriendInformation(props) {
                                             </li>
                                             <li className="drop-down-item">
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
-                                                    <div><p className='text-text'>Send a message</p></div>
+                                                    <div onClick={() => navigate("/message/compose")}><p className='text-text'>Send a message</p></div>
                                             </li>
                                             <li className="drop-down-item" onClick={() => {handleUserBlock(props.username);}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>

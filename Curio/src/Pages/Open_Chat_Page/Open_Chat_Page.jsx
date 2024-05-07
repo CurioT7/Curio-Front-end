@@ -5,9 +5,13 @@ import "./Open_Chat_Page.css";
 import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
 import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat';
 import { useNavigate } from 'react-router-dom';
+import { chatsOverview } from './Open_Chat_Page';
 
 function Right_Side_Chat(props) {
-    const [newPage, setNewPage] = useState('New Chat');
+    const navigate = useNavigate();
+    const [recipient, setRecipient] = useState('');
+    const [chatsData, setChatsData] = useState(null); 
+    const [chatId, setChatId] = useState();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -16,32 +20,50 @@ function Right_Side_Chat(props) {
         }
         props.hideSidebar();
         props.hideNavbar();
+        // Fetch chats data and store it in state
+        async function fetchChatsData() {
+            try {
+                const data = await chatsOverview();
+                setChatsData(data);
+            } catch (error) {
+                console.error('Error', error.message);
+            }
+        }
 
+        fetchChatsData();
         return () => {
             props.showSidebar();
             props.showNavbar();
         };
     }, []);
 
+    const handleRecipient = (newrecipient) => {
+        setRecipient(newrecipient);
+    };
 
-    const handleNewPage = (PageName) => {
-        setNewPage(PageName);
+    const handleChatId = (newChatID) => {
+        setChatId(newChatID);
     };
 
     return (
-        <div className='open-chat-container'>
+        <div className='open-chat-container'> 
             <div className='side-bar-chat-page'>
-                <OpenChatCom handleNewPage={handleNewPage} />
+                <OpenChatCom 
+                chatsData={chatsData}
+                handleChatId={handleChatId}
+                />
             </div>
             <div className='right-side-main-chat'>
-                {newPage === "New Chat" ? (
-                    <NewChat_Com />
-                ) : newPage === "Threads" ? (
+                {props.newPage === "New Chat" ? (
+                    <NewChat_Com handleRecipient={handleRecipient}/>
+                ) : props.newPage === "Threads" ? (
                     <Threads />
-                ) : newPage === "Chat" ? (
+                ) : props.newPage === "Chat" ? (
                     <>
-                    <LiveChat />
-                    {/* <LiveChatInput /> */}
+                    <LiveChat 
+                    recipient={recipient}
+                    chatId={chatId}
+                    />
                     </>
                 ) : null}
             </div>

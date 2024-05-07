@@ -14,10 +14,15 @@ import {
     Stack,
     Button
 } from '@chakra-ui/react'
+import { formatTimestamp } from "./ExactTime";
 import { FaRegSquare } from "react-icons/fa";
 import { BsCheckSquareFill } from "react-icons/bs";
 
-function OpenChatCom({handleNewPage}) {
+function OpenChatCom({ chatsData, handleChatId }) {
+    if (!chatsData || !chatsData.chats) {
+        return null;
+    }
+    const username = localStorage.getItem('username');
     const [chatChannelsChecked, setChatChannelsChecked] = useState(true);
     const [groupChatsChecked, setGroupChatsChecked] = useState(true);
     const [directChatsChecked, setDirectChatsChecked] = useState(true);
@@ -44,13 +49,13 @@ function OpenChatCom({handleNewPage}) {
                 }}>Chats</Box >
                 <Spacer />
                 <Box className='chat-icons-header'>
-                    <Link to={'/room/create'} className='add-chat' onClick={() => handleNewPage("New Chat")}>
+                    <Link to={'/room/create'} className='add-chat'>
                         <IoChatbubbleSharp style={{
                             width: '2rem',
                         }} />
                     </Link>
                     <div className='filter-chat-options'>
-                        <Popover placement='top-start' style={{position:'relative'}}>
+                        <Popover placement='top-start' style={{ position: 'relative' }}>
                             <PopoverTrigger>
                                 <Button style={{ background: 'transparent', padding: '0', height: '5px' }}><IoFilterOutline />
                                     <MdKeyboardArrowDown /></Button>
@@ -60,15 +65,15 @@ function OpenChatCom({handleNewPage}) {
                                     <div className='popover-chat-list'>
                                         <Stack direction="row" align="center" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }} onClick={handleChatChannelsChange}>
                                             <span>Chat channels</span>
-                                            {chatChannelsChecked ? <BsCheckSquareFill color='blue'/> : <FaRegSquare />}
+                                            {chatChannelsChecked ? <BsCheckSquareFill color='blue' /> : <FaRegSquare />}
                                         </Stack>
                                         <Stack direction="row" align="center" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }} onClick={handleGroupChatsChange}>
                                             <span>Group chats</span>
-                                            {groupChatsChecked ? <BsCheckSquareFill color='blue'/> : <FaRegSquare />}
+                                            {groupChatsChecked ? <BsCheckSquareFill color='blue' /> : <FaRegSquare />}
                                         </Stack>
                                         <Stack direction="row" align="center" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }} onClick={handleDirectChatsChange}>
                                             <span>Direct chats</span>
-                                            {directChatsChecked ? <BsCheckSquareFill color='blue'/> : <FaRegSquare />}
+                                            {directChatsChecked ? <BsCheckSquareFill color='blue' /> : <FaRegSquare />}
                                         </Stack>
                                         <Stack spacing={4} direction='row-reverse' align='center'>
                                             <Button colorScheme='blue' size='sm' borderRadius="20px">
@@ -82,7 +87,7 @@ function OpenChatCom({handleNewPage}) {
                     </div>
                 </Box>
             </Flex>
-            <Link to={'/threads'} className="threads-container" onClick={() => handleNewPage("Threads")}>
+            <Link to={'/threads'} className="threads-container">
                 <div className='threads-list'>
                     <span className='left-section-thread'>
                         <span className='threads-arrow-leftup'><PiArrowBendUpLeft /></span>
@@ -94,22 +99,28 @@ function OpenChatCom({handleNewPage}) {
                 </div>
             </Link>
             <div>
-                <div>
-                    <Link to={`/chat/General_Boat_962`} className='message-container-text' onClick={() => handleNewPage("Chat")}>
-                        <span className='image-chat-message'>
-                            <img src={profile} alt="" style={{ borderRadius: '20px' }} />
-                        </span>
-                        <div className='body-chat-message'>
-                            <div className='row-1-chat'>
-                                <span className='username-chat'>General_Boat_962 </span>
-                                <span className='last-message-time'>5:16 PM</span>
+                {Array.isArray(chatsData.chats) && chatsData.chats.map(chat => (
+                    <div key={chat._id}>
+                        <Link to={`/chat/${chat._id}`} className='message-container-text' onClick={() => handleChatId(chat._id)}>
+                            <span className='image-chat-message'>
+                                <img
+                                    src={chat?.profilePicture || profile}
+                                    alt=""
+                                    style={{ borderRadius: '20px' }}
+                                />
+                            </span>
+                            <div className='body-chat-message'>
+                                <div className='row-1-chat'>
+                                    <span className='username-chat'>{chat.participants}</span>
+                                    <span className='last-message-time'>{formatTimestamp(chat.messages[0].timestamp)}</span>
+                                </div>
+                                <div className='row-2-chat'>
+                                    <span className='last-message'> {chat.sender === username ? 'You' : chat.sender}: {chat.messages[0].message} </span>
+                                </div>
                             </div>
-                            <div className='row-2-chat'>
-                                <span className='last-message'> You: a </span>
-                            </div>
-                        </div>
-                    </Link>
-                </div>
+                        </Link>
+                    </div>
+                ))}
             </div>
         </Flex>
     );
