@@ -16,3 +16,20 @@ export function getTimeDifference(timestamp) {
         return `${Math.floor(timeDifferenceInSeconds / 86400)}d`;
     }
 }
+
+export function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+    return formattedTime;
+}
+
+export function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const options = { month: 'short', day: '2-digit' };
+    return date.toLocaleDateString('en-US', options);
+};
