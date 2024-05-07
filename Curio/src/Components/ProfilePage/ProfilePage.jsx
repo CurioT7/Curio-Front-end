@@ -29,6 +29,7 @@ function ProfilePage(props) {
   const [upvotedComments, setUpvotedComments] = useState([]);
   const [downvotedComments, setDownvotedComments] = useState([]);
   const [SocialLinks, setSocialLinks] = useState([]);
+  const [profileImage, setProfileImage] = useState('');
   const getSaved = async () => {
     try {
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -78,6 +79,18 @@ function ProfilePage(props) {
     }
   }
 
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
 
   useEffect(() => {
     window.addEventListener('hideOrSave', () => {
@@ -98,6 +111,7 @@ function ProfilePage(props) {
     getUserOverview(username)
       .then(data => setUserPosts(data.userPosts))
       .catch(error => console.error(error));
+    getPrefs();
   }, [username]);
 
   useEffect(() => {
@@ -179,7 +193,7 @@ function ProfilePage(props) {
       <div className="profileContainer">
         <div className="mainComponent">
           <div className="userInfo">
-            <img src={profile} alt="profile picture" className="profileAvatar" />
+            <img src={profileImage || profile} alt="profile picture" className="profileAvatar" />
             <h3 className='userName'> {userAbout.displayName}</h3>
             <h5 className="userName"> u/{username} </h5>
             <b>{userAbout.bio}</b>
