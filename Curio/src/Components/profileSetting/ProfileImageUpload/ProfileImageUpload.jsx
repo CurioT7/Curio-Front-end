@@ -140,6 +140,7 @@ function ProfileImageUpload() {
               setCheckImageProfile(false);
             };
             reader.readAsDataURL(file);
+            window.dispatchEvent(new Event('prefsChanged'));
           }
           break;
         case 404:

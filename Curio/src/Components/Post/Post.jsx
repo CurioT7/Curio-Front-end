@@ -260,7 +260,7 @@ const postCategory = async (postID) => {
                 title: props.title,
                 subreddit: props.linkedSubreddit,
                 content: props.content,
-                image: props.image,
+                media: props.media,
                 upvotes: props.upvotes,
                 downvotes: props.downvotes,
                 comments: props.comments,
@@ -406,7 +406,7 @@ const postCategory = async (postID) => {
             {!isHidden &&
                 <div>
                     <Card className='Post' variant='ghost' >
-                        <p onClick={() => navigate(`r/${props.linkedSubreddit}`)} style={{marginLeft: "70px"}} className='mb-0 subreddit-post-name'>r/{props.linkedSubreddit}</p>
+                        {props.linkedSubreddit && <p onClick={() => navigate(`r/${props.linkedSubreddit}`)} style={{marginLeft: "70px"}} className='mb-0 subreddit-post-name'>r/{props.linkedSubreddit}</p>}
                         <CardHeader className='py-0'>
                             <Flex spacing='4'>
                             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
@@ -415,7 +415,7 @@ const postCategory = async (postID) => {
                                handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
                             </Flex>
                             {isLocked && <FcLock className='lock-icon' />}
-                            <button onClick={handleJoinCommunity} className='join-button mt-1'>{!isUserMember ? "Join" : "Leave"}</button>
+                            {props.linkedSubreddit && <button onClick={handleJoinCommunity} className='join-button mt-1'>{!isUserMember ? "Join" : "Leave"}</button>}
                             <PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} isSpoiler={props.isSpoiler}  post={props.post}/>
                             </Flex>
                         </CardHeader>
@@ -424,6 +424,7 @@ const postCategory = async (postID) => {
                             didVote={props.didVote} optionSelected={props.optionSelected} pollEnded={props.pollEnded} /> ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails} >
                             <Heading as='h3' size='md'>{props.title}</Heading>
+                        {props.type === "media" && <Image src={props.media} alt={props.title} className='mb-1 d-flex justify-content-center w-100' />}
                      {props.isSpoiler ? (
                             <>
                                 <span className='text-body-spoiler' >

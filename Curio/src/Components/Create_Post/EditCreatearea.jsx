@@ -77,14 +77,23 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
       };
 
       // If imageFormData is available, append it to postData
+      console.log("imageFormData", imageFormData.get("media"));
       if (imageFormData) {
-        postData.image = imageFormData;
+        // Create a new FormData object
+        const formData = new FormData();
+        formData.append('media', imageFormData.get('media'));
+
+        // Merge formData with postData
+        for (let [key, value] of formData.entries()) {
+          postData[key] = value;
+      }
       }
       const response = await axios.post(
         `${serverHost}/api/submit`,
         postData,
         {
           headers: {
+            'Content-Type': 'multipart/form-data',
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }

@@ -1,0 +1,33 @@
+.message-title{
+    color: #373c3f;
+    font-size: 1.1rem!important;
+    font-weight: 600;
+    font-family: normal x-small verdana, arial, helvetica, sans-serif;
+}
+
+
+.secondary-message-text{
+    color: #878a8c;
+    font-size: 0.9rem!important;
+    font-family: normal x-small verdana, arial, helvetica, sans-serif;
+}
+
+.sender-style{
+    color: #0079d3;
+    font-size: 0.9rem!important;
+}
+
+.sender-style:hover{
+    text-decoration: underline;
+}
+
+.private-messages-controls{
+    font-weight: bold;
+    color: #888;
+    font-size: 0.9rem!important;
+}
+
+.private-messages-controls:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}

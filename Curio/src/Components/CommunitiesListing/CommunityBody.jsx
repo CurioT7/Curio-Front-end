@@ -42,6 +42,10 @@ React.useEffect(() => {
             
             if(mod.username===localStorage.getItem('username')){
               setIsMod(true);
+              return;
+            }
+            else{
+              setIsMod(false);
             }
           })
       }
