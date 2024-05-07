@@ -96,7 +96,7 @@ line-height: 1.25rem;
     box-sizing: border-box;
     word-wrap: break-word;
     padding: 3%;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     align-items: center;
     width: auto;
 }
@@ -106,8 +106,9 @@ line-height: 1.25rem;
     height: 15vh;
     align-content: flex-end;
     justify-content: flex-end;
-    border-radius: 5px;
-    padding: 2%;
+    /* border-radius: 5px; */
+    /* padding: 2%; */
+    margin-bottom: -10px;
 }
 .gradient button{
     background-color: white;
@@ -232,3 +233,41 @@ line-height: 1.25rem;
     margin-bottom: 1%;
 }
 
+.username {
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    margin-bottom: 0;
+}
+
+
+
+.displayname h6{
+    color: #5C6C74;
+    font-size: .75rem;
+    line-height: 1rem;
+}
+
+.userBio{
+    padding-top: 5px;
+}
+
+.profilename{
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+  
+  .UserBio {
+    display: block;
+    font-weight: 200;
+    padding-bottom: 3px;
+  }
+
+  .sidebarName{
+    margin-top: -10px;
+  }
