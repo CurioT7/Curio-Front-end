@@ -40,7 +40,7 @@ function OpenChatCom({ chatsData, handleChatId }) {
     };
 
     return (
-        <Flex className='left-side-open-chat-container' style={{ display: 'flex', flexDirection: 'column' }}>
+        <Flex className='left-side-open-chat-container' style={{ display: 'flex', flexDirection: 'column', height:'100vh' }}>
             <Flex className='chat-left-title'>
                 <Box style={{
                     lineHeight: '1.5rem',
@@ -98,7 +98,7 @@ function OpenChatCom({ chatsData, handleChatId }) {
                     </span>
                 </div>
             </Link>
-            <div style={{height: '100vh' , overflowY:'auto'}}>
+            <div style={{height: '100vh' , overflow:'auto'}}>
                 {Array.isArray(chatsData.chats) && chatsData.chats.map(chat => (
                     <div key={chat._id}>
                         <Link to={`/chat/${chat._id}`} className='message-container-text' onClick={() => handleChatId(chat._id)}>
