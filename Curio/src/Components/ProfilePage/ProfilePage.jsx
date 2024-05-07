@@ -279,6 +279,7 @@ useEffect(() => {
                               downvotes={post.downvotes}
                               comments={post.comments}
                               content={post.content}
+                              media={post.media}
                               linkedSubreddit={post.linkedSubreddit}
                               isSpoiler={post.isSpoiler}
                               savedPosts={savedPosts}
@@ -322,6 +323,7 @@ useEffect(() => {
                           savedPosts={savedPosts}
                           savedComments={savedComments}
                           hiddenPosts={hiddenPosts}
+                          media={post.media}
                         />
                       </div>
                     ))
@@ -361,6 +363,7 @@ useEffect(() => {
                       savedPosts={savedPosts}
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
+                      media={post.media}
                     />
                       <hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}></hr>
                     </div>
@@ -400,6 +403,7 @@ useEffect(() => {
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
                       isInProfile={true}
+                      media={post.media}
                       style={{ backgroundColor: "#00000000" }}
                     />
                       <hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}></hr>
@@ -430,6 +434,7 @@ useEffect(() => {
                             savedPosts={savedPosts}
                             savedComments={savedComments}
                             hiddenPosts={hiddenPosts}
+                            media={post.media}
                           />
                         </div>
                       ))}
@@ -468,6 +473,7 @@ useEffect(() => {
                       savedPosts={savedPosts}
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
+                      media={post.media}
                     />
                   </div>
                 ))}

@@ -21,7 +21,7 @@ function UserName_Mentions_Com(props) {
     }, [props.downvotedcomments, props.upvotedcomments, props.itemId]);
 
     return (
-        <div className='username-mentions-table'>
+        <div style={{width: "65%"}} className='username-mentions-table d-flex justify-content-center'>
             <h5 className='username-mentions-header-messages'>post reply:
                 <a href="" className='username-mentions-title-messages'>
                     {props.title}

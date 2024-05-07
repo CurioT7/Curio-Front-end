@@ -198,10 +198,10 @@ function SearchPage(){
                                                 downvotes={post.downvotes}
                                                 comments={post.comments}
                                                 content={post.content}
-                                                linkedSubreddit={post.linkedSubreddit}
                                                 savedPosts={savedPosts}
                                                 hiddenPosts={hiddenPosts}
                                                 savedComments={savedComments}
+                                                media={post.media}
                                             />
                                             <hr className='col-md-6 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
                                         </>
