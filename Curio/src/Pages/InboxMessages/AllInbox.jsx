@@ -5,14 +5,14 @@ import Messages from "../../Components/Messages/Messages.jsx";
 import {fetchMessages} from "./InboxMessagesEndpoints";
 
 
-function MessagesInbox(props) {
+function AllInbox(props) {
 
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetchMessages("messages");
+                const response = await fetchMessages("all");
                 const filteredMessages = response.filter((message) => message.type === "message" && message.isRead === true);
                 setMessages(filteredMessages);
             } catch (error) {
@@ -54,4 +54,4 @@ function MessagesInbox(props) {
     );
 }
 
-export default MessagesInbox;
+export default AllInbox;
