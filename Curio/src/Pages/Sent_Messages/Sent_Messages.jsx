@@ -90,7 +90,7 @@ function Sent_Messages(props) {
                                         postkarma={details.postKarma}
                                         commentkarma={details.commentKarma}
                                         cakeDay={details.cakeDay}
-                                        bio={details.bio}
+                                        about={details.about}
                                     />
                                 </div>
                             </div>

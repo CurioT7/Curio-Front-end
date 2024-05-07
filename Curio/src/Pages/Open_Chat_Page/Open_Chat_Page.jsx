@@ -5,9 +5,13 @@ import "./Open_Chat_Page.css";
 import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
 import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat';
 import { useNavigate } from 'react-router-dom';
+import { chatsOverview } from './Open_Chat_Page';
 
 function Right_Side_Chat(props) {
+    const navigate = useNavigate();
     const [recipient, setRecipient] = useState('');
+    const [chatsData, setChatsData] = useState(null); 
+    const [chatId, setChatId] = useState();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -16,7 +20,17 @@ function Right_Side_Chat(props) {
         }
         props.hideSidebar();
         props.hideNavbar();
+        // Fetch chats data and store it in state
+        async function fetchChatsData() {
+            try {
+                const data = await chatsOverview();
+                setChatsData(data);
+            } catch (error) {
+                console.error('Error', error.message);
+            }
+        }
 
+        fetchChatsData();
         return () => {
             props.showSidebar();
             props.showNavbar();
@@ -27,11 +41,17 @@ function Right_Side_Chat(props) {
         setRecipient(newrecipient);
     };
 
+    const handleChatId = (newChatID) => {
+        setChatId(newChatID);
+    };
+
     return (
-        <div className='open-chat-container'>
-            
+        <div className='open-chat-container'> 
             <div className='side-bar-chat-page'>
-                <OpenChatCom />
+                <OpenChatCom 
+                chatsData={chatsData}
+                handleChatId={handleChatId}
+                />
             </div>
             <div className='right-side-main-chat'>
                 {props.newPage === "New Chat" ? (
@@ -40,8 +60,10 @@ function Right_Side_Chat(props) {
                     <Threads />
                 ) : props.newPage === "Chat" ? (
                     <>
-                    <LiveChat recipient={recipient}/>
-                    {/* <LiveChatInput /> */}
+                    <LiveChat 
+                    recipient={recipient}
+                    chatId={chatId}
+                    />
                     </>
                 ) : null}
             </div>
