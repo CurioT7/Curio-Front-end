@@ -139,6 +139,9 @@ function SearchPage(){
         if(data){
             setHashtag({type:"Posts",posts:data.posts,comments:data.comments});
         }
+        else{
+            setHashtag({type:"Posts",posts:[],comments:[]});
+        }
     }
 
     const handleChangeSort = async (sortType, timeinterval) => {
