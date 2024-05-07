@@ -98,7 +98,7 @@ function OpenChatCom({ chatsData, handleChatId }) {
                     </span>
                 </div>
             </Link>
-            <div>
+            <div style={{height: '100vh' , overflowY:'auto'}}>
                 {Array.isArray(chatsData.chats) && chatsData.chats.map(chat => (
                     <div key={chat._id}>
                         <Link to={`/chat/${chat._id}`} className='message-container-text' onClick={() => handleChatId(chat._id)}>
