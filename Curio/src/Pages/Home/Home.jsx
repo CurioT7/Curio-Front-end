@@ -118,25 +118,6 @@ function Home() {
     isSelected: false
   })
 
-  const [polls, setPolls] = React.useState([]);
-
-// useEffect(() => {
-//   async function fetchAndSetData() {
-//       const data = await SortHomePosts("best", pageNumber);
-
-//     if (data) {
-//       setPosts(data.posts);
-//       setTotalPages(Math.ceil(data.totalPosts / 10));
-//       setRandomPost({ ...randomPost, isSelected: false });
-//     }
-//   }
-
-  
-
-//   fetchAndSetData();
-  
-// }, []);
-
 
 
 useEffect(() => {
@@ -300,6 +281,7 @@ useEffect(() => {
                     didVote={didVote[post.post._id]}
                     optionSelected={post.details?.pollVote}
                     pollEnded={post.details?.pollEnded}
+                    createdAt={post.post.createdAt}
                    />) : (
                     <Post
                     _id={post.post._id}
@@ -347,6 +329,7 @@ useEffect(() => {
                     didVote={didVote[post.post._id]}
                     optionSelected={post.details?.pollVote}
                     pollEnded={post.details?.pollEnded}
+                    createdAt={post.post.createdAt}
                    />) : (
                     <Post
                     _id={post.post._id}
@@ -359,7 +342,7 @@ useEffect(() => {
                     content={post.post.content}
                     media={post.post.media}
                     //isMod={isMod}
-                    linkedSubreddit={post.post.linkedSubreddit.name}
+                    linkedSubreddit={post.post.linkedSubreddit?.name}
                     voteStatus={post.details?.voteStatus}
                     isLocked={post.post.isLocked}
                     savedPosts={savedPosts}

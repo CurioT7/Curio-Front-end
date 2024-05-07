@@ -8,6 +8,7 @@ import { Text } from '@chakra-ui/react'
 import { pollVote, getPollInfo } from "./ShowPollEndpoints";
 import { get } from "mongoose";
 import { useNavigate } from "react-router-dom";
+import { getPollTimeDifference, getDaysCountdown } from "../getTimeDifference/getTimeDifference";
 
 
 
@@ -16,6 +17,9 @@ function ShowPoll( props ) {
   const [hasVoted, setVoted] = useState(false);
   const [votes, setVotes] = useState([]);
   const navigate = useNavigate();
+
+  const countdown = getDaysCountdown(props.voteLength);
+  countdown.start();
 
   const handleVote = (event) => {
     setVotepick(event.target.value);
@@ -53,7 +57,7 @@ function ShowPoll( props ) {
     }
   
     const avg = sum / numbers.length;
-    return numbers.map((number) => (number / avg) * 100);
+    return numbers.map((number) => (number / avg) * 200);
   };
 
   const voteArray = normalizeNumbers(votes);
@@ -96,7 +100,6 @@ function ShowPoll( props ) {
     {props.optionNames.map((option, index) => {
       const voteCount = votepick === option ? props.votes[index] + 1 : props.votes[index];
       const backgroundColor = voteCount >= maxVoteNumber ? 'rgb(255, 190, 166)' : 'rgb(226, 231, 233)';
-      console.log('Option Selected:', props.optionSelected)
       return (
         <div
         style={{ backgroundColor, width: `${hasVoted ? voteArray[index] : displayArray[index]}px`, borderRadius: '4px' }}          
@@ -111,6 +114,11 @@ function ShowPoll( props ) {
         </div>
       );
     })}
+      {props.pollEnded &&
+    <div className="mt-4 postTime">
+      Voting closed {getPollTimeDifference(props.createdAt, props.voteLength)} ago
+    </div>
+}
   </>
 ) : (
               <>
@@ -137,7 +145,7 @@ function ShowPoll( props ) {
               >
                 Vote
               </button>
-              <span className="ms-3 closesIn">Closes in {props.voteLength} days</span>
+              <span className="ms-3 closesIn">Closes in {countdown.getRemainingTime()}</span>
             </div>
             </>)}
           </Card.Body> 
