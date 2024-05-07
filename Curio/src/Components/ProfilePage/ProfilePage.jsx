@@ -33,6 +33,7 @@ function ProfilePage(props) {
   const [userBio, setUserBio] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
   const [SocialLinks, setSocialLinks] = useState([]);
+  const [profileImage, setProfileImage] = useState('');
   const getSaved = async () => {
     try {
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -82,6 +83,18 @@ function ProfilePage(props) {
     }
   }
 
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
 
   useEffect(() => {
     window.addEventListener('hideOrSave', () => {
@@ -102,6 +115,7 @@ function ProfilePage(props) {
     getUserOverview(username)
       .then(data => setUserPosts(data.userPosts))
       .catch(error => console.error(error));
+    getPrefs();
   }, [username]);
 
   useEffect(() => {
@@ -265,6 +279,7 @@ useEffect(() => {
                               downvotes={post.downvotes}
                               comments={post.comments}
                               content={post.content}
+                              media={post.media}
                               linkedSubreddit={post.linkedSubreddit}
                               isSpoiler={post.isSpoiler}
                               savedPosts={savedPosts}
@@ -308,6 +323,7 @@ useEffect(() => {
                           savedPosts={savedPosts}
                           savedComments={savedComments}
                           hiddenPosts={hiddenPosts}
+                          media={post.media}
                         />
                       </div>
                     ))
@@ -347,6 +363,7 @@ useEffect(() => {
                       savedPosts={savedPosts}
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
+                      media={post.media}
                     />
                       <hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}></hr>
                     </div>
@@ -386,6 +403,7 @@ useEffect(() => {
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
                       isInProfile={true}
+                      media={post.media}
                       style={{ backgroundColor: "#00000000" }}
                     />
                       <hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}></hr>
@@ -416,6 +434,7 @@ useEffect(() => {
                             savedPosts={savedPosts}
                             savedComments={savedComments}
                             hiddenPosts={hiddenPosts}
+                            media={post.media}
                           />
                         </div>
                       ))}
@@ -454,6 +473,7 @@ useEffect(() => {
                       savedPosts={savedPosts}
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
+                      media={post.media}
                     />
                   </div>
                 ))}

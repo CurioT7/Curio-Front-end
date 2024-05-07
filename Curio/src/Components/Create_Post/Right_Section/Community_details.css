@@ -16,14 +16,7 @@
     word-wrap: break-word;
     position: relative;
 }
-.community-details.switch-on .community-details-logo {
-    background-image: url(../../../assets/cover.png);
-    background-color: transparent;
-}
 
-.community-details.switch-off .community-details-logo {
-    background-color: #fc471e;
-}
 .community-details-logo{
     background-size: cover;
     background-position-y: center;
