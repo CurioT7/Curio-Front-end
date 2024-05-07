@@ -500,7 +500,7 @@ function ProfilePage(props) {
 
           <p>Settings</p>
           <div className="profileSettings">
-            <img src={profile} alt="profile" />
+            <img src={profileImage || profile} alt="profile" />
             <div className="textContainer">
               <h5>Profile</h5>
               <h6>Customise your profile</h6>
