@@ -310,6 +310,7 @@ useEffect(() => {
                     downvotes={post.post.downvotes}
                     comments={post.post.comments}
                     content={post.post.content}
+                    type={post.post.type}
                     media={post.post.media}
                     //isMod={isMod}
                     linkedSubreddit={post.details?.subredditName}

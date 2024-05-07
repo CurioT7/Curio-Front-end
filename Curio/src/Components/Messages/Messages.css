@@ -20,3 +20,14 @@
 .sender-style:hover{
     text-decoration: underline;
 }
+
+.private-messages-controls{
+    font-weight: bold;
+    color: #888;
+    font-size: 0.9rem!important;
+}
+
+.private-messages-controls:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}

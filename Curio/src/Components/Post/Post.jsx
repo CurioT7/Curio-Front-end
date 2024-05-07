@@ -424,6 +424,7 @@ const postCategory = async (postID) => {
                             didVote={props.didVote} optionSelected={props.optionSelected} pollEnded={props.pollEnded} /> ) : (
                         <CardBody className='py-0' onClick={handleNavigationToDetails} >
                             <Heading as='h3' size='md'>{props.title}</Heading>
+                        {props.type === "media" && <Image alt='Chakra UI' className='mb-1' />}
                      {props.isSpoiler ? (
                             <>
                                 <span className='text-body-spoiler' >

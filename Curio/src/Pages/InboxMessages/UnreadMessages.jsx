@@ -5,14 +5,14 @@ import Messages from "../../Components/Messages/Messages.jsx";
 import {fetchMessages} from "./InboxMessagesEndpoints";
 
 
-function UnreadInbox(props) {
+function UnreadMessages(props) {
 
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetchMessages("unread");
+                const response = await fetchMessages("messages");
                 const filteredMessages = response.filter((message) => message.type === "message" && message.isRead === false);
                 setMessages(filteredMessages);
             } catch (error) {
@@ -21,7 +21,6 @@ function UnreadInbox(props) {
         };
 
         fetchData();
-        window.addEventListener("privateUnreadMessageDeleted", fetchData);
     }, []);
 
     useEffect(() => {
@@ -37,7 +36,7 @@ function UnreadInbox(props) {
 
 
     return (
-        <div style={{marginTop: "60px", backgroundColor: "#EDEFF1", height: "100vh"}}>
+        <div className="w-100" style={{marginTop: "60px", backgroundColor: "#EDEFF1", height: "100vh"}}>
             <MessagesNavbar />
             <InboxTabs />
             {messages.length === 0 && (
@@ -48,11 +47,13 @@ function UnreadInbox(props) {
                         </p>
                 </div>
             )}
-            <div className="d-flex justify-content-center mt-4">
-                <Messages messages={messages} />
-            </div>
+            {messages && messages.map((message, index) => (
+                <div className="d-flex justify-content-center mt-4 w-100">
+                    <Messages messages={message} />
+                </div>
+            ))}
         </div>
     );
 }
 
-export default UnreadInbox;
+export default UnreadMessages;

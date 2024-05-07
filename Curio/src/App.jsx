@@ -42,6 +42,7 @@ import ScheduledPosts from "./Components/ModerationComponents/ScheduledPosts/Sch
 import UserManage from "./Components/ModerationComponents/UserManagement/UserManage.jsx";
 import ContentControl from "./Components/ModerationComponents/ContentControl/ContentControl.jsx";
 import ModSettings from "./Components/ModerationComponents/ModSettings/ModSettings.jsx";
+import UnreadMessages from "./Pages/InboxMessages/UnreadMessages.jsx";
 
 function App() {
   const location = useLocation();
@@ -134,6 +135,7 @@ function App() {
           <Route path="/message/messages" element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path="/messages/all" element={<AllInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path="/messages/unread" element={<UnreadInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/message/unread" element={<UnreadMessages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
         </Routes>
       </ChakraProvider>
     </div>

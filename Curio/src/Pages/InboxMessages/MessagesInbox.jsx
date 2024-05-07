@@ -3,11 +3,25 @@ import MessagesNavbar from "../../Components/Messages/MessagesNavbar.jsx";
 import InboxTabs from "../../Components/Messages/InboxTabs.jsx";
 import Messages from "../../Components/Messages/Messages.jsx";
 import {fetchMessages} from "./InboxMessagesEndpoints";
+import axios from "axios";
 
 
 function MessagesInbox(props) {
 
     const [messages, setMessages] = useState([]);
+
+    const markAllRead = async () => {
+        try {
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/message/readAll`,{},{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+        } catch (error) {
+            console.error("Error fetching messages:", error);
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,6 +35,11 @@ function MessagesInbox(props) {
         };
 
         fetchData();
+        markAllRead();
+        window.addEventListener("privateUnreadMessageDeleted", fetchData);
+        return () => {
+            window.removeEventListener("privateUnreadMessageDeleted", fetchData);
+        }
     }, []);
 
     useEffect(() => {
