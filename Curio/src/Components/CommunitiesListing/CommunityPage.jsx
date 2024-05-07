@@ -3,7 +3,7 @@ import CommunityHeader from "./CommunityHeader";
 import CommunityBody from "./CommunityBody";
 import "./CommunityPage.css";
 import { useEffect, useState } from "react";
-import { getModerators } from "./CommunityEndPoints";
+import { getModerators,fetchSubCurioInfo } from "./CommunityEndPoints";
 import { useParams } from "react-router-dom";
 
 import React from 'react';
@@ -11,19 +11,29 @@ function CommuntiyPage(props) {
   const { Community } = useParams();
   const [isModerator, setIsModerator] = useState(false);
 
-  async function handleGetModerators() {
-    const response = await getModerators(Community);
-    if (response) {
-      response.moderators.map((moderator) => {
-        if (moderator.username === localStorage.getItem("username")) {
-          setIsModerator(true);
-        }
-      });
-    }
-  }
+  
 
   useEffect(() => {
+    async function handleGetModerators() {
+      const response = await fetchSubCurioInfo(Community);
+      
+        if (response) {
+          response.subreddit.moderators.map((moderator) => {
+            if (moderator.username === localStorage.getItem("username")) {
+              setIsModerator(true);
+              return
+              
+            }
+            else{
+              setIsModerator(false);
+            }
+          });
+          
+        }
+    }
+    
     handleGetModerators();
+    
   }, [Community]);
 
 
