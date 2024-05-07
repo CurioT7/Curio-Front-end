@@ -7,7 +7,7 @@ import { IoMdCamera, IoMdSend } from "react-icons/io";
 import { BsFillEmojiSmileFill } from "react-icons/bs";
 import EmojiPicker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
-import { createChatRequest, getChatwholeChat } from '../../../../Pages/Open_Chat_Page/Open_Chat_Page';
+import { createChatRequest, getChatwholeChat, sendMessageRequest } from '../../../../Pages/Open_Chat_Page/Open_Chat_Page';
 import { formatTimestamp } from "../../OpenChatComLeft_Side/ExactTime";
 
 function LiveChat(props) {
@@ -38,14 +38,18 @@ function LiveChat(props) {
     const handleSend = async () => {
         if (message.trim() !== '') {
             try {
-                const response = await createChatRequest(props.recipient, message);
-                console.log('Chat created:', response);
+                if (props.chatId) { 
+                    await sendMessageRequest(props.chatId, message, null);
+                } else {
+                    await createChatRequest(props.recipient, message);
+                }
                 setMessage('');
             } catch (error) {
-                console.error('Error creating chat:', error);
+                console.error('Error sending message:', error);
             }
         }
     };
+    
 
     const handleEmojiSelect = (emoji) => {
         setMessage(message + emoji.native);
@@ -76,51 +80,49 @@ function LiveChat(props) {
                 </div>
             </div>
             {chatData && Array.isArray(chatData.chat) && chatData.chat.map((chat) => (
-    <div key={chat._id} style={{ width: '100%' }}>
-        {Array.isArray(chat.messages) && chat.messages.map((message) => {
-            const isCurrentUser = chat.senders[0].username === username;
+                <div key={chat._id} style={{ width: '100%' }}>
+                    {Array.isArray(chat.messages) && chat.messages.map((message) => {
+                        const isCurrentUser = chat.senders[0].username === username;
 
-            let profilePicture = profile;
-            if (isCurrentUser) {
-                profilePicture = chat.participants.find(participant => participant.username === username)?.profilePicture || profile;
-            } else {
-                profilePicture = chat.participants.find(participant => participant.username !== username)?.profilePicture || profile;
-            }
-
-            return (
-                <div key={message._id}>
-                    <div className='message-date-live-chat'>
-                        <div className='date-line-beside' />
-                        Apr 28
-                        <div className='date-line-beside' />
-                    </div>
-                    <div className='message-content-live-chat-container'>
-                        <span className='image-chat-message'>
-                            <img src={profilePicture} alt="" style={{ borderRadius: '20px' }} />
-                        </span>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '0.5em'
-                        }}>
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                gap: '.25rem',
-                                alignItems: 'center'
-                            }}>
-                                <span className='sender-name-live-chat'>{chat.senders[0].username}</span>
-                                <span className='sender-time-live-chat'>{formatTimestamp(message.timestamp)}</span>
+                        let profilePicture = profile;
+                        if (isCurrentUser) {
+                            profilePicture = chat.participants.find(participant => participant.username === username)?.profilePicture || profile;
+                        } else {
+                            profilePicture = chat.participants.find(participant => participant.username !== username)?.profilePicture || profile;
+                        }
+                        return (
+                            <div key={message._id}>
+                                <div className='message-date-live-chat'>
+                                    <div className='date-line-beside' />
+                                    Apr 28
+                                    <div className='date-line-beside' />
+                                </div>
+                                <div className='message-content-live-chat-container'>
+                                    <span className='image-chat-message'>
+                                        <img src={profilePicture} alt="" style={{ borderRadius: '20px' }} />
+                                    </span>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '0.5em'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            gap: '.25rem',
+                                            alignItems: 'center'
+                                        }}>
+                                            <span className='sender-name-live-chat'>{chat.senders[0].username}</span>
+                                            <span className='sender-time-live-chat'>{formatTimestamp(message.timestamp)}</span>
+                                        </div>
+                                        <span>{message.message}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <span>{message.message}</span>
-                        </div>
-                    </div>
+                        );
+                    })}
                 </div>
-            );
-        })}
-    </div>
-))}
-
+            ))}
             <div className='chat-live-input'>
                 <form action="" className='form-input-live-chat'>
                     <Button colorScheme='gray' variant='ghost'
