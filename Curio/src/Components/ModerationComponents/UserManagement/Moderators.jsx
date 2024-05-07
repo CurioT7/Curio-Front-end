@@ -1,12 +1,13 @@
 import React from "react";
 import { Button,Input,InputGroup, InputRightElement,Image } from "@chakra-ui/react";
-
+import LeaveMode from "./ModeratorsChilds/LeaveMod";
+import InvMode from "./ModeratorsChilds/InvMode";
 function Moderators() {
   return (
     <div className="mt-4 d-flex flex-column gap-3">
       <div className="d-flex justify-content-end gap-2 me-4">
-        <Button fontWeight={700} variant='outline' borderRadius={20} size='sm' colorScheme="blue"> Leave as mod</Button>
-        <Button fontWeight={700} borderRadius={20} size='sm' colorScheme="blue"> Invite user as mod </Button>
+        <LeaveMode />
+        <InvMode />
       </div>
 
       <div className="m-2 me-3">
