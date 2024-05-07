@@ -4,11 +4,13 @@ import "./NewChat.css";
 import HeaderChatRight_Side from "../../HeaderChatRight_Side/HeaderChatRight_Side";
 import TypeUsername from './Type_Username/Type_Username';
 import { handleToggleUser } from './userFunctions';
+import { useNavigate } from 'react-router-dom';
 
-function NewChat() {
+function NewChat({handleRecipient}) {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [groupName, setGroupName] = useState('');
     const [inputValue, setInputValue] = useState('');
+    const navigate = useNavigate();
 
     const handleUserToggle = (image, username) => {
         handleToggleUser(selectedUsers, setSelectedUsers, setInputValue, username, image);
@@ -16,6 +18,12 @@ function NewChat() {
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
+    };
+
+    const handleStartChat = () => {
+        handleRecipient(inputValue);
+        console.log(inputValue)
+        navigate(`/chat/${inputValue}`);
     };
 
     return (
@@ -74,7 +82,12 @@ function NewChat() {
                                 Start Group Chat
                             </Button>
                         ) : (
-                            <Button colorScheme='gray' size='sm' borderRadius="20px">
+                            <Button
+                                colorScheme='gray'
+                                size='sm'
+                                borderRadius="20px"
+                                onClick={handleStartChat}
+                            >
                                 Start Chat
                             </Button>
                         )}

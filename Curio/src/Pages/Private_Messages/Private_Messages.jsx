@@ -81,7 +81,7 @@ function Private_Messages(props) {
         recipient: finalRecipient,
         sendToSubreddit: isSubreddit
       };
-
+      console.log(messageData)
       const response = await axios.post(
         `${serverHost}/api/message/compose`,
         messageData,
@@ -92,6 +92,10 @@ function Private_Messages(props) {
           },
         }
       );
+      console.log('gfccccccc')
+
+      console.log(response)
+
       switch (response.status) {
         case 200:
           Toast('Message sent successfully', 'success');

@@ -76,8 +76,7 @@ function Sent_Messages(props) {
                 </div>
             </div>
             <div style={{ color: '#878a8c' }}>
-                {/* {props.bio} */}
-                Omar
+                {props.about}
             </div>
         </Popover>
     )

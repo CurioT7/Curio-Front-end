@@ -1,41 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image } from '@chakra-ui/react';
 import { FaRegSquare } from "react-icons/fa";
 import { BsCheckSquareFill } from "react-icons/bs";
-import profile from "../../../../../assets/avatar_default_6.png";
-import { CheckUsernaemExist } from "../../../../../Pages/Open_Chat_Page/Open_Chat_Page";
+import { CheckUsernaemExist } from '../../../../../Pages/Open_Chat_Page/Open_Chat_Page';
+import logo from "../../../../../assets/avatar_default_6.png";
 
 function TypeUsername({ setInputValue, inputValue, handleInputChange, handleToggleUser, selectedUsers }) {
-    const [showSuggested, setShowSuggested] = useState(true);
-    const [showError, setShowError] = useState(false);
+    const [suggestedUser, setSuggestedUser] = useState(null);
+    const [isSelected, setIsSelected] = useState(false);
 
     useEffect(() => {
-        const checkSuggested = async () => {
-            if (inputValue.trim() === '') {
-                setShowSuggested(true);
-                setShowError(false);
+        const fetchSuggestedUser = async () => {
+            if (inputValue) {
+                const response = await CheckUsernaemExist(inputValue);
+                console.log("response:", response)
+                if (response.success) {
+                    setSuggestedUser({ username: response.username, profilePicture: response.profilePicture });
+                    setIsSelected(selectedUsers.some(user => user.username === response.username));
+                    console.log("suggestedUser:", suggestedUser)
+                } else {
+                    setSuggestedUser(null);
+                }
             } else {
-                const success = await CheckUsernaemExist(inputValue.trim());
-                setShowSuggested(!success);
-                setShowError(false);
+                setSuggestedUser(null);
             }
         };
 
-        checkSuggested();
-    }, [inputValue]);
+        fetchSuggestedUser();
+    }, [inputValue, selectedUsers]);
 
-    const handleInputFocus = () => {
-        if (inputValue.trim() === '') {
-            setShowSuggested(true);
+    const handleToggleUserSelection = () => {
+        if (suggestedUser) {
+            if (isSelected) {
+                handleToggleUser(suggestedUser.profilePicture, suggestedUser.username);
+            } else {
+                handleToggleUser(suggestedUser.profilePicture, suggestedUser.username);
+                setInputValue(suggestedUser.username);
+            }
+            setIsSelected(!isSelected);
         }
     };
 
-    const handleKeyPress = async (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const success = await CheckUsernaemExist(inputValue.trim());
-            setShowError(success);
-        }
+    const handleChange = (e) => {
+        const newValue = e.target.value;
+        setInputValue(newValue);
+        handleInputChange(newValue);
     };
 
     return (
@@ -47,83 +56,54 @@ function TypeUsername({ setInputValue, inputValue, handleInputChange, handleTogg
                 placeholder="Type username(s)"
                 style={{ borderRadius: '1rem' }}
                 value={inputValue}
-                onChange={(e) => {
-                    setInputValue(e.target.value);
-                    handleInputChange(e);
-                }}
-                onFocus={handleInputFocus}
-                onKeyPress={handleKeyPress}
+                onChange={handleChange}
             />
             <label htmlFor="floatingInput">Type username(s)<span style={{ color: 'red' }}>*</span></label>
-            {showSuggested && (
-                <div className='new-chat-form-container'
-                    style={{
-                        minHeight: !inputValue.trim() ? '100px' : '50px'
-                    }}>
-                    {!inputValue.trim() && (
-                        <>
-                            <div className='suggested-div'>Suggested</div>
-                            <li className='chat-li' onClick={() => handleToggleUser(profile, 'General_Boat_962')} >
-                                <div className='container-li-chat'>
-                                    <span className='span-li-chat'>
-                                        <Image
-                                            boxSize='32px'
-                                            objectFit='cover'
-                                            src={profile}
-                                            alt='Dan Abramov'
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                borderRadius: '20px'
-                                            }}
-                                        />
-                                        General_Boat_962
-                                    </span>
-                                    <span
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center'
-                                        }}
-                                    >
-                                        {selectedUsers.some(user => user.username === 'General_Boat_962') ? <BsCheckSquareFill /> : <FaRegSquare />}
-                                    </span>
-                                </div>
-                            </li>
-                        </>
-                    )}
-                    {inputValue.trim() && (
-                        <li className='chat-li' onClick={() => handleToggleUser(profile, inputValue.trim())} >
-                            <div className='container-li-chat'>
-                                <span className='span-li-chat'>
+            <div className='new-chat-form-container'>
+                <div className='suggested-div'>Suggested</div>
+                {suggestedUser && (
+                    <li className='chat-li' onClick={handleToggleUserSelection}>
+                        <div className='container-li-chat'>
+                            <span className='span-li-chat'>
+                                {suggestedUser.profilePicture ? (
                                     <Image
                                         boxSize='32px'
                                         objectFit='cover'
-                                        src={profile}
-                                        alt='Profile'
+                                        src={suggestedUser.profilePicture}
+                                        alt={suggestedUser.username}
                                         style={{
                                             display: 'flex',
                                             alignItems: 'center',
                                             borderRadius: '20px'
                                         }}
                                     />
-                                    {inputValue.trim()}
-                                </span>
-                                <span
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    {selectedUsers.some(user => user.username === inputValue.trim()) ? <BsCheckSquareFill /> : <FaRegSquare />}
-                                </span>
-                            </div>
-                        </li>
-                    )}
-                </div>
-            )}
-            {showError && (
-                <div style={{ color: 'red' }}>Invalid username</div>
-            )}
+                                ) : (
+                                    <Image
+                                        boxSize='32px'
+                                        objectFit='cover'
+                                        src={logo}
+                                        alt="Default"
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            borderRadius: '20px'
+                                        }}
+                                    />
+                                )}
+                                {suggestedUser.username}
+                            </span>
+                            <span
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                {isSelected ? <BsCheckSquareFill /> : <FaRegSquare />}
+                            </span>
+                        </div>
+                    </li>
+                )}
+            </div>
         </div>
     );
 }
