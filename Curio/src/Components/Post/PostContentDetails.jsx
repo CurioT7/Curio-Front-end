@@ -413,6 +413,7 @@ function PostContentDetails(post) {
                         </div>
                         </>
                         )}
+                        <img className='mb-3' src={post.media} alt={post.title} />
                     <Box className=' mb-5 col-12 ' display='flex' flexDirection='row' justifyContent='space-between'>
                             <Box display='flex' flexDirection='row'>
                             <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
