@@ -338,7 +338,7 @@ if (!props.NavbarVisibility) {
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
           <Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
-            <img className='profileImg' src={localStorage.getItem("profileImage") || profile} alt="logo"/>
+            <img className='profileImg' src={profileImage || profile} alt="logo"/>
             <div className="d-flex flex-column">
               <span className="drop-down-profile-description">View Profile</span>
                 <div className='d-flex flex-start align-items-center ArrowandNumber'>
