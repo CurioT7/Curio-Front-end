@@ -59,80 +59,88 @@ function LiveChat(props) {
     return (
         <div className='chat-div'>
             <HeaderChatRight_Side header='General_Boat_962' check='true' />
-            <div className='Live-chat-form'>
-                <div className='Live-chat-profile-data'>
-                    <a style={{
-                        textDecorationLine: 'none',
-                        color: '#2a3c42',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}>
-                        <div className='Live-chat-profile-picture'>
-                            <img src={profile} className="picture-live-chat" alt="" />
-                        </div>
-                        <div className='Live-chat-profile-username'>
-                            General_Boat_962
-                        </div>
-                        <div className='Live-chat-profile-username-details'>
-                            Redditor for 61d  ·  1 karma
-                        </div>
-                    </a>
+            <div style={{
+                overflow: 'auto',
+                width: '100%',
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column'
+            }}>
+                <div className='Live-chat-form'>
+                    <div className='Live-chat-profile-data'>
+                        <a style={{
+                            textDecorationLine: 'none',
+                            color: '#2a3c42',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}>
+                            <div className='Live-chat-profile-picture'>
+                                <img src={profile} className="picture-live-chat" alt="" />
+                            </div>
+                            <div className='Live-chat-profile-username'>
+                                General_Boat_962
+                            </div>
+                            <div className='Live-chat-profile-username-details'>
+                                Redditor for 61d  ·  1 karma
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            {chatData && Array.isArray(chatData.chat) && chatData.chat.map((chat) => (
-                <div key={chat._id} style={{ width: '100%' }}>
-                    {Array.isArray(chat.messages) && chat.messages.slice().reverse().map((message, index, array) => {
-                        const participant = chat.participants.find(participant => participant.id === message.sender);
-                        const profilePicture = participant ? participant.profilePicture || profile : profile;
-                         // Check if it's a new day or the first message
-                         const currentDate = formatDate(message.timestamp);
-                         const isFirstMessage = index === 0 || formatDate(array[index - 1].timestamp) !== currentDate;
- 
-                         // Update previous date if it's a new day
-                         if (isFirstMessage && currentDate !== prevMessageDate) {
-                            setPrevMessageDate(currentDate);
-                         }
- 
-                         // Render date only if it's a new day or the first message
-                         const renderDate = isFirstMessage || currentDate !== prevMessageDate;
-                        return (
-                            <div key={message._id}>
-                                {renderDate && (
-                                    <div className='message-date-live-chat'>
-                                        <div className='date-line-beside' />
-                                        {prevMessageDate}
-                                        <div className='date-line-beside' />
-                                    </div>
-                                )}
-                                <div className='message-content-live-chat-container'>
-                                    <span className='image-chat-message'>
-                                        <img src={profilePicture} alt="" style={{ borderRadius: '20px' }} />
-                                    </span>
-                                    <div style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '0.5em'
-                                    }}>
+                {chatData && Array.isArray(chatData.chat) && chatData.chat.map((chat) => (
+                    <div key={chat._id} style={{ width: '100%' }}>
+                        {Array.isArray(chat.messages) && chat.messages.slice().reverse().map((message, index, array) => {
+                            const participant = chat.participants.find(participant => participant.id === message.sender);
+                            const profilePicture = participant ? participant.profilePicture || profile : profile;
+                            // Check if it's a new day or the first message
+                            const currentDate = formatDate(message.timestamp);
+                            const isFirstMessage = index === 0 || formatDate(array[index - 1].timestamp) !== currentDate;
+
+                            // Update previous date if it's a new day
+                            if (isFirstMessage && currentDate !== prevMessageDate) {
+                                setPrevMessageDate(currentDate);
+                            }
+
+                            // Render date only if it's a new day or the first message
+                            const renderDate = isFirstMessage || currentDate !== prevMessageDate;
+                            return (
+                                <div key={message._id}>
+                                    {renderDate && (
+                                        <div className='message-date-live-chat'>
+                                            <div className='date-line-beside' />
+                                            {prevMessageDate}
+                                            <div className='date-line-beside' />
+                                        </div>
+                                    )}
+                                    <div className='message-content-live-chat-container'>
+                                        <span className='image-chat-message'>
+                                            <img src={profilePicture} alt="" style={{ borderRadius: '20px' }} />
+                                        </span>
                                         <div style={{
                                             display: 'flex',
-                                            flexDirection: 'row',
-                                            gap: '.25rem',
-                                            alignItems: 'center'
+                                            flexDirection: 'column',
+                                            gap: '0.5em'
                                         }}>
-                                            <span className='sender-name-live-chat'>
-                                                {chat.senders.find(sender => sender.id === message.sender)?.username}
-                                            </span>
-                                            <span className='sender-time-live-chat'>{formatTimestamp(message.timestamp)}</span>
+                                            <div style={{
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                gap: '.25rem',
+                                                alignItems: 'center'
+                                            }}>
+                                                <span className='sender-name-live-chat'>
+                                                    {chat.senders.find(sender => sender.id === message.sender)?.username}
+                                                </span>
+                                                <span className='sender-time-live-chat'>{formatTimestamp(message.timestamp)}</span>
+                                            </div>
+                                            <span>{message.message}</span>
                                         </div>
-                                        <span>{message.message}</span>
                                     </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            ))}
+                            );
+                        })}
+                    </div>
+                ))}
+            </div>
             <div className='chat-live-input'>
                 <form action="" className='form-input-live-chat'>
                     <Button colorScheme='gray' variant='ghost'

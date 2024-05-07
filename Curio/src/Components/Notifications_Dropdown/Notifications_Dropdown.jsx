@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css";
 import logo from "../../assets/Profile_navbar.png";
+import { Link } from 'react-router-dom';
 import {
     Popover,
     PopoverTrigger,
@@ -9,7 +10,6 @@ import {
     PopoverArrow,
     Button
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
 import { SlOptions } from "react-icons/sl";
 import {
@@ -52,11 +52,11 @@ function Notifications_Dropdown({ setUnreadNotificationsNum }) {
                 <div className="notifications-title">
                     <span className="notifications-title-text">Notifications</span>
                 </div>
-                <a href="#" className="notifications-messages-link">
+                <Link to={'/message/messages'} className="notifications-messages-link">
                     <div className="notifications-messages-title">
                         <span className="notifications-messages-text">Messages</span>
                     </div>
-                </a>
+                </Link>
                 <div className="notifications-extra"></div>
                 <div className="messages-extra"></div>
             </div>
