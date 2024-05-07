@@ -8,12 +8,13 @@ import { BsFillEmojiSmileFill } from "react-icons/bs";
 import EmojiPicker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import { createChatRequest, getChatwholeChat, sendMessageRequest } from '../../../../Pages/Open_Chat_Page/Open_Chat_Page';
-import { formatTimestamp } from "../../OpenChatComLeft_Side/ExactTime";
+import { formatTimestamp, formatDate } from "../../../getTimeDifference/getTimeDifference";
 
 function LiveChat(props) {
     const [isPickerVisible, setPickerVisible] = useState(false);
     const [message, setMessage] = useState('');
     const [chatData, setChatData] = useState(null);
+    const [prevMessageDate, setPrevMessageDate] = useState(null);
     const username = localStorage.getItem('username');
 
     const pickerRef = useRef(null);
@@ -38,7 +39,7 @@ function LiveChat(props) {
     const handleSend = async () => {
         if (message.trim() !== '') {
             try {
-                if (props.chatId) { 
+                if (props.chatId) {
                     await sendMessageRequest(props.chatId, message, null);
                 } else {
                     await createChatRequest(props.recipient, message);
@@ -49,7 +50,7 @@ function LiveChat(props) {
             }
         }
     };
-    
+
 
     const handleEmojiSelect = (emoji) => {
         setMessage(message + emoji.native);
@@ -81,22 +82,29 @@ function LiveChat(props) {
             </div>
             {chatData && Array.isArray(chatData.chat) && chatData.chat.map((chat) => (
                 <div key={chat._id} style={{ width: '100%' }}>
-                    {Array.isArray(chat.messages) && chat.messages.map((message) => {
-                        const isCurrentUser = chat.senders[0].username === username;
-
-                        let profilePicture = profile;
-                        if (isCurrentUser) {
-                            profilePicture = chat.participants.find(participant => participant.username === username)?.profilePicture || profile;
-                        } else {
-                            profilePicture = chat.participants.find(participant => participant.username !== username)?.profilePicture || profile;
-                        }
+                    {Array.isArray(chat.messages) && chat.messages.slice().reverse().map((message, index, array) => {
+                        const participant = chat.participants.find(participant => participant.id === message.sender);
+                        const profilePicture = participant ? participant.profilePicture || profile : profile;
+                         // Check if it's a new day or the first message
+                         const currentDate = formatDate(message.timestamp);
+                         const isFirstMessage = index === 0 || formatDate(array[index - 1].timestamp) !== currentDate;
+ 
+                         // Update previous date if it's a new day
+                         if (isFirstMessage && currentDate !== prevMessageDate) {
+                            setPrevMessageDate(currentDate);
+                         }
+ 
+                         // Render date only if it's a new day or the first message
+                         const renderDate = isFirstMessage || currentDate !== prevMessageDate;
                         return (
                             <div key={message._id}>
-                                <div className='message-date-live-chat'>
-                                    <div className='date-line-beside' />
-                                    Apr 28
-                                    <div className='date-line-beside' />
-                                </div>
+                                {renderDate && (
+                                    <div className='message-date-live-chat'>
+                                        <div className='date-line-beside' />
+                                        {prevMessageDate}
+                                        <div className='date-line-beside' />
+                                    </div>
+                                )}
                                 <div className='message-content-live-chat-container'>
                                     <span className='image-chat-message'>
                                         <img src={profilePicture} alt="" style={{ borderRadius: '20px' }} />
@@ -112,7 +120,9 @@ function LiveChat(props) {
                                             gap: '.25rem',
                                             alignItems: 'center'
                                         }}>
-                                            <span className='sender-name-live-chat'>{chat.senders[0].username}</span>
+                                            <span className='sender-name-live-chat'>
+                                                {chat.senders.find(sender => sender.id === message.sender)?.username}
+                                            </span>
                                             <span className='sender-time-live-chat'>{formatTimestamp(message.timestamp)}</span>
                                         </div>
                                         <span>{message.message}</span>

@@ -14,7 +14,7 @@ import {
     Stack,
     Button
 } from '@chakra-ui/react'
-import { formatTimestamp } from "./ExactTime";
+import { formatTimestamp } from "../../getTimeDifference/getTimeDifference";
 import { FaRegSquare } from "react-icons/fa";
 import { BsCheckSquareFill } from "react-icons/bs";
 
