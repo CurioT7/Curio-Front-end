@@ -50,7 +50,7 @@ function Post_Replies(props) {
         <div style={{ marginTop: "60px" }}>
             <MessagesNavbar />
             <InboxTabs />
-            <div className='username-mentions-page'>
+            <div className='username-mentions-page w-100'>
                 {error ? (
                     <div className="error-message">
                         <p style={{
@@ -67,7 +67,7 @@ function Post_Replies(props) {
                         }}>
                         {recievedMessages.map((message, index) => (
                             <div key={message._id}>
-                                <div className='username-mentions-message-table'
+                                <div className='username-mentions-message-table w-100'
                                     style={{
                                         background: index % 2 === 0 ? "#f6f7f8" : "white"
                                     }}>

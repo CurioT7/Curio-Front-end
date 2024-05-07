@@ -24,7 +24,7 @@ function UserName_Mentions_Com(props) {
 
 
     return (
-        <div className='username-mentions-table'>
+        <div style={{width: "65%"}} className='username-mentions-table'>
             <h5 className='username-mentions-header-messages'>username mention:
                 <a href="" className='username-mentions-title-messages'>
                     {props.title}
