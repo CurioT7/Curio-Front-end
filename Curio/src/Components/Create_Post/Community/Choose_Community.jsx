@@ -22,6 +22,7 @@ function Choose_Community({ onSelect, subreddit }) {
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
     const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
+    const [profilepic, setProfilePic] = useState('');
 
     const handleCreateCommunityClick = () => {
         setCreateCommunityModalOpen(true);
@@ -121,6 +122,25 @@ function Choose_Community({ onSelect, subreddit }) {
         }
     };
 
+    const FetchProFileImage = async () => {
+        try {
+            const ProfilePicDataResponse = await axios.get(
+                `${serverHost}/api/user/${username}/about`
+            );
+            return ProfilePicDataResponse;
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    console.error('User not found');
+                } else if (error.response.status === 500) {
+                    console.error('An unexpected error occurred on the server. Please try again later.');
+                }
+            } else {
+                console.error('Network Error. Please check your internet connection.');
+            }
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const data = await fetchUserData();
@@ -129,6 +149,14 @@ function Choose_Community({ onSelect, subreddit }) {
             }
         };
 
+        const fetchDataprofile = async () => {
+            const data = await FetchProFileImage();
+            if (data) {
+                setProfilePic(data.data.profilePicture)
+            }
+        }
+
+        fetchDataprofile();
         fetchData();
     }, []);
 
@@ -150,7 +178,29 @@ function Choose_Community({ onSelect, subreddit }) {
                             <Icon as={FaSearch} className="search-icon-community" />
                         ) : (
                             chosenItem ? (
-                                <img src={profile} alt="Profile Picture" className="username-image" />
+                                (typeof chosenItem === 'string' && chosenItem.startsWith("u/")) ? (
+                                    <img
+                                        src={profilepic ? profilepic : profilepicture}
+                                        alt="Profile Picture"
+                                        style={{
+                                            height: '25px',
+                                            width: '25px',
+                                            borderRadius: '50%'
+                                        }}
+                                        className="username-image"
+                                    />
+                                ) : (
+                                    <img
+                                        src={searchResults.icon ? searchResults.icon : subbredditpicture}
+                                        alt="Subreddit Picture"
+                                        style={{
+                                            height: '25px',
+                                            width: '25px',
+                                            borderRadius: '50%'
+                                        }}
+                                        className="username-image"
+                                    />
+                                )
                             ) : (
                                 <span className="circle-dot" />
                             )
@@ -171,7 +221,7 @@ function Choose_Community({ onSelect, subreddit }) {
                                         <p className='title-username container'>Your Profile</p>
                                         <div className='dropdown-user'>
                                             <img
-                                                src={profilepicture}
+                                                src={profilepic ? profilepic : profilepicture}
                                                 style={{
                                                     height: '25px',
                                                     width: '25px',
