@@ -113,7 +113,7 @@ line-height: 1.25rem;
 }
 
 .gradient{
-    background: linear-gradient(180deg, #8e9ec2 0%, #0d0d61 100%);    
+    background: linear-gradient(180deg, #8e9ec2 0%, #0d0d61 100%) !important;    
     height: 15vh;
     align-content: flex-end;
     justify-content: flex-end;

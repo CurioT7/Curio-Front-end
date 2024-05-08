@@ -9,14 +9,18 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
 
+
+
 function Rules( props ) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [subredditName, setSubredditName] = useState(props.subredditName);
   const [rule, setRule] = useState('');
+  const [rules, setRules] = useState([]);
   const [appliesTo, setAppliesTo] = useState('');
   const [reportReason, setReportReason] = useState('');
   const [description, setDescription] = useState('');
+  const { Community } = useParams();
   const openModal = () => {
     setIsOpen(true);
   };
@@ -28,7 +32,6 @@ function Rules( props ) {
     setSubredditName(props.subredditName);
   }, [props.subredditName]);
 
-  const { Community } = useParams();
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -40,20 +43,20 @@ function Rules( props ) {
     };
   }, []);
 
-const addRule = async (subredditName, type, title, reasonMessage) => {
+
+
+const addRule = async (subredditName,type,title,reasonMessage) => {
     const url = `${VITE_SERVER_HOST}/api/moderator/rules`;
     const token = localStorage.getItem('token');
 
-    const rule = {
-        subredditName,
-        type,
-        info: {
-            title,
-            reasonMessage
-        }
-    };
-
-    console.log('Rule:', rule);
+    const body = {
+  subredditName, 
+  type, 
+  info: { 
+    title, 
+    reasonMessage, 
+  }
+};
 
     const response = await fetch(url, {
         method: 'POST',
@@ -61,18 +64,45 @@ const addRule = async (subredditName, type, title, reasonMessage) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(rule)
+        body: JSON.stringify(body)
     });
 
-    const responseData = await response.json();
-
-    if (!response.ok || !responseData.success) {
-        throw new Error(responseData.message || 'Network response was not ok');
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
     }
 
-    return responseData.message;
+    const responseData = await response.json();
+    return responseData;
+};
+const getRule = async (subredditName, type) => {
+    const url = `${VITE_SERVER_HOST}/api/moderator/info/${subredditName}/${type}`;
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+    return responseData;
 };
 
+// useEffect(() => {
+//   // Call getRule inside the useEffect hook
+//   const fetchRules = async () => {
+//     const rulesResponse = await getRule(subredditName, 'rule'); // replace 'rule' with the actual type
+//     setRules(rulesResponse.rules);
+//   };
+
+//   fetchRules();
+// }, [subredditName]);
 
 
   return (
@@ -143,7 +173,7 @@ const addRule = async (subredditName, type, title, reasonMessage) => {
                 </ModalBody>
                 <ModalFooter>
                     <button onClick={closeModal} className="buttonrule">Close</button>
-                    <button className="BanUserBtn" onClick={() => addRule(subredditName, rule, reportReason, description)}>Add New Rule</button>
+                    <button className="BanUserBtn" onClick={() => addRule(Community, rule, reportReason, description)}>Add New Rule</button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
@@ -163,6 +193,9 @@ const addRule = async (subredditName, type, title, reasonMessage) => {
             </button>
             </div>
             <div className="rulesnote"> These are rules that visitors must follow to participate. They can be used as reasons to report or ban posts, comments, and users. Communities can have a maximum of 15 rules.</div>
+{/* 
+           <Rules rules={rulesResponse.rules} /> */}
+            
                </TabPanel>
                <TabPanel>
                 hii
