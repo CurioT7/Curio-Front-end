@@ -6,9 +6,37 @@
 }
 .label-mod-settings {
     transform: translateY(0px) !important; 
-    font-size: 0.8rem !important;
     display: inline-block !important;
     padding-bottom: 0 !important;
+    font-size: 12px;
+    line-height: 18px;
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 4px;
+    margin-top: -1px;
 }
 
 
+.settingname{
+    font-family: var(--chakra-fonts-body);
+    color: var(--chakra-colors-chakra-body-text);
+    background: var(--chakra-colors-chakra-body-bg);
+    transition-property: background-color;
+    transition-duration: var(--chakra-transition-duration-normal);
+    line-height: var(--chakra-lineHeights-base);
+    margin-bottom: 0 !important;
+}
+.settingname2{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--newCommunityTheme-bodyText);
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 4px;
+}
+
+.form-control{
+    height:  50px !important;
+    width: 80% !important;
+}

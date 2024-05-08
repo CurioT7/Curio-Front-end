@@ -25,16 +25,16 @@ function ModSettings( props ) {
     <Header />
     <ModSidebar communityName={Community}/>
     <div style={{marginLeft: "17rem" }}>
-      <h2>Community Settings</h2>
+      <h2 className="settingname">Community Settings</h2>
       <h6 className="h6-mod-settings">Community profile</h6>
 
-      <h3>Community name</h3>
+      <h3 className="settingname">Community name</h3>
       <Input
           type="text"
           className="form-control mr-sm-2"
           maxLength="100"
         />
-        <h3>Community description</h3>
+        <h3 className="settingname">Community description</h3>
         <h6 className="h6-mod-settings">This is how new members come to understand your community</h6>
         <Input
           type="text"
@@ -42,7 +42,7 @@ function ModSettings( props ) {
           maxLength="500"
         />
 <div>
-  <h3>Send welcome message to new members</h3>
+  <h3 className="settingname">Send welcome message to new members</h3>
   <div>
     <input
       type="radio"
