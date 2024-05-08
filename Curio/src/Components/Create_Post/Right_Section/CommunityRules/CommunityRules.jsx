@@ -1,5 +1,5 @@
 import React from "react";
-import "./Community_rules.css";
+import "./CommunityRules.css";
 
 function Community_rules(props) {
     return (

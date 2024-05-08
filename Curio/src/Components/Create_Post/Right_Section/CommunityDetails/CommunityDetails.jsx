@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./Community_details.css";
+import "./CommunityDetails.css";
 import logo from "../../../../assets/Curio_logo.png";
 import { useToast, FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import { VscActivateBreakpoints } from "react-icons/vsc";
