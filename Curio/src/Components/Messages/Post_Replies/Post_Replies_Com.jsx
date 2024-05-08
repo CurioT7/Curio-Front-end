@@ -43,7 +43,7 @@ function Post_Replies_Com(props) {
         else
         setShowReportMenu(true);
     };
-    
+
     return (
         <div style={{ width: "65%" }} className='username-mentions-table d-flex justify-content-center'>
             <h5 className='username-mentions-header-messages'>post reply:
@@ -92,7 +92,7 @@ function Post_Replies_Com(props) {
                     </div>
                     <Box as="ul" listStyleType="none" display="flex" gap='0.5rem' justifyContent='flex-start' paddingLeft='0' flexWrap='wrap' width='100%'>
                         <Box className="list-item-username-mentions" as="li" paddingLeft='0'>Context</Box>
-                        <Box className="list-item-username-mentions" as="li">Full Comments({props.noComments})</Box>
+                        <Box className="list-item-username-mentions" as="li" >Full Comments({props.noComments})</Box>
                         <Box className="list-item-username-mentions" as="li" onClick={handleReportClick}>Report</Box>
                         {confirmBlock ? (
                             <>
