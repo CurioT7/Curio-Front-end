@@ -25,7 +25,6 @@ function Moderation(props) {
 
   function handleShowCommunities() {
     setShowCommunities(!showCommunities);
-    console.log(Community);
   }
 
   function handleShowContent() {

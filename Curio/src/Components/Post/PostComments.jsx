@@ -67,7 +67,6 @@ function PostComments(props) {
         setReportSubmittedModalOpen(true);
     }
     const handleSetReportReason = (reason) => {
-        console.log(reason)
         setReportReason(reason);
     }
     const handleShowExtraReasons = () => {
@@ -190,7 +189,6 @@ function PostComments(props) {
             }
         }
         catch(err){
-            console.log(err);
             if (err.response.status === 400 || err.response.status === 404){
                 toast({
                 description: "comment already saved.",
@@ -234,7 +232,6 @@ function PostComments(props) {
         }
         }
         catch(err){
-            console.log(err);
             if (err.response.status === 400){
                 toast({
                 description: "post already unsaved.",
@@ -275,7 +272,6 @@ function PostComments(props) {
         }
         }
         catch(err){
-        console.log(err);
         toast({
             description: "Server Error Occured.",
             status: 'error',

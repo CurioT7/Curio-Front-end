@@ -36,7 +36,7 @@ function SearchPage(){
             setUserResults(response.data.users);
         }
         catch(error){
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -47,7 +47,6 @@ function SearchPage(){
             setCommunityResults(response.data.subreddits);
         }
         catch(error){
-            console.log(error);
             setCommunityResults([]);
         }
 
@@ -60,7 +59,6 @@ function SearchPage(){
             setPostResults(response.data.posts);
         }
         catch(error){
-            console.log(error);
             setPostResults([]);
         }
     }
@@ -72,7 +70,6 @@ function SearchPage(){
             setCommentResults(response.data.content);
         }
         catch(error){
-            console.log(error);
             setCommentResults([]);
         }
     }

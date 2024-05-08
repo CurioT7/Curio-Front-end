@@ -13,11 +13,9 @@ function TypeUsername({ setInputValue, inputValue, handleInputChange, handleTogg
         const fetchSuggestedUser = async () => {
             if (inputValue) {
                 const response = await CheckUsernaemExist(inputValue);
-                console.log("response:", response)
                 if (response.success) {
                     setSuggestedUser({ username: response.username, profilePicture: response.profilePicture });
                     setIsSelected(selectedUsers.some(user => user.username === response.username));
-                    console.log("suggestedUser:", suggestedUser)
                 } else {
                     setSuggestedUser(null);
                 }

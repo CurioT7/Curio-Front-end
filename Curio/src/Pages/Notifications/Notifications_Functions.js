@@ -53,7 +53,6 @@ export async function handleNotificationClick(notificationID, notifications, unr
             await sendReadNotifications(notificationID);
             setUnreadNotifications(prevNotifications => prevNotifications.filter(notification => notification._id !== notificationID));
         }
-        console.log(notification.type)
         if (notification.type === "subreddit") {
             navigate(`/r/${notification.subredditName}`);
         } else if (notification.type === "post") {

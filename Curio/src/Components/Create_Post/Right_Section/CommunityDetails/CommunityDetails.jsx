@@ -7,6 +7,7 @@ import SocialLink from "../../../profileSetting/Socialmodal/Socialmodal";
 import { Link } from "react-router-dom";
 import { fetchUserDataFromBackend } from "../../../UserSetting/UserSettingsEndPoints";
 import profile from "../../../../assets/avatar_default_6.png";
+import subbredditprofilepic from "../../../../assets/avatar_default_2.png";
 import bannersubreddit from "../../../../assets/cover.png";
 import { formatDatewithDays } from "../../../getTimeDifference/getTimeDifference"
 
@@ -76,6 +77,8 @@ function Community_details({ subredditData, community }) {
                             <div className="file-upload-container-username top-1 start-1"
                                 style={{
                                     background: `url(${subredditData.banner ? subredditData.banner : '#33a8ff'})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
                                     borderRadius: '4px 4px 0 0',
                                     height: '94px',
                                     width: 'calc(100% - 2px)',
@@ -98,7 +101,7 @@ function Community_details({ subredditData, community }) {
                         {community.community !== username ? (
                             <>
                                 <div className="community-details-info">
-                                    <img src={subredditData.icon ? subredditData.icon : logo}
+                                    <img src={subredditData.icon ? subredditData.icon : subbredditprofilepic}
                                         alt="Subreddit Icon"
                                         role="presentation"
                                         className="community-details-icon" />
@@ -152,7 +155,7 @@ function Community_details({ subredditData, community }) {
                                             <div className="file-preview-container-username">
                                                 <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username" />
                                             </div>
-                                            <Link to={`/settings/profile`}  className="file-icon-container-username">
+                                            <Link to={`/settings/profile`} className="file-icon-container-username">
                                                 <i className="fa-solid fa-camera add-icon"></i>
                                             </Link>
                                         </label>
@@ -187,6 +190,19 @@ function Community_details({ subredditData, community }) {
                                         </span>
                                     </div>
                                 </div>
+                                {
+                                    subredditData.privacyMode !== "public" ? (
+                                        <div style={{ display: 'flex', marginTop: '8px', alignItems: 'center' }}>
+                                            <span><i className="fa-regular fa-eye-slash"></i></span>
+                                            {subredditData.privacyMode === "private" ? (
+                                                <span>Private</span>
+                                            ) : (
+                                                <span>Restricted</span>
+                                            )
+                                            }
+                                        </div>
+                                    ) : null
+                                }
                                 <div className="community-details-divider" />
                                 <hr className="hr-divider-community" />
                                 <div className="community-details-members">

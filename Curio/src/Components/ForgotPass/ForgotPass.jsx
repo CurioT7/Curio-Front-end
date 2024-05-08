@@ -29,7 +29,6 @@ function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {
 
     try {
       const response = await forgotPassword(username, email);
-      console.log('Success:', response);
       setChangePass(true);
       setForgotPass(false);
     } catch (error) {

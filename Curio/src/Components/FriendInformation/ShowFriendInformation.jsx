@@ -283,16 +283,35 @@ function ShowFriendInformation(props) {
         }
 
     const handleJoinCommunity = async (communityName) => {
-       const response = await axios.post(`${hostUrl}/api/friend`, {
-            subreddit: communityName
-        },
-        {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
+        try{
+            const response = await axios.post(`${hostUrl}/api/friend`, {
+                    subreddit: communityName
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200 || response.status === 201){
+                    toastError({
+                        description: "You have successfully joined the subreddit",
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position: 'bottom',
+                    });
+                }
+        }
+        catch(err){
+            if (err.response.status === 400){
+                toastError({
+                    description: "You are already a member of this subreddit",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
             }
-        });
-        if (response.status === 200){
-            setIsUserMember(!isUserMember);
         }
     }
 

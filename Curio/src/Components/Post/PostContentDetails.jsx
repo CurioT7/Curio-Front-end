@@ -125,7 +125,7 @@ function PostContentDetails(post) {
             }
         }
         catch(err){
-            console.log(err);
+            console.error(err);
             if (err.response.status === 409){
                 toast({
                     description: "Item already unhidden.",
@@ -278,7 +278,7 @@ function PostContentDetails(post) {
             if (localStorage.getItem('token') === null) {
                 const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
                 if (response.status === 200 || response.status === 201) {
-                    setComments(response.data);
+                    setComments(response.data.comments);
                 }
                 else {
                     Toast();
@@ -309,7 +309,7 @@ function PostContentDetails(post) {
     const handleChangedSort = async (value) => {
         setTimeout( async () => {
             
-            const data = await GetSortedComments(post._id, value,post.subreddit);
+            const data = await GetSortedComments(post._id, value,post.details[0].subredditName);
             if (data) {
                 setComments(data.comments);
             }
@@ -464,7 +464,7 @@ function PostContentDetails(post) {
                 <CommentInputForm type={"createComment"} ID={postId} />
                 <SortingComments onChangeSort={handleChangedSort} />
             {comments && comments.map((comment, index) => (
-                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} voteStatus={comment.details.voteStatus} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} voteStatus={comment.details?.voteStatus || "unvoted"} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
         </>
     )

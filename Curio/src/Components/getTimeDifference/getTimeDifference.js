@@ -17,6 +17,49 @@ export function getTimeDifference(timestamp) {
     }
 }
 
+export function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+    return formattedTime;
+}
+
+export function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const options = { month: 'short', day: '2-digit' };
+    return date.toLocaleDateString('en-US', options);
+};
+
+export function formatDatewithDays(dateString) {
+    const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const date = new Date(dateString);
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    return `${month} ${day}, ${year}`;
+}
+
+export function getDaysDifferenceFromToday(inputDate) {
+    const cameraModels = {
+        0: "70D",
+    };
+
+    const currentDate = new Date();
+    const targetDate = new Date(inputDate);
+    const timeDifference = Math.abs(currentDate - targetDate);
+    const differenceInDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    return cameraModels[differenceInDays % Object.keys(cameraModels).length];
+  }
 
 export function getPollTimeDifference(timestamp, voteLength){
     const currentTime = new Date();

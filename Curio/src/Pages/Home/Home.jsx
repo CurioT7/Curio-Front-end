@@ -140,7 +140,7 @@ useEffect(() => {
     }
   }else{
     const data =await SortHomePosts(sortType, pageNumber);
-    console.log(data);
+    
     if(data){
       setPosts(data.posts);
       setTotalPages(Math.ceil(data.totalPosts / 10));
@@ -278,7 +278,6 @@ useEffect(() => {
                     optionSelected={post.details?.pollVote}
                     pollEnded={post.details?.pollEnded}
                     isNSFW={post.post.isNSFW}
-                    createdAt={post.post.createdAt}
                    />) : (
                     <Post
                     _id={post.post._id}
@@ -308,24 +307,24 @@ useEffect(() => {
                   <>
                     {randomPost.post.type === 'poll' ? (
                     <Post
-                    pollTitle={randomPost.post.title}
-                    body={randomPost.post.body}
-                    pollText={randomPost.post.content}
-                    user={randomPost.post.authorName}
-                    _id={randomPost.post._id}
-                    type={randomPost.post.type}
-                    optionNames={randomPost.post.options.map((option) => option.name)}
-                    votes={randomPost.post.options.map((option) => option.votes)}
-                    upvotes={randomPost.post.upvotes}
-                    downvotes={randomPost.post.downvotes}
-                    comments={randomPost.post.comments}
-                    isLocked={randomPost.post.isLocked}
-                    voteLength={randomPost.post.voteLength}
-                    linkedSubreddit={randomPost.post.linkedSubreddit.name}
-                    didVote={didVote[randomPost.post._id]}
-                    optionSelected={randomPost.details?.pollVote}
-                    pollEnded={randomPost.details?.pollEnded}
-                    createdAt={randomPost.post.createdAt}
+                    pollTitle={post.post.title}
+                    body={post.post.body}
+                    pollText={post.post.content}
+                    user={post.post.authorName}
+                    _id={post.post._id}
+                    type={post.post.type}
+                    optionNames={post.post.options.map((option) => option.name)}
+                    votes={post.post.options.map((option) => option.votes)}
+                    upvotes={post.post.upvotes}
+                    downvotes={post.post.downvotes}
+                    comments={post.post.comments}
+                    isLocked={post.post.isLocked}
+                    voteLength={post.post.voteLength}
+                    linkedSubreddit={post.post.linkedSubreddit.name}
+                    didVote={didVote[post.post._id]}
+                    optionSelected={post.details?.pollVote}
+                    pollEnded={post.details?.pollEnded}
+                    isNSFW={post.post.isNSFW}
                    />) : (
                     <Post
                     _id={randomPost.post._id}
@@ -343,7 +342,8 @@ useEffect(() => {
                     isLocked={randomPost.post.isLocked}
                     savedPosts={savedPosts}
                     hiddenPosts={hiddenPosts}
-                    isUserMember={randomPost.details?.isUserMemberOfItemSubreddit}
+                    isUserMember={post.details?.isUserMemberOfItemSubreddit}
+                    isNSFW={post.post.isNSFW}
                   />
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>

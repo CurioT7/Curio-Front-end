@@ -9,8 +9,6 @@ export async function fetchMessages(type) {
         authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    console.log('response.data.messages')
-    console.log(response.data.messages)
     if (response.status === 200) {
       return (response.data.messages);
     }
@@ -158,7 +156,6 @@ export async function BlockUserMessages(blockeduser) {
         authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    console.log(response)
   } catch (error) {
     if (error.response) {
       if (error.response.status === 404) {
@@ -174,5 +171,21 @@ export async function BlockUserMessages(blockeduser) {
       console.error('Error fetching messages:', error.message);
     }
     return ('');
+  }
+}
+
+
+export async function handleUnread(id){
+  try {
+      const response = await axios.post(`${serverHost}/api/message/unread/${id}`,{},{
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      });
+      if (response.status === 200) {
+          window.dispatchEvent(new Event("privateUnreadMessageDeleted"));
+      }
+  } catch (error) {
+      console.error("Error marking message unread:", error);
   }
 }

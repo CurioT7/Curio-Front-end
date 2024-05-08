@@ -83,6 +83,7 @@ function Post_Replies(props) {
                                         downvotedcomments={downvotedcomments}
                                         upvotedcomments={upvotedcomments}
                                         onBlockConfirmed={() => removeMessage(message._id)}
+                                        id={message._id}
                                     />
                                 </div>
                             </div>
