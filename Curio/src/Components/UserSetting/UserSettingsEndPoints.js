@@ -30,13 +30,13 @@ export async function sendUserDataToBackend(data) {
         });
         switch (response.status) {
             case 200:
-              console.log("User preferences updated successfully");
+              
               break;
             case 404:
-              console.log("User preferences not found");
+              console.error("User preferences not found");
               break;
             default:
-              console.log("Unexpected response status:", response.status);
+              console.error("Unexpected response status:", response.status);
               break;
           }
         return response;
@@ -44,7 +44,7 @@ export async function sendUserDataToBackend(data) {
         if (error.response) {
             const status = error.response.status;
         if (status === 500) {
-            console.log("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
+            console.error("500 Internal Server Error: An unexpected error occurred on the server. Please try again later.");
         } else {
             console.error("Error sending data to backend:", error.response.data);
         }
