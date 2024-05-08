@@ -2,8 +2,7 @@ import axios from "axios";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-
-async function CreateScheduledPosts(subreddit) {
+export async function CreateScheduledPosts(subreddit) {
     try {
         const request = await axios.post(`${serverHost}/api/scheduledPosts`,{
             subreddit:subreddit,

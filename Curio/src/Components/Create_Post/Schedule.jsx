@@ -35,7 +35,7 @@ function Schedule(props){
 
     return(
         <div>
-            <Button className="text-white rounded-end"  borderRadius={0} onClick={onOpen} display="flex" colorScheme="blue"  gap={1} fontSize="0.75rem"    ><AiFillSchedule size={25}/></Button>
+            <Button className="text-white rounded-end" isDisabled={props.subreddit.community === localStorage.getItem("username") || !props.subreddit.community}  borderRadius={0} onClick={onOpen} display="flex" colorScheme="blue"  gap={1} fontSize="0.75rem"    ><AiFillSchedule size={25}/></Button>
             <Modal isCentered size='4xl' isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
