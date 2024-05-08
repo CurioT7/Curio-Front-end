@@ -1,0 +1,22 @@
+/* 
+.RuleTabs{
+
+} */
+
+.RuleButtons {
+    display: flex;
+    justify-content: flex-end;
+}
+.buttonrule{
+    border-radius: 999px;
+    background:white;
+    border: 2px solid #0079D3;
+    color: #0079D3;
+    margin-left: 4px;
+    padding: 7px;
+}
+.rulesnote{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+padding-top: 20px;}

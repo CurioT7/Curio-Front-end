@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./Community_details.css";
+import "./CommunityDetails.css";
 import logo from "../../../../assets/Curio_logo.png";
 import { useToast, FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import { VscActivateBreakpoints } from "react-icons/vsc";
@@ -8,12 +8,9 @@ import { Link } from "react-router-dom";
 import { fetchUserDataFromBackend } from "../../../UserSetting/UserSettingsEndPoints";
 import profile from "../../../../assets/avatar_default_6.png";
 import bannersubreddit from "../../../../assets/cover.png";
-import { formatDistanceToNow } from 'date-fns';
 import { formatDatewithDays } from "../../../getTimeDifference/getTimeDifference"
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
 function Community_details({ subredditData, community }) {
-    console.log(subredditData);
     const username = localStorage.getItem('username');
     const [isSwitch, setIsSwitch] = useState(true);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
@@ -73,13 +70,12 @@ function Community_details({ subredditData, community }) {
                         {community.community !== username ? (
                             <div className="community-details-logo"
                                 style={{
-                                    backgroundImage: `url(${subredditData.banner ? subredditData.banner : bannersubreddit})`,
-                                    backgroundColor: isSwitch ? 'transparent' : '#fc471e'
+                                    background: isSwitch ? `url(${subredditData.banner ? subredditData.banner : bannersubreddit}) no-repeat center/cover` : '#fc471e'
                                 }} />
                         ) : (
                             <div className="file-upload-container-username top-1 start-1"
                                 style={{
-                                    backgroundColor: '#33a8ff',
+                                    background: `url(${subredditData.banner ? subredditData.banner : '#33a8ff'})`,
                                     borderRadius: '4px 4px 0 0',
                                     height: '94px',
                                     width: 'calc(100% - 2px)',
@@ -92,9 +88,9 @@ function Community_details({ subredditData, community }) {
                                         <div className="file-preview-container-username">
                                             <input type="file" accept="image/x-png,image/jpeg" className="file-input-banner-username" />
                                         </div>
-                                        <div className="file-banner-container-username">
-                                            <i className="fa-solid fa-camera add-banner"></i>
-                                        </div>
+                                        <Link to={`/settings/profile`} className="file-banner-container-username">
+                                            <i className="fa-solid fa-camera add-banner" />
+                                        </Link>
                                     </label>
                                 </div>
                             </div>
@@ -156,9 +152,9 @@ function Community_details({ subredditData, community }) {
                                             <div className="file-preview-container-username">
                                                 <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username" />
                                             </div>
-                                            <div className="file-icon-container-username">
+                                            <Link to={`/settings/profile`}  className="file-icon-container-username">
                                                 <i className="fa-solid fa-camera add-icon"></i>
-                                            </div>
+                                            </Link>
                                         </label>
                                     </div>
                                 </div>

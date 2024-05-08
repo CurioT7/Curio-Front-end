@@ -52,7 +52,7 @@ function Notifications_Dropdown({ setUnreadNotificationsNum }) {
                 <div className="notifications-title">
                     <span className="notifications-title-text">Notifications</span>
                 </div>
-                <Link to={'/message/messages'} className="notifications-messages-link">
+                <Link to={'/message/messages'} className="notifications-messages-link" onClick={closeDropdown}>
                     <div className="notifications-messages-title">
                         <span className="notifications-messages-text">Messages</span>
                     </div>
@@ -83,7 +83,7 @@ function Notifications_Dropdown({ setUnreadNotificationsNum }) {
                         onClick={() => handleNotificationClick(notification._id, notifications, unreadNotifications, setUnreadNotifications, navigate)}
                     >
                         <div className="notifications-item-link" style={{ cursor: 'pointer' }} >
-                            <div className="notifications-item-content">
+                            <div className="notifications-item-content" >
                                 <div className="notifications-item-avatar">
                                     <div className="avatar">
                                         <span className="avatar-image">
