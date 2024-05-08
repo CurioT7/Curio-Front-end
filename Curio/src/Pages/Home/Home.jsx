@@ -118,25 +118,6 @@ function Home() {
     isSelected: false
   })
 
-  const [polls, setPolls] = React.useState([]);
-
-// useEffect(() => {
-//   async function fetchAndSetData() {
-//       const data = await SortHomePosts("best", pageNumber);
-
-//     if (data) {
-//       setPosts(data.posts);
-//       setTotalPages(Math.ceil(data.totalPosts / 10));
-//       setRandomPost({ ...randomPost, isSelected: false });
-//     }
-//   }
-
-  
-
-//   fetchAndSetData();
-  
-// }, []);
-
 
 
 useEffect(() => {
@@ -238,8 +219,9 @@ async function getBlocked() {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
       });
-      const blockedUsernames = response.data.viewBlockedPeople.map(user => user.blockedUsername);
+      const blockedUsernames = response.data.viewBlockedPeople?.map(user => user.blockedUsername);
       setBlockedUsers(blockedUsernames);
+      console.log(blockedUsers);
       return response.data
   } catch (error) {
       console.error('Error:', error);
@@ -247,12 +229,9 @@ async function getBlocked() {
 }
 
 useEffect(() => {
-  async function handleBlocked() {
-   await getBlocked();
-  }
+ getBlocked();
 
-  handleBlocked();
-}, []);
+}, [posts]);
 
 useEffect(() => {
   if (localStorage.getItem('token')) {
@@ -276,10 +255,8 @@ useEffect(() => {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {localStorage.getItem('token') ? (
-              posts
-                .filter(post => !blockedUsers.includes(post.authorName))
-                .map((post) => (
+        {randomPost.isSelected == false ? (
+              posts.map((post) => (
                   <>
                     {post.post.type === 'poll' ? (
                     <Post
@@ -327,11 +304,8 @@ useEffect(() => {
                   </>
                 ))
             ):(
-              posts
-                .filter(post => !blockedUsers.includes(post.authorName))
-                .map((post) => (
                   <>
-                    {post.post.type === 'poll' ? (
+                    {randomPost.post.type === 'poll' ? (
                     <Post
                     pollTitle={post.post.title}
                     body={post.post.body}
@@ -353,19 +327,19 @@ useEffect(() => {
                     isNSFW={post.post.isNSFW}
                    />) : (
                     <Post
-                    _id={post.post._id}
-                    title={post.post.title}
-                    body={post.post.body}
-                    user={post.post.authorName}
-                    upvotes={post.post.upvotes}
-                    downvotes={post.post.downvotes}
-                    comments={post.post.comments}
-                    content={post.post.content}
-                    media={post.post.media}
+                    _id={randomPost.post._id}
+                    title={randomPost.post.title}
+                    body={randomPost.post.body}
+                    user={randomPost.post.authorName}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    content={randomPost.post.content}
+                    media={randomPost.post.media}
                     //isMod={isMod}
-                    linkedSubreddit={post.post.linkedSubreddit.name}
-                    voteStatus={post.details?.voteStatus}
-                    isLocked={post.post.isLocked}
+                    linkedSubreddit={randomPost.post.linkedSubreddit?.name}
+                    voteStatus={randomPost.details?.voteStatus}
+                    isLocked={randomPost.post.isLocked}
                     savedPosts={savedPosts}
                     hiddenPosts={hiddenPosts}
                     isUserMember={post.details?.isUserMemberOfItemSubreddit}
@@ -374,8 +348,7 @@ useEffect(() => {
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
                   </>
-                ))
-            )}
+                )}
       </div>
       <div className='d-flex justify-content-end ms-auto mb-4 fixed-container' style={{marginRight: "3rem", paddingTop: "1.2rem", height: "100vh", overflowY: "auto", width: "20%"}}>
           <RecentPosts />

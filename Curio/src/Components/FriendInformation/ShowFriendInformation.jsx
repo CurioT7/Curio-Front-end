@@ -40,10 +40,25 @@ function ShowFriendInformation(props) {
     const [savedPosts, setSavedPosts] = useState([]);
     const [hiddenPosts, setHiddenPosts] = useState([]);
     const [savedComments, setSavedComments] = useState([]);
+    const [didVote, setDidVote] = useState(false);
+
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     // const navigate = useNavigate();
 
@@ -299,6 +314,18 @@ function ShowFriendInformation(props) {
             }
         }
     }
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+          if (userPosts) {
+            const votes = [];
+            userPosts.forEach(post => {
+              votes[post._id] = post.details?.pollVote !== null;
+            });
+            setDidVote(votes);
+          }
+        }
+      }, [userPosts]);
     
 
     return (
@@ -430,35 +457,85 @@ function ShowFriendInformation(props) {
                 </div>
                 ) :(
                 <div className="ms-0 ms-lg-5 mt-4 col-md-7">
-                    {overviewState === 0 && userPosts.map((post, index) => (
-                        <Post _id={post._id}
-                            title={post.title}
-                            body={post.content}
-                            user={post.authorName}
-                            upvotes={post.upvotes}
-                            downvotes={post.downvotes}
-                            comments={post.comments}
-                            content={post.content}
-                            //isMod={isMod}
-                            savedPosts={savedPosts}
-                            hiddenPosts={hiddenPosts} />
-                            ))}
+                {overviewState === 0 && userPosts.map((post, index) => (
+                post.type === 'poll' ? (
+                    <Post
+                        pollTitle={post.title}
+                        body={post.body}
+                        pollText={post.content}
+                        user={post.authorName}
+                        _id={post._id}
+                        type={post.type}
+                        optionNames={post.options.map((option) => option.name)}
+                        votes={post.options.map((option) => option.votes)}
+                        upvotes={post.upvotes}
+                        downvotes={post.downvotes}
+                        comments={post.comments}
+                        isLocked={post.isLocked}
+                        voteLength={post.voteLength}
+                        linkedSubreddit={post.details?.subredditName}
+                        didVote={didVote[post._id]}
+                        optionSelected={post.details?.pollVote}
+                        pollEnded={post.details?.pollEnded}
+                        createdAt={post.createdAt}
+                    />
+                ) : (
+                    <Post
+                        _id={post._id}
+                        title={post.title}
+                        body={post.content}
+                        user={post.authorName}
+                        upvotes={post.upvotes}
+                        downvotes={post.downvotes}
+                        comments={post.comments}
+                        content={post.content}
+                        //isMod={isMod}
+                        savedPosts={savedPosts}
+                        hiddenPosts={hiddenPosts}
+                    />
+                )
+                ))}
                     {overviewState === 0 && userComments.map((comment, index) => (
                         <PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
                     ))}
-                   {overviewState === 1 && userPosts.map((post, index) => (
-                        <Post _id={post._id}
-                            title={post.title}
-                            body={post.content}
-                            user={post.authorName}
-                            upvotes={post.upvotes}
-                            downvotes={post.downvotes}
-                            comments={post.comments}
-                            content={post.content}
-                            //isMod={isMod}
-                            savedPosts={savedPosts}
-                            hiddenPosts={hiddenPosts} />
-                            ))}
+                        {overviewState === 0 && userPosts.map((post, index) => (
+                        post.type === 'poll' ? (
+                            <Post
+                                pollTitle={post.title}
+                                body={post.body}
+                                pollText={post.content}
+                                user={post.authorName}
+                                _id={post._id}
+                                type={post.type}
+                                optionNames={post.options.map((option) => option.name)}
+                                votes={post.options.map((option) => option.votes)}
+                                upvotes={post.upvotes}
+                                downvotes={post.downvotes}
+                                comments={post.comments}
+                                isLocked={post.isLocked}
+                                voteLength={post.voteLength}
+                                linkedSubreddit={post.details?.subredditName}
+                                didVote={didVote[post._id]}
+                                optionSelected={post.details?.pollVote}
+                                pollEnded={post.details?.pollEnded}
+                                createdAt={post.createdAt}
+                            />
+                        ) : (
+                            <Post
+                                _id={post._id}
+                                title={post.title}
+                                body={post.content}
+                                user={post.authorName}
+                                upvotes={post.upvotes}
+                                downvotes={post.downvotes}
+                                comments={post.comments}
+                                content={post.content}
+                                //isMod={isMod}
+                                savedPosts={savedPosts}
+                                hiddenPosts={hiddenPosts}
+                            />
+                        )
+                        ))}
                             {overviewState === 2 && userComments.map((comment, index) => (
                                 <PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
                             ))}

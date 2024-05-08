@@ -107,14 +107,14 @@ export async function sendReadNotifications(notificationID) {
 
 export async function markasViewed() {
     try{
-        const response = await axios.patch(`${serverHost}/api/notifications/mark-all-viewed`, {
+        const response = await axios.patch(`${serverHost}/api/notifications/mark-all-viewed`, {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
         return response;
-        } catch (error) {
-            console.error('Error marking notification as viewed:', error.message);
-            throw error;
-        }
-    }   
+    } catch (error) {
+        console.error('Error marking notification as viewed:', error.message);
+        throw error;
+    }
+}

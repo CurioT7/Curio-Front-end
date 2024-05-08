@@ -42,7 +42,9 @@ function Notifications_Dropdown({ setUnreadNotificationsNum }) {
         if (data) {
             setNotifications(data.notifications || []);
             setUnreadNotifications(data.unreadNotifications || []);
-            setUnreadNotificationsNum(data.unreadNumber);
+            const viewedNotificationsCount = data.unreadNotifications.filter(notification => notification.isViewed).length;
+            const unreadNotificationsNum = data.unreadNumber - viewedNotificationsCount;
+            setUnreadNotificationsNum(unreadNotificationsNum);
         }
     }
 

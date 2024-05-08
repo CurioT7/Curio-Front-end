@@ -9,7 +9,9 @@ import { fetchDataFromBackend } from "./CommunityEndPoints";
 import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo} from "./CommunityEndPoints";
 function CommunityBody(props) {
   const navigate = useNavigate();
+
   const[posts, setPosts] = React.useState([])
+  const [didVote, setDidVote] = React.useState(false);
   const[randomPost, setRandomPost] = React.useState({
     post:{
 
@@ -126,6 +128,19 @@ async function changeSortType(value,time) {
     
 }
 
+React.useEffect(() => {
+  if (localStorage.getItem('token')) {
+    if (posts) {
+      const votes = [];
+      posts.forEach(post => {
+        votes[post._id] = post.details?.pollVote !== null;
+      });
+      setDidVote(votes);
+    }
+  }
+}, [posts]);
+
+
   return (
     <div className="community-body">
       <div className=" list mb-3">
@@ -153,6 +168,10 @@ async function changeSortType(value,time) {
                     isLocked={post.isLocked}
                     linkedSubreddit={Community}
                     subreddit={Community}
+                    optionSelected={post.details?.pollVote}
+                    pollEnded={post.details?.pollEnded}
+                    didVote={didVote[post._id]}
+                    createdAt={post.createdAt}
                   />) : (
                     <Post
                     _id={post._id}
@@ -190,6 +209,10 @@ async function changeSortType(value,time) {
                     voteLength={randomPost.post.voteLength}
                     isLocked={randomPost.post.isLocked}
                     subreddit={Community}
+                    optionSelected={randomPost.post.details?.pollVote}
+                    pollEnded={randomPost.post.details?.pollEnded}
+                    didVote={didVote[randomPost.post._id]}
+                    createdAt={randomPost.post.createdAt}
                   />) : (
                     <Post
                     _id={randomPost.post._id}
