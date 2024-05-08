@@ -12,6 +12,7 @@ import axios from "axios";
 import {useToast} from '@chakra-ui/react';
 import FilledHide from "../../styles/icons/FilledHide";
 import Delete from "../../styles/icons/Delete.jsx";
+const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
 
@@ -332,6 +333,56 @@ function PostControl(props) {
     }
   }
 
+// const handleUnspoilerClick = async (postID) => {
+//     setIsSpoiler(!isSpoiler);
+//     const url = `${VITE_SERVER_HOST}/api/unspoil`;
+//     const body = {
+//         postId: postID
+//     };
+
+//     const token = localStorage.getItem('token'); // replace this with how you store your token
+
+//     const response = await fetch(url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${token}`
+//         },
+//         body: JSON.stringify(body)
+//     });
+
+//     if (!response.ok) {
+//         throw new Error('Network response was not ok');
+//     }
+
+//     const responseData = await response.json();
+//     return responseData;
+// };
+
+// const handleSpoilerClick = async (postID) => {
+//   // toggle props.isSpoiler
+//   setIsSpoiler(!isSpoiler);
+//     const url = `${VITE_SERVER_HOST}/api/spoil`;
+//     const body = {
+//         postId: postID
+//     };
+
+//     const response = await fetch(url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(body)
+//     });
+
+//     if (!response.ok) {
+//         throw new Error('Network response was not ok');
+//     }
+
+//     const responseData = await response.json();
+//     return responseData;
+// };
+
   return (
     <>
       <div ref={dropdownRef}>
@@ -378,9 +429,9 @@ function PostControl(props) {
                                                       <div><p className='mt-3 me-2 text-text'>Delete</p></div>
                                                 </li>
                                               }
-                                              {/* {
+                                              {
                                                 isSpoiler &&
-                                                <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center" style={{ color: 'gray', pointerEvents: 'none' }}>
+                                                <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center" onClick={()=> setIsSpoiler(!isSpoiler)} >
                                                   <svg rpl="" fill="currentColor" height="20" icon-name="spoiler-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M9.463 15.384A1.092 1.092 0 0 1 9.076 15a1.033 1.033 0 0 1-.143-.537c-.002-.186.047-.369.143-.529.093-.16.227-.293.387-.387.16-.097.345-.148.533-.147a1.05 1.05 0 0 1 .537.141 1.076 1.076 0 0 1 .537.921c0 .188-.051.373-.148.535-.096.159-.23.292-.39.386a1.042 1.042 0 0 1-.536.143 1.026 1.026 0 0 1-.533-.142Zm-.141-3.329L9.13 5.342h1.73l-.192 6.713H9.322Zm.667 7.935a4.6 4.6 0 0 1-3.27-1.354l-5.367-5.365a4.634 4.634 0 0 1 0-6.542l5.367-5.365a4.626 4.626 0 0 1 6.54 0l5.366 5.364a4.627 4.627 0 0 1 0 6.542l-5.364 5.365a4.6 4.6 0 0 1-3.272 1.355Zm0-18.73a3.353 3.353 0 0 0-2.386.988L2.237 7.614a3.375 3.375 0 0 0 0 4.772l5.366 5.366a3.46 3.46 0 0 0 4.771 0l5.365-5.366a3.374 3.374 0 0 0 0-4.772L12.374 2.25A3.349 3.349 0 0 0 9.99 1.26Z"></path>
                                                   </svg>
@@ -388,13 +439,13 @@ function PostControl(props) {
                                                 </li>
                                               }
                                               {isSpoiler !== undefined && !isSpoiler &&
-                                                <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center" style={{ color: 'gray', pointerEvents: 'none' }}>
+                                                <li className="drop-down-item ps-3 dropdown-list-post-control d-flex align-items-center" onClick={()=> setIsSpoiler(!isSpoiler)} >
                                                   <svg rpl="" fill="currentColor" height="20" icon-name="spoiler-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M9.463 15.384A1.092 1.092 0 0 1 9.076 15a1.033 1.033 0 0 1-.143-.537c-.002-.186.047-.369.143-.529.093-.16.227-.293.387-.387.16-.097.345-.148.533-.147a1.05 1.05 0 0 1 .537.141 1.076 1.076 0 0 1 .537.921c0 .188-.051.373-.148.535-.096.159-.23.292-.39.386a1.042 1.042 0 0 1-.536.143 1.026 1.026 0 0 1-.533-.142Zm-.141-3.329L9.13 5.342h1.73l-.192 6.713H9.322Zm.667 7.935a4.6 4.6 0 0 1-3.27-1.354l-5.367-5.365a4.634 4.634 0 0 1 0-6.542l5.367-5.365a4.626 4.626 0 0 1 6.54 0l5.366 5.364a4.627 4.627 0 0 1 0 6.542l-5.364 5.365a4.6 4.6 0 0 1-3.272 1.355Zm0-18.73a3.353 3.353 0 0 0-2.386.988L2.237 7.614a3.375 3.375 0 0 0 0 4.772l5.366 5.366a3.46 3.46 0 0 0 4.771 0l5.365-5.366a3.374 3.374 0 0 0 0-4.772L12.374 2.25A3.349 3.349 0 0 0 9.99 1.26Z"></path>
                                                   </svg>
                                                   <div><p className='mt-3 me-2 text-text'>Spoiler</p></div>
                                                 </li>
-                                              } */}
+                                              }
                                           </ul>    
                                       </div>
               }

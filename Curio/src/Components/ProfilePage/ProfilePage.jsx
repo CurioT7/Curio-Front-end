@@ -161,7 +161,7 @@ function ProfilePage(props) {
     if (StoredUsername) {
       getUserAbout(StoredUsername).then(data => setUserAbout(data));
     }
-  }, [userAbout]);
+  }, []);
 
   useEffect(() => {
   const fetchUserBio = async () => {
