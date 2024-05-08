@@ -1,60 +1,101 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import "./LiveChat.css";
 import profile from "../../../../assets/avatar_default_6.png";
 import HeaderChatRight_Side from "../../HeaderChatRight_Side/HeaderChatRight_Side";
-import { Button, Input, InputGroup, InputRightElement, Tooltip } from '@chakra-ui/react';
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Tooltip,
+} from "@chakra-ui/react";
 import { IoMdCamera, IoMdSend } from "react-icons/io";
 import { BsFillEmojiSmileFill } from "react-icons/bs";
-import EmojiPicker from '@emoji-mart/react';
-import data from '@emoji-mart/data';
-import { createChatRequest, getChatwholeChat, sendMessageRequest } from '../../../../Pages/Open_Chat_Page/Open_Chat_Page';
-import { formatTimestamp, formatDate } from "../../../getTimeDifference/getTimeDifference";
-
+import EmojiPicker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
+import {
+  createChatRequest,
+  getChatwholeChat,
+  sendMessageRequest,
+} from "../../../../Pages/Open_Chat_Page/Open_Chat_Page";
+import {
+  formatTimestamp,
+  formatDate,
+} from "../../../getTimeDifference/getTimeDifference";
 function LiveChat(props) {
-    const [isPickerVisible, setPickerVisible] = useState(false);
-    const [message, setMessage] = useState('');
-    const [chatData, setChatData] = useState(null);
-    const [prevMessageDate, setPrevMessageDate] = useState(null);
-    const username = localStorage.getItem('username');
+  const [isPickerVisible, setPickerVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [chatData, setChatData] = useState(null);
+  const [prevMessageDate, setPrevMessageDate] = useState(null);
+  const username = localStorage.getItem("username");
 
-    const pickerRef = useRef(null);
+  const pickerRef = useRef(null);
 
-    useEffect(() => {
-        async function fetchChatData() {
-            try {
-                const response = await getChatwholeChat(props.chatId);
-                setChatData(response.data);
-            } catch (error) {
-                console.error('Error fetching chat data:', error);
-            }
+  useEffect(() => {
+    async function fetchChatData() {
+      try {
+        const response = await getChatwholeChat(props.chatId);
+        setChatData(response.data);
+      } catch (error) {
+        console.error("Error fetching chat data:", error);
+      }
+    }
+
+    fetchChatData();
+  }, [props.chatId]);
+
+  // socket.on("newMessage", (message, username) => {
+  //     const recieverSocket = getRecieverSocket(username);
+  //     recieverSocket.emit("newMessage", message);
+  //   });
+
+  useEffect(() => {
+    //for recieving messages
+    if (!socket) return;
+    socket.on("newMessage", (message, username) => {
+      console.log("new message", message);
+      console.log("username", username);
+      setChatData((prevData) => {
+        const chatIndex = prevData.chat.findIndex(
+          (chat) => chat._id === message.chatId
+        );
+        const chat = prevData.chat[chatIndex];
+        const newChat = {
+          ...chat,
+          messages: [...chat.messages, message],
+        };
+        const newChatData = [...prevData.chat];
+        newChatData[chatIndex] = newChat;
+        return {
+          ...prevData,
+          chat: newChatData,
+        };
+      });
+    });
+  }, [socket]);
+
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+  };
+
+  const handleSend = async () => {
+    if (message.trim() !== "") {
+      try {
+        if (props.chatId) {
+          await sendMessageRequest(props.chatId, message, null);
+        } else {
+          await createChatRequest(props.recipient, message);
         }
+        setMessage("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
+  };
 
-        fetchChatData();
-    }, [props.chatId]);
-
-    const handleMessageChange = (e) => {
-        setMessage(e.target.value);
-    };
-
-    const handleSend = async () => {
-        if (message.trim() !== '') {
-            try {
-                if (props.chatId) {
-                    await sendMessageRequest(props.chatId, message, null);
-                } else {
-                    await createChatRequest(props.recipient, message);
-                }
-                setMessage('');
-            } catch (error) {
-                console.error('Error sending message:', error);
-            }
-        }
-    };
-
-
-    const handleEmojiSelect = (emoji) => {
-        setMessage(message + emoji.native);
-    };
+  const handleEmojiSelect = (emoji) => {
+    setMessage(message + emoji.native);
+  };
 
     return (
         <div className='chat-div'>
