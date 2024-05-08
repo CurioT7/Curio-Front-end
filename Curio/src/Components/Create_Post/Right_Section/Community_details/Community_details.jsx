@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Community_details.css";
-import logo from "../../../assets/Curio_logo.png";
+import logo from "../../../../assets/Curio_logo.png";
 import { useToast, FormControl, FormLabel, Switch } from "@chakra-ui/react";
-import axios from "axios";
 import { VscActivateBreakpoints } from "react-icons/vsc";
-import SocialLink from "../../profileSetting/Socialmodal/Socialmodal";
+import SocialLink from "../../../profileSetting/Socialmodal/Socialmodal";
 import { Link } from "react-router-dom";
-import { fetchUserDataFromBackend } from "../../UserSetting/UserSettingsEndPoints";
-import profile from "../../../assets/avatar_default_6.png";
-import bannersubreddit from "../../../assets/cover.png";
+import { fetchUserDataFromBackend } from "../../../UserSetting/UserSettingsEndPoints";
+import profile from "../../../../assets/avatar_default_6.png";
+import bannersubreddit from "../../../../assets/cover.png";
+import { formatDistanceToNow } from 'date-fns';
+import { formatDatewithDays } from "../../../getTimeDifference/getTimeDifference"
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
-function Community_details({ community }) {
-    const icon = localStorage.getItem('profileImage');
+function Community_details({ subredditData, community }) {
+    console.log(subredditData);
     const username = localStorage.getItem('username');
-    const [subredditData, setSubredditData] = useState(null);
     const [isSwitch, setIsSwitch] = useState(true);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
     const [SocialLinks, setSocialLinks] = useState([]);
@@ -36,19 +36,7 @@ function Community_details({ community }) {
     };
 
     useEffect(() => {
-        if (community.community !== null) {
-            fetchSubredditData();
-        }
-    }, [community]);
-
-    const fetchSubredditData = async () => {
-        try {
-            const response = await axios.get(`${serverHost}/api/subredditOverview/${community.community}`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-            setSubredditData(response.data);
+        const fetchSubredditData = async () => {
             const data = await fetchUserDataFromBackend();
             if (data) {
                 setSocialLinks(data.socialLinks ?
@@ -58,10 +46,11 @@ function Community_details({ community }) {
                         platform: `fa-brands fa-${link.platform.toLowerCase()}`,
                     })) : []);
             }
-        } catch (error) {
-            console.error("Error fetching subreddit data:", error);
-        }
-    };
+        };
+
+        fetchSubredditData();
+    }, []);
+
 
     const handleSwitchChange = () => {
         setIsSwitch(!isSwitch);
@@ -74,18 +63,6 @@ function Community_details({ community }) {
 
     const toggleOptions = () => {
         setIsOptionsExpanded(!isOptionsExpanded);
-    };
-
-    const renderCreatedAt = () => {
-        if (subredditData && subredditData.createdAt) {
-            const createdAtDate = new Date(subredditData.createdAt);
-            return createdAtDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-        return '';
     };
 
     return (
@@ -210,7 +187,7 @@ function Community_details({ community }) {
                                     <div className="community-created-date">
                                         <i className="created-date-icon fa-solid fa-cake-candles" />
                                         <span className="community-created-date">
-                                            Created {renderCreatedAt()}
+                                            Created {formatDatewithDays(subredditData.createdAt)}
                                         </span>
                                     </div>
                                 </div>
@@ -238,7 +215,7 @@ function Community_details({ community }) {
                                     <h5 className="info-title-username">Cake day</h5>
                                     <div className="info-content-username">
                                         <i className="created-date-icon fa-solid fa-cake-candles" style={{ color: '#24a0ed' }} />
-                                        <span className="info-value-username">{subredditData.createdAt}</span>
+                                        <span className="info-value-username">{formatDatewithDays(subredditData.createdAt)}</span>
                                     </div>
                                 </div>
                             </div>

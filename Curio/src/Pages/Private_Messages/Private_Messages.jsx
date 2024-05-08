@@ -62,6 +62,19 @@ function Private_Messages(props) {
     }
   };
 
+  // const fetchUserData = async () => {
+  //   try {
+  //     const communityDataResponse = await axios.get(
+  //       `${serverHost}/api/moderatedSubreddits/${username}`
+  //     );
+  //     // const communityNames = communityDataResponse.data.moderatedSubreddits.map(community => community.name);
+  //     setUserCommunities(communityDataResponse);
+  //     console(communityDataResponse)
+  //   } catch (error) {
+  //       console.error('Network Error. Please check your internet connection.');
+  //   }
+  // };
+
   const handlePrivateMessage = async () => {
     let isSubreddit = false;
     try {
