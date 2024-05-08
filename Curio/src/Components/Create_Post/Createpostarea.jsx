@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import PostMethods from "./PostMethods";
 import EditCreateArea from "./EditCreatearea";
 import "./Createpostarea.css";
-import PostMethods from "./PostMethods";
-import EditCreateArea from "./EditCreatearea";
 import ImageVideo from "./Image_&_Video_Section/ImageVideo";
 import Link from "./Link_Section/Link";
 import Polls from "./Polls_Section/Polls";
