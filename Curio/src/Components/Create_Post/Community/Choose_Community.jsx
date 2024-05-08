@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Input, Icon } from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';
 import "./Choose_Community.css";
-import profile from "../../../assets/Profile_navbar.png";
 import profilepicture from "../../../assets/avatar_default_6.png";
 import subbredditpicture from "../../../assets/avatar_default_2.png";
 import axios from 'axios';
