@@ -27,8 +27,8 @@ function UserManage( props ) {
 
   function returntype() {
     if (type === "banned") {
-      return <Banned />;
-    } else if (type === "muted") {
+   return <Banned communityName={Community} />;    
+  } else if (type === "muted") {
       return <Muted />;
     } else {
       return <Moderators />;

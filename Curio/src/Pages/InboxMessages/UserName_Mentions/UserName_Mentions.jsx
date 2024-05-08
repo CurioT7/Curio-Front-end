@@ -6,8 +6,6 @@ import InboxTabs from '../../../Components/Messages/InboxTabs';
 import UserName_Mentions_Com from '../../../Components/Messages/UserName_Mentions/UserName_Mentions_Com';
 import { fetchMessages, fetchDownvotedMessages, fetchUpvotedMessages } from '../InboxMessagesEndpoints';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
-
 function UserName_Mentions(props) {
     const navigate = useNavigate();
     const [recievedMessages, setRecievedMessages] = useState([]);
@@ -46,11 +44,15 @@ function UserName_Mentions(props) {
         };
     }, []);
 
+    const removeMessage = (messageId) => {
+        setRecievedMessages(prevMessages => prevMessages.filter(message => message._id !== messageId));
+    };
+
     return (
         <div style={{ marginTop: "60px" }}>
             <MessagesNavbar />
             <InboxTabs />
-            <div className='username-mentions-page'>
+            <div className='username-mentions-page w-100'>
                 {error ? (
                     <div className="error-message">
                         <p style={{
@@ -81,6 +83,7 @@ function UserName_Mentions(props) {
                                         itemId={message.commentId}
                                         downvotedcomments={downvotedcomments}
                                         upvotedcomments={upvotedcomments}
+                                        onBlockConfirmed={() => removeMessage(message._id)}
                                     />
                                 </div>
                             </div>

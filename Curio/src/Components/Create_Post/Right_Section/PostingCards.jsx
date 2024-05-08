@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import "./Posting_Cards.css";
-import Posting_rules from "./Posting_rules/Posting_rules";
-import Community_details from "./Community_details/Community_details";
-import Community_rules from './Community_rules/Community_rules';
+import "./PostingCards.css";
+import PostingRules from "./PostingRules/PostingRules";
+import CommunityDetails from "./CommunityDetails/CommunityDetails";
+import CommunityRules from './CommunityRules/CommunityRules';
 import { fetchSubredditData } from './Community_info_Endpoints';
 
-function Posting_Cards(community) {
+// Function component for rendering posting cards
+function PostingCards(community) {
   const [subredditData, setSubredditData] = useState(null);
 
   useEffect(() => {
@@ -23,19 +24,22 @@ function Posting_Cards(community) {
 
   return (
     <div className='postingContainer'>
-      <Community_details
+      {/* Component for displaying community details */}
+      <CommunityDetails
         subredditData={subredditData}
         community={community}
       />
+      {/* Render community rules if data is available */}
       {subredditData && subredditData.subreddit && subredditData.rules && subredditData.rules.length > 0 &&
-        <Community_rules
+        <CommunityRules
           subbreddit={subredditData.subreddit}
           rules={subredditData.rules}
         />
       }
-      <Posting_rules />
+      {/* Component for displaying posting rules */}
+      <PostingRules />
     </div>
   );
 }
 
-export default Posting_Cards;
+export default PostingCards;

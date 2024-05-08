@@ -57,9 +57,23 @@
     }
     .username-mention-details{
         padding-top: 0;
+        position: absolute;
+
     }
     .list-item-username-mentions{
         font-size: xx-small;
         padding-left: 0px;
+    }
+}
+
+@media screen and (max-width: 866px) {
+    .check-block-message{
+        font-size: 8px;
+    }
+}
+
+@media screen and (min-width: 560px) and (max-width: 580px) {
+    .username-mentions-message-table {
+        height: 173px;
     }
 }
