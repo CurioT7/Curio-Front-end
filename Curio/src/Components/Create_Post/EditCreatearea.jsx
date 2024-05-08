@@ -123,13 +123,11 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
           isOC: ocClicked,
           isSpoiler: spoilerClicked,
           isNSFW: nsfwClicked,
-          voteLength: days,
           Options: optionsString,
           type: selectedMethod,
           repeatOption:repeat,
           contestMode:false,
           postAsAutoModerator:false,
-          isScheduled:true,
           scheduledPublishDate:dateTime,
       }, {
           headers: {
