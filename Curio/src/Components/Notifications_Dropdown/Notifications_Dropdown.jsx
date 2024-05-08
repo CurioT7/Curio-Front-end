@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css";
-import logo from "../../assets/Profile_navbar.png";
+import logo from "../../assets/avatar_default_6.png";
 import { Link } from 'react-router-dom';
 import {
     Popover,
@@ -87,7 +87,7 @@ function Notifications_Dropdown({ setUnreadNotificationsNum }) {
                                 <div className="notifications-item-avatar">
                                     <div className="avatar">
                                         <span className="avatar-image">
-                                            <img src={logo} alt="avatar for notification" style={{ marginBottom: "0" }} />
+                                            <img src={notification.media ? notification.media: logo} alt="avatar for notification" style={{ marginBottom: "0" }} />
                                         </span>
                                         <div className="notifications-item-icon">
                                             <i className="fa-solid fa-message" />

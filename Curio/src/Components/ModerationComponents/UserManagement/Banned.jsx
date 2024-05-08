@@ -7,6 +7,11 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 function Banned({ communityName }) {
   const [isOpen, setIsOpen] = useState(false);
   const [bannedUsers, setBannedUsers] = useState([]);
+  const [subredditName, setSubredditName] = useState('');
+  const [userToBan, setUserToBan] = useState('');
+  const [violation, setViolation] = useState('');
+  const [modNote, setModNote] = useState('');
+  const [userMessage, setUserMessage] = useState('');
 
 
   const openModal = () => {
@@ -36,7 +41,6 @@ function Banned({ communityName }) {
 
     const responseData = await response.json();
 
-    // Extracting banned user details
     const bannedUsers = responseData.bannedUsers.map(bannedUser => ({
         banDetails: bannedUser.banDetails.map(banDetail => ({
             id: banDetail._id,
@@ -67,11 +71,76 @@ useEffect(() => {
   const fetchBannedUserDetails = async () => {
       const users = await getBannedUserDetails();
       setBannedUsers(users);
+      console.log(users);
   };
 
   fetchBannedUserDetails();
-  console.log(bannedUsers);
-}, []);
+
+//   console.log(bannedUsers);
+}, [bannedUsers]);
+
+useEffect(() => {
+  setSubredditName(communityName);
+}, [communityName]);
+
+const banUser = async (subredditName, userToBan, violation, modNote, userMessage) => {
+  const url = `${VITE_SERVER_HOST}/api/moderator/ban`;
+    const token = localStorage.getItem('token');
+
+    const body = {
+        subredditName,
+        userToBan,
+        violation,
+        modNote,
+        userMessage
+    };
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    else 
+    {
+      // close nmodal 
+      closeModal();
+    }
+
+    const responseData = await response.json();
+    return responseData;
+};
+const unbanUser = async (subredditName, bannedUser) => {
+    const url = `${VITE_SERVER_HOST}/api/moderator/unban`;
+    const token = localStorage.getItem('token');
+
+    const body = {
+        subredditName,
+        bannedUser
+    };
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+};
 
   return (
 
@@ -88,16 +157,39 @@ useEffect(() => {
               <ModalCloseButton />
               <ModalBody>
                 <p className='inputTitle'>ENTER USERNAME</p>
-                <input type="text" placeholder='u/username' className='baninput'/>
+                <input 
+                    type="text" 
+                    placeholder='u/username' 
+                    className='baninput' 
+                    value={userToBan} 
+                    onChange={(e) => setUserToBan(e.target.value)}
+                />                
                 <p className='inputTitle'>REASON FOR BAN</p>
-                <input type="text" placeholder='Reason'  className='baninput'/>
+                <input 
+                    type="text" 
+                    placeholder='Reason' 
+                    className='baninput' 
+                    value={violation} 
+                    onChange={(e) => setViolation(e.target.value)}
+                />
                 <p className='inputTitle'>MOD NOTE</p>
-                <input type="text" placeholder='Mod Note'  className='baninput'/>
-                
+                <input type="text"
+                 placeholder='Mod Note'  
+                 className='baninput'
+                 value={modNote}
+                  onChange={(e) => setModNote(e.target.value)}
+                 />
+                <p>User Message</p>
+                <input type="text"
+                placeholder='user message'
+                value={userMessage} 
+                onChange={(e)=>setUserMessage(e.target.value)}/>
               </ModalBody>
 
               <ModalFooter>
-                <button className="BanUserBtn">Ban</button>
+                <button className="BanUserBtn"
+                onClick={()=> banUser(subredditName, userToBan, violation, modNote, userMessage)}
+                >Ban</button>
                 <button className="CancelBtn" onClick={closeModal}>Cancel</button>
               </ModalFooter>
             </ModalContent>
@@ -108,17 +200,26 @@ useEffect(() => {
     </div>
     <div className='BanContent'>
     <i class="_1c2rKv1iuQylye8ejI6-1v icon icon-ban"></i>
-      <p>No banned users in u/community</p>
-      {/* <ul>
-        <li className='card'>
-        <Card>
-        <CardBody>
-          <h6>banned</h6>
-        </CardBody>
-      </Card>
-        </li>
-      </ul> */}
-      </div>
+    {bannedUsers.length > 0 ? (
+        <ul>
+          
+            {bannedUsers.map((user, index) => (
+              <Card>
+              <CardBody>
+                    <div>{user.banDetails.length > 0 && user.banDetails[index].bannedUsername}</div>
+                    <button className='BanUserBtn'
+                    onClick={()=> unbanUser(subredditName, user.banDetails[index].bannedUsername)}
+                    >
+                      Unban</button>
+              </CardBody>
+            </Card>
+            ))}
+           
+        </ul>
+    ) : (
+        <p>No banned users in u/community</p>
+    )}
+</div>
     </div>
   );
 }
