@@ -1,6 +1,6 @@
 import React from 'react';
 import "./Posting_rules.css"
-import logo from "../../../assets/Curio_logo.png";
+import logo from "../../../../assets/Curio_logo.png";
 
 
 function Posting_rules() {

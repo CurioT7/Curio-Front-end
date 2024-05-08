@@ -50,7 +50,7 @@ function UserName_Mentions(props) {
         <div style={{ marginTop: "60px" }}>
             <MessagesNavbar />
             <InboxTabs />
-            <div className='username-mentions-page'>
+            <div className='username-mentions-page w-100'>
                 {error ? (
                     <div className="error-message">
                         <p style={{

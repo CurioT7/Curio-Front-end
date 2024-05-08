@@ -5,6 +5,7 @@ import Messages from "../../Components/Messages/Messages.jsx";
 import {fetchMessages} from "./InboxMessagesEndpoints";
 import UserName_Mentions_Com from "../../Components/Messages/UserName_Mentions/UserName_Mentions_Com.jsx";
 import Post_Replies_Com from "../../Components/Messages/Post_Replies/Post_Replies_Com.jsx";
+import {fetchDownvotedMessages, fetchUpvotedMessages} from "./InboxMessagesEndpoints";
 
 
 function AllInbox(props) {
@@ -24,7 +25,7 @@ function AllInbox(props) {
                 setMessages(filteredMessages);
                 const filteredUsernameMentions = response.filter((message) => message.type === "usernameMentions");
                 setUsernameMentions(filteredUsernameMentions);
-                const filteredPostReplies = response.filter((message) => message.type === "postReplies");
+                const filteredPostReplies = response.filter((message) => message.type === "postReply");
                 setPostReplies(filteredPostReplies);
                 const downvote = await fetchDownvotedMessages();
                 setDownvotedComments(downvote);
@@ -67,7 +68,7 @@ function AllInbox(props) {
                 <Messages messages={messages} />
             </div>
             {usernameMentions && usernameMentions.map((usernameMention, index) => (
-                <div className="d-flex justify-content-center mt-4">
+                <div className="d-flex justify-content-center mt-4 col-md-8">
                     <UserName_Mentions_Com
                                         title={usernameMention.postId ? usernameMention.postId.title : null}
                                         noComments={usernameMention.commentNumber}
