@@ -47,3 +47,10 @@ export function formatDatewithDays(dateString) {
 
     return `${month} ${day}, ${year}`;
 }
+
+export function getDaysDifferenceFromToday(inputDate) {
+    const today = new Date();
+    const input = new Date(inputDate);
+    const differenceInDays = Math.floor((input - today) / (1000 * 60 * 60 * 24));
+    return Math.abs(differenceInDays) + 'd';
+  }

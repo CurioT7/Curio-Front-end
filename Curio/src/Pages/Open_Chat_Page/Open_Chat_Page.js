@@ -91,3 +91,15 @@ export async function sendMessageRequest(chatId, message, media) {
     console.error("Error", error.message);
   }
 }
+
+
+export async function AboutParticipant(username) {
+  try {
+    const participantdata = await axios.get(
+      `${serverHost}/api/user/${username}/about`
+    );
+    return participantdata.data;
+  } catch (error) {
+    console.error("Error", error.message);
+  }
+}
