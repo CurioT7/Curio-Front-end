@@ -49,11 +49,11 @@ function Moderation(props) {
 
   function returntype() {
     if (type === "removed") {
-      return <Removed />;
+      return <Removed community={Community}/>;
     } else if (type === "edited") {
-      return <Edited />;
+      return <Edited community={Community}/>;
     } else {
-      return <Unmoderated />;
+      return <Unmoderated community={Community}/>;
     }
   }
 

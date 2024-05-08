@@ -219,8 +219,9 @@ async function getBlocked() {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
       });
-      const blockedUsernames = response.data.viewBlockedPeople.map(user => user.blockedUsername);
+      const blockedUsernames = response.data.viewBlockedPeople?.map(user => user.blockedUsername);
       setBlockedUsers(blockedUsernames);
+      console.log(blockedUsers);
       return response.data
   } catch (error) {
       console.error('Error:', error);
@@ -228,12 +229,9 @@ async function getBlocked() {
 }
 
 useEffect(() => {
-  async function handleBlocked() {
-   await getBlocked();
-  }
+ getBlocked();
 
-  handleBlocked();
-}, []);
+}, [posts]);
 
 useEffect(() => {
   if (localStorage.getItem('token')) {
@@ -257,10 +255,8 @@ useEffect(() => {
         <Listing onChangeSort={changeSortType} isHome={true} isCommunity={false} isProfile={false}/>
         <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
         </div>
-        {localStorage.getItem('token') ? (
-              posts
-                .filter(post => !blockedUsers.includes(post.authorName))
-                .map((post) => (
+        {randomPost.isSelected == false ? (
+              posts.map((post) => (
                   <>
                     {post.post.type === 'poll' ? (
                     <Post
@@ -307,54 +303,50 @@ useEffect(() => {
                   </>
                 ))
             ):(
-              posts
-                .filter(post => !blockedUsers.includes(post.authorName))
-                .map((post) => (
                   <>
-                    {post.post.type === 'poll' ? (
+                    {randomPost.post.type === 'poll' ? (
                     <Post
-                    pollTitle={post.post.title}
-                    body={post.post.body}
-                    pollText={post.post.content}
-                    user={post.post.authorName}
-                    _id={post.post._id}
-                    type={post.post.type}
-                    optionNames={post.post.options.map((option) => option.name)}
-                    votes={post.post.options.map((option) => option.votes)}
-                    upvotes={post.post.upvotes}
-                    downvotes={post.post.downvotes}
-                    comments={post.post.comments}
-                    isLocked={post.post.isLocked}
-                    voteLength={post.post.voteLength}
-                    linkedSubreddit={post.post.linkedSubreddit.name}
-                    didVote={didVote[post.post._id]}
-                    optionSelected={post.details?.pollVote}
-                    pollEnded={post.details?.pollEnded}
-                    createdAt={post.post.createdAt}
+                    pollTitle={randomPost.post.title}
+                    body={randomPost.post.body}
+                    pollText={randomPost.post.content}
+                    user={randomPost.post.authorName}
+                    _id={randomPost.post._id}
+                    type={randomPost.post.type}
+                    optionNames={randomPost.post.options.map((option) => option.name)}
+                    votes={randomPost.post.options.map((option) => option.votes)}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    isLocked={randomPost.post.isLocked}
+                    voteLength={randomPost.post.voteLength}
+                    linkedSubreddit={randomPost.post.linkedSubreddit.name}
+                    didVote={didVote[randomPost.post._id]}
+                    optionSelected={randomPost.details?.pollVote}
+                    pollEnded={randomPost.details?.pollEnded}
+                    createdAt={randomPost.post.createdAt}
                    />) : (
                     <Post
-                    _id={post.post._id}
-                    title={post.post.title}
-                    body={post.post.body}
-                    user={post.post.authorName}
-                    upvotes={post.post.upvotes}
-                    downvotes={post.post.downvotes}
-                    comments={post.post.comments}
-                    content={post.post.content}
-                    media={post.post.media}
+                    _id={randomPost.post._id}
+                    title={randomPost.post.title}
+                    body={randomPost.post.body}
+                    user={randomPost.post.authorName}
+                    upvotes={randomPost.post.upvotes}
+                    downvotes={randomPost.post.downvotes}
+                    comments={randomPost.post.comments}
+                    content={randomPost.post.content}
+                    media={randomPost.post.media}
                     //isMod={isMod}
-                    linkedSubreddit={post.post.linkedSubreddit?.name}
-                    voteStatus={post.details?.voteStatus}
-                    isLocked={post.post.isLocked}
+                    linkedSubreddit={randomPost.post.linkedSubreddit?.name}
+                    voteStatus={randomPost.details?.voteStatus}
+                    isLocked={randomPost.post.isLocked}
                     savedPosts={savedPosts}
                     hiddenPosts={hiddenPosts}
-                    isUserMember={post.details?.isUserMemberOfItemSubreddit}
+                    isUserMember={randomPost.details?.isUserMemberOfItemSubreddit}
                   />
                   )}
                     <hr className='col-md-12 mb-3' style={{backgroundColor: "#0000003F"}}></hr>
                   </>
-                ))
-            )}
+                )}
       </div>
       <div className='d-flex justify-content-end ms-auto mb-4 fixed-container' style={{marginRight: "3rem", paddingTop: "1.2rem", height: "100vh", overflowY: "auto", width: "20%"}}>
           <RecentPosts />
