@@ -25,9 +25,6 @@ function EditRecurring(props){
         const localDateTime = new Date(event.target.value);
         const utcDateTime = localDateTime.toISOString().slice(0, -8);
         setDateTime(utcDateTime);
-        console.log("UTC: ",utcDateTime)
-        console.log("Old: ",event.target.value)
-        console.log("Local: ",localDateTime)
         
         
     };
