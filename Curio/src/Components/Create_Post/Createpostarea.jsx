@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import "./CreatePostArea.css";
+import "./Createpostarea.css";
 import PostMethods from "./PostMethods";
 import EditCreateArea from "./EditCreatearea";
 import ImageVideo from "./Image_&_Video_Section/ImageVideo";

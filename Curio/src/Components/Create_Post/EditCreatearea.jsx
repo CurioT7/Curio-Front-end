@@ -6,7 +6,7 @@ import "./EditCreatearea.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Schedule from "./Schedule";
-
+import { CreateScheduledPosts } from "../ModerationComponents/ScheduledPosts/ScheduleEndPoints";
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
 // Function component for editing and creating posts
@@ -18,6 +18,7 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
   const [timeZone,setTimeZone] = useState("")
   const [repeat,setRepeat] = useState("")
   const [dateTime, setDateTime] = useState('');
+  
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -61,7 +62,7 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
     }
     return string;
   }
-
+  
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
@@ -99,7 +100,11 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
           postData[key] = value;
       }
       }
-      const response = await axios.post(
+
+      let response ;
+      
+      if(dateTime.length===0){
+      const normalresponse = await axios.post(
         `${serverHost}/api/submit`,
         postData,
         {
@@ -109,6 +114,31 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
           },
         }
       );
+      response = normalresponse
+      }else{
+        const responseSchedule=await axios.post(`${serverHost}/api/scheduledPost`,{
+          title: title,
+          content: content,
+          subreddit: subreddit,
+          isOC: ocClicked,
+          isSpoiler: spoilerClicked,
+          isNSFW: nsfwClicked,
+          voteLength: days,
+          Options: optionsString,
+          type: selectedMethod,
+          repeatOption:repeat,
+          contestMode:false,
+          postAsAutoModerator:false,
+          isScheduled:true,
+          scheduledPublishDate:dateTime,
+      }, {
+          headers: {
+              authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      });
+      response = responseSchedule
+      }
+      
       switch (response.status) {
         case 201:
           Toast('Post created successfully', 'success');
@@ -143,6 +173,7 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
         console.error("Error:", error.message);
       }
     }
+    
   }; 
 
   return (
@@ -206,7 +237,7 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
             <div className="d-flex justify-content-end gap-0 me-1">
               
               <Button className="rounded-start " variant='outline' borderRadius={0} colorScheme='blue' onClick={handleSubmit}>Post</Button>
-              <Schedule setDateTime={setDateTime} setRepeat={setRepeat} setTimeZone={setTimeZone} />
+              <Schedule subreddit={community} setDateTime={setDateTime} setRepeat={setRepeat} setTimeZone={setTimeZone} />
             </div>
             {dateTime &&<p className="me-1"> Post scheduled for {dateTime}</p>}
           </div>
