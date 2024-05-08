@@ -9,8 +9,6 @@ export async function fetchMessages(type) {
         authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    console.log('response.data.messages')
-    console.log(response.data.messages)
     if (response.status === 200) {
       return (response.data.messages);
     }
@@ -158,7 +156,6 @@ export async function BlockUserMessages(blockeduser) {
         authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    console.log(response)
   } catch (error) {
     if (error.response) {
       if (error.response.status === 404) {

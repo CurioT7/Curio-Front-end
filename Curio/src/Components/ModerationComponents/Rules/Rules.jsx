@@ -11,7 +11,6 @@ function Rules( props ) {
 
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => {
-    console.log('Opening modal...');
     setIsOpen(true);
   };
 

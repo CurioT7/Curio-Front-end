@@ -38,7 +38,6 @@ function PostDetails(props) {
               });
               if (response.status === 200 || response.status === 201){
                   setPostInfo(response.data.item);
-                  console.log(response.data.item)
               }
           }
           catch(err){
@@ -56,9 +55,6 @@ function PostDetails(props) {
     }, []);
   const post = location.state?.post;
   React.useEffect(() => {
-    console.log('the locations post is =', post);
-    console.log('the postinfo is = ', postInfo);
-    console.log('the location is', location);
 }, []);
   return (
     <div className='posts-content-container col-md-6 col-7'>

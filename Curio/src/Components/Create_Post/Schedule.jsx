@@ -24,12 +24,7 @@ function Schedule(props){
     const handleDateTimeChange = (event) => {
         const localDateTime = new Date(event.target.value);
         const utcDateTime = localDateTime.toISOString().slice(0, -8);
-        setDateTime(utcDateTime);
-        // console.log("UTC: ",utcDateTime)
-        // console.log("Old: ",event.target.value)
-        // console.log("Local: ",localDateTime)
-        
-        
+        setDateTime(utcDateTime);        
     };
     const submitSchedule = () => {
         props.setDateTime(dateTime);

@@ -177,7 +177,6 @@ const postCategory = async (postID) => {
             authorization: `Bearer ${token}`
         },
     });
-    console.log(response);
 
     if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -218,7 +217,6 @@ const postCategory = async (postID) => {
             }
         }
     catch(err){
-      console.log(err);
       if (err.response.status === 409){
         toast({
           description: "Item already unhidden.",
@@ -328,7 +326,6 @@ const postCategory = async (postID) => {
                 pollEnded: props.pollEnded,
                 dateViewed: new Date().toISOString()
             }
-            console.log(err);
             navigate(`/post/post-details/${props._id}`, { state: { post } });
         }
     }

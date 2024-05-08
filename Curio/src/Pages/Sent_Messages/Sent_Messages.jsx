@@ -35,7 +35,6 @@ function Sent_Messages(props) {
             });
             const aboutresponse = await axios.get(`${serverHost}/api/user/${username}/about`);
             setSentMessages(response.data.messages);
-            console.log(response)
             setDetails(aboutresponse.data);
             if (response.data.messages.length === 0) {
                 setError(true);
