@@ -19,6 +19,7 @@ export async function fetchCommentsFromBackend(postId) {
 }
 
 export async function GetSortedComments(postID,sortType,subreddit) {
+    
     try {
         const request = await axios.get(`${serverHost}/api/r/${subreddit}/${postID}/${sortType}`);
         return request.data;

@@ -84,6 +84,8 @@ function UserName_Mentions(props) {
                                         downvotedcomments={downvotedcomments}
                                         upvotedcomments={upvotedcomments}
                                         onBlockConfirmed={() => removeMessage(message._id)}
+                                        postId={message.postId ? message.postId._id : null}
+                                        id={message._id}
                                     />
                                 </div>
                             </div>

@@ -19,7 +19,6 @@ function SignupInfo(props) {
   const navigate = useNavigate();
   const toast = useToast();
   const handleGoogleSignupResponse = async (response) => {
-    console.log(response);
     const hostUrl = import.meta.env.VITE_SERVER_HOST;
     const serverResponse = await axios.post(`${hostUrl}/api/auth/google`,{
       token: response.access_token

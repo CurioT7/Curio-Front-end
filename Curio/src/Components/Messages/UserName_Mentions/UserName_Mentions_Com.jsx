@@ -6,7 +6,7 @@ import Downvotes from '../../../styles/icons/Downvotes.jsx';
 import FilledDownvote from '../../../styles/icons/FilledDownvote.jsx';
 import FilledUpvote from '../../../styles/icons/FilledUpvote.jsx';
 import { getTimeDifference } from '../../getTimeDifference/getTimeDifference';
-import { handleUPVoteComments, handleDownVoteComments, BlockUserMessages } from '../../../Pages/InboxMessages/InboxMessagesEndpoints.js';
+import { handleUPVoteComments, handleDownVoteComments, BlockUserMessages, handleUnread } from '../../../Pages/InboxMessages/InboxMessagesEndpoints.js';
 import { Link, useNavigate } from 'react-router-dom';
 import ReportPopup from "../../ModalPages/ModalPages.jsx";
 
@@ -91,9 +91,9 @@ function UserName_Mentions_Com(props) {
                     }}>
                         <a href="">{props.message}</a>
                     </div>
-                    <Box as="ul" listStyleType="none" display="flex" gap='0.5rem' justifyContent='flex-start' paddingLeft='0'>
-                        <Box className="list-item-username-mentions" as="li" paddingLeft='0'>Context</Box>
-                        <Box className="list-item-username-mentions" as="li">Full Comments({props.noComments})</Box>
+                    <Box as="ul" listStyleType="none" display="flex" gap='0.5rem' justifyContent='flex-start' paddingLeft='0' flexWrap='wrap' width='100%'>
+                        <Link to={`/post/post-details/${props.postId}`} className="list-item-username-mentions" as="li" paddingLeft='0' onMouseOver={(e) => e.currentTarget.style.color = 'gray'}>Context</Link>
+                        <Link to={`/post/post-details/${props.postId}`} className="list-item-username-mentions" as="li" onMouseOver={(e) => e.currentTarget.style.color = 'gray'}>Full Comments({props.noComments})</Link>
                         <Box className="list-item-username-mentions" as="li" onClick={handleReportClick}>Report</Box>
                         {confirmBlock ? (
                             <>
@@ -105,7 +105,7 @@ function UserName_Mentions_Com(props) {
                         ) : (
                             <Box className="list-item-username-mentions" as="li" onClick={() => setConfirmBlock(true)}>Block User</Box>
                         )}
-                        <Box className="list-item-username-mentions" as="li">Mark Unread</Box>
+                        <Box onClick={() => handleUnread(props.id)} className="list-item-username-mentions" as="li">Mark Unread</Box>
                     </Box>
                     <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
                 </div>
