@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-
 // Function component for editing and creating posts
 function EditCreateArea({ title, content, community, days, options, imageFormData, selectedMethod }) {
   const username = localStorage.getItem('username');
