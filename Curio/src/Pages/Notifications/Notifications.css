@@ -4,6 +4,7 @@
     flex-direction: column;
     justify-content: flex;
     margin-left: 18rem;
+    width: 60%;
 }
 .notifications-page-title{
     color: #0f1a1c;

@@ -6,8 +6,8 @@
 .notifications-header-page{
     padding-left: 1rem;
     padding-right: 1rem;
-    display: grid;
-    grid-template-columns: 0.7fr 2rem;
+    display: flex;
+    justify-content: space-between;
 }
 .notifications-date{
     justify-content: space-between;
@@ -37,8 +37,8 @@
     gap: 1rem;
 }
 .notification-item{
-    display: grid;
-    grid-template-columns: 2rem 0.682fr 2rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 .notification-item.unread {
