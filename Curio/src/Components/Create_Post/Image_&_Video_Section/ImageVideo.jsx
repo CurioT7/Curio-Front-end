@@ -38,7 +38,6 @@ function ImageVideo(props) {
   const handleUpload = async () => {
     try {
       const formData = new FormData();
-      console.log("file", file)
       formData.append('media', file.file);
 
       // Pass image data to the parent component

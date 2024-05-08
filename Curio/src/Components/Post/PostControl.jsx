@@ -54,7 +54,6 @@ function PostControl(props) {
       setIsSaved(false);
     }
     if (props.hiddenPosts && props.hiddenPosts.some(post => post._id === props._id)) {
-      console.log('useEffect')
       setIsHidden(true);
     } else {
       setIsHidden(false);
@@ -105,7 +104,6 @@ function PostControl(props) {
     setReportSubmittedModalOpen(true);
   }
   const handleSetReportReason = (reason) => {
-    console.log(reason)
     setReportReason(reason);
   }
   const handleShowExtraReasons = () => {
@@ -143,7 +141,6 @@ function PostControl(props) {
       }
     }
     catch(err){
-      console.log(err);
       if (err.response.status === 409){
         toast({
           description: "Item already hidden.",
@@ -186,7 +183,6 @@ function PostControl(props) {
       }
     }
     catch(err){
-      console.log(err);
       if (err.response.status === 409){
         toast({
           description: "Item already unhidden.",
@@ -272,7 +268,6 @@ function PostControl(props) {
       }
     }
     catch(err){
-      console.log(err);
       if (err.response.status === 400){
         toast({
           description: "post already unsaved.",
@@ -322,7 +317,6 @@ function PostControl(props) {
       }
     }
     catch(err){
-      console.log(err);
       toast({
         description: "Server Error Occured.",
         status: 'error',
