@@ -48,9 +48,9 @@ function Right_Side_Chat(props) {
     if (!user) return;
     const newsocket = io("http://localhost:3000");
     setSocket(newsocket);
-    // return () => {
-    //   newsocket.disconnect();
-    // };
+    return () => {
+      newsocket.disconnect();
+    };
   }, [user]);
 
   useEffect(() => {

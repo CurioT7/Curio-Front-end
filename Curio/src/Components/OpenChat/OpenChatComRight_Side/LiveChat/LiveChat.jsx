@@ -25,9 +25,12 @@ import {
 function LiveChat(props) {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [message, setMessage] = useState("");
+  const [newMessage, setNewMessage] = useState("");
+
   const [chatData, setChatData] = useState(null);
   const user = localStorage.getItem("username");
   const [prevMessageDate, setPrevMessageDate] = useState(null);
+  const [participants, setParticipants] = useState([]);
   const username = localStorage.getItem("username");
 
   const pickerRef = useRef(null);
@@ -45,33 +48,42 @@ function LiveChat(props) {
     fetchChatData();
   }, [props.chatId]);
 
+  useEffect(() => {
+    try {
+      //send message
+      if (!props.socket || newMessage == "") return;
+      console.log(newMessage);
+      props.socket.emit("newMessage", newMessage, participants);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  }, [newMessage]);
+
   //recieve message
   useEffect(() => {
-    if (!props.socket) return;
-    console.log("YAAAAAARAAb", props.socket);
-    props.socket.on("getMessage", (message, participants) => {
-      if (participants.includes(username)) {
-        setChatData((prev) => {
-          const newChatData = { ...prev };
-          const chatIndex = newChatData.chat.findIndex((chat) =>
-            chat.participants
-              .map((participant) => participant.username)
-              .includes(username)
-          );
-          newChatData.chat[chatIndex].messages.push({
-            message: message,
-            sender: username,
-            timestamp: new Date().toISOString(),
-          });
-          return newChatData;
-        });
+    if (!props.socket) {
+      console.log("socket not connected");
+      return;
+    }
+    // Attach the event listener for incoming messages
+    props.socket.on("getMessage", (message, username) => {
+      if (message == null) return;
+      if (username !== user) return;
+      //update chat data
+      async function fetchChatData() {
+        try {
+          const response = await getChatwholeChat(props.chatId);
+          setChatData(response.data);
+        } catch (error) {
+          console.error("Error fetching chat data:", error);
+        }
       }
+      fetchChatData();
     });
-
     return () => {
       props.socket.off("getMessage");
     };
-  }, [props.socket, username]);
+  }, [props.socket, chatData]);
 
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
@@ -87,19 +99,20 @@ function LiveChat(props) {
             )
             .flat();
 
+          //set participants
+          //   const [participants, setParticipants] = useState([]);
+          setParticipants(participants);
+          console.log("RECIEVER", participants);
+
           await sendMessageRequest(props.chatId, message, null);
-          console.log(props.socket);
-          if (props.socket) {
-            //TODO Change
 
-            console.log("RECIEVER", participants);
-
-            props.socket.emit("newMessage", message, participants);
-            console.log("message sent");
-          }
+          const response = await getChatwholeChat(props.chatId);
+          setChatData(response.data);
         } else {
           await createChatRequest(props.recipient, message);
         }
+        console.log("message sent", message, participants);
+        setNewMessage(message);
         setMessage("");
       } catch (error) {
         console.error("Error sending message:", error);
