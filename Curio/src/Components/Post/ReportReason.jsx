@@ -56,7 +56,7 @@ function ReportReason(props) {
             duration: 5000,
             isClosable: true,
           })
-          console.log(err);
+          console.error(err);
         }
     }
     if (e.target.textContent === "Next") {

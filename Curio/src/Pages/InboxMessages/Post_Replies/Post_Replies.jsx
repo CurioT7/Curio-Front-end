@@ -34,7 +34,6 @@ function Post_Replies(props) {
                 console.error('Error fetching messages:', error.message);
                 setError(true);
             }
-            console.log(recievedMessages)
         };
 
         fetchData();

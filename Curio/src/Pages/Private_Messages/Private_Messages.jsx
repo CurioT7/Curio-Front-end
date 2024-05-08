@@ -81,7 +81,6 @@ function Private_Messages(props) {
         recipient: finalRecipient,
         sendToSubreddit: isSubreddit
       };
-      console.log(messageData)
       const response = await axios.post(
         `${serverHost}/api/message/compose`,
         messageData,

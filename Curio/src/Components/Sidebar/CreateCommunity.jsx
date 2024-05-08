@@ -66,7 +66,7 @@ function CreateCommunity(props) {
         props.onHide();
       }
       if (response.response.status === 400){
-        console.log('error bad request')
+        console.error('error bad request')
         toast({
           description: "That subreddit already exists",
           status: "error",

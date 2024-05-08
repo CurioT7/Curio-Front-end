@@ -64,7 +64,6 @@ export async function getChatwholeChat(chatId) {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    console.log(response);
     return response;
   } catch (error) {
     console.error("Error", error.message);

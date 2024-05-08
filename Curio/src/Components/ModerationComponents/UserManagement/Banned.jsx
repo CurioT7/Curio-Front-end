@@ -70,12 +70,10 @@ useEffect(() => {
   const fetchBannedUserDetails = async () => {
       const users = await getBannedUserDetails();
       setBannedUsers(users);
-      console.log(users);
   };
 
   fetchBannedUserDetails();
 
-//   console.log(bannedUsers);
 }, [bannedUsers]);
 
 useEffect(() => {
