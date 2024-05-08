@@ -28,17 +28,6 @@ export async function sendUserDataToBackend(data) {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        switch (response.status) {
-            case 200:
-              
-              break;
-            case 404:
-              console.error("User preferences not found");
-              break;
-            default:
-              console.error("Unexpected response status:", response.status);
-              break;
-          }
         return response;
     } catch (error) {
         if (error.response) {

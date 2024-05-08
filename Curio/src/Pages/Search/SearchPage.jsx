@@ -47,7 +47,6 @@ function SearchPage(){
             setCommunityResults(response.data.subreddits);
         }
         catch(error){
-            console.log(error);
             setCommunityResults([]);
         }
 
@@ -60,7 +59,6 @@ function SearchPage(){
             setPostResults(response.data.posts);
         }
         catch(error){
-            console.log(error);
             setPostResults([]);
         }
     }
