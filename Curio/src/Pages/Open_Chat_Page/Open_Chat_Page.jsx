@@ -14,11 +14,9 @@ function Right_Side_Chat(props) {
   const [chatsData, setChatsData] = useState(null);
   const [chatId, setChatId] = useState();
   const user = localStorage.getItem("username");
-  console.log("user", user);
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-  console.log("onlineUsers", onlineUsers);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

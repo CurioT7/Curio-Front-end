@@ -15,7 +15,6 @@ function Banned({ communityName }) {
 
 
   const openModal = () => {
-    console.log('Opening modal...');
     setIsOpen(true);
   };
 

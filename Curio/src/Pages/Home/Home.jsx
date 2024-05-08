@@ -159,7 +159,6 @@ useEffect(() => {
     }
   }else{
     const data =await SortHomePosts(sortType, pageNumber);
-    console.log(data);
     if(data){
       setPosts(data.posts);
       setTotalPages(Math.ceil(data.totalPosts / 10));
