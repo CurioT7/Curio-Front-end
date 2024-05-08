@@ -1,0 +1,43 @@
+.sent_message_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #edeff1;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sent_message_table {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 15px;
+    height: 130px;
+}
+
+.error-message {
+    min-width: unset;
+    width: 70%;
+    background: white;
+    margin: 20px auto;
+}
+
+@media screen and (max-width: 500px) {
+
+    .sent_message_table {
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 315px) {
+
+    .sent_message_table {
+        height: 170px;
+    }
+}
+
+@media screen and (max-width: 215px) {
+
+    .sent_message_table {
+        height: 190px;
+    }
+}

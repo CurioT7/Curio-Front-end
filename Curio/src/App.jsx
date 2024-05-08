@@ -11,7 +11,6 @@ import FeedingSettings from "./Pages/feedSettings/FeedingSettings.jsx";
 import EmailSettings from "./Pages/emailSettings/EmailSettings.jsx";
 import ChatAndMessagingSettings from "./Pages/ChatAndMassegingSettings/ChatAndMassegingSettings.jsx";
 import SidebarComponent from "./Components/Sidebar/SidebarComponent.jsx";
-import ShowFriendInformation from "./Components/FriendInformation/ShowFriendInformation.jsx";
 import NavbarComponent from "./Components/Navbar/Navbar.jsx";
 import ForgotUser from "./Components/ForgotUser/ForgotUser.jsx";
 import LoginPage from "./Components/Login/Loginpage.jsx";
@@ -29,8 +28,22 @@ import ChangePassword from './Components/ForgotPass/ChangePassword.jsx';
 import FollowersPage from "./Components/FollowersPage/FollowersPage.jsx";
 import ShowPoll from "./Components/Poll/ShowPoll.jsx";
 import Notifications from "./Pages/Notifications/Notifications.jsx";
-import NewChat from "./Pages/Right_Side_Chat/Right_Side_Chat.jsx";
+import NewChat from "./Pages/Open_Chat_Page/Open_Chat_Page.jsx";
 import SearchPage from "./Pages/Search/SearchPage.jsx";
+import Private_Messages from "./Pages/Private_Messages/Private_Messages.jsx";
+import MessagesInbox from "./Pages/InboxMessages/MessagesInbox.jsx";
+import Sent_Messages from "./Pages/Sent_Messages/Sent_Messages.jsx";
+import Moderation from "./Pages/Moderation/Moderation.jsx";
+import UserName_Mentions from "./Pages/InboxMessages/UserName_Mentions/UserName_Mentions.jsx";
+import Post_Replies from "./Pages/InboxMessages/Post_Replies/Post_Replies.jsx";
+import AllInbox from "./Pages/InboxMessages/AllInbox.jsx";
+import UnreadInbox from "./Pages/InboxMessages/UnreadInbox.jsx";
+import ScheduledPosts from "./Components/ModerationComponents/ScheduledPosts/ScheduledPosts.jsx";
+import UserManage from "./Components/ModerationComponents/UserManagement/UserManage.jsx";
+import ContentControl from "./Components/ModerationComponents/ContentControl/ContentControl.jsx";
+import ModSettings from "./Components/ModerationComponents/ModSettings/ModSettings.jsx";
+import Rules from "./Components/ModerationComponents/Rules/Rules.jsx";
+import UnreadMessages from "./Pages/InboxMessages/UnreadMessages.jsx";
 
 function App() {
   const location = useLocation();
@@ -54,11 +67,13 @@ function App() {
     setIsNavbarVisible(true);
   };
 
-  React.useEffect(() => {
+    React.useEffect(() => {
     if (location.pathname !== '/user/CreatePost') {
       setSubreddit(null);
     }
   }, [location.pathname]);
+
+
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
  
@@ -103,9 +118,26 @@ function App() {
           <Route path="/notifications" element={<Notifications/>}/>
           <Route path='/polls' element={<ShowPoll/>} />
           <Route path='/user/:username/followers' element={<FollowersPage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
-          <Route path='/room/create' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
-          <Route path='/threads' element={<NewChat hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/room/create' element={<NewChat newPage='New Chat'hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/threads' element={<NewChat newPage='Threads' hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
+          <Route path='/chat/:username' element={<NewChat newPage='Chat' hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} hideNavbar={handleHideNavbar} showNavbar={handleShowNavbar} />}/>
           <Route path='/search/:searchTerm' element={<SearchPage />}></Route>
+          <Route path='/message/compose' element={<Private_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/inbox' element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar} />}/>
+          <Route path='/message/sent' element={<Sent_Messages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/scheduledposts' element={<ScheduledPosts hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/usermanagement' element={<UserManage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/rules/contentcontrols' element={<ContentControl hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/settings' element={<ModSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/rules' element={<Rules hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/mentions' element={<UserName_Mentions hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/message/selfreply' element={<Post_Replies hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/message/messages" element={<MessagesInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/messages/all" element={<AllInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/messages/unread" element={<UnreadInbox hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path="/message/unread" element={<UnreadMessages hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
         </Routes>
       </ChakraProvider>
     </div>

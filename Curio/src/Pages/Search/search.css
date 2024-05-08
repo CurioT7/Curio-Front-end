@@ -18,3 +18,49 @@
     font-size: 0.75rem;
     font-weight: 400;
 }
+.search-sorting{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.search-sorting>p{
+    font-size: 0.85rem;
+    font-weight: 400;
+    padding:10px ;
+    margin-top: 15px;
+    color: rgb(100, 114, 120);
+
+}
+.search-sorting hr{
+  color: rgb(100, 114, 120);
+  border-bottom: #576f76;
+
+}
+
+.search-sorting-content{
+  
+  font-size: 0.95rem;
+
+}
+.search-sorting-content :hover{
+  background-color: #F2F4F5!important;
+  cursor: pointer;
+}
+
+.search-sorting-item{
+  padding: 0.75rem;
+  padding-right: 1.5rem;
+  padding-left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 650px){
+  
+  hr{
+    display: none;
+  }
+}

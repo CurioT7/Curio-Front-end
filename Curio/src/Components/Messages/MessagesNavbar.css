@@ -1,0 +1,9 @@
+.private-message{
+    display: inline-block;
+    padding: 0 10px;
+    font-size: larger;
+    background-color: transparent;
+    color: #edeff1;
+    text-transform: capitalize;
+    border: none;
+}

@@ -1,25 +1,28 @@
-:root{
+:root {
     --thirdclr: #edeff1;
 }
-.container-custom-title{
+
+.container-custom-title {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 10px;
     margin: 6px 2px;
 }
+
 .custom-url-li,
-.custom-url-button{
-    display: flex;
+.custom-url-button {
+    display: inline-flex;
     align-items: center;
     background-color: var(--thirdclr);
     border-radius: 30px;
     cursor: pointer;
     height: 20px;
-    padding: 15px 5px 15px 5px;
+    padding: 15px 10px 15px 10px;
 }
+
 .display_text,
-.url_website{
+.url_website {
     font-family: Noto Sans, Arial, sans-serif;
     font-size: 14px;
     font-weight: 400;
@@ -33,6 +36,7 @@
     border: 1px solid var(--thirdclr);
     border-radius: 4px;
 }
-.display_text{
+
+.display_text {
     margin-bottom: 10px;
 }

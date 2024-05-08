@@ -1,0 +1,47 @@
+.sent_message_table_content {
+    display: flex;
+    flex-direction: column;
+}
+
+.subject_sent_messages {
+    font-weight: bold;
+    font-size: larger;
+    margin-bottom: 1em;
+}
+
+.sent_message_time {
+    margin-left: 0.5em;
+}
+
+.sent_message_details {
+    color: #878a8c;
+    font-size: smaller;
+}
+
+.message_name_detail {
+    line-height: 1.5em;
+    font-size: 1em;
+}
+
+.popover_details{
+    margin-bottom: 15px;
+}
+
+.popover_details_header{
+    margin: 0;
+    color: #373C3F;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: normal;
+}
+
+#popover-sent-messages{
+    background-color: #f6f7f8;
+    color: black; 
+    position: absolute;
+    padding: 15px 15px 10px 15px;
+}
+
+.username-popover-sent:hover {
+    text-decoration: underline;
+}

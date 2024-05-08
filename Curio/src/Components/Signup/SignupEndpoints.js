@@ -23,7 +23,6 @@ async function signup({username, email, password, gender}) {
 async function checkUsernameAvailability(username) {
     try {
         const response = await axios.get(`${hostUrl}/api/auth/username_available/${username}`);
-        console.log(response);
         return response;
     } catch (error) {
         console.error('Error:', error);

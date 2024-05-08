@@ -15,7 +15,6 @@ function ChangePassword(props) {
 
         try {
             const response = await changePassword(password, newPassword);
-            console.log('Success:', response);
         } catch (error) {
             console.error('Error:', error);
         }

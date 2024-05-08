@@ -54,7 +54,7 @@ function SidebarComponent(props) {
         setJoinedCommunities(response.data.communities);
       }
       catch(error){
-        console.log(error);
+        console.error(error);
         return error;
       }
   }

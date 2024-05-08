@@ -24,7 +24,6 @@ function Test(props) {
         });
         setId(response.data); // Access the 'id' attribute
         if(response.data){
-          console.log(response.data)
         }
       } catch (error) {
         console.error('Error:', error);

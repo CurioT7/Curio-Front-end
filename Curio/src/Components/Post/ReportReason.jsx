@@ -56,11 +56,10 @@ function ReportReason(props) {
             duration: 5000,
             isClosable: true,
           })
-          console.log(err);
+          console.error(err);
         }
     }
     if (e.target.textContent === "Next") {
-      console.log("Next button clicked");
       props.setReportReason(reportReason);
       props.showExtraReasons();
       props.onHide();

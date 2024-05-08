@@ -1,0 +1,103 @@
+.Live-chat-form{
+    flex: 1 0 0px;
+}
+
+.Live-chat-profile-data{
+    flex: 1 1 0%;
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    padding: 16px 12px;
+}
+
+.Live-chat-profile-picture{
+    align-items: center;
+}
+
+.picture-live-chat{
+    border-radius: 100%;
+    width: 3rem;
+    height: 3rem;
+}
+
+.Live-chat-profile-username{
+    font-weight: 600;
+    line-height: 1.25rem;
+    font-size: 0.875rem;
+}
+
+.Live-chat-profile-username-details{
+    color: #576f76;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    padding-top: 0.25rem;
+}
+
+.message-date-live-chat{
+    color: #ACACAC;
+    display: flex;
+    flex-direction: row;
+    font-weight: 600;
+    font-size: 0.75rem;
+    justify-content: center;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    width: 100%;
+
+}
+
+.chat-live-input{
+    width: 100%;
+}
+.form-input-live-chat{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: .25rem;
+    padding: .5rem;
+    width: 100%;
+}
+
+.live-chat-input-area{
+    width: 100%;
+}
+
+.emoji-picker-container {
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+}
+
+.date-line-beside{
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    content: "";
+    flex: 1 1;
+    margin: auto;
+    height: 1px;
+    width: 100%;
+}
+
+.message-content-live-chat-container{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: .75rem;
+    padding: 0.25rem .75rem;
+    position: relative;
+    width: 100%;
+}
+
+.sender-name-live-chat{
+    font-weight: 700;
+}
+
+.sender-time-live-chat{
+    color: #434343;
+    font-size: 12px;
+}

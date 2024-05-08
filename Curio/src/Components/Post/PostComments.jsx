@@ -36,6 +36,17 @@ function PostComments(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (props.voteStatus === "upvoted"){
+            setUpvoted(true);
+            setDownvoted(false);
+        }
+        else if (props.voteStatus === "downvoted"){
+            setDownvoted(true);
+            setUpvoted(false);
+        }
+    }, [])
+
+    useEffect(() => {
         function handleClickOutside(event) {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setShowControls(false);
@@ -56,7 +67,6 @@ function PostComments(props) {
         setReportSubmittedModalOpen(true);
     }
     const handleSetReportReason = (reason) => {
-        console.log(reason)
         setReportReason(reason);
     }
     const handleShowExtraReasons = () => {
@@ -157,7 +167,6 @@ function PostComments(props) {
         }
     }
     const handleSave = async () => {
-        console.log(props.key);
         try{
             var hostUrl = import.meta.env.VITE_SERVER_HOST;
             const response = await axios.post(`${hostUrl}/api/save`, {
@@ -180,7 +189,6 @@ function PostComments(props) {
             }
         }
         catch(err){
-            console.log(err);
             if (err.response.status === 400 || err.response.status === 404){
                 toast({
                 description: "comment already saved.",
@@ -224,7 +232,6 @@ function PostComments(props) {
         }
         }
         catch(err){
-            console.log(err);
             if (err.response.status === 400){
                 toast({
                 description: "post already unsaved.",
@@ -265,7 +272,6 @@ function PostComments(props) {
         }
         }
         catch(err){
-        console.log(err);
         toast({
             description: "Server Error Occured.",
             status: 'error',

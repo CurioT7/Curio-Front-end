@@ -1,0 +1,40 @@
+.community_rules_container{
+    margin-top: 16px;
+    width: 312px;
+    background: white;
+}
+
+.community_rules_inner_container{
+    border-color: #ccc;
+}
+
+.community_rules_inner_container_header{
+    font-size: 10px;
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    letter-spacing: .5px;
+    line-height: 12px;
+    background: #fc471e;
+    text-transform: uppercase;
+}
+
+.community_rules_list{
+    padding: 12px;
+}
+
+.community_rule_item{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    padding: 8px 0;
+    gap: 2px;
+}
+
+.community_rule_body{
+    flex: 1 1 100%;
+    width: 100%;
+}

@@ -23,7 +23,6 @@ function ReportSubmitted(props) {
           }
         });
         if (response.status === 200) {
-          console.log('Blocked');
         }
         if (response.status === 403) {
           toast({
@@ -35,7 +34,7 @@ function ReportSubmitted(props) {
         }
       }
       catch (err) {
-        console.log(err);
+        console.error(err);
         if (err.response.status === 403) {
           toast({
             description: "You can't block the user for 24 hours after unblocking them",
@@ -62,7 +61,7 @@ function ReportSubmitted(props) {
           }
         });
         if (response.status === 200) {
-          console.log('Unblocked');
+          console.error('Unblocked');
         }
       }
       catch (err) {
@@ -82,7 +81,6 @@ function ReportSubmitted(props) {
               isClosable: true,
             })
         }
-        console.log(err);
       }
     }
   };

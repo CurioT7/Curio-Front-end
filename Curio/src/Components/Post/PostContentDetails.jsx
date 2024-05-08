@@ -24,6 +24,7 @@ import { set } from 'mongoose';
 import UserPopover from '../UserPopover/UserPopover.jsx';
 import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import { FetchSubredditName } from './PostEndPoints';
+import Polls from '../../Components/Poll/ShowPoll.jsx';
 
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -39,6 +40,7 @@ function PostContentDetails(post) {
     const [isLocked, setIsLocked] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [friendInfo, setFriendInfo] = useState({});
+    const [didVote, setDidVote] = useState(false);
     const [votes, setVotes] = useState(post.upvotes - post.downvotes);
     const toast = useToast();
     const postId = post._id;
@@ -123,7 +125,7 @@ function PostContentDetails(post) {
             }
         }
         catch(err){
-            console.log(err);
+            console.error(err);
             if (err.response.status === 409){
                 toast({
                     description: "Item already unhidden.",
@@ -158,10 +160,27 @@ function PostContentDetails(post) {
         setIsLocked(post.isLocked);
     },[post])
 
-    const [upvoted, setUpvoted] = useState(post.voteStatus === "upvoted" ? true : false);
-    const [downvoted, setDownvoted] = useState(post.voteStatus === "downvoted" ? true : false);
+    const [upvoted, setUpvoted] = useState((post.voteStatus || (post.details && post.details[0].voteStatus)) === "upvoted" ? true : false);
+    const [downvoted, setDownvoted] = useState((post.voteStatus || (post.details && post.details[0].voteStatus)) === "downvoted" ? true : false);
     const [savedComments, setSavedComments] = useState([]);
     const navigate = useNavigate();
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            if (post.voteStatus){
+                return;
+            }
+            else if (post.details && post.details[0].voteStatus){
+                if (post.details[0].voteStatus === "upvoted"){
+                    setUpvoted(true);
+                    setDownvoted(false);
+                }
+                else if (post.details[0].voteStatus === "downvoted"){
+                    setDownvoted(true);    
+                    setUpvoted(false);         
+                }
+            }
+        }
+    }, [post]);
     const makePostUpvoted = async () => {
         if (localStorage.getItem('token') === null) {
             navigate('/login');
@@ -200,7 +219,6 @@ function PostContentDetails(post) {
         }
     }
     const makePostDownvoted = async () => {
-        console.log("hello")
         if (localStorage.getItem('token') === null) {
             navigate('/login');
         }
@@ -257,14 +275,28 @@ function PostContentDetails(post) {
     }
     useEffect(() => {
         async function fetchAndSetData() {
-            const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
-            if (response.status === 200 || response.status === 201) {
-                setComments(response.data.comments);
+            if (localStorage.getItem('token') === null) {
+                const response = await axios.get(`${hostUrl}/api/comments/${post._id}`);
+                if (response.status === 200 || response.status === 201) {
+                    setComments(response.data.comments);
+                }
+                else {
+                    Toast();
+                }
             }
-            else {
-                Toast();
-            }
-            
+            else{
+                const response = await axios.get(`${hostUrl}/api/comments/${post._id}`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200 || response.status === 201) {
+                    setComments(response.data);
+                }
+                else {
+                    Toast();
+                }
+            }       
         }
         window.addEventListener('deleteComment', fetchAndSetData);
     
@@ -277,7 +309,7 @@ function PostContentDetails(post) {
     const handleChangedSort = async (value) => {
         setTimeout( async () => {
             
-            const data = await GetSortedComments(post._id, value,post.subreddit);
+            const data = await GetSortedComments(post._id, value,post.details[0].subredditName);
             if (data) {
                 setComments(data.comments);
             }
@@ -331,6 +363,13 @@ function PostContentDetails(post) {
         navigate(`/r/${post.subreddit}`);
     }
 
+    useEffect(() => {
+        if (post && post.details) {
+            setDidVote(post.details[0].pollVote !== null);
+        }
+    }, [post]);
+      
+
     return (
         <>
             {!isHidden &&
@@ -340,7 +379,7 @@ function PostContentDetails(post) {
                             <button onClick={handleBack} style={{backgroundColor: "#EAEDEF", width: "2.1rem", height: "2.1rem"}} className='back-button-post-content signup-back-button me-2 d-flex justify-content-center align-items-center'><BackButton/></button>
                             <Avatar size='sm' className='me-2' name='Segun Adebayo' src='https://a.thumbs.redditmedia.com/4SKK4rzvSSDPLWbx4kt0BvE7B-j1UQBLZJsNCGgMz54.png' />
                             <div className='d-flex flex-column'>
-                                <a onClick={handleNavigationToSubreddit} className='community-post-name'>r/{post.subreddit || "germany"}</a>
+                                <a onClick={handleNavigationToSubreddit} className='community-post-name'>r/{post.subreddit || (post.details && post.details[0].subredditName)}</a>
                                 <UserPopover user={post.user || post.authorName} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
                                 handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="userPosting" />
                             </div>
@@ -352,6 +391,10 @@ function PostContentDetails(post) {
                             <PostControl hidePost={handleHidePost} postDetails={true} hiddenPosts={hiddenPosts} savedPosts={savedPosts} savedComments={savedComments} username={post.user} _id={post._id} />
                         </div>
                     </div>
+                    { post.type === "poll" ? (<Polls optionNames={post.options.map((option) => option.name)} user={post.authorName} 
+                    votes={post.options.map((option) => option.votes)} _id={post._id} pollTitle={post.title} optionSelected={post.details[0].pollVote}
+                    pollText={post.content} voteLength={post.voteLength} pollEnded={post.details[0].pollEnded} didVote={didVote}/>) : (
+                    <>
                     <h3 className='post-content-header mb-3'>{post.title}</h3>
 
                     <div onClick={() => setIsClicked(true)}>
@@ -367,7 +410,10 @@ function PostContentDetails(post) {
 
                             </>
                         )}
-                    </div>
+                        </div>
+                        </>
+                        )}
+                        {post.media !== "" && <img className='mb-3' src={post.media} alt={post.title} />}
                     <Box className=' mb-5 col-12 ' display='flex' flexDirection='row' justifyContent='space-between'>
                             <Box display='flex' flexDirection='row'>
                             <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
@@ -382,7 +428,7 @@ function PostContentDetails(post) {
                                 </button>
                             </div>
                             <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
-                            <span className='share-post-text'>{comments.length}</span>
+                            <span className='share-post-text'>{comments?.length}</span>
                             </Button>
                                 <Menu>
                                         <MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={<LuShare />}>
@@ -417,8 +463,8 @@ function PostContentDetails(post) {
                 }
                 <CommentInputForm type={"createComment"} ID={postId} />
                 <SortingComments onChangeSort={handleChangedSort} />
-            {comments.map((comment, index) => (
-                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
+            {comments && comments.map((comment, index) => (
+                <PostComments key={comment._id} id={comment._id} savedComments={savedComments} voteStatus={comment.details?.voteStatus || "unvoted"} username={comment.authorName} commentUpvotes={comment.upvotes-comment.downvotes} comment={comment.content} />
             ))}
         </>
     )

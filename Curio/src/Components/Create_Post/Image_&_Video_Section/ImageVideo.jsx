@@ -1,21 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './ImageVideo.css';
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
 
-function ImageVideo({ onImageUpload }) {
+function ImageVideo(props) {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (file){
+      handleUpload();
+    }
+  }, [file]);
 
   const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       if (selectedFile.type && selectedFile.type.includes('image')) {
         setFile({ type: 'image', file: selectedFile }); 
-        handleUpload();
       } else if (selectedFile.type && selectedFile.type.includes('video')) {
         setFile({ type: 'video', file: selectedFile });
-        handleUpload();
       } else {
         console.error('Unsupported file type');
       }
@@ -37,10 +41,7 @@ function ImageVideo({ onImageUpload }) {
       formData.append('media', file.file);
 
       // Pass image data to the parent component
-      onImageUpload(formData);
-
-      // Clear file state
-      setFile(null);
+      props.onImageUpload(formData);
     } catch (error) {
       console.error('Error uploading file:', error);
     }

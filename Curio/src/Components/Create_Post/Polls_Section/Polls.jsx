@@ -6,12 +6,12 @@ import InfoIcon from "../../../styles/icons/InfoIcon";
 import SixDots from "../../../styles/icons/SixDots";
 import Remove from "../../../styles/icons/Remove";
 
-function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options }) {
+function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options, onContentChange }) {
 
 
   return (
     <div className="flex-wrap pollPage">
-      <Text_Editor />
+      <Text_Editor onContentChange={onContentChange} />
       <div className="container flex-wrap cont-div">
         <div className="row row-cols-2" style={{height: 'fit-content'}}>
           <div className="col-8">
@@ -58,7 +58,7 @@ function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRem
               <div className="d-flex align-items-center mt-1 votingLengthContainer">
                 <div className="votingLength">Voting Length:</div>
                 <div>
-                  <select name="cars" id="cars" className="daysDropDown" defaultValue="3" onChange={handleDayChange}>
+                  <select name="voteLength" id="voteLength" className="daysDropDown" defaultValue="3" onChange={handleDayChange}>
                     <option value="1">1 Day</option>
                     <option value="2">2 Days</option>
                     <option value="3">3 Days</option>

@@ -2,20 +2,27 @@ import React, { useState } from "react";
 import "./NewPostForm.css";
 import { Button, Flex, Spacer, Checkbox, useToast } from "@chakra-ui/react";
 import { AddIcon, CheckIcon } from "@chakra-ui/icons";
-import "./EditCreatearea.css";
 import axios from "axios";
+import "./EditCreatearea.css";
 import { useNavigate } from 'react-router-dom';
-
+import Schedule from "./Schedule";
+import { CreateScheduledPosts } from "../ModerationComponents/ScheduledPosts/ScheduleEndPoints";
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
-function EditCreatearea({ title, content, community, days, options, imageFormData, selectedMethod }) {
+// Function component for editing and creating posts
+function EditCreateArea({ title, content, community, days, options, imageFormData, selectedMethod }) {
   const username = localStorage.getItem('username');
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
+  const [timeZone,setTimeZone] = useState("")
+  const [repeat,setRepeat] = useState("")
+  const [dateTime, setDateTime] = useState('');
+  
   const toast = useToast();
   const navigate = useNavigate();
 
+  // Function to display a toast message
   function Toast(message, state) {
     toast({
       description: message,
@@ -25,20 +32,26 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
     })
   }
 
+  // Function to handle OC click
   const handleOcClick = () => {
     setOcClicked(!ocClicked);
   };
 
+  // Function to handle Spoiler click
   const handleSpoilerClick = () => {
     if (community && community.community) {
       setSpoilerClicked(!spoilerClicked);
     }
   };
 
+  // Function to handle NSFW click
   const handleNsfwClick = () => {
     setNsfwClicked(!nsfwClicked);
   };
 
+   
+
+  // Function to convert options array to string
   const handleTurnToSting = (options) => {
     let string = "";
     for (let i = 0; i < options.length; i++) {
@@ -49,7 +62,8 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
     }
     return string;
   }
-
+  
+  // Function to handle form submission
   const handleSubmit = async () => {
     try {
       let optionsString; // Initialize optionsString
@@ -76,24 +90,60 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         type: selectedMethod
       };
 
-      // If imageFormData is available, append it to postData
       if (imageFormData) {
-        postData.image = imageFormData;
+        // Create a new FormData object
+        const formData = new FormData();
+        formData.append('media', imageFormData.get('media'));
+
+        // Merge formData with postData
+        for (let [key, value] of formData.entries()) {
+          postData[key] = value;
       }
-      const response = await axios.post(
+      }
+
+      let response ;
+      
+      if(dateTime.length===0){
+      const normalresponse = await axios.post(
         `${serverHost}/api/submit`,
         postData,
         {
           headers: {
+            'Content-Type': 'multipart/form-data',
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
+      response = normalresponse
+      }else{
+        const responseSchedule=await axios.post(`${serverHost}/api/scheduledPost`,{
+          title: title,
+          content: content,
+          subreddit: subreddit,
+          isOC: ocClicked,
+          isSpoiler: spoilerClicked,
+          isNSFW: nsfwClicked,
+          voteLength: days,
+          Options: optionsString,
+          type: selectedMethod,
+          repeatOption:repeat,
+          contestMode:false,
+          postAsAutoModerator:false,
+          isScheduled:true,
+          scheduledPublishDate:dateTime,
+      }, {
+          headers: {
+              authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      });
+      response = responseSchedule
+      }
+      
       switch (response.status) {
         case 201:
           Toast('Post created successfully', 'success');
           const postId = response.data.postId;
-          navigate(`/post/post-details/${postId}`);d
+          navigate(`/post/post-details/${postId}`);
           break;
         default:
           console.error("Unexpected response status:", response.status);
@@ -123,12 +173,14 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
         console.error("Error:", error.message);
       }
     }
+    
   }; 
 
   return (
     <div className="EditCreatearea">
       <div>
         <div className='button-group-edit'>
+          {/* Button for OC */}
           <Button
             className='rest-button'
             variant='ghost'
@@ -143,6 +195,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
           >
             OC
           </Button>
+          {/* Button for Spoiler */}
           <Button 
             className='rest-button' 
             leftIcon={spoilerClicked ? <CheckIcon /> : <AddIcon />}
@@ -159,6 +212,7 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
           >
             Spoiler
           </Button>
+          {/* Button for NSFW */}
           <Button
             className='rest-button'
             variant='ghost'
@@ -174,14 +228,26 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
             NSFW
           </Button>
         </div>
+        {/* Save and post buttons */}
         <hr className='hr-edit-post' />
         <Flex className='save-buttons' minWidth='max-content' alignItems='center' gap='2'>
+          
           <Spacer />
-          <Button className="post-button" variant='outline' colorScheme='blue' onClick={handleSubmit}>Post</Button>
+          <div>
+            <div className="d-flex justify-content-end gap-0 me-1">
+              
+              <Button className="rounded-start " variant='outline' borderRadius={0} colorScheme='blue' onClick={handleSubmit}>Post</Button>
+              <Schedule subreddit={community} setDateTime={setDateTime} setRepeat={setRepeat} setTimeZone={setTimeZone} />
+            </div>
+            {dateTime &&<p className="me-1"> Post scheduled for {dateTime}</p>}
+          </div>
         </Flex>
+        
       </div>
+      {/* Checkbox for reply notifications */}
       <div className='reply_notifications'>
         <Checkbox value='reply_notifications' size='md'>Send me post reply notifications</Checkbox>
+        {/* Container for connecting accounts */}
         <div className='container-share-account'>
           <a className='share-account' href="#">
             Connect accounts to share your post
@@ -193,4 +259,4 @@ function EditCreatearea({ title, content, community, days, options, imageFormDat
   );
 }
 
-export default EditCreatearea;
+export default EditCreateArea;
