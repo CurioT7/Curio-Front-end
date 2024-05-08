@@ -12,7 +12,7 @@ function InvCheckBox(props){
     }, 0);
   return (
     <div>
-        <Checkbox isChecked={checked} onChange={handleChange}   >
+        <Checkbox disabled={props.denyAccess} isChecked={checked} onChange={handleChange}   >
             {props.label}
         </Checkbox>
         <p style={{fontSize:"0.75rem"}} className="text-secondary ms-4 " >{props.description}</p>

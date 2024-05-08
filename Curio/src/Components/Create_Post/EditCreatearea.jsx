@@ -5,6 +5,7 @@ import { AddIcon, CheckIcon } from "@chakra-ui/icons";
 import "./EditCreatearea.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Schedule from "./Schedule";
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -14,6 +15,9 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
   const [ocClicked, setOcClicked] = useState(false);
   const [spoilerClicked, setSpoilerClicked] = useState(false);
   const [nsfwClicked, setNsfwClicked] = useState(false);
+  const [timeZone,setTimeZone] = useState("")
+  const [repeat,setRepeat] = useState("")
+  const [dateTime, setDateTime] = useState('');
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -43,6 +47,8 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
   const handleNsfwClick = () => {
     setNsfwClicked(!nsfwClicked);
   };
+
+   
 
   // Function to convert options array to string
   const handleTurnToSting = (options) => {
@@ -194,9 +200,18 @@ function EditCreateArea({ title, content, community, days, options, imageFormDat
         {/* Save and post buttons */}
         <hr className='hr-edit-post' />
         <Flex className='save-buttons' minWidth='max-content' alignItems='center' gap='2'>
+          
           <Spacer />
-          <Button className="post-button" variant='outline' colorScheme='blue' onClick={handleSubmit}>Post</Button>
+          <div>
+            <div className="d-flex justify-content-end gap-0 me-1">
+              
+              <Button className="rounded-start " variant='outline' borderRadius={0} colorScheme='blue' onClick={handleSubmit}>Post</Button>
+              <Schedule setDateTime={setDateTime} setRepeat={setRepeat} setTimeZone={setTimeZone} />
+            </div>
+            {dateTime &&<p className="me-1"> Post scheduled for {dateTime}</p>}
+          </div>
         </Flex>
+        
       </div>
       {/* Checkbox for reply notifications */}
       <div className='reply_notifications'>
