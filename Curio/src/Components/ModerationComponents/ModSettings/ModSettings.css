@@ -1,0 +1,14 @@
+.h6-mod-settings {
+    font-weight: 400;
+    color: var(--newCommunityTheme-metaText);
+    font-size: 12px;
+    line-height: 16px;
+}
+.label-mod-settings {
+    transform: translateY(0px) !important; 
+    font-size: 0.8rem !important;
+    display: inline-block !important;
+    padding-bottom: 0 !important;
+}
+
+
