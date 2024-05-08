@@ -125,7 +125,7 @@ function PostContentDetails(post) {
             }
         }
         catch(err){
-            console.log(err);
+            console.error(err);
             if (err.response.status === 409){
                 toast({
                     description: "Item already unhidden.",
@@ -307,7 +307,6 @@ function PostContentDetails(post) {
     }, [post]);
 
     const handleChangedSort = async (value) => {
-        console.log("post info", post.details[0].subredditName)
         setTimeout( async () => {
             
             const data = await GetSortedComments(post._id, value,post.details[0].subredditName);

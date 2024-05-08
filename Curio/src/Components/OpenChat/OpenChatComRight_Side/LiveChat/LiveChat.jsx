@@ -47,7 +47,7 @@ function LiveChat(props) {
         const aboutParticipantinfo = await AboutParticipant(username);
         setChatData(response.data);
         setAboutParticipant(aboutParticipantinfo);
-        console.log(aboutParticipantinfo)
+        // console.log(aboutParticipantinfo)
         const participant = response.data.chat[0].participants.find(participant => participant.username !== username);
         if (participant) {
           setParticipantName(participant.username);
@@ -64,7 +64,7 @@ function LiveChat(props) {
     try {
       //send message
       if (!props.socket || newMessage == "") return;
-      console.log(newMessage);
+      // console.log(newMessage);
       props.socket.emit("newMessage", newMessage, participants);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -74,7 +74,7 @@ function LiveChat(props) {
   //recieve message
   useEffect(() => {
     if (!props.socket) {
-      console.log("socket not connected");
+      // console.log("socket not connected");
       return;
     }
     // Attach the event listener for incoming messages
@@ -111,7 +111,7 @@ function LiveChat(props) {
             )
             .flat();
           setParticipants(participants);
-          console.log("RECIEVER", participants);
+          // console.log("RECIEVER", participants);
 
           await sendMessageRequest(props.chatId, message, null);
 
@@ -120,7 +120,7 @@ function LiveChat(props) {
         } else {
           await createChatRequest(props.recipient, message);
         }
-        console.log("message sent", message, participants);
+        // console.log("message sent", message, participants);
         props.onNewMessage(message, participants);
         setNewMessage(message);
         setMessage("");

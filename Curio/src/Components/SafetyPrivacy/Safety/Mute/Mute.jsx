@@ -101,7 +101,6 @@ function Mute() {
         };
         try {
           await sendUserDataToBackend(newData);
-          console.log("User preferences updated successfully");
           setMutedCommunities(prevMutedCommunities => [...prevMutedCommunities, newUser]);
           setMutedCommunityInput('');
       } catch (error) {

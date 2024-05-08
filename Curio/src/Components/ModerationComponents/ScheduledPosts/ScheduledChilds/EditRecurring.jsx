@@ -25,8 +25,6 @@ function EditRecurring(props){
         const localDateTime = new Date(event.target.value);
         const utcDateTime = localDateTime.toISOString().slice(0, -8);
         setDateTime(utcDateTime);
-        
-        
     };
     return(
         <div>

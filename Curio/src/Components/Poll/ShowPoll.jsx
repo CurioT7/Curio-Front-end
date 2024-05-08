@@ -96,7 +96,6 @@ function ShowPoll( props ) {
     {props.optionNames.map((option, index) => {
       const voteCount = votepick === option ? props.votes[index] + 1 : props.votes[index];
       const backgroundColor = voteCount >= maxVoteNumber ? 'rgb(255, 190, 166)' : 'rgb(226, 231, 233)';
-      console.log('Option Selected:', props.optionSelected)
       return (
         <div
         style={{ backgroundColor, width: `${hasVoted ? voteArray[index] : displayArray[index]}px`, borderRadius: '4px' }}          

@@ -119,11 +119,11 @@ function SignupHandler() {
         navigate("/");
       }
       else{
-        console.log('Signup failed');
+        console.error('Signup failed');
       }
     }
     catch(err){
-      console.log(err);
+      console.error(err);
       toast({
         description: "Server Error!",
         status: "error",
