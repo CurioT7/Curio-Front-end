@@ -307,7 +307,6 @@ function PostContentDetails(post) {
     }, [post]);
 
     const handleChangedSort = async (value) => {
-        console.log("post info", post.details[0].subredditName)
         setTimeout( async () => {
             
             const data = await GetSortedComments(post._id, value,post.details[0].subredditName);

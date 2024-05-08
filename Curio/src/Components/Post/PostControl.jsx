@@ -54,7 +54,6 @@ function PostControl(props) {
       setIsSaved(false);
     }
     if (props.hiddenPosts && props.hiddenPosts.some(post => post._id === props._id)) {
-      console.log('useEffect')
       setIsHidden(true);
     } else {
       setIsHidden(false);
@@ -105,7 +104,6 @@ function PostControl(props) {
     setReportSubmittedModalOpen(true);
   }
   const handleSetReportReason = (reason) => {
-    console.log(reason)
     setReportReason(reason);
   }
   const handleShowExtraReasons = () => {

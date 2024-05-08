@@ -73,7 +73,6 @@ function Postsfooter(props) {
           <MenuList>
           <MenuItem onClick={async () => {
               
-                  console.log('postId:', postId);
               
                   await navigator.clipboard.writeText(`http://localhost:5173/post/post-details/${postId}`);
                   alert('Link copied to clipboard');

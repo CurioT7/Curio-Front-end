@@ -89,12 +89,9 @@ function SignupHandlerForLogin() {
   const handleSignup = async () => {
     try{
       const response = await signup({username, email: enteredEmail, password, gender: enteredGender});
-      console.log(response);
       if(response.status === 201){
-        console.log('Signup successful');
         localStorage.setItem('token', response.data.accessToken);
         localStorage.setItem('username', username);
-        console.log('Token:', response.data.accessToken);
         setIsAuthenticated(true);
         window.dispatchEvent(new Event("loginOrSignup"));
         navigate("/");
