@@ -1,11 +1,11 @@
-import {React, useEffect, useState} from "react";
+import { React, useEffect, useState } from "react";
 import MessagesNavbar from "../../Components/Messages/MessagesNavbar.jsx";
 import InboxTabs from "../../Components/Messages/InboxTabs.jsx";
 import Messages from "../../Components/Messages/Messages.jsx";
-import {fetchMessages} from "./InboxMessagesEndpoints";
+import { fetchMessages } from "./InboxMessagesEndpoints";
 import UserName_Mentions_Com from "../../Components/Messages/UserName_Mentions/UserName_Mentions_Com.jsx";
 import Post_Replies_Com from "../../Components/Messages/Post_Replies/Post_Replies_Com.jsx";
-import {fetchDownvotedMessages, fetchUpvotedMessages} from "./InboxMessagesEndpoints";
+import { fetchDownvotedMessages, fetchUpvotedMessages } from "./InboxMessagesEndpoints";
 
 
 function AllInbox(props) {
@@ -53,15 +53,15 @@ function AllInbox(props) {
 
 
     return (
-        <div style={{marginTop: "60px", backgroundColor: "#EDEFF1", height: "100vh"}}>
+        <div style={{ marginTop: "60px", backgroundColor: "#EDEFF1", height: "100vh" }}>
             <MessagesNavbar />
             <InboxTabs />
             {messages.length === 0 && usernameMentions.length === 0 && postReplies.length === 0 && (
                 <div className="error-message">
-                        <p style={{
-                            padding: '20px',
-                        }}>there doesn't seem to be anything here
-                        </p>
+                    <p style={{
+                        padding: '20px',
+                    }}>there doesn't seem to be anything here
+                    </p>
                 </div>
             )}
             <div className="d-flex justify-content-center mt-4">
@@ -70,15 +70,15 @@ function AllInbox(props) {
             {usernameMentions && usernameMentions.map((usernameMention, index) => (
                 <div className="d-flex justify-content-center mt-4 col-md-8">
                     <UserName_Mentions_Com
-                                        title={usernameMention.postId ? usernameMention.postId.title : null}
-                                        noComments={usernameMention.commentNumber}
-                                        sender={usernameMention.sender.username}
-                                        timestamp={usernameMention.timestamp}
-                                        linkedSubreddit={usernameMention.linkedSubreddit ? usernameMention.linkedSubreddit.name : null}
-                                        message={usernameMention.message}
-                                        itemId={usernameMention.commentId}
-                                        downvotedcomments={downvotedcomments}
-                                        upvotedcomments={upvotedcomments}
+                        title={usernameMention.postId ? usernameMention.postId.title : null}
+                        noComments={usernameMention.commentNumber}
+                        sender={usernameMention.sender.username}
+                        timestamp={usernameMention.timestamp}
+                        linkedSubreddit={usernameMention.linkedSubreddit ? usernameMention.linkedSubreddit.name : null}
+                        message={usernameMention.message}
+                        itemId={usernameMention.commentId}
+                        downvotedcomments={downvotedcomments}
+                        upvotedcomments={upvotedcomments}
                     />
                 </div>
             ))}
@@ -86,15 +86,15 @@ function AllInbox(props) {
             {postReplies && postReplies.map((postReply, index) => (
                 <div className="d-flex justify-content-center mt-4">
                     <Post_Replies_Com
-                                        title={postReply.postId ? postReply.postId.title : null}
-                                        noComments={postReply.commentNumber}
-                                        sender={postReply.sender.username}
-                                        timestamp={postReply.timestamp}
-                                        linkedSubreddit={postReply.linkedSubreddit ? postReply.linkedSubreddit.name : null}
-                                        message={postReply.message}
-                                        itemId={postReply.commentId}
-                                        downvotedcomments={downvotedcomments}
-                                        upvotedcomments={upvotedcomments}
+                        title={postReply.postId ? postReply.postId.title : null}
+                        noComments={postReply.commentNumber}
+                        sender={postReply.sender.username}
+                        timestamp={postReply.timestamp}
+                        linkedSubreddit={postReply.linkedSubreddit ? postReply.linkedSubreddit.name : null}
+                        message={postReply.message}
+                        itemId={postReply.commentId}
+                        downvotedcomments={downvotedcomments}
+                        upvotedcomments={upvotedcomments}
                     />
                 </div>
             ))}

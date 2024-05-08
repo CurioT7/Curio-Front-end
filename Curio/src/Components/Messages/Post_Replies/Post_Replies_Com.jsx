@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Box } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Upvotes from '../../../styles/icons/Upvotes.jsx';
 import Downvotes from '../../../styles/icons/Downvotes.jsx';
 import FilledDownvote from '../../../styles/icons/FilledDownvote.jsx';
 import FilledUpvote from '../../../styles/icons/FilledUpvote.jsx';
 import { getTimeDifference } from '../../getTimeDifference/getTimeDifference';
 import { handleUPVoteComments, handleDownVoteComments, BlockUserMessages } from '../../../Pages/InboxMessages/InboxMessagesEndpoints.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import ReportPopup from "../../ModalPages/ModalPages.jsx";
 
 function Post_Replies_Com(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [confirmBlock, setConfirmBlock] = useState(false);
+    const [showReportMenu, setShowReportMenu] = useState(false);
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const isDownvoted = props.downvotedcomments.some(comment => comment._id === props.itemId);
@@ -21,6 +25,25 @@ function Post_Replies_Com(props) {
         setUpvoted(isUpvoted);
     }, [props.downvotedcomments, props.upvotedcomments, props.itemId]);
 
+
+    const handleBlockConfirmation = () => {
+        props.onBlockConfirmed();
+        BlockUserMessages(props.sender)
+    };
+
+    const handleReportPopupClose = () => {
+        setShowReportMenu(false);
+    };
+
+    const handleReportClick = () => {
+        if (!token) {
+         navigate('/login');
+        setShowReportMenu(false);
+        }
+        else
+        setShowReportMenu(true);
+    };
+    
     return (
         <div style={{ width: "65%" }} className='username-mentions-table d-flex justify-content-center'>
             <h5 className='username-mentions-header-messages'>post reply:
@@ -70,11 +93,11 @@ function Post_Replies_Com(props) {
                     <Box as="ul" listStyleType="none" display="flex" gap='0.5rem' justifyContent='flex-start' paddingLeft='0' flexWrap='wrap' width='100%'>
                         <Box className="list-item-username-mentions" as="li" paddingLeft='0'>Context</Box>
                         <Box className="list-item-username-mentions" as="li">Full Comments({props.noComments})</Box>
-                        <Box className="list-item-username-mentions" as="li">Report</Box>
+                        <Box className="list-item-username-mentions" as="li" onClick={handleReportClick}>Report</Box>
                         {confirmBlock ? (
                             <>
                                 <span className="list-item-username-mentions check-block-message" style={{ color: 'red' }}>are you sure?</span>
-                                <Box className="list-item-username-mentions check-block-message" as="li" onClick={() => BlockUserMessages(props.sender)}>Yes</Box>
+                                <Box className="list-item-username-mentions check-block-message" as="li" onClick={handleBlockConfirmation}>Yes</Box>
                                 <span className="list-item-username-mentions">/</span>
                                 <Box className="list-item-username-mentions check-block-message" as="li" onClick={() => setConfirmBlock(false)}>No</Box>
                             </>
@@ -83,6 +106,7 @@ function Post_Replies_Com(props) {
                         )}
                         <Box className="list-item-username-mentions" as="li">Mark Unread</Box>
                     </Box>
+                    <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
                 </div>
             </div>
         </div>
