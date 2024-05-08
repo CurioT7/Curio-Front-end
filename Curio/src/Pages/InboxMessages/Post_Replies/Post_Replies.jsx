@@ -19,6 +19,7 @@ function Post_Replies(props) {
         }
         props.hideSidebar();
 
+        
         const fetchData = async () => {
             try {
                 const messages = await fetchMessages('postReply');
