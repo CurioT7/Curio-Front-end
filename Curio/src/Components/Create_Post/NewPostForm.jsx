@@ -1,7 +1,7 @@
 import React from 'react';
 import "./NewPostForm.css";
 import { Flex } from '@chakra-ui/react';
-import CreatePostArea from "./Createpostarea"
+import CreatePostArea from "./CreatePostArea"
 
 // Function component for rendering posts
 function Posts(community) {
