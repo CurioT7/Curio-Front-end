@@ -8,8 +8,7 @@ function Text_Editor({ onContentChange }) { // Receive onContentChange as prop
   const [inputText, setInputText] = useState("");
 
   const toolbarOptions = [['bold', 'italic','link','strike',{ 'script': 'super' }],
-  [ { 'header': [1, 2, 3, 4, 5, 6, false] },{ 'list': 'bullet' },{ 'list': 'ordered'},'blockquote','code-block'],
-['image']];
+  [ { 'header': [1, 2, 3, 4, 5, 6, false] },{ 'list': 'bullet' },{ 'list': 'ordered'},'blockquote','code-block']];
 
   const module = {
     toolbar: toolbarOptions,

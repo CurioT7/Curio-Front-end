@@ -5,10 +5,7 @@ import InboxTabs from '../../../Components/Messages/InboxTabs';
 import Post_Replies_Com from '../../../Components/Messages/Post_Replies/Post_Replies_Com';
 import { fetchMessages, fetchDownvotedMessages, fetchUpvotedMessages } from '../InboxMessagesEndpoints';
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
-
 function Post_Replies(props) {
-    //Hi
     const navigate = useNavigate();
     const [recievedMessages, setRecievedMessages] = useState([]);
     const [error, setError] = useState(false);
@@ -46,6 +43,10 @@ function Post_Replies(props) {
         };
     }, []);
 
+    const removeMessage = (messageId) => {
+        setRecievedMessages(prevMessages => prevMessages.filter(message => message._id !== messageId));
+    };
+
     return (
         <div style={{ marginTop: "60px" }}>
             <MessagesNavbar />
@@ -81,6 +82,7 @@ function Post_Replies(props) {
                                         itemId={message.commentId}
                                         downvotedcomments={downvotedcomments}
                                         upvotedcomments={upvotedcomments}
+                                        onBlockConfirmed={() => removeMessage(message._id)}
                                     />
                                 </div>
                             </div>

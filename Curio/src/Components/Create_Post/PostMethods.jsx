@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Flex } from '@chakra-ui/react';
-import "./Post_Methods.css"
+import "./PostMethods.css"
 
+// Function component for selecting different post methods
 function Post_Methods({ onMethodSelect }) {
-  const [selectedTab, setSelectedTab] = useState("post"); // Initialize state for tracking clicked button
+  // State to keep track of the selected tab
+  const [selectedTab, setSelectedTab] = useState("post");
 
-  // Function to handle button click and update selectedTab state
+  // Function to handle button clicks
   const handleButtonClick = (buttonName) => {
     setSelectedTab(buttonName);
     onMethodSelect(buttonName);
@@ -13,16 +15,17 @@ function Post_Methods({ onMethodSelect }) {
 
   return (
     <Flex className='post-methods'>
+      {/* Button for posting */}
       <Button
         className='button-post-method'
-        colorScheme={selectedTab === "post" ? "blue" : ""} // Change color based on selectedTab state
+        colorScheme={selectedTab === "post" ? "blue" : ""}
         size='lg'
         variant='ghost'
-        leftIcon={<i className="fa-solid fa-signs-post"/>}
+        leftIcon={<i className="fa-solid fa-signs-post" />}
         onClick={() => handleButtonClick("post")}
-        style={{ 
+        style={{
           borderColor: '#edeff1',
-          borderStyle: 'solid', 
+          borderStyle: 'solid',
           borderRadius: '0',
           borderBottomColor: selectedTab === "post" ? "blue" : "#edeff1",
           borderWidth: selectedTab === "post" ? '0 0 2px 0' : '0 0 1px 0',
@@ -31,17 +34,18 @@ function Post_Methods({ onMethodSelect }) {
       >
         Post
       </Button>
+      {/* Button for media */}
       <Button
         className='button-post-method'
-        colorScheme={selectedTab === "media" ? "blue" : ""} // Change color based on selectedTab state
+        colorScheme={selectedTab === "media" ? "blue" : ""}
         size='lg'
         variant='ghost'
-        leftIcon={<i className="fa-regular fa-image"/>}
+        leftIcon={<i className="fa-regular fa-image" />}
         onClick={() => handleButtonClick("media")}
-        style={{ 
+        style={{
           borderColor: '#edeff1',
-          borderWidth: '0 0 1px 1px', 
-          borderStyle: 'solid', 
+          borderWidth: '0 0 1px 1px',
+          borderStyle: 'solid',
           borderRadius: '0',
           borderBottomColor: selectedTab === "media" ? "blue" : "#edeff1",
           borderWidth: selectedTab === "media" ? '0 0 2px 1px' : '0 0 1px 1px',
@@ -50,17 +54,18 @@ function Post_Methods({ onMethodSelect }) {
       >
         Image & Video
       </Button>
+      {/* Button for link */}
       <Button
         className='button-post-method'
-        colorScheme={selectedTab === "link" ? "blue" : ""} // Change color based on selectedTab state
+        colorScheme={selectedTab === "link" ? "blue" : ""}
         size='lg'
         variant='ghost'
-        leftIcon={<i className="fa-solid fa-link"/>}
+        leftIcon={<i className="fa-solid fa-link" />}
         onClick={() => handleButtonClick("link")}
-        style={{ 
+        style={{
           borderColor: '#edeff1',
-          borderWidth: '0 0 1px 1px', 
-          borderStyle: 'solid', 
+          borderWidth: '0 0 1px 1px',
+          borderStyle: 'solid',
           borderRadius: '0',
           borderBottomColor: selectedTab === "link" ? "blue" : "#edeff1",
           borderWidth: selectedTab === "link" ? '0 0 2px 1px' : '0 0 1px 1px',
@@ -69,17 +74,18 @@ function Post_Methods({ onMethodSelect }) {
       >
         Link
       </Button>
+      {/* Button for polls */}
       <Button
         className='button-post-method'
-        colorScheme={selectedTab === "poll" ? "blue" : ""} // Change color based on selectedTab state
+        colorScheme={selectedTab === "poll" ? "blue" : ""}
         size='lg'
         variant='ghost'
-        leftIcon={<i className="fa-regular fa-image"/>}
-        onClick={() => handleButtonClick("poll")} 
-        style={{ 
+        leftIcon={<i className="fa-regular fa-image" />}
+        onClick={() => handleButtonClick("poll")}
+        style={{
           borderColor: '#edeff1',
-          borderWidth: '0 0 1px 1px', 
-          borderStyle: 'solid', 
+          borderWidth: '0 0 1px 1px',
+          borderStyle: 'solid',
           borderRadius: '0',
           borderBottomColor: selectedTab === "poll" ? "blue" : "#edeff1",
           borderWidth: selectedTab === "poll" ? '0 0 2px 1px' : '0 0 1px 1px',

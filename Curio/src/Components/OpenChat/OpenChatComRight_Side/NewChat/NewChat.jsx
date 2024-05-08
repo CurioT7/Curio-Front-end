@@ -22,7 +22,6 @@ function NewChat({handleRecipient}) {
 
     const handleStartChat = () => {
         handleRecipient(inputValue);
-        console.log(inputValue)
         navigate(`/chat/${inputValue}`);
     };
 

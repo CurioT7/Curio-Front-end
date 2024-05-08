@@ -1,7 +1,7 @@
 .open-chat-container{
     grid-template-columns: 300px 1fr;
     display: grid;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
 }
 .side-bar-chat-page{

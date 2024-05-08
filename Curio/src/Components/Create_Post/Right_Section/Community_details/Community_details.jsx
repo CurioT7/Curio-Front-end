@@ -1,20 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Community_details.css";
-import logo from "../../../assets/Curio_logo.png";
+import logo from "../../../../assets/Curio_logo.png";
 import { useToast, FormControl, FormLabel, Switch } from "@chakra-ui/react";
-import axios from "axios";
 import { VscActivateBreakpoints } from "react-icons/vsc";
-import SocialLink from "../../profileSetting/Socialmodal/Socialmodal";
+import SocialLink from "../../../profileSetting/Socialmodal/Socialmodal";
 import { Link } from "react-router-dom";
-import { fetchUserDataFromBackend } from "../../UserSetting/UserSettingsEndPoints";
-import profile from "../../../assets/avatar_default_6.png";
-import bannersubreddit from "../../../assets/cover.png";
+import { fetchUserDataFromBackend } from "../../../UserSetting/UserSettingsEndPoints";
+import profile from "../../../../assets/avatar_default_6.png";
+import bannersubreddit from "../../../../assets/cover.png";
+import { formatDatewithDays } from "../../../getTimeDifference/getTimeDifference"
 
-const serverHost = import.meta.env.VITE_SERVER_HOST;
-function Community_details({ community }) {
-    const icon = localStorage.getItem('profileImage');
+function Community_details({ subredditData, community }) {
     const username = localStorage.getItem('username');
-    const [subredditData, setSubredditData] = useState(null);
     const [isSwitch, setIsSwitch] = useState(true);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
     const [SocialLinks, setSocialLinks] = useState([]);
@@ -36,19 +33,7 @@ function Community_details({ community }) {
     };
 
     useEffect(() => {
-        if (community.community !== null) {
-            fetchSubredditData();
-        }
-    }, [community]);
-
-    const fetchSubredditData = async () => {
-        try {
-            const response = await axios.get(`${serverHost}/api/subredditOverview/${community.community}`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-            setSubredditData(response.data);
+        const fetchSubredditData = async () => {
             const data = await fetchUserDataFromBackend();
             if (data) {
                 setSocialLinks(data.socialLinks ?
@@ -58,10 +43,11 @@ function Community_details({ community }) {
                         platform: `fa-brands fa-${link.platform.toLowerCase()}`,
                     })) : []);
             }
-        } catch (error) {
-            console.error("Error fetching subreddit data:", error);
-        }
-    };
+        };
+
+        fetchSubredditData();
+    }, []);
+
 
     const handleSwitchChange = () => {
         setIsSwitch(!isSwitch);
@@ -76,18 +62,6 @@ function Community_details({ community }) {
         setIsOptionsExpanded(!isOptionsExpanded);
     };
 
-    const renderCreatedAt = () => {
-        if (subredditData && subredditData.createdAt) {
-            const createdAtDate = new Date(subredditData.createdAt);
-            return createdAtDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-        return '';
-    };
-
     return (
         <div className={`community-details ${isSwitch ? 'switch-on' : 'switch-off'}`}>
             <div className="community-details-header">
@@ -96,13 +70,12 @@ function Community_details({ community }) {
                         {community.community !== username ? (
                             <div className="community-details-logo"
                                 style={{
-                                    backgroundImage: `url(${subredditData.banner ? subredditData.banner : bannersubreddit})`,
-                                    backgroundColor: isSwitch ? 'transparent' : '#fc471e'
+                                    background: isSwitch ? `url(${subredditData.banner ? subredditData.banner : bannersubreddit}) no-repeat center/cover` : '#fc471e'
                                 }} />
                         ) : (
                             <div className="file-upload-container-username top-1 start-1"
                                 style={{
-                                    backgroundColor: '#33a8ff',
+                                    background: `url(${subredditData.banner ? subredditData.banner : '#33a8ff'})`,
                                     borderRadius: '4px 4px 0 0',
                                     height: '94px',
                                     width: 'calc(100% - 2px)',
@@ -115,9 +88,9 @@ function Community_details({ community }) {
                                         <div className="file-preview-container-username">
                                             <input type="file" accept="image/x-png,image/jpeg" className="file-input-banner-username" />
                                         </div>
-                                        <div className="file-banner-container-username">
-                                            <i className="fa-solid fa-camera add-banner"></i>
-                                        </div>
+                                        <Link to={`/settings/profile`} className="file-banner-container-username">
+                                            <i className="fa-solid fa-camera add-banner" />
+                                        </Link>
                                     </label>
                                 </div>
                             </div>
@@ -179,9 +152,9 @@ function Community_details({ community }) {
                                             <div className="file-preview-container-username">
                                                 <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username" />
                                             </div>
-                                            <div className="file-icon-container-username">
+                                            <Link to={`/settings/profile`}  className="file-icon-container-username">
                                                 <i className="fa-solid fa-camera add-icon"></i>
-                                            </div>
+                                            </Link>
                                         </label>
                                     </div>
                                 </div>
@@ -210,7 +183,7 @@ function Community_details({ community }) {
                                     <div className="community-created-date">
                                         <i className="created-date-icon fa-solid fa-cake-candles" />
                                         <span className="community-created-date">
-                                            Created {renderCreatedAt()}
+                                            Created {formatDatewithDays(subredditData.createdAt)}
                                         </span>
                                     </div>
                                 </div>
@@ -238,7 +211,7 @@ function Community_details({ community }) {
                                     <h5 className="info-title-username">Cake day</h5>
                                     <div className="info-content-username">
                                         <i className="created-date-icon fa-solid fa-cake-candles" style={{ color: '#24a0ed' }} />
-                                        <span className="info-value-username">{subredditData.createdAt}</span>
+                                        <span className="info-value-username">{formatDatewithDays(subredditData.createdAt)}</span>
                                     </div>
                                 </div>
                             </div>
