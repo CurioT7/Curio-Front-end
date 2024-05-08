@@ -6,4 +6,55 @@
   font-size: 16px;
   font-weight: 700;
 }
+ .banpage{
+display: flex;
+flex-direction: column;
+ }
 
+
+.baninput{
+  box-sizing: border-box;
+  color:#1c1c1c;
+  border: 1px solid ;
+  border-radius: 4px;
+  padding: 12px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.inputTitle{
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  line-height: 12px;
+  text-transform: uppercase;
+  color: #878A8C;
+  display: block;
+  margin-bottom: 8px;
+}
+.CancelBtn{ 
+  border-radius: 40%;
+  background:white;
+  border: 2px solid #0079D3;
+  color: #0079D3;
+  margin-left: 2px;
+  padding: 1%;
+}
+
+.BanContent {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  padding: 10px; 
+  height: 350px;
+}
+.BanContent p {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22px;
+  padding-top: 30px;
+  color: #9fa1a3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

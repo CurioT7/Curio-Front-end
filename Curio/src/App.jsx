@@ -42,6 +42,7 @@ import ScheduledPosts from "./Components/ModerationComponents/ScheduledPosts/Sch
 import UserManage from "./Components/ModerationComponents/UserManagement/UserManage.jsx";
 import ContentControl from "./Components/ModerationComponents/ContentControl/ContentControl.jsx";
 import ModSettings from "./Components/ModerationComponents/ModSettings/ModSettings.jsx";
+import Rules from "./Components/ModerationComponents/Rules/Rules.jsx";
 import UnreadMessages from "./Pages/InboxMessages/UnreadMessages.jsx";
 
 function App() {
@@ -129,6 +130,7 @@ function App() {
           <Route path='/r/:Community/about/usermanagement' element={<UserManage hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/r/:Community/about/rules/contentcontrols' element={<ContentControl hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/r/:Community/about/settings' element={<ModSettings hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
+          <Route path='/r/:Community/about/rules' element={<Rules hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/modqueue' element={<Moderation hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/mentions' element={<UserName_Mentions hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
           <Route path='/message/selfreply' element={<Post_Replies hideSidebar={handleHideSidebar} showSidebar={handleShowSidebar}/>}/>
