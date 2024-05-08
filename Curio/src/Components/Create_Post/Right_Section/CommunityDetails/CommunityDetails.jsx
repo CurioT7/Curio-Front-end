@@ -76,6 +76,8 @@ function Community_details({ subredditData, community }) {
                             <div className="file-upload-container-username top-1 start-1"
                                 style={{
                                     background: `url(${subredditData.banner ? subredditData.banner : '#33a8ff'})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
                                     borderRadius: '4px 4px 0 0',
                                     height: '94px',
                                     width: 'calc(100% - 2px)',
@@ -152,7 +154,7 @@ function Community_details({ subredditData, community }) {
                                             <div className="file-preview-container-username">
                                                 <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username" />
                                             </div>
-                                            <Link to={`/settings/profile`}  className="file-icon-container-username">
+                                            <Link to={`/settings/profile`} className="file-icon-container-username">
                                                 <i className="fa-solid fa-camera add-icon"></i>
                                             </Link>
                                         </label>
