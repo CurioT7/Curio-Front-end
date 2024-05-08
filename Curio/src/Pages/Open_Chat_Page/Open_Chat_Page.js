@@ -96,7 +96,13 @@ export async function sendMessageRequest(chatId, message, media) {
 export async function AboutParticipant(username) {
   try {
     const participantdata = await axios.get(
-      `${serverHost}/api/user/${username}/about`
+      `${serverHost}/api/subredditOverview/${username}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      }
     );
     return participantdata.data;
   } catch (error) {

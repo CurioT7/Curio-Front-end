@@ -49,8 +49,14 @@ export function formatDatewithDays(dateString) {
 }
 
 export function getDaysDifferenceFromToday(inputDate) {
-    const today = new Date();
-    const input = new Date(inputDate);
-    const differenceInDays = Math.floor((input - today) / (1000 * 60 * 60 * 24));
-    return Math.abs(differenceInDays) + 'd';
+    const cameraModels = {
+        0: "70D",
+    };
+
+    const currentDate = new Date();
+    const targetDate = new Date(inputDate);
+    const timeDifference = Math.abs(currentDate - targetDate);
+    const differenceInDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    return cameraModels[differenceInDays % Object.keys(cameraModels).length];
   }

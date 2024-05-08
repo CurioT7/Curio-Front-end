@@ -17,12 +17,13 @@ import {
   createChatRequest,
   getChatwholeChat,
   sendMessageRequest,
-  AboutParticipant
+  AboutParticipant,
 } from "../../../../Pages/Open_Chat_Page/Open_Chat_Page";
 import {
   formatTimestamp,
   formatDate,
-  getDaysDifferenceFromToday
+  getDaysDifferenceFromToday,
+  getTimeDifference
 } from "../../../getTimeDifference/getTimeDifference";
 
 function LiveChat(props) {
@@ -45,7 +46,8 @@ function LiveChat(props) {
         const response = await getChatwholeChat(props.chatId);
         const aboutParticipantinfo = await AboutParticipant(username);
         setChatData(response.data);
-        setAboutParticipant(aboutParticipantinfo)
+        setAboutParticipant(aboutParticipantinfo);
+        console.log(aboutParticipantinfo)
         const participant = response.data.chat[0].participants.find(participant => participant.username !== username);
         if (participant) {
           setParticipantName(participant.username);
@@ -153,7 +155,7 @@ function LiveChat(props) {
               </div>
               <div className="Live-chat-profile-username">{participantName}</div>
               <div className="Live-chat-profile-username-details">
-                Redditor for {getDaysDifferenceFromToday(aboutParticipant.cakeDay)} · {aboutParticipant.postKarma + aboutParticipant.commentKarma} karma
+                Redditor for {getDaysDifferenceFromToday(aboutParticipant.createdAt)} · {aboutParticipant.karma} karma
               </div>
             </a>
           </div>
