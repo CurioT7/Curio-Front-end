@@ -11,51 +11,35 @@ import Ellipsis from "../../styles/icons/Elippsis";
 import { MdOutlineReport } from "react-icons/md";
 import { GoLock } from "react-icons/go";
 import ProfileImg from "../../styles/icons/ProfileImg";
-import { fetchUnmoderatedPostsFromBackend } from "./UnmoderatedEndpoints.js";
+import { fetchRemovedPostsfromBackend } from "./UnmoderatedEndpoints.js";
 import { getTimeDifference } from "../../Components/getTimeDifference/getTimeDifference.js";
 import { Text } from '@chakra-ui/react'
 import RemovedPosts from "./RemovedPosts.jsx";
+import CleanQueue from "./CleanQueue.jsx";
 
 function Removed( props ) {
   const [checked, setChecked] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [isApproved, setisApproved] = useState(false);
-  const [isRemoved, setisRemoved] = useState(false);
-  const [didRespond, setDdidRespond] = useState(false);
-  const [UnmoderatedPosts, setUnmoderatedPosts] = useState([]);
-  const [isRemovedComponent, setRemovedComponent] = useState(false);
+  const [removedPosts, setRemovedPosts] = useState([]);
+
   
   const myusername = localStorage.getItem("username");
-    const handleshowOptions = () => {
-    setShowOptions(!showOptions);
-};
+
 
   const handleClick = () => {
     setChecked(!checked);
   };
 
-//   const handleisApproved = () => {
-//     setisApproved(true);
-//     setisRemoved(false);
-//     setDdidRespond(true);
-//   };
 
-  
-//   const handleisRemoved = () => {
-//     setisRemoved(true);
-//     setisApproved(false);
-//     setDdidRespond(true);
-//   };
-
-  async function getUnmoderatedPosts() {
-    const response = await fetchUnmoderatedPostsFromBackend(props.community);
+  async function getRemovedPosts() {
+    const response = await fetchRemovedPostsfromBackend(props.community);
     if(response){
-    setUnmoderatedPosts(response);
+    setRemovedPosts(response);
     }
   }
 
   useEffect(() => {
-    getUnmoderatedPosts();
+    getRemovedPosts();
   }, []);
 
   return (
@@ -86,8 +70,8 @@ function Removed( props ) {
             </div>
           </div>
         </div>
-        {UnmoderatedPosts.unmoderatedPosts?(
-          UnmoderatedPosts.unmoderatedPosts.map((post, index) => (
+        {removedPosts.removedItems && removedPosts.removedItems.length > 0?(
+          removedPosts.removedItems.map((post, index) => (
             <RemovedPosts
             key={index}
             _id={post._id}
@@ -101,8 +85,9 @@ function Removed( props ) {
             comments={post.comments}
             myusername={myusername}
             checked={checked}
+            community={props.community}
           />
-          ))) : null
+          ))) : <CleanQueue />
         }
       </div>
     </div>

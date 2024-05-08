@@ -17,6 +17,7 @@ import { fetchUnmoderatedPostsFromBackend } from "./UnmoderatedEndpoints.js";
 import { getTimeDifference } from "../../Components/getTimeDifference/getTimeDifference.js";
 import { Text } from '@chakra-ui/react'
 import ModerationPosts from "./ModerationPosts.jsx";
+import CleanQueue from "./CleanQueue.jsx";
 
 
 function Unmoderated( props ) {
@@ -80,7 +81,7 @@ function Unmoderated( props ) {
             </div>
           </div>
         </div>
-        {UnmoderatedPosts.unmoderatedPosts?(
+        {UnmoderatedPosts.unmoderatedPosts && UnmoderatedPosts.unmoderatedPosts.length > 0?(
           UnmoderatedPosts.unmoderatedPosts.map((post, index) => (
             <ModerationPosts
             key={index}
@@ -97,8 +98,9 @@ function Unmoderated( props ) {
             checked={checked}
             isLocked={post.isLocked}
             isNSFW={post.isNSFW}
+            community={props.community}
           />
-          ))) : null
+          ))) : <CleanQueue />
         }
       </div>
     </div>

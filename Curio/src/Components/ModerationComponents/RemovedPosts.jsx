@@ -20,7 +20,7 @@ import { PiTrafficCone } from "react-icons/pi";
 import eighteenPlus from "../../assets/icons8-18-plus-50.png";
 import OC from "../../assets/icons8-oc-50.png";
 import { SendLockedPost, SendUnlockedPost } from "../Post/PostEndPoints.js";
-import { markasNSFW, unmarkasNSFW } from "./UnmoderatedEndpoints.js";
+import { markasNSFW, unmarkasNSFW, approveRemovedPosts, removePost } from "./UnmoderatedEndpoints.js";
 
 
 
@@ -43,19 +43,27 @@ function RemovedPosts( props ) {
     setChecked(!checked);
   };
 
-  const handleisApproved = (id) => {
-    setisApproved(true);
-    setisRemoved(false);
-    setDdidRespond(true);
-    console.log(`post with ${id} has been approved`);
-  };
+
+
+  const handleApprovePost =  async (id, post, commName) => {
+    const response = await approveRemovedPosts(id, post, commName);
+    if(response){
+      setisApproved(true);
+      setisRemoved(false);
+      setDdidRespond(true);
+    }
+  }
 
   
-  const handleisRemoved = () => {
-    setisRemoved(true);
-    setisApproved(false);
-    setDdidRespond(true);
-  };
+  const handleRemovePost =  async (id, post, commName, reason) => {
+    const response = await removePost(id, post, commName);
+    if(response){
+      setisApproved(false);
+      setisRemoved(true);
+      setDdidRespond(true);
+      setRemovalReason(reason);
+    }
+  }
 
   const handleLockedPost = async (id) => {
     const response = await SendLockedPost(id);
@@ -165,12 +173,10 @@ function RemovedPosts( props ) {
             </div>
           }
           <div className="d-flex align-items-center">
-            {isApproved && !isRemoved ? (
-                <button className="RemoveButton" onClick={handleisRemoved}><Close />Remove</button>
-            ) : !isApproved && isRemoved ? (
+            {!isApproved && isRemoved ? (
                 <>
                     <button className="me-3 ApproveButton1">Add Removal Reason</button>
-                    <button className="me-3 ApproveButton1" onClick={() => {handleisApproved(props._id)}}><FaCheck style={{display: 'inline-block', fontSize: '10px'}} /> Approve</button>
+                    <button className="me-3 ApproveButton1" onClick={() => {handleApprovePost(props._id, 'post', props.community)}}><FaCheck style={{display: 'inline-block', fontSize: '10px'}} /> Approve</button>
                 </>
             ) : null}
             <OverlayTrigger

@@ -20,7 +20,7 @@ import { PiTrafficCone } from "react-icons/pi";
 import eighteenPlus from "../../assets/icons8-18-plus-50.png";
 import OC from "../../assets/icons8-oc-50.png";
 import { SendLockedPost, SendUnlockedPost } from "../Post/PostEndPoints.js";
-import { markasNSFW, unmarkasNSFW } from "./UnmoderatedEndpoints.js";
+import { markasNSFW, unmarkasNSFW, approvePost, removePost } from "./UnmoderatedEndpoints.js";
 
 function ModerationPosts( props ) {
   const [checked, setChecked] = useState(false);
@@ -38,6 +38,24 @@ function ModerationPosts( props ) {
     setShowOptions(!showOptions);
 };
 
+const handleApprovePost =  async (id, post, commName) => {
+  const response = await approvePost(id, post, commName);
+  if(response){
+    setisApproved(true);
+    setisRemoved(false);
+    setDdidRespond(true);
+  }
+}
+
+const handleRemovePost =  async (id, post, commName, reason) => {
+  const response = await removePost(id, post, commName);
+  if(response){
+    setisApproved(false);
+    setisRemoved(true);
+    setDdidRespond(true);
+    setRemovalReason(reason);
+  }
+}
 
   const handleClick = () => {
     setChecked(!checked);
@@ -164,16 +182,16 @@ function ModerationPosts( props ) {
           }
           <div className="d-flex align-items-center">
             {!didRespond && <>
-            <button className="me-3 ApproveButton" onClick={() => {handleisApproved(props._id)}}><FaCheck style={{display: 'inline-block', fontSize: '10px'}} /> Approve</button>
-            <button className="RemoveButton" onClick={() => {handleisRemoved('Removed')}}><Close />Remove</button>
+            <button className="me-3 ApproveButton" onClick={() => {handleApprovePost(props._id, 'post', props.community)}}><FaCheck style={{display: 'inline-block', fontSize: '10px'}} /> Approve</button>
+            <button className="RemoveButton" onClick={() => {handleRemovePost(props._id, 'post', props.community, 'normal')}}><Close />Remove</button>
             </>
             }
             {isApproved && !isRemoved ? (
-                <button className="RemoveButton" onClick={() => handleisRemoved('normal')}><Close />Remove</button>
+                <button className="RemoveButton" onClick={() => {handleRemovePost(props._id, 'post', props.community, 'normal')}}><Close />Remove</button>
             ) : !isApproved && isRemoved ? (
                 <>
                     <button className="me-3 ApproveButton1">Add Removal Reason</button>
-                    <button className="me-3 ApproveButton1" onClick={() => {handleisApproved(props._id)}}><FaCheck style={{display: 'inline-block', fontSize: '10px'}} /> Approve</button>
+                    <button className="me-3 ApproveButton1" onClick={() => {handleApprovePost(props._id, 'post', props.community)}}><FaCheck style={{display: 'inline-block', fontSize: '10px'}} /> Approve</button>
                 </>
             ) : null}
             <OverlayTrigger
@@ -188,7 +206,7 @@ function ModerationPosts( props ) {
                     <div className="dropdownReport ms-2">
                       Moderation
                     </div>
-                    <div className="dropdownComponents2" onClick={() => handleisRemoved('spam')}>
+                    <div className="dropdownComponents2" onClick={() => {handleRemovePost(props._id, 'post', props.community, 'spam')}}>
                         <MdOutlineReport style={{display: 'inline-block'}}  />Remove As Spam
                     </div>  
                     {!isLocked ? (
