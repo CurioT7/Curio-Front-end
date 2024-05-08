@@ -7,6 +7,11 @@ import GoBack from '../../../styles/icons/GoBack';
 import { Link } from 'react-router-dom';
 import Queues from '../../../styles/icons/Queues';
 import './ModSidebar.css';
+import ScheduledPosts from '../../../styles/icons/ScheduledPosts';
+import UserManagement from '../../../styles/icons/UserManagement'; 
+import RulesandRemoval from '../../../styles/icons/RulesAndRemoval';
+import ContentControls from '../../../styles/icons/ContentControls';
+import SidebarSetting from '../../../styles/icons/SidbarSettings';
 
 
 function ModSidebar({ communityName }) {
@@ -31,21 +36,21 @@ function ModSidebar({ communityName }) {
           <MenuItem className='normalModItem'><Queues />Queues</MenuItem>
         </Link>
         <Link to={`/r/${communityName}/about/scheduledposts`} style={{ textDecoration: 'none' }}>
-          <MenuItem className='normalModItem'>Scheduled Posts</MenuItem>
+          <MenuItem className='normalModItem'><ScheduledPosts />Scheduled Posts</MenuItem>
         </Link>
         <Link to={`/r/${communityName}/about/usermanagement`} style={{ textDecoration: 'none' }}>
-          <MenuItem className='normalModItem'>User Management</MenuItem>
+          <MenuItem className='normalModItem'><UserManagement />User Management</MenuItem>
         </Link>
         <p className='overviewText' style={{ paddingTop: '40px' }}>MODERATION</p>
         <Link to={`/r/${communityName}/about/rules`} style={{ textDecoration: 'none' }}>
-        <MenuItem className='normalModItem'>Rules and removal reasons</MenuItem>
+        <MenuItem className='normalModItem'><RulesandRemoval />Rules and removal reasons</MenuItem>
         </Link>
         <Link to={`/r/${communityName}/about/rules/contentcontrols`} style={{ textDecoration: 'none' }}>
-          <MenuItem className='normalModItem'>Content Controls</MenuItem>
+          <MenuItem className='normalModItem'><ContentControls />Content Controls</MenuItem>
         </Link>
         <p className='overviewText' style={{ paddingTop: '40px' }}>SETTINGS</p>
         <Link to={`/r/${communityName}/about/settings`} style={{ textDecoration: 'none' }}>
-          <MenuItem className='normalModItem'>General Settings</MenuItem>
+          <MenuItem className='normalModItem'><SidebarSetting />General Settings</MenuItem>
         </Link>
       </Menu>
     </Sidebar>
