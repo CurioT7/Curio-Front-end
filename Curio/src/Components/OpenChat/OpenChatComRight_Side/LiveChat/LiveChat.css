@@ -1,6 +1,5 @@
 .Live-chat-form{
     flex: 1 0 0px;
-    overflow: hidden auto;
 }
 
 .Live-chat-profile-data{
@@ -86,6 +85,7 @@
 
 .message-content-live-chat-container{
     display: flex;
+    align-items: center;
     flex-direction: row;
     gap: .75rem;
     padding: 0.25rem .75rem;

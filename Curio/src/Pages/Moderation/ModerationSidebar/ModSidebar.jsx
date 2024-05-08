@@ -37,7 +37,9 @@ function ModSidebar({ communityName }) {
           <MenuItem className='normalModItem'>User Management</MenuItem>
         </Link>
         <p className='overviewText' style={{ paddingTop: '40px' }}>MODERATION</p>
+        <Link to={`/r/${communityName}/about/rules`} style={{ textDecoration: 'none' }}>
         <MenuItem className='normalModItem'>Rules and removal reasons</MenuItem>
+        </Link>
         <Link to={`/r/${communityName}/about/rules/contentcontrols`} style={{ textDecoration: 'none' }}>
           <MenuItem className='normalModItem'>Content Controls</MenuItem>
         </Link>

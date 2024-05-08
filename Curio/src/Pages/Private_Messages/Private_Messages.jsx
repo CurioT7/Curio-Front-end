@@ -45,9 +45,9 @@ function Private_Messages(props) {
   const fetchUserData = async () => {
     try {
       const communityDataResponse = await axios.get(
-        `${serverHost}/api/user/${username}/about`
+        `${serverHost}/api/moderatedSubreddits/${username}`
       );
-      const communityNames = communityDataResponse.data.moderatedSubreddits.map(community => community.name);
+      const communityNames = communityDataResponse.data.moderatedCommunities;
       setUserCommunities(communityNames);
     } catch (error) {
       if (error.response) {
@@ -92,9 +92,6 @@ function Private_Messages(props) {
           },
         }
       );
-      console.log('gfccccccc')
-
-      console.log(response)
 
       switch (response.status) {
         case 200:

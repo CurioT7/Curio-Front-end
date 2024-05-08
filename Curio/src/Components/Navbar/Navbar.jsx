@@ -276,14 +276,14 @@ if (!props.NavbarVisibility) {
       <div className='right-section-navbar'>
         {isAuthenticated && 
         <>
-          <Tooltip label="Open chat">
+          <Tooltip hasArrow label="Open chat">
             <Link to={'/room/create'} className='sub-right-navbar'>
               <li className='right-item-option' style={{ display: "flex" }}>
                     <img className='navImg' src={openchat} alt="logo"/>
               </li>
             </Link>
           </Tooltip>
-          <Tooltip label="Create post">
+          <Tooltip hasArrow label="Create post">
             <Link to={'/user/CreatePost'} className='sub-right-navbar'>
               <li className='create-icon' style={{ display: "flex" }}>
                 <img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
@@ -291,7 +291,7 @@ if (!props.NavbarVisibility) {
               </li>
             </Link>
           </Tooltip>
-          <Tooltip label="Open inbox">
+          <Tooltip hasArrow label="Open inbox">
             <a className='sub-right-navbar notif' style={{position: 'relative'}} >
               <li className='right-item-option' style={{ display: "flex" }} onClick={handleOpenNotifications}>
                   <Menu>
@@ -312,7 +312,7 @@ if (!props.NavbarVisibility) {
             </a>
           </Tooltip>
           <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
-            <Tooltip label="Open profile menu">
+            <Tooltip hasArrow label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
                 <img className='profileImg' src={profileImage || profile} alt="logo"/>
               </a>

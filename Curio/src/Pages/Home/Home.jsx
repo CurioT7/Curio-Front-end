@@ -277,6 +277,7 @@ useEffect(() => {
                     didVote={didVote[post.post._id]}
                     optionSelected={post.details?.pollVote}
                     pollEnded={post.details?.pollEnded}
+                    isNSFW={post.post.isNSFW}
                     createdAt={post.post.createdAt}
                    />) : (
                     <Post
@@ -290,6 +291,7 @@ useEffect(() => {
                     content={post.post.content}
                     type={post.post.type}
                     media={post.post.media}
+                    isNSFW={post.post.isNSFW}
                     //isMod={isMod}
                     linkedSubreddit={post.details?.subredditName}
                     voteStatus={post.details?.voteStatus}
@@ -353,48 +355,55 @@ useEffect(() => {
           <BackToTheTopButton/>
       </div>
       <div style={{marginLeft: "20rem"}}>
+      {posts.length === 0 &&
+        <div className="error-message">
+          <p>There doesn't seem to be anything here
+          </p>
+        </div>
+      }
+      {posts.length > 0 && 
+          <Pagination>
+            <Pagination.Prev 
+              onClick={() => setPageNumber(Math.max(pageNumber - 1, 1))} 
+            />
+            <Pagination.Ellipsis 
+              onClick={() => setPageNumber(Math.max(pageNumber - 10, 1))}
+            />
 
-        <Pagination>
-          <Pagination.Prev 
-            onClick={() => setPageNumber(Math.max(pageNumber - 1, 1))} 
-          />
-          <Pagination.Ellipsis 
-            onClick={() => setPageNumber(Math.max(pageNumber - 10, 1))}
-          />
+            <Pagination.Item active>{pageNumber}</Pagination.Item>
 
-          <Pagination.Item active>{pageNumber}</Pagination.Item>
+            <Pagination.Item 
+              onClick={() => setPageNumber(Math.min(pageNumber + 1, totalPages))}
+            >
+              {pageNumber + 1}
+            </Pagination.Item>
 
-          <Pagination.Item 
-            onClick={() => setPageNumber(Math.min(pageNumber + 1, totalPages))}
-          >
-            {pageNumber + 1}
-          </Pagination.Item>
+            <Pagination.Item 
+              onClick={() => setPageNumber(Math.min(pageNumber + 2, totalPages))}
+            >
+              {pageNumber + 2}
+            </Pagination.Item>
 
-          <Pagination.Item 
-            onClick={() => setPageNumber(Math.min(pageNumber + 2, totalPages))}
-          >
-            {pageNumber + 2}
-          </Pagination.Item>
+            <Pagination.Item 
+              onClick={() => setPageNumber(Math.min(pageNumber + 3, totalPages))} 
+            >
+              {pageNumber + 3}
+            </Pagination.Item>
 
-          <Pagination.Item 
-            onClick={() => setPageNumber(Math.min(pageNumber + 3, totalPages))} 
-          >
-            {pageNumber + 3}
-          </Pagination.Item>
+            <Pagination.Item 
+              onClick={() => setPageNumber(Math.min(pageNumber + 4, totalPages))} 
+            >
+              {pageNumber + 4}
+            </Pagination.Item>
 
-          <Pagination.Item 
-            onClick={() => setPageNumber(Math.min(pageNumber + 4, totalPages))} 
-          >
-            {pageNumber + 4}
-          </Pagination.Item>
-
-          <Pagination.Ellipsis 
-            onClick={() => setPageNumber(Math.min(pageNumber + 10, totalPages))}
-          />
-          <Pagination.Next 
-            onClick={() => setPageNumber(Math.min(pageNumber + 1, totalPages))}
-          />
-        </Pagination>
+            <Pagination.Ellipsis 
+              onClick={() => setPageNumber(Math.min(pageNumber + 10, totalPages))}
+            />
+            <Pagination.Next 
+              onClick={() => setPageNumber(Math.min(pageNumber + 1, totalPages))}
+            />
+          </Pagination>
+        }
       </div>
 
     
