@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Posting_rules.css"
+import "./PostingRules.css"
 import logo from "../../../../assets/Curio_logo.png";
 
 
