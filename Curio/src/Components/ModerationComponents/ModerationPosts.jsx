@@ -30,6 +30,8 @@ function ModerationPosts( props ) {
   const [didRespond, setDdidRespond] = useState(false);
   const [isLocked, setisLocked] = useState(false);
   const [isNSFW, setisNSFW] = useState(false);
+  const [removalReason, setRemovalReason] = useState('');
+
   const _id = props._id;
   
   const handleshowOptions = () => {
@@ -49,11 +51,13 @@ function ModerationPosts( props ) {
   };
 
   
-  const handleisRemoved = () => {
+  const handleisRemoved = (reason) => {
     setisRemoved(true);
     setisApproved(false);
     setDdidRespond(true);
+    setRemovalReason(reason);
   };
+
 
   const handleLockedPost = async (id) => {
     const response = await SendLockedPost(id);
@@ -150,7 +154,7 @@ function ModerationPosts( props ) {
               </div>
               <div className="d-flex flex-column ms-2">
             <div style={{fontSize: '12px', fontWeight: '700'}}>
-              Removed
+            {removalReason === 'spam' ? 'Removed as spam' : 'Removed'}
               </div>
               <div style={{fontSize: '12px'}}>
                 u/{props.myusername} 2hours ago
@@ -161,11 +165,11 @@ function ModerationPosts( props ) {
           <div className="d-flex align-items-center">
             {!didRespond && <>
             <button className="me-3 ApproveButton" onClick={() => {handleisApproved(props._id)}}><FaCheck style={{display: 'inline-block', fontSize: '10px'}} /> Approve</button>
-            <button className="RemoveButton" onClick={handleisRemoved}><Close />Remove</button>
+            <button className="RemoveButton" onClick={() => {handleisRemoved('Removed')}}><Close />Remove</button>
             </>
             }
             {isApproved && !isRemoved ? (
-                <button className="RemoveButton" onClick={handleisRemoved}><Close />Remove</button>
+                <button className="RemoveButton" onClick={() => handleisRemoved('normal')}><Close />Remove</button>
             ) : !isApproved && isRemoved ? (
                 <>
                     <button className="me-3 ApproveButton1">Add Removal Reason</button>
@@ -184,8 +188,8 @@ function ModerationPosts( props ) {
                     <div className="dropdownReport ms-2">
                       Moderation
                     </div>
-                    <div className="dropdownComponents2">
-                        <MdOutlineReport style={{display: 'inline-block'}} />Remove As Spam
+                    <div className="dropdownComponents2" onClick={() => handleisRemoved('spam')}>
+                        <MdOutlineReport style={{display: 'inline-block'}}  />Remove As Spam
                     </div>  
                     {!isLocked ? (
                     <div className="dropdownComponents1" onClick={() => {handleLockedPost(props._id)}}>
