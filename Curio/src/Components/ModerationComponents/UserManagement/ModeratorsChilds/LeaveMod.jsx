@@ -11,8 +11,20 @@ import {
   } from '@chakra-ui/react'
   import { Button } from "@chakra-ui/react";
   import { HiTrash } from "react-icons/hi2";
+  import { LeaveModeration } from "./ModeratorsEndPoints";
+  import { useParams } from "react-router-dom";
+  import { useNavigate } from "react-router-dom";
 function LeaveMode(props){
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { Community } = useParams();
+    const navigate = useNavigate();
+    async function handleLeave(){
+        const data = await LeaveModeration(Community);
+        if(data){
+            navigate(`/r/${Community}`);
+        }
+        onClose();
+    }
     return(
         <div>
             {!props.invited&&<Button onClick={onOpen} fontWeight={700} variant='outline' borderRadius={20} size='sm' colorScheme="blue"> Leave as mod</Button>}
@@ -31,7 +43,7 @@ function LeaveMode(props){
                     <Button size='sm' borderRadius={20} variant='outline' colorScheme='blue' mr={3} onClick={onClose}>
                         cancel
                     </Button>
-                    {!props.invited&&<Button size='sm' onClick={onClose} colorScheme="blue" borderRadius={20}  >Leave</Button>}
+                    {!props.invited&&<Button size='sm' onClick={handleLeave} colorScheme="blue" borderRadius={20}  >Leave</Button>}
                     {props.invited&&<Button size='sm' onClick={onClose} colorScheme="blue" borderRadius={20}  >Remove</Button>}
                 </ModalFooter>
             </ModalContent>

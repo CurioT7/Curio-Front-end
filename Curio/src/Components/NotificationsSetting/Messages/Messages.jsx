@@ -6,22 +6,14 @@ import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
 
 function Messages({ userActivity }) {
   const toast = useToast();
-  const [mentions, setMentionChecked] = useState(true);
-  const [comments, setCommentsChecked] = useState(true);
-  const [upvotesPosts, setUpvotesPostsChecked] = useState(true);
-  const [upvotesComments, setUpvotesCommentsChecked] = useState(true);
-  const [replies, setRepliesChecked] = useState(true);
-  const [newFollowers, setNewFollowersChecked] = useState(true);
-  const [postsYouFollow, setPostsFollowChecked] = useState(true);
+  const [allowPrivateMessages, setAllowPrivateMessages] = useState(true);
+  const [allowChatNotifications, setAllowChatNotifications] = useState(true);
+  const [allowChatRequests, setAllowChatRequests] = useState(true);
 
   useEffect(() => {
-    setMentionChecked(userActivity.mentions);
-    setCommentsChecked(userActivity.comments);
-    setUpvotesPostsChecked(userActivity.upvotesPosts);
-    setUpvotesCommentsChecked(userActivity.upvotesComments);
-    setRepliesChecked(userActivity.replies);
-    setNewFollowersChecked(userActivity.newFollowers);
-    setPostsFollowChecked(userActivity.postsYouFollow);
+    setAllowPrivateMessages(userActivity.allowPrivateMessages);
+    setAllowChatNotifications(userActivity.allowChatNotifications);
+    setAllowChatRequests(userActivity.allowChatRequests);
   }, [userActivity]);
 
   function Toast() {
@@ -33,46 +25,21 @@ function Messages({ userActivity }) {
     });
   }
 
-  function handleMentionChange(){
-    setMentionChecked(!mentions);
-    sendUserDataToBackend({mentions :! mentions});
+  function handlePrivateMessagesChange(){
+    setAllowPrivateMessages(!allowPrivateMessages);
+    sendUserDataToBackend({allowPrivateMessages :! allowPrivateMessages});
     Toast();
   };
 
-  function handleCommentsChange(){
-    setCommentsChecked(!comments);
-    sendUserDataToBackend({comments :! comments});
+  function handleChatMessagesChange(){
+    setAllowChatNotifications(!allowChatNotifications);
+    sendUserDataToBackend({allowChatNotifications :! allowChatNotifications});
     Toast();
   };
 
-  function handleUpvotesPostsChange(){
-    setUpvotesPostsChecked(!upvotesPosts);
-    sendUserDataToBackend({upvotesPosts :! upvotesPosts});
-    Toast();
-  };
-
-
-  function handleUpvotesCommentsChange(){
-    setUpvotesCommentsChecked(!upvotesComments);
-    sendUserDataToBackend({upvotesComments :! upvotesComments});
-    Toast();
-  };
-
-  function handleRepliesChange(){
-    setRepliesChecked(!replies);
-    sendUserDataToBackend({replies :! replies});
-    Toast();
-  };
-
-  function handleNewFollowersChange(){
-    setNewFollowersChecked(!newFollowers);
-    sendUserDataToBackend({newFollowers :! newFollowers});
-    Toast();
-  };
-
-  function handlePostsFollowChange(){
-    setPostsFollowChecked(!postsYouFollow);
-    sendUserDataToBackend({postsYouFollow :! postsYouFollow});
+  function handleChatrequestChange(){
+    setAllowChatRequests(!allowChatRequests);
+    sendUserDataToBackend({allowChatRequests :! allowChatRequests});
     Toast();
   };
 
@@ -83,8 +50,8 @@ function Messages({ userActivity }) {
         <Spacer />
         <Switch
           size="lg"
-          isChecked={mentions}
-          onChange={handleMentionChange}
+          isChecked={allowPrivateMessages}
+          onChange={handlePrivateMessagesChange}
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -92,8 +59,8 @@ function Messages({ userActivity }) {
         <Spacer />
         <Switch
           size="lg"
-          isChecked={comments}
-          onChange={handleCommentsChange}
+          isChecked={allowChatNotifications}
+          onChange={handleChatMessagesChange}
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -101,8 +68,8 @@ function Messages({ userActivity }) {
         <Spacer />
         <Switch
           size="lg"
-          isChecked={upvotesPosts}
-          onChange={handleUpvotesPostsChange}
+          isChecked={allowChatRequests}
+          onChange={handleChatrequestChange}
         />
       </Flex>
     </>

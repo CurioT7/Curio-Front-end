@@ -32,7 +32,10 @@ function NotificationSetting(props) {
         upvotesComments: data.upvotesComments,
         replies: data.replies,
         newFollowers: data.newFollowers,
-        postsYouFollow: data.postsYouFollow
+        postsYouFollow: data.postsYouFollow,
+        allowPrivateMessages: data.allowPrivateMessages,
+        allowChatNotifications: data.allowChatNotifications,
+        allowChatRequests: data.allowChatRequests
       })        
     }
 }
