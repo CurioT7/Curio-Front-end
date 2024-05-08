@@ -18,7 +18,7 @@ import { formatTimestamp } from "../../getTimeDifference/getTimeDifference";
 import { FaRegSquare } from "react-icons/fa";
 import { BsCheckSquareFill } from "react-icons/bs";
 
-function OpenChatCom({ chatsData, handleChatId }) {
+function OpenChatCom({ newMessage, newParticipants, chatsData, handleChatId }) {
     if (!chatsData || !chatsData.chats) {
         return null;
     }

@@ -47,3 +47,16 @@ export function formatDatewithDays(dateString) {
 
     return `${month} ${day}, ${year}`;
 }
+
+export function getDaysDifferenceFromToday(inputDate) {
+    const cameraModels = {
+        0: "70D",
+    };
+
+    const currentDate = new Date();
+    const targetDate = new Date(inputDate);
+    const timeDifference = Math.abs(currentDate - targetDate);
+    const differenceInDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    return cameraModels[differenceInDays % Object.keys(cameraModels).length];
+  }

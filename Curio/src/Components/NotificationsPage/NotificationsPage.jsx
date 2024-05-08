@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";
-import logo from "../../assets/Profile_navbar.png";
+import logo from "../../assets/avatar_default_6.png";
 import {
     Popover,
     PopoverTrigger,
@@ -55,7 +55,7 @@ function NotificationsPage({ notifications, unreadNotifications, onHideNotificat
                         <div style={{ display: 'flex', gap:'0.5em' }}>
                             <div className='avatar'>
                                 <span className='avatar-image'>
-                                    <img src={logo} alt="avatar for notification" style={{ marginBottom: "0" }} />
+                                    <img src={notification.media ? notification.media: logo} alt="avatar for notification" style={{ marginBottom: "0" }} />
                                 </span>
                                 <div className='notifications-item-icon notification-item-icon-page'>
                                     <i className="fa-solid fa-message" />

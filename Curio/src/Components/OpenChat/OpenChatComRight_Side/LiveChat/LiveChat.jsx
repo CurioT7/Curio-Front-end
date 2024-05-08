@@ -17,20 +17,25 @@ import {
   createChatRequest,
   getChatwholeChat,
   sendMessageRequest,
+  AboutParticipant,
 } from "../../../../Pages/Open_Chat_Page/Open_Chat_Page";
 import {
   formatTimestamp,
   formatDate,
+  getDaysDifferenceFromToday,
+  getTimeDifference
 } from "../../../getTimeDifference/getTimeDifference";
+
 function LiveChat(props) {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [newMessage, setNewMessage] = useState("");
-
+  const [participantName, setParticipantName] = useState('');
   const [chatData, setChatData] = useState(null);
   const user = localStorage.getItem("username");
   const [prevMessageDate, setPrevMessageDate] = useState(null);
   const [participants, setParticipants] = useState([]);
+  const [aboutParticipant, setAboutParticipant] = useState([]);
   const username = localStorage.getItem("username");
 
   const pickerRef = useRef(null);
@@ -39,7 +44,14 @@ function LiveChat(props) {
     async function fetchChatData() {
       try {
         const response = await getChatwholeChat(props.chatId);
+        const aboutParticipantinfo = await AboutParticipant(username);
         setChatData(response.data);
+        setAboutParticipant(aboutParticipantinfo);
+        console.log(aboutParticipantinfo)
+        const participant = response.data.chat[0].participants.find(participant => participant.username !== username);
+        if (participant) {
+          setParticipantName(participant.username);
+        }
       } catch (error) {
         console.error("Error fetching chat data:", error);
       }
@@ -98,9 +110,6 @@ function LiveChat(props) {
               chat.participants.map((participant) => participant.username)
             )
             .flat();
-
-          //set participants
-          //   const [participants, setParticipants] = useState([]);
           setParticipants(participants);
           console.log("RECIEVER", participants);
 
@@ -112,12 +121,14 @@ function LiveChat(props) {
           await createChatRequest(props.recipient, message);
         }
         console.log("message sent", message, participants);
+        props.onNewMessage(message, participants);
         setNewMessage(message);
         setMessage("");
       } catch (error) {
         console.error("Error sending message:", error);
       }
     }
+    setNewMessage('');
   };
 
   const handleEmojiSelect = (emoji) => {
@@ -126,7 +137,7 @@ function LiveChat(props) {
 
   return (
     <div className="chat-div">
-      <HeaderChatRight_Side header="General_Boat_962" check="true" />
+      <HeaderChatRight_Side header={participantName} check="true" />
       <div style={{display:'flex', flexDirection: 'column', overflow: 'auto', width:'100%', height:'100%'}}>
         <div className="Live-chat-form">
           <div className="Live-chat-profile-data">
@@ -142,9 +153,9 @@ function LiveChat(props) {
               <div className="Live-chat-profile-picture">
                 <img src={profile} className="picture-live-chat" alt="" />
               </div>
-              <div className="Live-chat-profile-username">General_Boat_962</div>
+              <div className="Live-chat-profile-username">{participantName}</div>
               <div className="Live-chat-profile-username-details">
-                Redditor for 61d · 1 karma
+                Redditor for {getDaysDifferenceFromToday(aboutParticipant.createdAt)} · {aboutParticipant.karma} karma
               </div>
             </a>
           </div>
