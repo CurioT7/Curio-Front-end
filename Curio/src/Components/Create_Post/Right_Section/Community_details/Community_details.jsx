@@ -11,7 +11,6 @@ import bannersubreddit from "../../../../assets/cover.png";
 import { formatDatewithDays } from "../../../getTimeDifference/getTimeDifference"
 
 function Community_details({ subredditData, community }) {
-    console.log(subredditData.banner)
     const username = localStorage.getItem('username');
     const [isSwitch, setIsSwitch] = useState(true);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
@@ -84,15 +83,14 @@ function Community_details({ subredditData, community }) {
                                     top: '1px',
                                     left: '1px'
                                 }}>
-
                                 <div className="file-input-wrapper-username">
                                     <label htmlFor="" className="file-label-username" style={{ cursor: 'pointer' }}>
                                         <div className="file-preview-container-username">
                                             <input type="file" accept="image/x-png,image/jpeg" className="file-input-banner-username" />
                                         </div>
-                                        <div className="file-banner-container-username">
+                                        <Link to={`/settings/profile`} className="file-banner-container-username">
                                             <i className="fa-solid fa-camera add-banner" />
-                                        </div>
+                                        </Link>
                                     </label>
                                 </div>
                             </div>
@@ -154,9 +152,9 @@ function Community_details({ subredditData, community }) {
                                             <div className="file-preview-container-username">
                                                 <input type="file" accept="image/x-png,image/jpeg" className="file-input-icon-username" />
                                             </div>
-                                            <div className="file-icon-container-username">
+                                            <Link to={`/settings/profile`}  className="file-icon-container-username">
                                                 <i className="fa-solid fa-camera add-icon"></i>
-                                            </div>
+                                            </Link>
                                         </label>
                                     </div>
                                 </div>
