@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./NewPostForm.css";
 import { Button, Flex, Spacer, Checkbox, useToast } from "@chakra-ui/react";
 import { AddIcon, CheckIcon } from "@chakra-ui/icons";
-import "./EditCreateArea.css";
+import "./EditCreatearea.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
