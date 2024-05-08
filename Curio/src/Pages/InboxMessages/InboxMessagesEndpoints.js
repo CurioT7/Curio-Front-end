@@ -173,3 +173,19 @@ export async function BlockUserMessages(blockeduser) {
     return ('');
   }
 }
+
+
+export async function handleUnread(id){
+  try {
+      const response = await axios.post(`${serverHost}/api/message/unread/${id}`,{},{
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      });
+      if (response.status === 200) {
+          window.dispatchEvent(new Event("privateUnreadMessageDeleted"));
+      }
+  } catch (error) {
+      console.error("Error marking message unread:", error);
+  }
+}

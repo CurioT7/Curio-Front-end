@@ -5,7 +5,7 @@ import Downvotes from '../../../styles/icons/Downvotes.jsx';
 import FilledDownvote from '../../../styles/icons/FilledDownvote.jsx';
 import FilledUpvote from '../../../styles/icons/FilledUpvote.jsx';
 import { getTimeDifference } from '../../getTimeDifference/getTimeDifference';
-import { handleUPVoteComments, handleDownVoteComments, BlockUserMessages } from '../../../Pages/InboxMessages/InboxMessagesEndpoints.js';
+import { handleUPVoteComments, handleDownVoteComments, BlockUserMessages, handleUnread } from '../../../Pages/InboxMessages/InboxMessagesEndpoints.js';
 import { Link, useNavigate } from 'react-router-dom';
 import ReportPopup from "../../ModalPages/ModalPages.jsx";
 
@@ -104,7 +104,7 @@ function Post_Replies_Com(props) {
                         ) : (
                             <Box className="list-item-username-mentions" as="li" onClick={() => setConfirmBlock(true)}>Block User</Box>
                         )}
-                        <Box className="list-item-username-mentions" as="li">Mark Unread</Box>
+                        <Box onClick={() => handleUnread(props.id)} className="list-item-username-mentions" as="li">Mark Unread</Box>
                     </Box>
                     <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
                 </div>

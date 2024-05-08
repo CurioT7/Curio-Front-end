@@ -34,6 +34,7 @@ function Post_Replies(props) {
                 console.error('Error fetching messages:', error.message);
                 setError(true);
             }
+            console.log(recievedMessages)
         };
 
         fetchData();
@@ -83,6 +84,7 @@ function Post_Replies(props) {
                                         downvotedcomments={downvotedcomments}
                                         upvotedcomments={upvotedcomments}
                                         onBlockConfirmed={() => removeMessage(message._id)}
+                                        id={message._id}
                                     />
                                 </div>
                             </div>
