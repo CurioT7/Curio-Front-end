@@ -76,7 +76,7 @@ function Post(props) {
                }
             });
         }
-    }, [props])
+    }, [])
     const navigate = useNavigate();
     const [upvoted, setUpvoted] = useState((localStorage.getItem('token') && props.voteStatus === "upvoted") ? true : false);
     const [downvoted, setDownvoted] = useState((localStorage.getItem('token') && props.voteStatus === "downvoted") ? true : false);
@@ -138,6 +138,7 @@ function Post(props) {
             });
             if (response.status === 200 || response.status === 201){
                 setDownvoted(false);
+                setUpvoted(false);
                 setVotes(votes + 1);
             }
         } else {
@@ -466,15 +467,15 @@ const postCategory = async (postID) => {
                             }}
                         >   
                             <Box display='flex' justifyContent='start'>
-                                <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: upvoted ? "#D93A00" : downvoted ? "#6A5CFF" : ""}}>
+                                <div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: (upvoted && localStorage.getItem("token")) ? "#D93A00" : (downvoted && localStorage.getItem("token")) ? "#6A5CFF" : ""}}>
                                     <button data-testid="upvotes" className='me-2 upvotes-footer-button' onClick={() => makePostUpvoted()}>
-                                        {upvoted ? <FilledUpvote /> : downvoted ? <Upvotes whiteOutline={true} /> : <Upvotes />}
+                                        {(upvoted && localStorage.getItem("token") !== null) ? <FilledUpvote /> : (downvoted && localStorage.getItem("token") !== null) ? <Upvotes whiteOutline={true} /> : <Upvotes />}
                                     </button>
                                     <div className='me-2'>
                                         <span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{votes}</span>
                                     </div>
                                     <button data-testid="downvotes" className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
-                                        {downvoted ? <FilledDownvote /> : upvoted ? <Downvotes whiteOutline={true} /> : <Downvotes />}
+                                        {(downvoted && localStorage.getItem("token")) ? <FilledDownvote /> : (upvoted && localStorage.getItem("token")) ? <Downvotes whiteOutline={true} /> : <Downvotes />}
                                     </button>
                                 </div>
                                 <Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={<FaRegCommentAlt />}>
