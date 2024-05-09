@@ -27,20 +27,6 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @param {string} notificationID - The ID of the notification to hide.
- * @param {Array} notifications - The array of notifications.
- * @param {function} setNotifications - Function to set the notifications state.
- * @param {string} notificationID - The ID of the notification to enable or disable.
- * @param {Array} notifications - The array of notifications.
- * @param {function} setNotifications - Function to set the notifications state.
- * @param {string} notificationID - The ID of the notification clicked.
- * @param {Array} notifications - The array of notifications.
- * @param {Array} unreadNotifications - The array of unread notifications.
- * @param {function} setUnreadNotifications - Function to set the unread notifications state.
- * @param {function} navigate - Function for navigation.
- * @param {Array} notifications - The array of notifications.
- * @param {Array} unreadNotifications - The array of unread notifications.
- * @param {function} setUnreadNotifications - Function to set the unread notifications state.
  * @module NotificationsFunctions
  */
 import {
@@ -50,6 +36,12 @@ import {
     enableNotification
 } from '../Notifications/NotificationsEndPoints';
 
+/**
+ * Handles hiding a notification.
+ * @param {string} notificationID - The ID of the notification to hide.
+ * @param {Array} notifications - The array of notifications.
+ * @param {function} setNotifications - Function to set the notifications state.
+ */
 export async function handleHideNotification(notificationID, notifications, setNotifications) {
     try {
         await hideNotification({ notificationID: notificationID });
@@ -59,6 +51,12 @@ export async function handleHideNotification(notificationID, notifications, setN
     }
 }
 
+/**
+ * Handles enabling or disabling a notification.
+ * @param {string} notificationID - The ID of the notification to enable or disable.
+ * @param {Array} notifications - The array of notifications.
+ * @param {function} setNotifications - Function to set the notifications state.
+ */
 export async function handleEnableNotification(notificationID, notifications, setNotifications) {
     try {
         const notificationIndex = notifications.findIndex(notification => notification._id === notificationID);
@@ -90,6 +88,14 @@ export async function handleEnableNotification(notificationID, notifications, se
     }
 }
 
+/**
+ * Handles clicking on a notification.
+ * @param {string} notificationID - The ID of the notification clicked.
+ * @param {Array} notifications - The array of notifications.
+ * @param {Array} unreadNotifications - The array of unread notifications.
+ * @param {function} setUnreadNotifications - Function to set the unread notifications state.
+ * @param {function} navigate - Function for navigation.
+ */
 export async function handleNotificationClick(notificationID, notifications, unreadNotifications, setUnreadNotifications, navigate) {
     try {
         const notification = notifications.find(notification => notification._id === notificationID);
@@ -112,6 +118,12 @@ export async function handleNotificationClick(notificationID, notifications, unr
     }
 }
 
+/**
+ * Marks all notifications as read.
+ * @param {Array} notifications - The array of notifications.
+ * @param {Array} unreadNotifications - The array of unread notifications.
+ * @param {function} setUnreadNotifications - Function to set the unread notifications state.
+ */
 export async function markAllAsRead(notifications, unreadNotifications, setUnreadNotifications) {
     try {
         // Filter out only unread notifications
@@ -137,13 +149,13 @@ export async function markAllAsRead(notifications, unreadNotifications, setUnrea
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 02:10:32 GMT+0300 (Eastern European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 02:59:21 GMT+0300 (Eastern European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

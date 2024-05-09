@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: TypeUsername</title>
+    <title>JSDoc: Module: NotificationsPage</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: TypeUsername</h1>
+    <h1 class="page-title">Module: NotificationsPage</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Component for typing usernames.</p></div>
+            <div class="description"><p>Component for rendering the notifications page.</p></div>
         
 
         
@@ -79,13 +79,13 @@
 
         <tr>
             
-                <td class="name"><code>props</code></td>
+                <td class="name"><code>notifications</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">object</span>
 
 
             
@@ -95,33 +95,37 @@
 
             
 
-            <td class="description last"><p>Component props.</p>
-                <h6>Properties</h6>
-                
+            <td class="description last"><p>Array of notifications.</p></td>
+        </tr>
 
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>setInputValue</code></td>
+                <td class="name"><code>unreadNotifications</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of unread notifications.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onHideNotification</code></td>
             
 
             <td class="type">
@@ -137,37 +141,14 @@
 
             
 
-            <td class="description last"><p>Function to set the input value.</p></td>
+            <td class="description last"><p>Function to hide a notification.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>inputValue</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The current input value.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>handleInputChange</code></td>
+                <td class="name"><code>onNotificationClick</code></td>
             
 
             <td class="type">
@@ -183,14 +164,14 @@
 
             
 
-            <td class="description last"><p>Function to handle input change.</p></td>
+            <td class="description last"><p>Function to handle notification click.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>handleToggleUser</code></td>
+                <td class="name"><code>onEnableNotification</code></td>
             
 
             <td class="type">
@@ -206,20 +187,20 @@
 
             
 
-            <td class="description last"><p>Function to toggle user selection.</p></td>
+            <td class="description last"><p>Function to enable a notification.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>selectedUsers</code></td>
+                <td class="name"><code>setNotifications</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">function</span>
 
 
             
@@ -229,14 +210,53 @@
 
             
 
-            <td class="description last"><p>The currently selected users.</p></td>
+            <td class="description last"><p>Function to set notifications state.</p></td>
         </tr>
 
     
-    </tbody>
-</table>
 
+        <tr>
+            
+                <td class="name"><code>setUnreadNotifications</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
             </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to set unread notifications state.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>markAllAsRead</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to mark all notifications as read.</p></td>
         </tr>
 
     
@@ -277,7 +297,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_OpenChat_OpenChatComRight_Side_NewChat_Type_Username_Type_Username.jsx.html">Components/OpenChat/OpenChatComRight_Side/NewChat/Type_Username/Type_Username.jsx</a>, <a href="Components_OpenChat_OpenChatComRight_Side_NewChat_Type_Username_Type_Username.jsx.html#line1">line 1</a>
+        <a href="Components_NotificationsPage_NotificationsPage.jsx.html">Components/NotificationsPage/NotificationsPage.jsx</a>, <a href="Components_NotificationsPage_NotificationsPage.jsx.html#line1">line 1</a>
     </li></ul></dd>
     
 
