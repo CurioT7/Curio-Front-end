@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./FollowersPage.css";
 import SearchIcon from "../../styles/icons/SearchIcon.jsx";
+import avatar2 from "../../assets/avatar_default_6.png";
 
 import {
   useToast
