@@ -15,7 +15,7 @@ import NavbarComponent from "./Components/Navbar/Navbar.jsx";
 import ForgotUser from "./Components/ForgotUser/ForgotUser.jsx";
 import LoginPage from "./Components/Login/Loginpage.jsx";
 import UserPage from "./Pages/UserProfile/UserProfile.jsx";
-import TestData from "./Components/TestingAPI/test.jsx";
+import TestData from "./Components/TestingAPI/test_1.jsx";
 import ResetPass from './Components/ForgotPass/ResetPass.jsx';
 import CommuntiyPage from './Components/CommunitiesListing/CommunityPage.jsx';
 import Top from './Pages/TopCommunityPage/TopCommunity.jsx';
