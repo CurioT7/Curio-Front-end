@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Create_Post/Right_Section/PostingRules/PostingRules.jsx</title>
+    <title>JSDoc: Source: Components/OpenChat/OpenChatComRight_Side/NewChat/userFunctions.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Create_Post/Right_Section/PostingRules/PostingRules.jsx</h1>
+    <h1 class="page-title">Source: Components/OpenChat/OpenChatComRight_Side/NewChat/userFunctions.js</h1>
 
     
 
@@ -27,40 +27,32 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Component for displaying posting rules.
- * @component
- * @module PostingRules
+ * Handles toggling users.
+ * @param {Array} selectedUsers - The currently selected users.
+ * @param {Function} setSelectedUsers - Function to set the selected users.
+ * @param {Function} setInputValue - Function to set the input value.
+ * @param {string} username - The username of the user to toggle.
+ * @param {string} image - The image of the user to toggle.
+ * @module UserFunctions
  */
-import React from 'react';
-import "./PostingRules.css"
-import logo from "../../../../assets/Curio_logo.png";
-
-
-function PostingRules() {
-  return (
-    &lt;div>
-      &lt;div className='curioPostingHeader'>
-        &lt;div className='headerContent'>
-            &lt;img src={logo} alt="Logo Curio" className='logoImg'/>Posting to Curio
-        &lt;/div>
-        &lt;ol className='rulesList'>
-            &lt;li className='ruleItem'>Remember the human&lt;/li>
-            &lt;li className='ruleItem'>Behave like you would in real life&lt;/li>
-            &lt;li className='ruleItem'>Look for the original source of content&lt;/li>
-            &lt;li className='ruleItem'>Search for duplicates before posting&lt;/li>
-            &lt;li className='ruleItem'>Read the community’s rules&lt;/li>
-        &lt;/ol>
-      &lt;/div>
-      &lt;div className='blank-div-rule'>&lt;/div>
-      &lt;div className='redditNotice'>
-      Please be mindful of reddit's &lt;a href="https://www.reddit.com/help/contentpolicy" className='contentPolicyLink'>content policy
-      &lt;/a> and practice good &lt;a href="https://www.reddit.com/wiki/reddiquette" className='reddiquetteLink'>reddiquette&lt;/a>.
-      &lt;/div>
-    &lt;/div>
-  );
-}
-
-export default PostingRules;
+export const handleToggleUser = (selectedUsers, setSelectedUsers, setInputValue, username, image) => {
+    const isUserSelected = selectedUsers.some(user => user.username === username);
+    if (isUserSelected) {
+        // User is already selected, remove them
+        const updatedUsers = selectedUsers.filter(user => user.username !== username);
+        setSelectedUsers(updatedUsers);
+        setInputValue(prevInputValue => {
+            // Filter out the username from the input value
+            const usernames = prevInputValue.split(',').map(name => name.trim());
+            const updatedUsernames = usernames.filter(name => name !== username);
+            return updatedUsernames.join(', ');
+        });
+    } else {
+        // User is not selected, add them
+        setSelectedUsers([...selectedUsers, { image, username }]);
+        setInputValue(prevInputValue => prevInputValue ? `${prevInputValue}, ${username}` : username);
+    }
+};
 </code></pre>
         </article>
     </section>

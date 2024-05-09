@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Function component for the live chat section.
  * @component
  * @param {Object} props - The component props.
@@ -145,12 +173,12 @@ function LiveChat(props) {
   };
 
   return (
-    <div className="chat-div">
-      <HeaderChatRight_Side header={participantName} check="true" />
-      <div style={{display:'flex', flexDirection: 'column', overflow: 'auto', width:'100%', height:'100%'}}>
-        <div className="Live-chat-form">
-          <div className="Live-chat-profile-data">
-            <a
+    &lt;div className="chat-div">
+      &lt;HeaderChatRight_Side header={participantName} check="true" />
+      &lt;div style={{display:'flex', flexDirection: 'column', overflow: 'auto', width:'100%', height:'100%'}}>
+        &lt;div className="Live-chat-form">
+          &lt;div className="Live-chat-profile-data">
+            &lt;a
               style={{
                 textDecorationLine: "none",
                 color: "#2a3c42",
@@ -159,21 +187,21 @@ function LiveChat(props) {
                 alignItems: "center",
               }}
             >
-              <div className="Live-chat-profile-picture">
-                <img src={profile} className="picture-live-chat" alt="" />
-              </div>
-              <div className="Live-chat-profile-username">{participantName}</div>
-              <div className="Live-chat-profile-username-details">
+              &lt;div className="Live-chat-profile-picture">
+                &lt;img src={profile} className="picture-live-chat" alt="" />
+              &lt;/div>
+              &lt;div className="Live-chat-profile-username">{participantName}&lt;/div>
+              &lt;div className="Live-chat-profile-username-details">
                 Redditor for {getDaysDifferenceFromToday(aboutParticipant.createdAt)} · {aboutParticipant.karma} karma
-              </div>
-            </a>
-          </div>
-        </div>
-        {chatData &&
-          Array.isArray(chatData.chat) &&
+              &lt;/div>
+            &lt;/a>
+          &lt;/div>
+        &lt;/div>
+        {chatData &amp;&amp;
+          Array.isArray(chatData.chat) &amp;&amp;
           chatData.chat.map((chat) => (
-            <div key={chat._id} style={{ width: "100%" }}>
-              {Array.isArray(chat.messages) &&
+            &lt;div key={chat._id} style={{ width: "100%" }}>
+              {Array.isArray(chat.messages) &amp;&amp;
                 chat.messages
                   .slice()
                   .reverse()
@@ -191,7 +219,7 @@ function LiveChat(props) {
                       formatDate(array[index - 1].timestamp) !== currentDate;
 
                     // Update previous date if it's a new day
-                    if (isFirstMessage && currentDate !== prevMessageDate) {
+                    if (isFirstMessage &amp;&amp; currentDate !== prevMessageDate) {
                       setPrevMessageDate(currentDate);
                     }
 
@@ -199,30 +227,30 @@ function LiveChat(props) {
                     const renderDate =
                       isFirstMessage || currentDate !== prevMessageDate;
                     return (
-                      <div key={message._id}>
-                        {renderDate && (
-                          <div className="message-date-live-chat">
-                            <div className="date-line-beside" />
+                      &lt;div key={message._id}>
+                        {renderDate &amp;&amp; (
+                          &lt;div className="message-date-live-chat">
+                            &lt;div className="date-line-beside" />
                             {prevMessageDate}
-                            <div className="date-line-beside" />
-                          </div>
+                            &lt;div className="date-line-beside" />
+                          &lt;/div>
                         )}
-                        <div className="message-content-live-chat-container">
-                          <span className="image-chat-message">
-                            <img
+                        &lt;div className="message-content-live-chat-container">
+                          &lt;span className="image-chat-message">
+                            &lt;img
                               src={profilePicture}
                               alt=""
                               style={{ borderRadius: "20px" }}
                             />
-                          </span>
-                          <div
+                          &lt;/span>
+                          &lt;div
                             style={{
                               display: "flex",
                               flexDirection: "column",
                               gap: "0.5em",
                             }}
                           >
-                            <div
+                            &lt;div
                               style={{
                                 display: "flex",
                                 flexDirection: "row",
@@ -230,29 +258,29 @@ function LiveChat(props) {
                                 alignItems: "center",
                               }}
                             >
-                              <span className="sender-name-live-chat">
+                              &lt;span className="sender-name-live-chat">
                                 {
                                   chat.senders.find(
                                     (sender) => sender.id === message.sender
                                   )?.username
                                 }
-                              </span>
-                              <span className="sender-time-live-chat">
+                              &lt;/span>
+                              &lt;span className="sender-time-live-chat">
                                 {formatTimestamp(message.timestamp)}
-                              </span>
-                            </div>
-                            <span>{message.message}</span>
-                          </div>
-                        </div>
-                      </div>
+                              &lt;/span>
+                            &lt;/div>
+                            &lt;span>{message.message}&lt;/span>
+                          &lt;/div>
+                        &lt;/div>
+                      &lt;/div>
                     );
                   })}
-            </div>
+            &lt;/div>
           ))}
-      </div>
-      <div className="chat-live-input">
-        <form action="" className="form-input-live-chat">
-          <Button
+      &lt;/div>
+      &lt;div className="chat-live-input">
+        &lt;form action="" className="form-input-live-chat">
+          &lt;Button
             colorScheme="gray"
             variant="ghost"
             style={{
@@ -263,16 +291,16 @@ function LiveChat(props) {
               borderRadius: "100%",
             }}
           >
-            <IoMdCamera
+            &lt;IoMdCamera
               style={{
                 height: "40px",
                 width: "40px",
               }}
             />
-          </Button>
-          <div className="live-chat-input-area">
-            <InputGroup size="md">
-              <Input
+          &lt;/Button>
+          &lt;div className="live-chat-input-area">
+            &lt;InputGroup size="md">
+              &lt;Input
                 placeholder="Message"
                 size="md"
                 style={{
@@ -285,9 +313,9 @@ function LiveChat(props) {
                 value={message}
                 onChange={handleMessageChange}
               />
-              <InputRightElement width="4.5rem">
-                <Tooltip hasArrow label="Select sticker" placement="top">
-                  <Button
+              &lt;InputRightElement width="4.5rem">
+                &lt;Tooltip hasArrow label="Select sticker" placement="top">
+                  &lt;Button
                     h="1.75rem"
                     size="sm"
                     colorScheme="teal"
@@ -301,18 +329,18 @@ function LiveChat(props) {
                     }}
                     onClick={() => setPickerVisible(!isPickerVisible)}
                   >
-                    <BsFillEmojiSmileFill
+                    &lt;BsFillEmojiSmileFill
                       style={{
                         height: "40px",
                         width: "40px",
                       }}
                     />
-                  </Button>
-                </Tooltip>
-              </InputRightElement>
-            </InputGroup>
-          </div>
-          <Button
+                  &lt;/Button>
+                &lt;/Tooltip>
+              &lt;/InputRightElement>
+            &lt;/InputGroup>
+          &lt;/div>
+          &lt;Button
             colorScheme={message ? "blue" : "gray"}
             variant={message ? "ghost" : "none"}
             style={{
@@ -325,26 +353,49 @@ function LiveChat(props) {
             }}
             onClick={handleSend}
           >
-            <IoMdSend
+            &lt;IoMdSend
               style={{
                 height: "40px",
                 width: "40px",
               }}
             />
-          </Button>
-          {isPickerVisible && (
-            <div ref={pickerRef} className="emoji-picker-container">
-              <EmojiPicker
+          &lt;/Button>
+          {isPickerVisible &amp;&amp; (
+            &lt;div ref={pickerRef} className="emoji-picker-container">
+              &lt;EmojiPicker
                 data={data}
                 previewPosition="bottom"
                 onEmojiSelect={handleEmojiSelect}
               />
-            </div>
+            &lt;/div>
           )}
-        </form>
-      </div>
-    </div>
+        &lt;/form>
+      &lt;/div>
+    &lt;/div>
   );
 }
 
 export default LiveChat;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 02:00:14 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

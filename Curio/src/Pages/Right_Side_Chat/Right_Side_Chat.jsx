@@ -1,3 +1,13 @@
+/**
+ * Function component for the right side chat section.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.hideSidebar - Function to hide the sidebar.
+ * @param {Function} props.hideNavbar - Function to hide the navbar.
+ * @param {Function} props.showSidebar - Function to show the sidebar.
+ * @param {Function} props.showNavbar - Function to show the navbar.
+ * @module OpenChat
+ */
 import React, { useEffect, useState } from 'react';
 import OpenChatCom from "../../Components/OpenChat/OpenChatComLeft_Side/OpenChatComLeft_Side";
 import NewChat_Com from "../../Components/OpenChat/OpenChatComRight_Side/NewChat/NewChat";
@@ -25,15 +35,28 @@ function Right_Side_Chat(props) {
     }, []);
 
 
+    /**
+     * Function to handle the change of the chat page.
+     * @param {string} PageName - The name of the new chat page.
+     */
     const handleNewPage = (PageName) => {
         setNewPage(PageName);
     };
 
+    /**
+     * Function to handle new messages and participants.
+     * @param {string} message - The new message.
+     * @param {Array} participants - The new participants.
+     */
     const handleNewMessage = (message, participants) => {
         setNewMessage(message);
         setNewParticipants(participants);
     };
 
+    /**
+     * Function to handle the socket connection.
+     * @param {Object} socket - The socket object.
+     */
     const handleSocket = (socket) => {
         setSocket(socket);
     };

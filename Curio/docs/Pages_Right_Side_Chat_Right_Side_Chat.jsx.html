@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Pages/Right_Side_Chat/Right_Side_Chat.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Pages/Right_Side_Chat/Right_Side_Chat.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Function component for the right side chat section.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.hideSidebar - Function to hide the sidebar.
+ * @param {Function} props.hideNavbar - Function to hide the navbar.
+ * @param {Function} props.showSidebar - Function to show the sidebar.
+ * @param {Function} props.showNavbar - Function to show the navbar.
+ * @module OpenChat
+ */
+import React, { useEffect, useState } from 'react';
+import OpenChatCom from "../../Components/OpenChat/OpenChatComLeft_Side/OpenChatComLeft_Side";
+import NewChat_Com from "../../Components/OpenChat/OpenChatComRight_Side/NewChat/NewChat";
+import "./Right_Side_Chat.css";
+import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
+import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat';
+
+function Right_Side_Chat(props) {
+    const [newPage, setNewPage] = useState('New Chat');
+    const [newMessage, setNewMessage] = useState(""); 
+    const [newParticipants, setNewParticipants] = useState([]);
+    const [socket, setSocket] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+        }
+        props.hideSidebar();
+        props.hideNavbar();
+        return () => {
+            props.showSidebar();
+            props.showNavbar();
+        };
+    }, []);
+
+
+    /**
+     * Function to handle the change of the chat page.
+     * @param {string} PageName - The name of the new chat page.
+     */
+    const handleNewPage = (PageName) => {
+        setNewPage(PageName);
+    };
+
+    /**
+     * Function to handle new messages and participants.
+     * @param {string} message - The new message.
+     * @param {Array} participants - The new participants.
+     */
+    const handleNewMessage = (message, participants) => {
+        setNewMessage(message);
+        setNewParticipants(participants);
+    };
+
+    /**
+     * Function to handle the socket connection.
+     * @param {Object} socket - The socket object.
+     */
+    const handleSocket = (socket) => {
+        setSocket(socket);
+    };
+
+    return (
+        &lt;div className='open-chat-container'>
+            &lt;div className='side-bar-chat-page'>
+                &lt;OpenChatCom 
+                socket={socket}
+                newMessage={newMessage}
+                newParticipants={newParticipants}
+                handleNewPage={handleNewPage} />
+            &lt;/div>
+            &lt;div className='right-side-main-chat'>
+                {newPage === "New Chat" ? (
+                    &lt;NewChat_Com />
+                ) : newPage === "Threads" ? (
+                    &lt;Threads />
+                ) : newPage === "Chat" ? (
+                    &lt;>
+                    &lt;LiveChat onSocket={handleSocket} onNewMessage={handleNewMessage}/>
+                    &lt;/>
+                ) : null}
+            &lt;/div>
+        &lt;/div>
+    );
+}
+
+export default Right_Side_Chat;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 02:00:14 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

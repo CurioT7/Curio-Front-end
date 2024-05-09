@@ -1,3 +1,13 @@
+/**
+ * Function component for the left side of the open chat.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.newMessage - The new message.
+ * @param {Array} props.newParticipants - The new participants.
+ * @param {Array} props.chatsData - The chats data.
+ * @param {Function} props.handleChatId - Function to handle chat ID.
+ * @module OpenChatComLeftSide
+ */
 import React, { useEffect, useState } from 'react';
 import "./OpenChatComLeft_Side.css";
 import { Flex, Spacer, Box, position } from '@chakra-ui/react';
@@ -18,7 +28,7 @@ import { formatTimestamp } from "../../getTimeDifference/getTimeDifference";
 import { FaRegSquare } from "react-icons/fa";
 import { BsCheckSquareFill } from "react-icons/bs";
 
-function OpenChatCom({ newMessage, newParticipants, chatsData, handleChatId }) {
+function OpenChatComLeftSide({ newMessage, newParticipants, chatsData, handleChatId }) {
     if (!chatsData || !chatsData.chats) {
         return null;
     }
@@ -126,4 +136,4 @@ function OpenChatCom({ newMessage, newParticipants, chatsData, handleChatId }) {
     );
 }
 
-export default OpenChatCom;
+export default OpenChatComLeftSide;

@@ -1,3 +1,10 @@
+/**
+ * Function component for creating a new chat.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.handleRecipient - Function to handle recipient.
+ * @module NewChat
+ */
 import React, { useState } from 'react';
 import { Button, Stack, Spacer } from '@chakra-ui/react';
 import "./NewChat.css";
@@ -12,14 +19,26 @@ function NewChat({handleRecipient}) {
     const [inputValue, setInputValue] = useState('');
     const navigate = useNavigate();
 
+    /**
+     * Handles toggling users.
+     * @param {string} image - The user image.
+     * @param {string} username - The username.
+     */
     const handleUserToggle = (image, username) => {
         handleToggleUser(selectedUsers, setSelectedUsers, setInputValue, username, image);
     };
 
+    /**
+     * Handles input change.
+     * @param {Object} e - The event object.
+     */
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
 
+    /**
+     * Handles starting a chat.
+     */
     const handleStartChat = () => {
         handleRecipient(inputValue);
         navigate(`/chat/${inputValue}`);

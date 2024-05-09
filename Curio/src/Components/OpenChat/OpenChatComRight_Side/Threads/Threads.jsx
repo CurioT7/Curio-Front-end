@@ -1,3 +1,7 @@
+/**
+ * Component for displaying threads.
+ * @module Threads
+ */
 import React from 'react';
 import "./Threads.css";
 import { Button } from '@chakra-ui/react';
@@ -8,6 +12,9 @@ import { useNavigate } from 'react-router-dom';
 function Threads() {
     const navigate = useNavigate();
 
+    /**
+     * Handles navigation to create room.
+     */
     const handleNavigate = () => {
         navigate('/room/create');
     };

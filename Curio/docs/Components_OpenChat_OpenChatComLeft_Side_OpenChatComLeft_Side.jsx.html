@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/OpenChat/OpenChatComLeft_Side/OpenChatComLeft_Side.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/OpenChat/OpenChatComLeft_Side/OpenChatComLeft_Side.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Function component for the left side of the open chat.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.newMessage - The new message.
+ * @param {Array} props.newParticipants - The new participants.
+ * @param {Array} props.chatsData - The chats data.
+ * @param {Function} props.handleChatId - Function to handle chat ID.
+ * @module OpenChatComLeftSide
+ */
+import React, { useEffect, useState } from 'react';
+import "./OpenChatComLeft_Side.css";
+import { Flex, Spacer, Box, position } from '@chakra-ui/react';
+import { IoChatbubbleSharp, IoFilterOutline } from "react-icons/io5";
+import { MdKeyboardArrowDown, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { PiArrowBendUpLeft } from "react-icons/pi";
+import profile from "../../../assets/avatar_default_6.png";
+import { Link } from 'react-router-dom';
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverBody,
+    Stack,
+    Button
+} from '@chakra-ui/react'
+import { formatTimestamp } from "../../getTimeDifference/getTimeDifference";
+import { FaRegSquare } from "react-icons/fa";
+import { BsCheckSquareFill } from "react-icons/bs";
+
+function OpenChatComLeftSide({ newMessage, newParticipants, chatsData, handleChatId }) {
+    if (!chatsData || !chatsData.chats) {
+        return null;
+    }
+    const username = localStorage.getItem('username');
+    const [chatChannelsChecked, setChatChannelsChecked] = useState(true);
+    const [groupChatsChecked, setGroupChatsChecked] = useState(true);
+    const [directChatsChecked, setDirectChatsChecked] = useState(true);
+
+    const handleChatChannelsChange = () => {
+        setChatChannelsChecked(!chatChannelsChecked);
+    };
+
+    const handleGroupChatsChange = () => {
+        setGroupChatsChecked(!groupChatsChecked);
+    };
+
+    const handleDirectChatsChange = () => {
+        setDirectChatsChecked(!directChatsChecked);
+    };
+
+    return (
+        &lt;Flex className='left-side-open-chat-container' style={{ display: 'flex', flexDirection: 'column', height:'100vh' }}>
+            &lt;Flex className='chat-left-title'>
+                &lt;Box style={{
+                    lineHeight: '1.5rem',
+                    fontWeight: '700',
+                    fontSize: '1.125rem'
+                }}>Chats&lt;/Box >
+                &lt;Spacer />
+                &lt;Box className='chat-icons-header'>
+                    &lt;Link to={'/room/create'} className='add-chat'>
+                        &lt;IoChatbubbleSharp style={{
+                            width: '2rem',
+                        }} />
+                    &lt;/Link>
+                    &lt;div className='filter-chat-options'>
+                        &lt;Popover placement='top-start' style={{ position: 'relative' }}>
+                            &lt;PopoverTrigger>
+                                &lt;Button style={{ background: 'transparent', padding: '0', height: '5px' }}>&lt;IoFilterOutline />
+                                    &lt;MdKeyboardArrowDown />&lt;/Button>
+                            &lt;/PopoverTrigger>
+                            &lt;PopoverContent>
+                                &lt;PopoverBody>
+                                    &lt;div className='popover-chat-list'>
+                                        &lt;Stack direction="row" align="center" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }} onClick={handleChatChannelsChange}>
+                                            &lt;span>Chat channels&lt;/span>
+                                            {chatChannelsChecked ? &lt;BsCheckSquareFill color='blue' /> : &lt;FaRegSquare />}
+                                        &lt;/Stack>
+                                        &lt;Stack direction="row" align="center" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }} onClick={handleGroupChatsChange}>
+                                            &lt;span>Group chats&lt;/span>
+                                            {groupChatsChecked ? &lt;BsCheckSquareFill color='blue' /> : &lt;FaRegSquare />}
+                                        &lt;/Stack>
+                                        &lt;Stack direction="row" align="center" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }} onClick={handleDirectChatsChange}>
+                                            &lt;span>Direct chats&lt;/span>
+                                            {directChatsChecked ? &lt;BsCheckSquareFill color='blue' /> : &lt;FaRegSquare />}
+                                        &lt;/Stack>
+                                        &lt;Stack spacing={4} direction='row-reverse' align='center'>
+                                            &lt;Button colorScheme='blue' size='sm' borderRadius="20px">
+                                                Apply
+                                            &lt;/Button>
+                                        &lt;/Stack>
+                                    &lt;/div>
+                                &lt;/PopoverBody>
+                            &lt;/PopoverContent>
+                        &lt;/Popover>
+                    &lt;/div>
+                &lt;/Box>
+            &lt;/Flex>
+            &lt;Link to={'/threads'} className="threads-container">
+                &lt;div className='threads-list'>
+                    &lt;span className='left-section-thread'>
+                        &lt;span className='threads-arrow-leftup'>&lt;PiArrowBendUpLeft />&lt;/span>
+                        &lt;span className='thread-title'>Threads&lt;/span>
+                    &lt;/span>
+                    &lt;span className="arrow-right-threads-icon">
+                        &lt;MdOutlineKeyboardArrowRight />
+                    &lt;/span>
+                &lt;/div>
+            &lt;/Link>
+            &lt;div style={{height: '100vh' , overflow:'auto'}}>
+                {Array.isArray(chatsData.chats) &amp;&amp; chatsData.chats.map(chat => (
+                    &lt;div key={chat._id}>
+                        &lt;Link to={`/chat/${chat._id}`} className='message-container-text' onClick={() => handleChatId(chat._id)}>
+                            &lt;span className='image-chat-message'>
+                                &lt;img
+                                    src={chat?.profilePicture || profile}
+                                    alt=""
+                                    style={{ borderRadius: '20px' }}
+                                />
+                            &lt;/span>
+                            &lt;div className='body-chat-message'>
+                                &lt;div className='row-1-chat'>
+                                    &lt;span className='username-chat'>{chat.participants}&lt;/span>
+                                    &lt;span className='last-message-time'>{formatTimestamp(chat.messages[0].timestamp)}&lt;/span>
+                                &lt;/div>
+                                &lt;div className='row-2-chat'>
+                                    &lt;span className='last-message'> {chat.sender === username ? 'You' : chat.sender}: {chat.messages[0].message} &lt;/span>
+                                &lt;/div>
+                            &lt;/div>
+                        &lt;/Link>
+                    &lt;/div>
+                ))}
+            &lt;/div>
+        &lt;/Flex>
+    );
+}
+
+export default OpenChatComLeftSide;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 02:00:14 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

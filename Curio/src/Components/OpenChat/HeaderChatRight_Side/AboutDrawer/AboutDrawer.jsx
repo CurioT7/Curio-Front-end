@@ -1,3 +1,11 @@
+/**
+ * Function component for the About Drawer.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isOpen - Whether the drawer is open.
+ * @param {Function} props.onClose - Function to close the drawer.
+ * @module AboutDrawer
+ */
 import React, { useState } from 'react';
 import {
     Drawer,
@@ -19,7 +27,10 @@ function AboutDrawer({ isOpen, onClose }) {
     const [groupName, setGroupName] = useState('');
     const [tooltipOpen, setTooltipOpen] = useState(false); 
 
-    // Handler for group name input change
+    /**
+     * Handler for group name input change.
+     * @param {Object} event - The input change event.
+     */
     const handleGroupNameChange = (event) => {
         setGroupName(event.target.value);
     };
