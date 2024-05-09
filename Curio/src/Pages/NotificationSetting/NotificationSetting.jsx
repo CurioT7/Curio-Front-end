@@ -5,6 +5,7 @@ import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
 import Activity from "../../Components/NotificationsSetting/Activity/Activity";
 import { useNavigate } from 'react-router-dom';
 import { fetchUserDataFromBackend } from '../../Components/UserSetting/UserSettingsEndPoints.js';
+import Messages from '../../Components/NotificationsSetting/Messages/Messages.jsx';
 
 function NotificationSetting(props) {
   const [userActivity, setUserActivity] = useState(false);
@@ -31,7 +32,10 @@ function NotificationSetting(props) {
         upvotesComments: data.upvotesComments,
         replies: data.replies,
         newFollowers: data.newFollowers,
-        postsYouFollow: data.postsYouFollow
+        postsYouFollow: data.postsYouFollow,
+        allowPrivateMessages: data.allowPrivateMessages,
+        allowChatNotifications: data.allowChatNotifications,
+        allowChatRequests: data.allowChatRequests
       })        
     }
 }
@@ -43,6 +47,10 @@ function NotificationSetting(props) {
         <div className="notification-settings">
             <div className="notification-settings-section">
             <h2 className='notification-settings-heading'>Notification settings</h2>
+            <div className='activity-section'>
+                <h3 className='headings-titles text-uppercase fw-bold mb-4'>MESSAGES</h3>    
+                    <Messages userActivity= {userActivity}/> 
+            </div>
             <div className='activity-section'>
                 <h3 className='headings-titles text-uppercase fw-bold mb-4'>Activity</h3>    
                     <Activity userActivity= {userActivity}/> 

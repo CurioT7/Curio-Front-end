@@ -1,0 +1,79 @@
+.username-mentions-table{
+    display: flex;
+    flex-direction: column;
+}
+.username-mentions-header-messages{
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.username-mentions-title-messages{
+    line-height: 1.5em;
+    color: #24a0ed;
+    margin-left: 10px;
+}
+
+.upvote-username-mentions,
+.downvote-username-mentions{
+    margin: 2px 0px 0px 0px;
+    height: 14px;
+    display: block;
+    cursor: pointer;
+    width: 15px;
+    margin-right: auto;
+    outline: none;
+}
+
+.username-mention-details{
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.username-mention-from-message{
+    color: #878a8c;
+    font-size: x-small;
+    margin-bottom: 5px;
+}
+
+.list-item-username-mentions{
+    font-size: x-small;
+    cursor: pointer;
+    padding-left: 1px;
+    color: #888;
+    font-weight: bold;
+}
+
+.list-item-username-mentions:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 560px) {
+    .username-mentions-header-messages{
+        margin-bottom: 0.1em;
+        font-weight: normal;
+    }
+    .username-mention-details{
+        padding-top: 0;
+        position: absolute;
+
+    }
+    .list-item-username-mentions{
+        font-size: xx-small;
+        padding-left: 0px;
+    }
+}
+
+@media screen and (max-width: 866px) {
+    .check-block-message{
+        font-size: 8px;
+    }
+}
+
+@media screen and (min-width: 560px) and (max-width: 580px) {
+    .username-mentions-message-table {
+        height: 173px;
+    }
+}

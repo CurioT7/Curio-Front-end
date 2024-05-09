@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import './ShowFriendInformation.css';
 import Minus from "../../styles/icons/Minus";
 import PlusIcon from "../../styles/icons/PlusIcon";
@@ -13,13 +13,14 @@ import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {userBlock , userUnblock, userFollow, userUnfollow, getFollower} from "./ShowFriendInformationEndpoints.js";
+import {userBlock , userUnblock, userFollow, userUnfollow, getFollower, getBlocked} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
 import { useNavigate } from "react-router-dom";
 import { useToast } from '@chakra-ui/react';
-import redditPic from "../../styles/icons/hmm-snoo.png"
+import redditPic from "../../styles/icons/hmm-snoo.png";
+import PostComments from "../Post/PostComments.jsx";
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
@@ -27,15 +28,37 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
     const [isFollowing, setIsFollowing] = useState(false);
     // const [blockedUsers, setBlockedUsers] = useState([]);
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [showSortings, setShowSortings] = useState(false);
     const [sortingState, setSortingState] = useState(1);
+    const [userPosts, setUserPosts] = useState([]);
+    const [userComments, setUserComments] = useState([]);
+    const [overviewState, setOverviewState] = useState(0);
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [hiddenPosts, setHiddenPosts] = useState([]);
+    const [savedComments, setSavedComments] = useState([]);
+    const [didVote, setDidVote] = useState(false);
+
 
     const token = localStorage.getItem('token');
     const toastError = useToast();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     // const navigate = useNavigate();
 
@@ -68,6 +91,19 @@ function ShowFriendInformation(props) {
         });
     }
 
+    const getUserOverview = async () => {
+        try{
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.get(`${hostUrl}/api/user/${props.username}/overview`);
+            if (response.status === 200 || response.status === 201) {
+                setUserPosts(response.data.userPosts);
+                setUserComments(response.data.userComments);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }   
+
 
     const handleEllipsisClick = () => {
         setShowDropdown(!showDropdown);
@@ -86,28 +122,66 @@ function ShowFriendInformation(props) {
         setShowReportMenu(true);
     };
 
+    const getSaved = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setSavedPosts(response.data.savedPosts);
+            setSavedComments(response.data.savedComments);  
+        }
+      }
+      catch(err){
+        console.error(err);
+      }
+    }
+
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          console.error(err);
+      }
+    }
+
     const handleReportPopupClose = () => {
         setShowReportMenu(false);
     };
 
     useEffect(() => {
         handleGetFollower(props.username);
+        handleGetBlocked(props.username);
         getBlocked(props.username);
+        getUserOverview();
+        if (localStorage.getItem('token')) {
+            getSaved();
+            getHidden();
+        }
     }, [props.username]);
 
 
     async function handleGetFollower(username) {
-        try {
-            const result = await getFollower(username);
-            if (result) {
-                setIsFollowing(true);
-            } else {
-                console.error('Error:', result.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        const result = await getFollower(username);
+        if (result) {
+            setIsFollowing(true);
+        } else {
+            console.error('Error occurred in getFollower');
         }
     }
+    
     
 
     const handleFollowToggle = async () => {
@@ -151,23 +225,17 @@ function ShowFriendInformation(props) {
     }
     
 
-    async function getBlocked(username) {
+    async function handleGetBlocked(username) {
         try {
             if (!token) {
                 console.error('Token not found');
                 return;
             }
     
-            const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await getBlocked();
             if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.blockedUsername === username)) {
                 props.isUserBlocked();
             }
-            return response.data
         } catch (error) {
             console.error('Error:', error);
         }
@@ -205,13 +273,59 @@ function ShowFriendInformation(props) {
                 ToastSuccess('User unblocked successfully');
             }
             else if(result === 500){
-                console.error('An unexpected error occurred on the server. Please try again later.');
+                ToastError('An unexpected error occurred on the server. Please try again later.');
             }
             
             }catch (error) {
                 console.error('Error:', error);
+                ToastError('Request has failed, please try again later.')
             }
         }
+
+    const handleJoinCommunity = async (communityName) => {
+        try{
+            const response = await axios.post(`${hostUrl}/api/friend`, {
+                    subreddit: communityName
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200 || response.status === 201){
+                    toastError({
+                        description: "You have successfully joined the subreddit",
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position: 'bottom',
+                    });
+                }
+        }
+        catch(err){
+            if (err.response.status === 400){
+                toastError({
+                    description: "You are already a member of this subreddit",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+          if (userPosts) {
+            const votes = [];
+            userPosts.forEach(post => {
+              votes[post._id] = post.details?.pollVote !== null;
+            });
+            setDidVote(votes);
+          }
+        }
+      }, [userPosts]);
     
 
     return (
@@ -238,7 +352,8 @@ function ShowFriendInformation(props) {
                                         <button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick}>
                                         <Ellipsis className="ellipsis-img" />
                                     </button>
-                                    <div className="dropdown-menu1" style={{ 
+                                    <div ref={dropdownRef} className="dropdown-menu1" 
+                                        style={{ 
                                         display: showDropdown ? 'flex' : 'none',
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',
@@ -261,7 +376,7 @@ function ShowFriendInformation(props) {
                                             </li>
                                             <li className="drop-down-item">
                                                     <div><MessageIcon alt="message" className="interaction-icons" /></div>
-                                                    <div><p className='text-text'>Send a message</p></div>
+                                                    <div onClick={() => navigate("/message/compose")}><p className='text-text'>Send a message</p></div>
                                             </li>
                                             <li className="drop-down-item" onClick={() => {handleUserBlock(props.username);}}>
                                                     <div><BlockIcon alt="block" className="interaction-icons" /></div>
@@ -323,55 +438,16 @@ function ShowFriendInformation(props) {
                                         <p className="mod-community-name mb-0">{community.name}</p>
                                         <p className="mod-community-subscribers secondary-subheader">{community.members.length} members</p>
                                     </div>
-                                    <button className="join-button">Join</button>
+                                    <button onClick={() => handleJoinCommunity(community.name)} className="join-button">Join</button>
                                     </div>           
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <div className="mt-4 ms-lg-5 d-flex flex-column flex-lg-row ms-0 align-items-start">
-                        <button className="btn control-button me-2 p-1 p-sm-3">Overview</button>
-                        <button className="btn control-button me-2 p-1 p-sm-3">Posts</button>
-                        <button className="btn control-button me-2 p-1 p-sm-3">Comments</button>
-                    </div>
-                    <div className="w-25 d-flex justify-content-start p-0 p-lg-4 mt-2 ms-0 ms-lg-4">
-                        <div className="pt-0 w-75 d-flex">
-                            <button className="d-flex justify-content-center ms-2 sort-button p-2" style={{backgroundColor : showSortings ? "#D2DADD" : ""}} onClick={handleSortingsClick}>{sortingState === 0 ? "Hot" : sortingState === 1 ? "New" : "Top"}<div className="ms-1"><DownArrow /></div></button>
-
-                            <div className="" style={{ 
-                                        display: showSortings ? 'flex' : 'none',
-                                        flexDirection: 'column',
-                                        alignItems: 'flex-start',
-                                        position: 'absolute',
-                                        translateY: '-20%!important',
-                                        translateX: '0%',
-                                        backgroundColor: '#FFFFFF',
-                                        borderRadius: '10px',
-                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
-                                        marginTop: '2rem',
-                                        marginRight: '1rem',
-                                        padding: '0px',
-                                        width: '4rem !important',
-                                        zIndex: '1'
-                                    }}>
-                                        <ul className='drop-down-list'>
-                                            <li className="drop-down-item">
-                                                    <div className="d-flex justify-content-center"><p className='text-text sort-by mb-0 p-2 ms-0'>Sort By</p></div>
-                                            </li>
-                                        </ul>
-                                        <ul className='drop-down-list w-100 p-0'>
-                                            <li className="drop-down-item dropdown-hover-effect mb-0 pt-2" style={{backgroundColor: (sortingState === 0) ? "#EAEDEF" : ""}} onClick={() => setSortingState(0)}>
-                                                    <div className="pt-2"><p className='text-text'>Hot</p></div>
-                                            </li>
-                                            <li className="drop-down-item dropdown-hover-effect p-0 pt-2 mb-0" style={{backgroundColor: (sortingState === 1) ? "#EAEDEF" : ""}} onClick={() => setSortingState(1)}>
-                                                    <div className="pt-2"><p className='text-text'>New</p></div>
-                                            </li>
-                                            <li className="drop-down-item dropdown-hover-effect mb-1 p-0 pt-2" style={{backgroundColor: (sortingState === 2) ? "#EAEDEF" : ""}} onClick={() => setSortingState(2)}>
-                                                    <div className="pt-2"><p className='text-text'>Top</p></div>
-                                            </li>
-                                        </ul>   
-                                    </div>
-                        </div>
+                    <div className="mt-4 ms-lg-5 d-flex flex-column flex-lg-row ms-0 mb-2 align-items-start">
+                        <button onClick={() => setOverviewState(0)} style={{backgroundColor: overviewState === 0 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Overview</button>
+                        <button onClick={() => setOverviewState(1)} style={{backgroundColor: overviewState === 1 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Posts</button>
+                        <button onClick={() => setOverviewState(2)} style={{backgroundColor: overviewState === 2 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Comments</button>
                     </div>
                 <hr style={{backgroundColor: "#0000008F"}} className="d-flex justify-content-center col-12 col-md-7 ms-0 ms-lg-5"></hr>
                 {props.isBlocked ? (
@@ -381,30 +457,88 @@ function ShowFriendInformation(props) {
                 </div>
                 ) :(
                 <div className="ms-0 ms-lg-5 mt-4 col-md-7">
+                {overviewState === 0 && userPosts.map((post, index) => (
+                post.type === 'poll' ? (
                     <Post
-                        user="r/netherlands"
-                        title="Second Post"
-                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
-                        upvotes={10}
-                        downvotes={1}
-                        comments={[4, 5]} // Dummy array for comments
+                        pollTitle={post.title}
+                        body={post.body}
+                        pollText={post.content}
+                        user={post.authorName}
+                        _id={post._id}
+                        type={post.type}
+                        optionNames={post.options.map((option) => option.name)}
+                        votes={post.options.map((option) => option.votes)}
+                        upvotes={post.upvotes}
+                        downvotes={post.downvotes}
+                        comments={post.comments}
+                        isLocked={post.isLocked}
+                        voteLength={post.voteLength}
+                        linkedSubreddit={post.details?.subredditName}
+                        didVote={didVote[post._id]}
+                        optionSelected={post.details?.pollVote}
+                        pollEnded={post.details?.pollEnded}
+                        createdAt={post.createdAt}
                     />
+                ) : (
                     <Post
-                        user="r/netherlands"
-                        title="Second Post"
-                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
-                        upvotes={10}
-                        downvotes={1}
-                        comments={[4, 5]} // Dummy array for comments
+                        _id={post._id}
+                        title={post.title}
+                        body={post.content}
+                        user={post.authorName}
+                        upvotes={post.upvotes}
+                        downvotes={post.downvotes}
+                        comments={post.comments}
+                        content={post.content}
+                        //isMod={isMod}
+                        savedPosts={savedPosts}
+                        hiddenPosts={hiddenPosts}
                     />
-                    <Post
-                        user="r/netherlands"
-                        title="Second Post"
-                        image="https://preview.redd.it/happy-easter-v0-o8d3et699nrc1.jpeg?width=640&crop=smart&auto=webp&s=7a63acc0ef0afb3699c036718113ef23e13b96f7"
-                        upvotes={10}
-                        downvotes={1}
-                        comments={[4, 5]} // Dummy array for comments
-                    />
+                )
+                ))}
+                    {overviewState === 0 && userComments.map((comment, index) => (
+                        <PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
+                    ))}
+                        {overviewState === 0 && userPosts.map((post, index) => (
+                        post.type === 'poll' ? (
+                            <Post
+                                pollTitle={post.title}
+                                body={post.body}
+                                pollText={post.content}
+                                user={post.authorName}
+                                _id={post._id}
+                                type={post.type}
+                                optionNames={post.options.map((option) => option.name)}
+                                votes={post.options.map((option) => option.votes)}
+                                upvotes={post.upvotes}
+                                downvotes={post.downvotes}
+                                comments={post.comments}
+                                isLocked={post.isLocked}
+                                voteLength={post.voteLength}
+                                linkedSubreddit={post.details?.subredditName}
+                                didVote={didVote[post._id]}
+                                optionSelected={post.details?.pollVote}
+                                pollEnded={post.details?.pollEnded}
+                                createdAt={post.createdAt}
+                            />
+                        ) : (
+                            <Post
+                                _id={post._id}
+                                title={post.title}
+                                body={post.content}
+                                user={post.authorName}
+                                upvotes={post.upvotes}
+                                downvotes={post.downvotes}
+                                comments={post.comments}
+                                content={post.content}
+                                //isMod={isMod}
+                                savedPosts={savedPosts}
+                                hiddenPosts={hiddenPosts}
+                            />
+                        )
+                        ))}
+                            {overviewState === 2 && userComments.map((comment, index) => (
+                                <PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
+                            ))}
                 </div>)}
                 </div>
             </>

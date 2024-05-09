@@ -30,3 +30,12 @@ export async function getSearchPeople(searchInput) {
         console.error(error);
     }
 }
+
+export async function getSearchSuggestion(searchInput) {
+    try{
+        const request =await axios.get(`${serverHost}/api/searchSuggestions/${searchInput}`);
+        return request.data;
+    }catch(error){
+        console.error(error);
+    }
+}

@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { showFriendInformation } from '../../Components/FriendInformation/ShowFriendInformationEndpoints.js';
 
-const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 function UserPage( props ) {
   const { username } = useParams();

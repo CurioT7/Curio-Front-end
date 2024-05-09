@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
-import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo,fetchUserName } from "./CommunityEndPoints";
+import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo} from "./CommunityEndPoints";
 function CommunityBody(props) {
   const navigate = useNavigate();
+
   const[posts, setPosts] = React.useState([])
+  const [didVote, setDidVote] = React.useState(false);
   const[randomPost, setRandomPost] = React.useState({
     post:{
 
@@ -36,12 +38,16 @@ React.useEffect(() => {
 React.useEffect(() => {
   async function fetchAndSetData() {
       const subCurioData = await fetchSubCurioInfo(Community);
-      const userData = await fetchUserName();
-      if (subCurioData && userData) {
+      
+      if (subCurioData) {
           subCurioData.subreddit.moderators.map((mod)=>{
             
-            if(mod.username===userData.username){
+            if(mod.username===localStorage.getItem('username')){
               setIsMod(true);
+              return;
+            }
+            else{
+              setIsMod(false);
             }
           })
       }
@@ -85,7 +91,7 @@ async function changeSortType(value,time) {
           if(time==="All Time"){
             const data = await fetchTopFromBackend(Community);
             if (data) {
-              setPosts(data.post);
+              setPosts(data.topPosts);
               setRandomPost({ ...randomPost, isSelected: false });
           }
           else{
@@ -96,7 +102,7 @@ async function changeSortType(value,time) {
           else{
             const data = await fetchTopTimeFromBackend(Community,time);
             if (data) {
-              setPosts(data.post);
+              setPosts(data.posts);
               setRandomPost({ ...randomPost, isSelected: false });
               }
               else{
@@ -109,15 +115,31 @@ async function changeSortType(value,time) {
         else if (value === 'Random') {
             const data = await fetchRisingFromBackend(Community);
             if (data) {
-                setRandomPost({ post: data.post, isSelected: true });
-                
+                // setRandomPost({ post: data.post, isSelected: true });
+                setPosts(data.post);
+                setRandomPost({ ...randomPost, isSelected: false });
             }
             else{
-              setRandomPost({ post:{}, isSelected: true });
+              // setRandomPost({ post:{}, isSelected: true });
+              setPosts([]);
+              setRandomPost({ ...randomPost, isSelected: false });
             }
         }
     
 }
+
+React.useEffect(() => {
+  if (localStorage.getItem('token')) {
+    if (posts) {
+      const votes = [];
+      posts.forEach(post => {
+        votes[post._id] = post.details?.pollVote !== null;
+      });
+      setDidVote(votes);
+    }
+  }
+}, [posts]);
+
 
   return (
     <div className="community-body">
@@ -144,7 +166,12 @@ async function changeSortType(value,time) {
                     comments={post.comments}
                     voteLength={post.voteLength}
                     isLocked={post.isLocked}
+                    linkedSubreddit={Community}
                     subreddit={Community}
+                    optionSelected={post.details?.pollVote}
+                    pollEnded={post.details?.pollEnded}
+                    didVote={didVote[post._id]}
+                    createdAt={post.createdAt}
                   />) : (
                     <Post
                     _id={post._id}
@@ -156,7 +183,7 @@ async function changeSortType(value,time) {
                     comments={post.comments}
                     content={post.content}
                     isMod={isMod}
-                    linkedSubreddit={post.linkedSubreddit}
+                    linkedSubreddit={Community}
                     isLocked={post.isLocked}
                     subreddit={Community}
                   />
@@ -178,9 +205,14 @@ async function changeSortType(value,time) {
                     upvotes={randomPost.post.upvotes}
                     downvotes={randomPost.post.downvotes}
                     comments={randomPost.post.comments}
+                    linkedSubreddit={Community}
                     voteLength={randomPost.post.voteLength}
                     isLocked={randomPost.post.isLocked}
                     subreddit={Community}
+                    optionSelected={randomPost.post.details?.pollVote}
+                    pollEnded={randomPost.post.details?.pollEnded}
+                    didVote={didVote[randomPost.post._id]}
+                    createdAt={randomPost.post.createdAt}
                   />) : (
                     <Post
                     _id={randomPost.post._id}
@@ -192,7 +224,7 @@ async function changeSortType(value,time) {
                     comments={randomPost.post.comments}
                     content={randomPost.post.content}
                     isMod={isMod}
-                    linkedSubreddit={randomPost.post.linkedSubreddit}
+                    linkedSubreddit={Community}
                     isLocked={randomPost.post.isLocked}
                     subreddit={Community}
                   />

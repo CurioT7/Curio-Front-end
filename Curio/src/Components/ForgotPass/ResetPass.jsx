@@ -43,7 +43,6 @@ const handleResetPassword = async (event) => {
 
   try {
     const response = await resetPassword(password);
-    console.log('Success:', response);
     navigate('/login');
   } catch (error) {
     console.error('Error:', error);

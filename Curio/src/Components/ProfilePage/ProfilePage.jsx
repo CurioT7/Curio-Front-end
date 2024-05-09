@@ -11,6 +11,8 @@ import PostComments from '../Post/PostComments.jsx';
 import { Link } from 'react-router-dom';
 import SocialLink from '../profileSetting/Socialmodal/Socialmodal.jsx';
 import { fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints.js';
+const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
+
 
 function ProfilePage(props) {
 
@@ -28,7 +30,12 @@ function ProfilePage(props) {
   const [downvotedPosts, setDownvotedPosts] = useState([]);
   const [upvotedComments, setUpvotedComments] = useState([]);
   const [downvotedComments, setDownvotedComments] = useState([]);
+  const [userBio, setUserBio] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
   const [SocialLinks, setSocialLinks] = useState([]);
+  const [profileImage, setProfileImage] = useState('');
+  const [bannerImage, setBannerImage] = useState('');
+
   const getSaved = async () => {
     try {
       var hostUrl = import.meta.env.VITE_SERVER_HOST;
@@ -78,6 +85,18 @@ function ProfilePage(props) {
     }
   }
 
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
 
   useEffect(() => {
     window.addEventListener('hideOrSave', () => {
@@ -98,6 +117,7 @@ function ProfilePage(props) {
     getUserOverview(username)
       .then(data => setUserPosts(data.userPosts))
       .catch(error => console.error(error));
+    getPrefs();
   }, [username]);
 
   useEffect(() => {
@@ -146,6 +166,26 @@ function ProfilePage(props) {
   }, []);
 
   useEffect(() => {
+    const fetchUserBio = async () => {
+      const url = `${VITE_SERVER_HOST}/api/user/${username}/about`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data && data.about) {
+        setUserBio(data.about);
+      }
+    };
+    fetchUserBio();
+  }, [username]);
+
+  useEffect(() => {
+    if (userAbout && userAbout.profilePicture) {
+      setProfilePicture(userAbout.profilePicture);
+      setBannerImage(userAbout.banner);
+    }
+  }, [userAbout]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchUserDataFromBackend();
@@ -179,10 +219,26 @@ function ProfilePage(props) {
       <div className="profileContainer">
         <div className="mainComponent">
           <div className="userInfo">
-            <img src={profile} alt="profile picture" className="profileAvatar" />
-            <h3 className='userName'> {userAbout.displayName}</h3>
+            <div className='profilepicture'>
+              <img src={profilePicture ? profilePicture : profile} alt="profile picture" className="profileAvatar" />
+              <faceplate-tracker source="profile" action="click" noun="edit_snoovatar">
+                <a rpl="" aria-label="Edit profile avatar" class="
+      button-small px-[var(--rem6)]
+      button-secondary
+      icon
+      items-center justify-center
+      button inline-flex " href="http://localhost:5173/settings/profile"><span class="flex items-center justify-center">
+                    <span class="flex"><svg rpl="" aria-hidden="true" fill="currentColor" height="16" icon-name="add-media-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.376 3.032h-2.355L13.8 1.446A1.155 1.155 0 0 0 12.892 1h-5.74a1.17 1.17 0 0 0-.923.454L5.014 3.031H2.625A2.629 2.629 0 0 0 0 5.656v9.719A2.63 2.63 0 0 0 2.625 18h14.75A2.63 2.63 0 0 0 20 15.375V5.657a2.627 2.627 0 0 0-2.624-2.625Zm1.374 12.343a1.377 1.377 0 0 1-1.375 1.375H2.625a1.377 1.377 0 0 1-1.375-1.375V5.656a1.377 1.377 0 0 1 1.375-1.375h3L7.152 2.25l5.657-.041 1.6 2.072h2.971a1.375 1.375 0 0 1 1.37 1.376v9.718Zm-8.125-6H14v1.25h-3.375V14h-1.25v-3.375H6v-1.25h3.375V6h1.25v3.375Z"></path>
+                    </svg></span>
+
+                  </span>
+                </a>
+              </faceplate-tracker>
+            </div>
+            <b className='profilename'> {userAbout.displayName}</b>
             <h5 className="userName"> u/{username} </h5>
-            <b>{userAbout.bio}</b>
+            {/* <span className='userBio'>{userBio}</span>           */}
           </div>
 
           <div className="tableList">
@@ -203,8 +259,10 @@ function ProfilePage(props) {
                 <Tab>Downvoted</Tab>
               </TabList>
               <div className='postCreate'>
-                <button onClick={() =>{props.setSubreddit(username)
-                  navigate('/user/CreatePost')}} >+ Create a post</button>
+                <button onClick={() => {
+                  props.setSubreddit(username)
+                  navigate('/user/CreatePost')
+                }} >+ Create a post</button>
               </div>
               <hr style={{ width: "90%" }} />
               <TabPanels className="profilePannels">
@@ -226,6 +284,7 @@ function ProfilePage(props) {
                               downvotes={post.downvotes}
                               comments={post.comments}
                               content={post.content}
+                              media={post.media}
                               linkedSubreddit={post.linkedSubreddit}
                               isSpoiler={post.isSpoiler}
                               savedPosts={savedPosts}
@@ -239,7 +298,7 @@ function ProfilePage(props) {
                         <div className='comment-card' key={comment.id}>
                           <h6>u/author    •   title</h6>
                           <div className='author'>
-                            <img className="profileAvatar" src={profile} alt="profile picture" />
+                            <img className="profileAvatar" src={profilePicture ? profilePicture : profile} alt="profile picture" />
                             <b>u/{comment.authorName}</b>
                           </div>
                           <p>{comment.content}</p>
@@ -269,6 +328,7 @@ function ProfilePage(props) {
                           savedPosts={savedPosts}
                           savedComments={savedComments}
                           hiddenPosts={hiddenPosts}
+                          media={post.media}
                         />
                       </div>
                     ))
@@ -308,6 +368,7 @@ function ProfilePage(props) {
                       savedPosts={savedPosts}
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
+                      media={post.media}
                     />
                       <hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}></hr>
                     </div>
@@ -347,6 +408,7 @@ function ProfilePage(props) {
                       savedComments={savedComments}
                       hiddenPosts={hiddenPosts}
                       isInProfile={true}
+                      media={post.media}
                       style={{ backgroundColor: "#00000000" }}
                     />
                       <hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}></hr>
@@ -363,17 +425,29 @@ function ProfilePage(props) {
                     <>
                       {upvotedPosts.map(post => (
                         <div className='post-card' key={post.id}>
-                          <div className='author'>
-                            <img src={profile} alt="profile picture" className="profileAvatar" />
-                            <b>u/{post.authorName}</b>
-                          </div>
-                          <p>{post.content}</p>
+                          <Post
+                            _id={post.id}
+                            title={post.title}
+                            body={post.body}
+                            user={post.authorName}
+                            upvotes={post.upvotes}
+                            downvotes={post.downvotes}
+                            comments={post.comments}
+                            content={post.content}
+                            linkedSubreddit={post.linkedSubreddit}
+                            isSpoiler={post.isSpoiler}
+                            savedPosts={savedPosts}
+                            savedComments={savedComments}
+                            hiddenPosts={hiddenPosts}
+                            media={post.media}
+                          />
                         </div>
                       ))}
                       {upvotedComments.map(comment => (
                         <div className='comment-card' key={comment.id}>
+                          <h6>u/{comment.authorName} • {comment.title}</h6>
                           <div className='author'>
-                            <img src={profile} alt="profile picture" className="profileAvatar" />
+                            <img className="profileAvatar" src={profilePicture ? profilePicture : profile} alt="profile picture" />
                             <b>u/{comment.authorName}</b>
                           </div>
                           <p>{comment.content}</p>
@@ -390,17 +464,29 @@ function ProfilePage(props) {
                     <>
                       {downvotedPosts.map(post => (
                         <div className='post-card' key={post.id}>
-                          <div className='author'>
-                            <img src={profile} alt="profile picture" className="profileAvatar" />
-                            <b>u/{post.authorName}</b>
-                          </div>
-                          <p>{post.content}</p>
+                          <Post
+                            _id={post.id}
+                            title={post.title}
+                            body={post.body}
+                            user={post.authorName}
+                            upvotes={post.upvotes}
+                            downvotes={post.downvotes}
+                            comments={post.comments}
+                            content={post.content}
+                            linkedSubreddit={post.linkedSubreddit}
+                            isSpoiler={post.isSpoiler}
+                            savedPosts={savedPosts}
+                            savedComments={savedComments}
+                            hiddenPosts={hiddenPosts}
+                            media={post.media}
+                          />
                         </div>
                       ))}
                       {downvotedComments.map(comment => (
                         <div className='comment-card' key={comment.id}>
+                          <h6>u/{comment.authorName} • {comment.title}</h6>
                           <div className='author'>
-                            <img src={profile} alt="profile picture" className="profileAvatar" />
+                            <img className="profileAvatar" src={profilePicture ? profilePicture : profile} alt="profile picture" />
                             <b>u/{comment.authorName}</b>
                           </div>
                           <p>{comment.content}</p>
@@ -417,20 +503,32 @@ function ProfilePage(props) {
         </div>
 
         <div className="rightSideBar">
-          <div className="gradient">
-            <button>
+          <div className="gradient"
+            style={{
+              background: `url(${bannerImage ? bannerImage : '#33a8ff'})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}>
+            <button onClick={() => navigate('/settings/profile')}>
               <svg rpl="" aria-hidden="true" fill="currentColor" height="16" icon-name="add-media-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.376 3.032h-2.355L13.8 1.446A1.155 1.155 0 0 0 12.892 1h-5.74a1.17 1.17 0 0 0-.923.454L5.014 3.031H2.625A2.629 2.629 0 0 0 0 5.656v9.719A2.63 2.63 0 0 0 2.625 18h14.75A2.63 2.63 0 0 0 20 15.375V5.657a2.627 2.627 0 0 0-2.624-2.625Zm1.374 12.343a1.377 1.377 0 0 1-1.375 1.375H2.625a1.377 1.377 0 0 1-1.375-1.375V5.656a1.377 1.377 0 0 1 1.375-1.375h3L7.152 2.25l5.657-.041 1.6 2.072h2.971a1.375 1.375 0 0 1 1.37 1.376v9.718Zm-8.125-6H14v1.25h-3.375V14h-1.25v-3.375H6v-1.25h3.375V6h1.25v3.375Z"></path>
               </svg>
             </button>
           </div>
           <br />
-          <button className="shareButton">
-            <svg rpl="" fill="currentColor" height="16" icon-name="share-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18.942 7.058 12.8.912l-.883.883 5.079 5.08h-2.871A13.189 13.189 0 0 0 1.067 18h1.267a11.94 11.94 0 0 1 11.791-9.875h2.866l-5.079 5.08.883.883 6.147-6.146a.624.624 0 0 0 0-.884Z"></path>
-            </svg>
-            Share
-          </button>
+          <div className='sidebarName' >
+            <span className='profileName'>{userAbout.displayName}</span>
+            <b className='UserBio'>{userBio}</b>
+            <button className="shareButton">
+              <svg rpl="" fill="currentColor" height="16" icon-name="share-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.942 7.058 12.8.912l-.883.883 5.079 5.08h-2.871A13.189 13.189 0 0 0 1.067 18h1.267a11.94 11.94 0 0 1 11.791-9.875h2.866l-5.079 5.08.883.883 6.147-6.146a.624.624 0 0 0 0-.884Z"></path>
+              </svg>
+              Share
+            </button>
+          </div>
+          <Divider orientation='horizontal' />
+
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
             <div className="profilevalue">{userAbout.postKarma || '0 '}</div>
             <div className="profilevalue">{userAbout.commentKarma || '0'}</div>
@@ -486,7 +584,7 @@ function ProfilePage(props) {
 
           <p>Settings</p>
           <div className="profileSettings">
-            <img src={profile} alt="profile" />
+            <img src={profilePicture ? profilePicture : profile} alt="profile" />
             <div className="textContainer">
               <h5>Profile</h5>
               <h6>Customise your profile</h6>

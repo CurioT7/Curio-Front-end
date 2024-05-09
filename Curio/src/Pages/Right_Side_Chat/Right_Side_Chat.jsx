@@ -3,10 +3,13 @@ import OpenChatCom from "../../Components/OpenChat/OpenChatComLeft_Side/OpenChat
 import NewChat_Com from "../../Components/OpenChat/OpenChatComRight_Side/NewChat/NewChat";
 import "./Right_Side_Chat.css";
 import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
-import { useNavigate } from 'react-router-dom';
+import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat';
 
 function Right_Side_Chat(props) {
     const [newPage, setNewPage] = useState('New Chat');
+    const [newMessage, setNewMessage] = useState(""); 
+    const [newParticipants, setNewParticipants] = useState([]);
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -15,7 +18,6 @@ function Right_Side_Chat(props) {
         }
         props.hideSidebar();
         props.hideNavbar();
-
         return () => {
             props.showSidebar();
             props.showNavbar();
@@ -27,16 +29,33 @@ function Right_Side_Chat(props) {
         setNewPage(PageName);
     };
 
+    const handleNewMessage = (message, participants) => {
+        setNewMessage(message);
+        setNewParticipants(participants);
+    };
+
+    const handleSocket = (socket) => {
+        setSocket(socket);
+    };
+
     return (
         <div className='open-chat-container'>
             <div className='side-bar-chat-page'>
-                <OpenChatCom handleNewPage={handleNewPage} />
+                <OpenChatCom 
+                socket={socket}
+                newMessage={newMessage}
+                newParticipants={newParticipants}
+                handleNewPage={handleNewPage} />
             </div>
             <div className='right-side-main-chat'>
                 {newPage === "New Chat" ? (
                     <NewChat_Com />
                 ) : newPage === "Threads" ? (
                     <Threads />
+                ) : newPage === "Chat" ? (
+                    <>
+                    <LiveChat onSocket={handleSocket} onNewMessage={handleNewMessage}/>
+                    </>
                 ) : null}
             </div>
         </div>

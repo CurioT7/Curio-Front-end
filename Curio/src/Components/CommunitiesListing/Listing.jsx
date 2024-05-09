@@ -62,37 +62,73 @@ function Listing(props) {
     React.useEffect(() => {
       
       setListValue('Hot');
-      
+      setSortTop('Today');
     }, [Community]);
     React.useEffect(() => {
       setCommunity(Community);
     }, [Community]);
+    React.useEffect(() => {
+      setSortTop('Today');
+    },[listValue])
   }
  
   function changeListValue(value) {
     setListValue(value);
     handleListValueChange(value);
-    props.onChangeSort(value,sortTop);
+    if(props.isCommunity){
+    props.onChangeSort(value,"0");}
+    else if(props.isHome){
+      props.onChangeSort(value,"day");
+    }
   }
   function changeSortTop(value) {
     setSortTop(value);
     if(value==="Today"){
+      if(props.isCommunity){
       props.onChangeSort("Top","0");
+      }else{
+        props.onChangeSort("Top","day");
+      }
     }
     else if(value==="This Week"){
-      props.onChangeSort("Top","7");
+      if(props.isCommunity){
+        props.onChangeSort("Top","7");
+      }else{
+        props.onChangeSort("Top","week");
+      }
+      
     }
     else if(value==="This Month"){
-      props.onChangeSort("Top","30");
+      if(props.isCommunity){
+        props.onChangeSort("Top","30");
+      }else{
+        props.onChangeSort("Top","month");
+      }
+      
     }
     else if(value==="This Year"){
-      props.onChangeSort("Top","365");
+      if(props.isCommunity){
+        props.onChangeSort("Top","365");
+      }else{
+        props.onChangeSort("Top","year");
+      }
+      
     }
     else if(value==="Now"){
-      props.onChangeSort("Top","now");
+      if(props.isCommunity){
+        props.onChangeSort("Top","now");
+      }
+      else{
+        props.onChangeSort("Top","hour");
+      }
+     
     }
     else{
-      props.onChangeSort("Top",value);
+      if(props.isCommunity){
+        props.onChangeSort("Top",value);
+      }else{
+        props.onChangeSort("Top","all");
+      }
     }
     
    
@@ -120,6 +156,9 @@ function Listing(props) {
           <p className="Sort-title">Sort By</p>
           {props.isCommunity &&<>{topSortArr.map((Sort)=>(
             <Link to={`/r/${community}/Top`} onClick={() => changeSortTop(Sort)} className="link-sort">{Sort}</Link>
+          ))} </>  }
+          {props.isHome &&<>{topSortArr.map((Sort)=>(
+            <Link to={`/Top`} onClick={() => changeSortTop(Sort)} className="link-sort">{Sort}</Link>
           ))} </>  }
           
           

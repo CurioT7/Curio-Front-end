@@ -63,7 +63,7 @@ function ReportExtraReason(props){
             duration: 5000,
             isClosable: true,
           })
-          console.log(err);
+          console.error(err);
         }
     }
     return (

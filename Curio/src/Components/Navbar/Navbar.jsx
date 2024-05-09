@@ -9,7 +9,7 @@ import Settings from '../../styles/icons/Settings';
 import { Link } from 'react-router-dom';
 import SignupHandler from './SignupHandler';
 import LoggedOutHandler from './LoggedOutHandler';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
 import { BsArrowUpRightCircle } from "react-icons/bs";
 import { Menu, MenuButton, MenuList, Tooltip } from '@chakra-ui/react'
@@ -20,12 +20,14 @@ import {
   PopoverBody,
 } from '@chakra-ui/react'
 import { CiSearch } from "react-icons/ci";
-import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
-import { getUnreadNotifications, getAllNotifications, markAsViweed } from '../Notifications_Dropdown/NotificationsEndpoints';
+import { getTrending,getSearchSuggestion } from './SearchingEndPoints';
+// import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
+import { fetchNotificationsFromBackend, markasViewed } from '../../Pages/Notifications/NotificationsEndPoints';
 
 import Trending from './Trending';
 import SearchBy from './SearchBy';
 import { set } from 'mongoose';
+import axios from 'axios';
 
 
 
@@ -35,11 +37,12 @@ function NavbarComponent(props) {
   const [searchCommunities, setSearchCommunities] = React.useState([]);
   const [searchPeople, setSearchPeople] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
-  const [unreadNotifications, setUnreadNotifications] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [unreadNotificationsNum, setUnreadNotificationsNum] = useState(0);
   const [isRead, setIsRead] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
+  const [profileImage, setProfileImage] = useState('');
+  const location = useLocation();
   const navigate = useNavigate();
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
@@ -50,57 +53,36 @@ function NavbarComponent(props) {
     }
   };
 
-  async function handleUnreadNotifications(){
-    const unreadNotifications = await getUnreadNotifications();
-    if(unreadNotifications){
-      setUnreadNotifications(unreadNotifications.data.unreadCount);
-    }
-  }
-
-  async function handleAllNotifications() {
-    const response = await getAllNotifications();
-    if(response) {
-        setNotifications(response.data.notifications);
-    }
-}
 
   async function handleMarkAsRead(){
-    const response = await markAsViweed();
+    const response = await markasViewed();
     if(response.success) {
-        setIsRead(true);
+        console.log("Marked as read");
     }
 }
 
 
   function handleOpenNotifications(){
-    setUnreadNotifications(null);
+    if(!isNotificationsOpen){
+    setUnreadNotificationsNum(0);
+    handleMarkAsRead();
     setIsNotificationsOpen(true);
-    handleAllNotifications();
+    }
+    else
+    {
+      setIsNotificationsOpen(false);
+    }
   }
-
-  useEffect(() => {
-    handleUnreadNotifications();
-  }, []);
-
-
 
 
   const handleSearchChange = async (e) => {
     setSearchValue(e.target.value);
-    const searchCommunitiesData = await getSearchSubreddits(searchValue);
-    const searchPeopleData = await getSearchPeople(searchValue);
-    if(searchCommunitiesData){
-      setSearchCommunities(searchCommunitiesData.subreddits);
+    const searchSuggestionsData = await getSearchSuggestion(searchValue);
+    if(searchSuggestionsData){
+      setSearchCommunities(searchSuggestionsData.subreddits);
+      setSearchPeople(searchSuggestionsData.users);
     }
-    else{
-      setSearchCommunities([]);
-    }
-    if(searchPeopleData){
-      setSearchPeople(searchPeopleData.users);
-    }
-    else{
-      setSearchPeople([]);
-    }
+    
   }
   const navigateToLogin = () => {
     navigate('/login');
@@ -114,6 +96,10 @@ function NavbarComponent(props) {
     navigate(`/search/${searchValue}`);
     setSearchValue('');
   }
+  const handleSearchFor = () => {
+    window.location.href = `/search/${searchValue}`;
+    setSearchValue('');
+  }
   
   useEffect(() => {
     if (inputRef.current && popoverRef.current) {
@@ -121,14 +107,31 @@ function NavbarComponent(props) {
     }
   }, []);
 
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     window.addEventListener("loginOrSignup", checkAuthentication);
     setIsAuthenticated(!!token);
+    if (token) {
+      getPrefs();
+    }
+    window.addEventListener("prefsChanged", getPrefs);
     return () => {
       window.removeEventListener("loginOrSignup", checkAuthentication);
+      window.removeEventListener("prefsChanged", getPrefs);
     };
   }, []);
 
@@ -179,6 +182,7 @@ function NavbarComponent(props) {
     };
   }, []);
 
+
  useEffect(() => {
   if (isOpen) {
     setTimeout(() => {
@@ -227,9 +231,9 @@ if (!props.NavbarVisibility) {
                   </div>}
                   { searchValue && <div>
 
-                    {searchCommunities && <div>
+                    {searchCommunities.length>0 && <div>
                     <div className='searchBy-header'> Communities</div>
-                    <SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/>
+                    {/* <SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/> */}
                     { searchCommunities.map((comm) => (
                       <SearchBy
                         key={comm._id}
@@ -242,9 +246,9 @@ if (!props.NavbarVisibility) {
                     }
                     </div>
                     }
-                    {searchPeople && <div>
-                    <div className='searchBy-header'>People</div>
-                    <SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/>
+                    {searchPeople.length>0 && <div>
+                    <div onClick={handleSearch} className='searchBy-header'>People</div>
+                    {/* <SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/> */}
                     { searchPeople.map((user) => (
                       <SearchBy
                         key={user._id}
@@ -259,7 +263,7 @@ if (!props.NavbarVisibility) {
                     
                     </div>
                     }
-                    <div className='search-footer'> <CiSearch className='search-icon'/> <span> Search by  "{searchValue}"</span>
+                    <div onClick={handleSearchFor} className='search-footer'> <CiSearch className='search-icon'/> <span> Search by  "{searchValue}"</span>
                     </div>
                   </div>}
                   
@@ -272,14 +276,14 @@ if (!props.NavbarVisibility) {
       <div className='right-section-navbar'>
         {isAuthenticated && 
         <>
-          <Tooltip label="Open chat">
+          <Tooltip hasArrow label="Open chat">
             <Link to={'/room/create'} className='sub-right-navbar'>
               <li className='right-item-option' style={{ display: "flex" }}>
                     <img className='navImg' src={openchat} alt="logo"/>
               </li>
             </Link>
           </Tooltip>
-          <Tooltip label="Create post">
+          <Tooltip hasArrow label="Create post">
             <Link to={'/user/CreatePost'} className='sub-right-navbar'>
               <li className='create-icon' style={{ display: "flex" }}>
                 <img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
@@ -287,13 +291,13 @@ if (!props.NavbarVisibility) {
               </li>
             </Link>
           </Tooltip>
-          <Tooltip label="Open inbox">
+          <Tooltip hasArrow label="Open inbox">
             <a className='sub-right-navbar notif' style={{position: 'relative'}} >
-              <li className='right-item-option' style={{ display: "flex" }} onClick={() => {handleOpenNotifications(); handleMarkAsRead()}}>
+              <li className='right-item-option' style={{ display: "flex" }} onClick={handleOpenNotifications}>
                   <Menu>
                     <MenuButton>
                       <img className='navImg' src={inbox} alt="logo" />
-                      <span className='unread-notifs'>{unreadNotifications}</span>
+                      {unreadNotificationsNum === 0 ? null : <span className='unread-notifs'>{unreadNotificationsNum}</span>}
                     </MenuButton>
                     <MenuList 
                     style={{
@@ -301,16 +305,16 @@ if (!props.NavbarVisibility) {
                       border: 'none',
                       boxShadow: 'none', 
                     }}>
-                      <Notifications_Dropdown notifications={notifications}/>
+                      <Notifications_Dropdown notifications={notifications} setUnreadNotificationsNum={setUnreadNotificationsNum}/>
                     </MenuList>
                   </Menu>
               </li>
             </a>
           </Tooltip>
           <li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
-            <Tooltip label="Open profile menu">
+            <Tooltip hasArrow label="Open profile menu">
               <a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
-                <img className='profileImg' src={profile} alt="logo"/>
+                <img className='profileImg' src={profileImage || profile} alt="logo"/>
               </a>
             </Tooltip>
           </li>
@@ -334,7 +338,7 @@ if (!props.NavbarVisibility) {
       <div className="sub-menu-wrap" id='subMenu'>
         <div className="sub-menu">
           <Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
-            <img className='profileImg' src={profile} alt="logo"/>
+            <img className='profileImg' src={profileImage || profile} alt="logo"/>
             <div className="d-flex flex-column">
               <span className="drop-down-profile-description">View Profile</span>
                 <div className='d-flex flex-start align-items-center ArrowandNumber'>

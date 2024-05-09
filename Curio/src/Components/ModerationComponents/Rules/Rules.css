@@ -1,0 +1,66 @@
+/* 
+.RuleTabs{
+
+} */
+
+.RuleButtons {
+    display: flex;
+    justify-content: flex-end;
+}
+.buttonrule{
+    border-radius: 999px;
+    background:white;
+    border: 2px solid #0079D3;
+    color: #0079D3;
+    margin-left: 4px;
+    padding: 7px;
+}
+.rulesnote{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+padding-top: 20px;}
+
+.ruleinput{
+    box-sizing: border-box;
+    color:#1c1c1c;
+    border: 1px solid ;
+    border-radius: 4px;
+    padding: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .inputTitle{
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    text-transform: uppercase;
+    display: block;
+    color: black;
+    margin-bottom: 5px;
+    margin-top: 10px;
+  }
+
+  .radiobtn{
+    margin-bottom: 10px;
+}
+
+  .ruletitle{
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #878A8C;
+  }
+
+  .describetext{
+    box-sizing: border-box;
+    color:#1c1c1c;
+    border: 1px solid ;
+    border-radius: 4px;
+    padding: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+    height: 100px;
+  }
