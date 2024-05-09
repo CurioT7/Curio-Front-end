@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: listing files
-      run: ls ./Curio/
+      run: ls 
     - name: Change directory
       run: cd ./Curio/
     - name: Use Node.js ${{ matrix.node-version }}
