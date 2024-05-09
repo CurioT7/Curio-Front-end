@@ -1,3 +1,10 @@
+/**
+ * Component for uploading and displaying images or videos.
+ * @component
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {function} props.onImageUpload - Function to handle uploaded image or video.
+ * @module ImageVideo
+ */
 import React, { useState, useRef, useEffect } from 'react';
 import './ImageVideo.css';
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';

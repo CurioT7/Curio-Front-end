@@ -1,3 +1,15 @@
+/**
+ * Component for creating a poll.
+ * @component
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {Function} props.handleDayChange - Function to handle the change in voting length.
+ * @param {Function} props.handleOptionChange - Function to handle the change in poll options.
+ * @param {Function} props.handleAddOption - Function to add a new option to the poll.
+ * @param {Function} props.handleRemoveOption - Function to remove an option from the poll.
+ * @param {Array} props.options - Array containing poll options.
+ * @param {Function} props.onContentChange - Function to handle the change in poll content.
+ * @module Polls
+ */
 import React from "react";
 import { useState } from "react";
 import "./Polls.css";

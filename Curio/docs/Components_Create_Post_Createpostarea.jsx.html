@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Create_Post/Createpostarea.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Create_Post/Createpostarea.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * CreatePostArea component for creating posts.
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {Object} props.community - The community object containing information about the post's community.
+ * @module CreatePostArea
+ */
+
+import React, { useState, useRef } from 'react';
+import PostMethods from "./PostMethods";
+import EditCreateArea from "./EditCreatearea";
+import "./Createpostarea.css";
+import ImageVideo from "./Image_&amp;_Video_Section/ImageVideo";
+import Link from "./Link_Section/Link";
+import Polls from "./Polls_Section/Polls";
+import Post from "./Post_Section/Post";
+
+function CreatePostArea({ community }) {
+  const [inputTitle, setInputTitle] = useState('');
+  const [selectedMethod, setSelectedMethod] = useState("post");
+  const [content, setContent] = useState('');
+  const [dayNumber, setDayNumber] = useState(3);
+  const [imageFormData, setImageFormData] = useState(null);
+  const [linkUrl, setLinkUrl] = useState('');
+  const textareaRef = useRef(null);
+  const [optionsText, setoptionsText] = useState([]);
+  const [options, setOptions] = useState([]);
+  const maxOptions = 4;
+
+  // Function to add an option
+  const handleAddOption = () => {
+    if (options.length &lt; maxOptions) {
+      setOptions([...options, `Option ${options.length + 3}`]);
+    }
+  };
+
+  // Function to remove an option
+  const handleRemoveOption = (index) => {
+    const newOptions = [...options];
+    newOptions.splice(index, 1);
+    setOptions(newOptions);
+
+    const newOptionsText = [...optionsText];
+    newOptionsText.splice(index + 2, 1);
+    setoptionsText(newOptionsText);
+  };
+
+  // Function to handle day change
+  const handleDayChange = (event) => {
+    setDayNumber(parseInt(event.target.value));
+  };
+
+  // Function to handle option change
+  const handleOptionChange = (index, event) => {
+    const newOptionsText = [...optionsText];
+    newOptionsText[index] = event.target.value;
+    setoptionsText(newOptionsText);
+  };
+
+  // Function to handle title input change
+  const handleTitleInputChange = (event) => {
+    setInputTitle(event.target.value);
+    adjustTextareaHeight();
+  };
+
+  // Function to adjust textarea height based on content
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
+
+  // Function to handle method selection
+  const handleMethodSelect = (method) => {
+    setSelectedMethod(method);
+  };
+
+  // Function to handle content change
+  const handleContentChange = (newContent) => {
+    setContent(newContent);
+  };
+
+  // Function to handle image upload
+  const handleImageUpload = (formData) => {
+    setImageFormData(formData);
+  };
+
+  // Function to handle link change
+  const handleLinkChange = (url) => {
+    setLinkUrl(url);
+  };
+
+  // Function to render the selected method section
+  const renderSelectedMethod = () => {
+    switch (selectedMethod) {
+      case "post":
+        return &lt;Post onContentChange={handleContentChange} />;
+      case "media":
+        return &lt;ImageVideo onImageUpload={handleImageUpload} />;
+      case "link":
+        return &lt;Link onLinkChange={handleLinkChange} />;
+      case "poll":
+        return &lt;Polls handleDayChange={handleDayChange} handleOptionChange={handleOptionChange} handleAddOption={handleAddOption} handleRemoveOption={handleRemoveOption}
+          options={options} onContentChange={handleContentChange} />;
+    }
+  };
+
+  return (
+    &lt;div className='create-post-region'>
+      &lt;PostMethods onMethodSelect={handleMethodSelect} />
+      &lt;div className="container my-3">
+        &lt;div className="textarea-container">
+          &lt;textarea
+            className="custom-textarea"
+            ref={textareaRef}
+            rows="1"
+            maxLength="300"
+            placeholder="Title"
+            value={inputTitle}
+            onChange={handleTitleInputChange}
+          />
+          &lt;div className="counter-title">
+            {inputTitle.length}/300
+          &lt;/div>
+        &lt;/div>
+        {renderSelectedMethod()}
+      &lt;/div>
+      &lt;EditCreateArea
+        title={inputTitle}
+        content={content || linkUrl}
+        community={community}
+        days={dayNumber}
+        options={optionsText}
+        imageFormData={imageFormData}
+        selectedMethod={selectedMethod}
+      />
+    &lt;/div>
+  );
+}
+
+export default CreatePostArea;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 01:10:43 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

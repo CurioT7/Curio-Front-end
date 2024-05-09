@@ -1,3 +1,14 @@
+
+/**
+ * Function component for creating a new post.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.subreddit - Subreddit data.
+ * @param {Function} props.hideSidebar - Function to hide the sidebar.
+ * @param {Function} props.showSidebar - Function to show the sidebar.
+ * @module CreatePost
+ */
+
 import React, { useState, useEffect  } from "react";
 import {useNavigate} from 'react-router-dom';
 import { Box, Button, Text } from '@chakra-ui/react';
@@ -6,10 +17,15 @@ import "./Createpost.css";
 import Community from '../../Components/Create_Post/Community/Community';
 import PostingCards from "../../Components/Create_Post/Right_Section/PostingCards";
 
-function Createpost(props) {
+function CreatePost(props) {
   const navigate = useNavigate();
   const [selectedCommunity, setSelectedCommunity] = useState(null); 
 
+  /**
+   * Function to handle the selection of a community.
+   * @param {string} community - The selected community.
+   */
+  
     const handleCommunitySelect = (community) => {
         setSelectedCommunity(community);
     };
@@ -44,4 +60,4 @@ function Createpost(props) {
   );
 }
 
-export default Createpost;
+export default CreatePost;

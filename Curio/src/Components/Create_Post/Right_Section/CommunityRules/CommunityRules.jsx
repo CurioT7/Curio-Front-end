@@ -1,7 +1,15 @@
+/**
+ * Component for displaying community rules.
+ * @component
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {string} props.subbreddit - The name of the subreddit.
+ * @param {string[]} props.rules - An array of rules to be displayed.
+ * @module CommunityRules
+ */
 import React from "react";
 import "./CommunityRules.css";
 
-function Community_rules(props) {
+function CommunityRules(props) {
     return (
         <div className="community_rules_container">
             <div className="community_rules_inner_container">
@@ -23,4 +31,4 @@ function Community_rules(props) {
     );
 }
 
-export default Community_rules;
+export default CommunityRules;

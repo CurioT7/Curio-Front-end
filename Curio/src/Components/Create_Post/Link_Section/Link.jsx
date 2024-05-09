@@ -1,3 +1,10 @@
+/**
+ * Component for entering and displaying a link URL.
+ * @component
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {function} props.onLinkChange - Function to handle URL change.
+ * @module Link
+ */
 import React, { useState } from 'react';
 import "./Link.css";
 

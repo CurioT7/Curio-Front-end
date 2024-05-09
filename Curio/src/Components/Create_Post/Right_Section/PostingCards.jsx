@@ -1,3 +1,9 @@
+/**
+ * Function component for rendering posting cards.
+ * @component
+ * @param {Object} community - The community data.
+ * @module PostingCards
+ */
 import React, { useEffect, useState } from 'react';
 import "./PostingCards.css";
 import PostingRules from "./PostingRules/PostingRules";

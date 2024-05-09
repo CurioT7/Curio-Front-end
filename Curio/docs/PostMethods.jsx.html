@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: PostMethods.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: PostMethods.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Function component for selecting different post methods.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.onMethodSelect - Function to handle method selection.
+ * @module PostMethods
+ */
+import React, { useState } from 'react';
+import { Button, Flex } from '@chakra-ui/react';
+import "./PostMethods.css"
+
+// Function component for selecting different post methods
+function PostMethods({ onMethodSelect }) {
+  // State to keep track of the selected tab
+  const [selectedTab, setSelectedTab] = useState("post");
+  
+  /**
+   * Function to handle button clicks.
+   * @param {string} buttonName - The name of the button clicked.
+   */
+  const handleButtonClick = (buttonName) => {
+    setSelectedTab(buttonName);
+    onMethodSelect(buttonName);
+  };
+
+  return (
+    &lt;Flex className='post-methods'>
+      {/* Button for posting */}
+      &lt;Button
+        className='button-post-method'
+        colorScheme={selectedTab === "post" ? "blue" : ""}
+        size='lg'
+        variant='ghost'
+        leftIcon={&lt;i className="fa-solid fa-signs-post" />}
+        onClick={() => handleButtonClick("post")}
+        style={{
+          borderColor: '#edeff1',
+          borderStyle: 'solid',
+          borderRadius: '0',
+          borderBottomColor: selectedTab === "post" ? "blue" : "#edeff1",
+          borderWidth: selectedTab === "post" ? '0 0 2px 0' : '0 0 1px 0',
+          color: selectedTab === "post" ? "#0079d3" : "#878a8c",
+        }}
+      >
+        Post
+      &lt;/Button>
+      {/* Button for media */}
+      &lt;Button
+        className='button-post-method'
+        colorScheme={selectedTab === "media" ? "blue" : ""}
+        size='lg'
+        variant='ghost'
+        leftIcon={&lt;i className="fa-regular fa-image" />}
+        onClick={() => handleButtonClick("media")}
+        style={{
+          borderColor: '#edeff1',
+          borderWidth: '0 0 1px 1px',
+          borderStyle: 'solid',
+          borderRadius: '0',
+          borderBottomColor: selectedTab === "media" ? "blue" : "#edeff1",
+          borderWidth: selectedTab === "media" ? '0 0 2px 1px' : '0 0 1px 1px',
+          color: selectedTab === "media" ? "#0079d3" : "#878a8c",
+        }}
+      >
+        Image &amp; Video
+      &lt;/Button>
+      {/* Button for link */}
+      &lt;Button
+        className='button-post-method'
+        colorScheme={selectedTab === "link" ? "blue" : ""}
+        size='lg'
+        variant='ghost'
+        leftIcon={&lt;i className="fa-solid fa-link" />}
+        onClick={() => handleButtonClick("link")}
+        style={{
+          borderColor: '#edeff1',
+          borderWidth: '0 0 1px 1px',
+          borderStyle: 'solid',
+          borderRadius: '0',
+          borderBottomColor: selectedTab === "link" ? "blue" : "#edeff1",
+          borderWidth: selectedTab === "link" ? '0 0 2px 1px' : '0 0 1px 1px',
+          color: selectedTab === "link" ? "#0079d3" : "#878a8c",
+        }}
+      >
+        Link
+      &lt;/Button>
+      {/* Button for polls */}
+      &lt;Button
+        className='button-post-method'
+        colorScheme={selectedTab === "poll" ? "blue" : ""}
+        size='lg'
+        variant='ghost'
+        leftIcon={&lt;i className="fa-regular fa-image" />}
+        onClick={() => handleButtonClick("poll")}
+        style={{
+          borderColor: '#edeff1',
+          borderWidth: '0 0 1px 1px',
+          borderStyle: 'solid',
+          borderRadius: '0',
+          borderBottomColor: selectedTab === "poll" ? "blue" : "#edeff1",
+          borderWidth: selectedTab === "poll" ? '0 0 2px 1px' : '0 0 1px 1px',
+          color: selectedTab === "poll" ? "#0079d3" : "#878a8c",
+        }}
+      >
+        Polls
+      &lt;/Button>
+    &lt;/Flex>
+  );
+}
+
+export default PostMethods;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 01:08:04 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

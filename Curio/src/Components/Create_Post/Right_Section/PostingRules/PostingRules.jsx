@@ -1,9 +1,14 @@
+/**
+ * Component for displaying posting rules.
+ * @component
+ * @module PostingRules
+ */
 import React from 'react';
 import "./PostingRules.css"
 import logo from "../../../../assets/Curio_logo.png";
 
 
-function Posting_rules() {
+function PostingRules() {
   return (
     <div>
       <div className='curioPostingHeader'>
@@ -27,4 +32,4 @@ function Posting_rules() {
   );
 }
 
-export default Posting_rules;
+export default PostingRules;
