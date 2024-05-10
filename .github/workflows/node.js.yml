@@ -38,6 +38,7 @@ jobs:
         envkey_VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
         envkey_VITE_CLIENT_SECRET: ${{ secrets.VITE_CLIENT_SECRET }}
         envkey_VITE_SERVER_HOST: ${{ secrets.VITE_SERVER_HOST }}
+        directory: ./Curio
         file_name: .env
         fail_on_empty: true
         sort_keys: false
