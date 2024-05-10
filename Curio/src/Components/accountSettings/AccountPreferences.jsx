@@ -10,6 +10,20 @@ import { useToast, } from '@chakra-ui/react';
 import { sendUserDataToBackend,fetchUserDataFromBackend } from "../UserSetting/UserSettingsEndPoints"
 
 
+/**
+ * AccountPreferences component.
+ * 
+ * This component displays the account preferences settings, including email address, password change, gender, and location customization.
+ * It allows users to update their preferences and saves the changes to the backend.
+ * 
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.findPass - Indicates whether the user is in the password recovery flow.
+ * @param {string} props.email - The user's email address.
+ * @param {string} props.username - The user's username.
+ * @param {Function} props.onChangeEmail - The function to handle email change.
+ * @returns {JSX.Element} AccountPreferences component.
+ */
 const AccountPreferences = (props) => {   
     const [gender, setGender] = React.useState("MAN")
     const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
