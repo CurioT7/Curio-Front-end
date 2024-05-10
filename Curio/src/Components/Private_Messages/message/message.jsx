@@ -35,8 +35,13 @@ function message({ setMessage }) {
 
   return (
     <div className='message_container'>
-      <label htmlFor="selectOption" style={{fontSize:'large'}}>message</label>
-      <Textarea className="message_private_textarea" size='sm' onChange={handleMessageChange}/>
+      <label htmlFor="selectOption" style={{ fontSize: 'large' }}>message</label>
+      <Textarea
+        className="message_private_textarea"
+        size='sm'
+        onChange={handleMessageChange}
+        data-testid="message-textarea"
+      />
     </div>
   );
 }

@@ -35,8 +35,13 @@ function subject_message({ setSubject }) {
 
   return (
     <div className='subject_message_container'>
-      <label htmlFor="selectOption" style={{fontSize:'large'}}>subject</label>
-      <Input size='sm' maxWidth='492px' onChange={handleSubjectChange}/>
+      <label htmlFor="selectOption" style={{ fontSize: 'large' }}>subject</label>
+      <Input
+        size='sm'
+        maxWidth='492px'
+        onChange={handleSubjectChange}
+        data-testid="subject-message-input"
+      />
     </div>
   );
 }
