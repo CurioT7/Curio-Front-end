@@ -8,6 +8,20 @@ import axios from "axios";
 import './ReportModals.css';
 import { useToast } from '@chakra-ui/react'
 
+/**
+ * ReportReason component for selecting and submitting report reasons.
+ * @module ReportReason
+ * @param {object} props - Component props.
+ * @param {boolean} props.show - Indicates if the modal is shown.
+ * @param {function} props.onHide - Function to hide the modal.
+ * @param {function} props.showSubmittedReport - Function to show the final submitted report.
+ * @param {string} props.reportType - Type of the report.
+ * @param {string} props.postId - ID of the post being reported.
+ * @param {function} props.setReportReason - Function to set the selected report reason.
+ * @param {function} props.showExtraReasons - Function to show extra reasons for the report.
+ * @returns {JSX.Element} ReportReason component.
+ */
+
 function ReportReason(props) {
   const toast = useToast();
   const [reportReason, setReportReason] = useState('');

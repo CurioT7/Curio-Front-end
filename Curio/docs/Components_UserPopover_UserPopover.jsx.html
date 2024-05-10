@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/UserPopover/UserPopover.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/UserPopover/UserPopover.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useRef, useEffect } from "react";
+import './UserPopover.css';
+import Popover from "react-bootstrap/Popover";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Minus from "../../styles/icons/Minus.jsx";
+import PlusIcon from "../../styles/icons/PlusIcon.jsx";
+import Chat from "../../styles/icons/Chat.jsx";
+import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import { Flex,Avatar,Box,Heading,IconButton,Text,Image } from '@chakra-ui/react'
+import Cake from "../../styles/icons/Cake.jsx";
+
+
+/**
+ * Renders a user popover component.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.user - The username of the user.
+ * @param {Object} props.friendInfo - Information about the user's friend.
+ * @param {boolean} props.isFollowing - Indicates whether the user is being followed.
+ * @param {Function} props.handleFollowToggle - Function to handle follow/unfollow action.
+ * @param {Function} props.handleGetFollower - Function to handle getting follower information.
+ * @param {Function} props.showFriendInformation - Function to show friend information.
+ * @param {string} props.classname - The CSS class name for the component.
+ * @module FollowUserPopover
+ */
+function UserPopover( { user, friendInfo, isFollowing, handleFollowToggle, handleGetFollower, showFriendInformation, classname } ) {
+  const [showPopover, setShowPopover] = useState(false);
+  const [isSelf , setIsSelf] = useState(false);
+
+  useEffect(() => {
+    if (user === localStorage.getItem('username')) {
+      setIsSelf(true);
+    }
+  }, [user]);
+
+  return (
+    &lt;OverlayTrigger
+      trigger={["hover", "focus"]}
+      placement="bottom"
+      show={showPopover}
+      overlay={
+        &lt;Popover
+          id="overlay2"
+          onMouseEnter={() => setShowPopover(true)}
+          onMouseLeave={() => setShowPopover(false)}
+        >
+          &lt;div className="d-flex align-items-center p-2 popOverHeader">
+            &lt;Avatar
+              size="md"
+              name="Segun Adebayo"
+              src="https://bit.ly/sage-adebayo"
+              className="popoverAvatar"
+            />
+            &lt;div className="d-flex flex-column ms-2">
+              &lt;a
+                href={`/user/${user}`}
+                className="popOverUsername"
+                taget="_blank"
+              >
+                {user}
+              &lt;/a>
+              &lt;span className="popOverCake">u/{user}&lt;/span>
+              &lt;div className="d-flex">
+                &lt;Cake />
+              &lt;span className="popOverCake ms-2">{friendInfo.cakeDay}&lt;/span>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="container mt-4">
+            &lt;div className="row row-cols-2 powerOverRow">
+              &lt;div className="col-5 popOverCol text-start">
+                &lt;h6 className="numbersHeader">{friendInfo.postKarma}&lt;/h6>
+                &lt;p className="membersText">Post Karma&lt;/p>
+              &lt;/div>
+              &lt;div className="col-7 popOverCol text-start">
+                &lt;h6 className="numbersHeader">{friendInfo.commentKarma}&lt;/h6>
+                &lt;p className="membersText">Comment Karma&lt;/p>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;a
+            className="karmaText text-start mt-2 mb-4 ms-2"
+            href="https://support.reddithelp.com/hc/en-us/articles/204511829-What-is-karma"
+          >
+            What is Karma?
+          &lt;/a>
+          {isSelf? null : (
+          &lt;div className="d-flex mt-2 ">
+            &lt;button
+              className={`d-flex align-items-center popoverFollow p-2 ${
+                isFollowing ? "following" : "not-following"
+              }`}
+              onClick={() => {
+                handleFollowToggle(user);
+              }}
+            >
+              &lt;span>{isFollowing ? &lt;Minus /> : &lt;PlusIcon />}&lt;/span>
+              &lt;span className="ms-2 ">
+                {isFollowing ? "Unfollow" : "Follow"}
+              &lt;/span>
+            &lt;/button>
+            &lt;button className="d-flex align-items-center popoverChat p-2 ms-2">
+              &lt;span>
+                &lt;Chat />
+              &lt;/span>
+              &lt;span className="ms-2 ">Chat&lt;/span>
+            &lt;/button>
+          &lt;/div>
+          )
+      }
+        &lt;/Popover>
+      }
+    >
+      &lt;a
+        href={`/user/${user}`}
+        className={`${classname}`}
+        onMouseEnter={() => {
+          setShowPopover(true);
+          handleGetFollower(user);
+          showFriendInformation(user);
+        }}
+        onMouseLeave={() => setShowPopover(false)}
+      >
+        {user}
+      &lt;/a>
+    &lt;/OverlayTrigger>
+  );
+}
+
+export default UserPopover;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 17:20:49 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

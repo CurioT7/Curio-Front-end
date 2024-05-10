@@ -10,6 +10,13 @@ import { width } from "@mui/system";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
+
+/**
+ * RecentPosts component for displaying recent posts.
+ * @module RecentPosts
+ * @returns {JSX.Element} RecentPosts component.
+ */
+
 function RecentPosts() {
     const [recentPosts, setRecentPosts] = useState([]);
     const [isClear, setIsClear] = useState(false);

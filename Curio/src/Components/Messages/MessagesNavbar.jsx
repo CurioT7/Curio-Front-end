@@ -2,6 +2,12 @@ import React from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-ui/react';
 import { useNavigate } from "react-router-dom";
 
+/**
+ * MessagesNavbar component for displaying navigation tabs related to messages.
+ * @module MessagesNavbar
+ * @returns {JSX.Element} MessagesNavbar component.
+ */
+
 function MessagesNavbar() {
     const navigate = useNavigate();
     return (
