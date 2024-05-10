@@ -17,6 +17,12 @@ import './ProfilePage.css'
 import Logo from "../../assets/Curio_logo.png";
 
 
+/**
+ * Renders the profile sidebar component.
+ *
+ * @param {Object} props - The component props.
+ * @module The profile sidebar component.
+ */
 function ProfileSideBar( props ){
 
   const navigate = useNavigate();

@@ -10,6 +10,20 @@ import SignupHandlerForLogin from './SignupHandlerForLogin.jsx';
 import { useToast } from '@chakra-ui/react';
 
 
+/**
+ * Represents the Login component.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.forgotUser - Flag indicating if the user has forgotten their username.
+ * @param {function} props.setForgotUser - Function to update the forgotUser flag.
+ * @param {boolean} props.forgotPass - Flag indicating if the user has forgotten their password.
+ * @param {function} props.setForgotPass - Function to update the forgotPass flag.
+ * @param {boolean} props.isOpen - Flag indicating if the login form is open.
+ * @param {function} props.setIsOpen - Function to update the isOpen flag.
+ *@module The rendered Login component.
+ */
+
 function Login({
   forgotUser,
   setForgotUser,

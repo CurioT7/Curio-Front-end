@@ -38,6 +38,12 @@ const token = localStorage.getItem('token');
 
 
 
+/**
+ * Represents a post component.
+ *
+ * @param {Object} props - The props for the Post component.
+ * @module The rendered Post component.
+ */
 function Post(props) {
     const [subredditName, setSubredditName] = useState("");
     const [isHidden, setIsHidden] = useState(false);

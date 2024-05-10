@@ -2,6 +2,12 @@ import React from 'react';
 import '../Login/Login.css';
 import Modal from 'react-modal';
 
+/**
+ * Renders a user message component.
+ * @param {Object} props - The component props.
+ * @param {Function} props.setUserMessage - A function to set the user message.
+ * @module The rendered UserMessage component.
+ */
 function UserMessage({ setUserMessage }) {
     return (
         <>

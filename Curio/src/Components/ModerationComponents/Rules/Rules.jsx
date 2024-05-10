@@ -8,9 +8,12 @@ import'./Rules.css'
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
-
-
-
+/**
+ * Renders the Rules component.
+ *
+ * @param {Object} props - The component props.
+ *@module The rendered Rules component.
+ */
 function Rules( props ) {
 
   const [isOpen, setIsOpen] = useState(false);

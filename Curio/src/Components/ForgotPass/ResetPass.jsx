@@ -7,6 +7,13 @@ import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
 import { useParams , useNavigate} from 'react-router-dom';
 import { useToast, } from '@chakra-ui/react';
 
+/**
+ * ResetPass component for resetting user password.
+ *
+ * @component
+ * @param {Object} props - The props object containing component properties.
+ * @module The ResetPass component.
+ */
 function ResetPass(props) {
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
