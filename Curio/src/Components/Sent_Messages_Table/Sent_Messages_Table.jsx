@@ -1,3 +1,22 @@
+/**
+ * Component for rendering sent messages.
+ * 
+ * @param {Object} props - Component props.
+ * @param {string} props.subject - The subject of the message.
+ * @param {string} props.recipient - The recipient of the message.
+ * @param {string} props.sender - The sender of the message.
+ * @param {string} props.timestamp - The timestamp of the message.
+ * @param {string} props.message - The content of the message.
+ * @param {string} props.cakeDay - The date the user joined.
+ * @param {string} props.displayName - The display name of the user.
+ * @param {number} props.postkarma - The post karma of the user.
+ * @param {number} props.commentkarma - The comment karma of the user.
+ * @param {string} props.about - The about section of the user.
+ * @param {boolean} props.isRecipientNull - Boolean indicating if the recipient is null.
+ * 
+ * @module SentMessagesTable
+ */
+
 import React, { useState } from 'react';
 import "./Sent_Messages_Table.css";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference';

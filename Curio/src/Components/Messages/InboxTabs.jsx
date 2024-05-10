@@ -1,6 +1,12 @@
 import React from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-ui/react';
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+
+/**
+ * InboxTabs component for displaying tabs in the inbox.
+ * @module InboxTabs
+ * @returns {JSX.Element} InboxTabs component.
+ */
 
 function InboxTabs() {
     const navigate = useNavigate(); 

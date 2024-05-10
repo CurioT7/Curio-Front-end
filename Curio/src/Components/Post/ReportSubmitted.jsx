@@ -8,6 +8,16 @@ import axios from "axios";
 import { useToast } from '@chakra-ui/react'
 import './ReportModals.css';
 
+/**
+ * ReportSubmitted component for displaying a report submission confirmation modal.
+ * @module ReportSubmitted
+ * @param {object} props - Component props.
+ * @param {boolean} props.show - Indicates if the modal is shown.
+ * @param {function} props.onHide - Function to hide the modal.
+ * @param {string} props.username - Username of the user being reported.
+ * @returns {JSX.Element} ReportSubmitted component.
+ */
+
 function ReportSubmitted(props) {
   const toast = useToast();
   const handleBlock = async (event) => {

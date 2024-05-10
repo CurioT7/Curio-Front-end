@@ -5,6 +5,14 @@ import axios from "axios";
 import ReportPopup from "./../ModalPages/ModalPages.jsx";
 import { BlockUserMessages } from '../../Pages/InboxMessages/InboxMessagesEndpoints.js';
 
+/**
+ * Messages component for displaying messages.
+ * @module Messages
+ * @param {Object} props - Component props.
+ * @param {Array} props.messages - Array of messages to display.
+ * @returns {JSX.Element} Messages component.
+ */
+
 function Messages(props) {
     const [showReportMenu, setShowReportMenu] = useState(false);
     const [confirmBlock, setConfirmBlock] = useState(false);

@@ -8,6 +8,34 @@ import generateRandomUsername from './GenerateUsername';
 import Shuffle from '../../styles/icons/Shuffle';
 import {checkUsernameAvailability} from './SignupEndpoints.js';
 
+/**
+ * UsernameInfo component displays a modal for user to enter username and password during signup.
+ * @component
+ * @param {object} props - The props for the UsernameInfo component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @param {string} props.enteredUsername - Initial value for the entered username.
+ * @param {string} props.enteredPassword - Initial value for the entered password.
+ * @param {Function} props.onEnteredUsername - Function to handle the entered username.
+ * @param {Function} props.onEnteredPassword - Function to handle the entered password.
+ * @param {Function} props.onContinueToGender - Function to handle the continue button click.
+ * @param {Function} props.onBack - Function to handle the back button click.
+ * @module UsernameInfo
+ * @returns {JSX.Element} UsernameInfo JSX element.
+ * @example
+ * // Example usage of UsernameInfo component:
+ * <UsernameInfo
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ *   enteredUsername=""
+ *   enteredPassword=""
+ *   onEnteredUsername={(username) => setUsername(username)}
+ *   onEnteredPassword={(password) => setPassword(password)}
+ *   onContinueToGender={() => handleContinue()}
+ *   onBack={() => handleBack()}
+ * />
+ */
+
 function UsernameInfo(props) {
 
 

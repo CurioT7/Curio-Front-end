@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Post/Post.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Post/Post.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
+import { Flex,Avatar,Box,Heading,IconButton,Text,Image } from '@chakra-ui/react'
+import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import Popover from 'react-bootstrap/Popover';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import picture from "../../styles/icons/commPic.png";
+import Minus from "../../styles/icons/Minus";
+import PlusIcon from "../../styles/icons/PlusIcon";
+import Chat from "../../styles/icons/Chat";
+import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import UserPopover from '../UserPopover/UserPopover.jsx';
+import Polls from '../Poll/ShowPoll.jsx';
+
+
+const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
+
+
+
+import { FaRegCommentAlt } from "react-icons/fa";
+import PostLock from './PostLock.jsx';
+import { FcLock } from "react-icons/fc";
+import { LuShare } from "react-icons/lu";
+import { SlOptions } from "react-icons/sl";
+import Upvotes from '../../styles/icons/Upvotes.jsx';
+import Downvotes from '../../styles/icons/Downvotes.jsx';
+import FilledDownvote from '../../styles/icons/FilledDownvote.jsx';
+import FilledUpvote from '../../styles/icons/FilledUpvote.jsx';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
+
+import { FetchObjectInfo } from './PostEndPoints.js';
+import './Post.css'
+import PostControl from './PostControl.jsx';
+import axios from 'axios';
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
+const token = localStorage.getItem('token');
+
+/**
+ * Post component.
+ * @param {Object} props - Component props.
+ * @param {string} props._id - Post ID.
+ * @param {string} props.user - User who posted.
+ * @param {string} props.title - Post title.
+ * @param {string} props.linkedSubreddit - Linked subreddit.
+ * @param {string} props.content - Post content.
+ * @param {string} props.image - Post image URL.
+ * @param {number} props.upvotes - Number of upvotes.
+ * @param {number} props.downvotes - Number of downvotes.
+ * @param {Array} props.comments - List of comments.
+ * @param {Array} props.savedPosts - List of saved posts.
+ * @param {Array} props.savedComments - List of saved comments.
+ * @param {string} props.voteStatus - Vote status.
+ * @param {Array} props.hiddenPosts - List of hidden posts.
+ * @param {boolean} props.isSpoiler - Whether the post is a spoiler.
+ * @param {boolean} props.isMod - Whether the user is a moderator.
+ * @module PostComponent
+ * @returns {JSX.Element} Post component JSX.
+ */
+
+/**
+ * Post component.
+ * @param {PostProps} props - Component props.
+ * @returns {JSX.Element} Post component JSX.
+ */
+
+function Post(props) {
+    const [subredditName, setSubredditName] = useState("");
+    const [isHidden, setIsHidden] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [friendInfo, setFriendInfo] = useState({});
+    const [isUserMember, setIsUserMember] = useState();
+    const toast = useToast();
+    const postId = props._id;
+    const [votes, setVotes] = useState(props.upvotes - props.downvotes);
+    const handleHidePost = () => {
+        setIsHidden(!isHidden);
+    }
+    useEffect(() => {
+        if (props.hiddenPosts &amp;&amp; props.hiddenPosts.some(post => post._id === props._id)) {
+            setIsHidden(true);
+        } else {
+            setIsHidden(false);
+        }      
+    }, [props.hiddenPosts, props._id])
+    useEffect(() => {
+        setUpvoted(props.voteStatus === "upvoted" ? true : false);
+        setDownvoted(props.voteStatus === "downvoted" ? true : false);
+        setIsLocked(props.isLocked);
+        setIsUserMember(props.isUserMember);
+        window.addEventListener('loginOrSignup', () => {
+            if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+            }
+        });
+        return () => {
+            window.removeEventListener('loginOrSignup', () => {
+               if (localStorage.getItem('token') === null){
+                setUpvoted(false);
+                setDownvoted(false);
+               }
+            });
+        }
+    }, [])
+    const navigate = useNavigate();
+    const [upvoted, setUpvoted] = useState((localStorage.getItem('token') &amp;&amp; props.voteStatus === "upvoted") ? true : false);
+    const [downvoted, setDownvoted] = useState((localStorage.getItem('token') &amp;&amp; props.voteStatus === "downvoted") ? true : false);
+    const [isLocked, setIsLocked] = useState(false);
+
+    
+    const makePostUpvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
+        if (upvoted) {
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
+        } else {
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setUpvoted(true);
+                setDownvoted(false);
+                setVotes(votes + 1);
+            }
+        }
+    }
+    const makePostDownvoted = async () => {
+        if (localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
+        if (downvoted) {
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: 0
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(false);
+                setUpvoted(false);
+                setVotes(votes + 1);
+            }
+        } else {
+            const response = await axios.post(`${hostUrl}/api/vote`, {
+                itemID: props._id,
+                itemName: "post",
+                direction: -1
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                setDownvoted(true);
+                setUpvoted(false);
+                setVotes(votes - 1);
+            }
+        }
+    }
+    
+    const handleIsLocked = (value) => {
+        setIsLocked(value);
+    }
+  
+    
+const postCategory = async (postID) => {
+    
+    const url = `${VITE_SERVER_HOST}/api/saved_categories`;
+    const token = localStorage.getItem('token')
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
+        },
+    });
+    
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+
+    const postData = responseData.map(post => ({
+     
+        isSpoiler: post.isSpoiler,
+        
+    }));
+
+
+    return postData;
+};
+
+    const handleUnhide = async () => {
+        try{
+            var hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/unhide`, {
+                postId: props._id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200){
+                toast({
+                    description: "Post Unhidden",
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                })
+                window.dispatchEvent(new Event('hideOrSave'));
+                setIsHidden(false);
+            }
+        }
+    catch(err){
+      
+      if (err.response.status === 409){
+        toast({
+          description: "Item already unhidden.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+      else{
+        toast({
+          description: "Server Error Occured.",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+  }
+
+    // useEffect(() => {
+    //     const fetchPostStatus = async () => {
+    //         const postInfo = await FetchObjectInfo(props._id,"post");
+    //         if(postInfo){
+    //             setIsLocked(postInfo.item.isLocked);  
+    //         }
+    //         const SubredditInfo = await FetchObjectInfo(props.linkedSubreddit,"subreddit");
+    //         if(SubredditInfo){
+                
+    //             setSubredditName(SubredditInfo.item.name);
+    //         }
+    //     }
+    //     fetchPostStatus();
+    // })
+
+    const handleNavigationToDetails = async () => {
+        try{
+            const post = {
+                _id: props._id,
+                user: props.user,
+                title: props.title,
+                subreddit: props.linkedSubreddit,
+                content: props.content,
+                media: props.media,
+                upvotes: props.upvotes,
+                downvotes: props.downvotes,
+                comments: props.comments,
+                savedPosts: props.savedPosts,
+                savedComments: props.savedComments,
+                voteStatus: upvoted ? "upvoted" : downvoted ? "downvoted" : "unvoted",
+                hiddenPosts: props.hiddenPosts,
+                isSpoiler: props.isSpoiler,
+                isMod: props.isMod,
+                isLocked: isLocked,
+                voteLength: props.voteLength,
+                pollTitle: props.pollTitle,
+                pollText: props.pollText,
+                optionNames: props.optionNames,
+                votes: props.votes,
+                didVote: props.didVote,
+                optionSelected: props.optionSelected,
+                type: props.type,
+                pollEnded: props.pollEnded,
+                dateViewed: new Date().toISOString()
+            }
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.post(`${hostUrl}/api/history`, {
+                postID: props._id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                window.dispatchEvent(new Event('newRecentPost'));
+                navigate(`/post/post-details/${props._id}`, { state: { post } });
+            }
+            if (response.status === 401){
+                navigate(`/post/post-details/${props._id}`, { state: { post } });
+            }
+        }
+        catch(err){
+            const post = {
+                _id: props._id,
+                user: props.user,
+                title: props.title,
+                subreddit: props.linkedSubreddit,
+                content: props.content,
+                image: props.image,
+                upvotes: props.upvotes,
+                downvotes: props.downvotes,
+                comments: props.comments,
+                savedPosts: props.savedPosts,
+                savedComments: props.savedComments,
+                hiddenPosts: props.hiddenPosts,
+                isMod: props.isMod,
+                isSpoiler: props.isSpoiler,
+                isLocked: isLocked,
+                voteLength: props.voteLength,
+                pollTitle: props.pollTitle,
+                pollText: props.pollText,
+                optionNames: props.optionNames,
+                votes: props.votes,
+                didVote: props.didVote,
+                optionSelected: props.optionSelected,
+                type: props.type,
+                pollEnded: props.pollEnded,
+                dateViewed: new Date().toISOString()
+            }
+            
+            navigate(`/post/post-details/${props._id}`, { state: { post } });
+        }
+    }
+
+
+    function handleFollowToggle(username) {
+        if (!token) {
+         navigate('/login');
+        }
+        else{
+        if (isFollowing) {
+            userUnfollow(username);
+        } else {
+            userFollow(username);
+        }
+        setIsFollowing(!isFollowing);
+    }
+    }
+
+    async function handleGetFollower(username) {
+        const result = await getFollower(username);
+        if (result) {
+            setIsFollowing(true);
+        } else {
+            console.error('Error occurred in getFollower');
+        }
+    }
+    
+
+    async function showFriendInfo(username) {
+        const result = await showFriendInformation(username);
+        if(result) {
+          setFriendInfo(result.data);
+        }
+      }
+
+    async function handleJoinCommunity() {
+        if (localStorage.getItem('token') === null){
+            navigate('/login');
+        } else {
+            if (!isUserMember){
+                const response = await axios.post(`${hostUrl}/api/friend`, {
+                    subreddit: props.linkedSubreddit
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200){
+                    setIsUserMember(!isUserMember);
+                }
+            }
+            else {
+                const response = await axios.post(`${hostUrl}/api/unfriend`, {
+                        subreddit: props.linkedSubreddit
+                    },{
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                );
+                if (response.status === 200){
+                    setIsUserMember(!isUserMember);
+                }
+            }
+        }
+    }
+
+
+ 
+
+    return (
+        
+        &lt;>
+            {!isHidden &amp;&amp;
+                &lt;div>
+                    &lt;Card className='Post' variant='ghost' >
+                        {props.linkedSubreddit &amp;&amp; &lt;p onClick={() => navigate(`r/${props.linkedSubreddit}`)} style={{marginLeft: "70px"}} className='mb-0 subreddit-post-name'>r/{props.linkedSubreddit}&lt;/p>}
+                        &lt;CardHeader className='py-0'>
+                            &lt;Flex spacing='4'>
+                            &lt;Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
+                                &lt;Avatar size='sm' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                               &lt;UserPopover user={props.user} friendInfo={friendInfo} isFollowing={isFollowing} handleFollowToggle={handleFollowToggle} 
+                               handleGetFollower={handleGetFollower} showFriendInformation={showFriendInfo} classname="community-post-name" />
+                            &lt;/Flex>
+                            {isLocked &amp;&amp; &lt;FcLock className='lock-icon' />}
+                            {props.linkedSubreddit &amp;&amp; &lt;button onClick={handleJoinCommunity} className='join-button mt-1'>{!isUserMember ? "Join" : "Leave"}&lt;/button>}
+                            &lt;PostControl hidePost={handleHidePost} postDetails={false} hiddenPosts={props.hiddenPosts} savedPosts={props.savedPosts} savedComments={props.savedComments} username={props.user} _id={props._id} isSpoiler={props.isSpoiler}  post={props.post}/>
+                            &lt;/Flex>
+                        &lt;/CardHeader>
+                        {props.type === 'poll' ? (&lt;Polls optionNames={props.optionNames} user={props.user} votes={props.votes} _id={props._id} pollTitle={props.pollTitle}
+                            pollText={props.pollText} voteLength={props.voteLength} handleNavigation={handleNavigationToDetails}
+                            didVote={props.didVote} optionSelected={props.optionSelected} pollEnded={props.pollEnded} createdAt={props.createdAt} /> ) : (
+                        &lt;CardBody className='py-0' onClick={handleNavigationToDetails} >
+                            &lt;Heading as='h3' size='md'>{props.title}&lt;/Heading>
+                        {props.type === "media" &amp;&amp; &lt;Image style={{ filter: props.isNSFW ? "blur(4px)" : ""}} src={props.media} alt={props.title} className='mb-1 d-flex justify-content-center w-100' />}
+                     {props.isSpoiler ? (
+                            &lt;>
+                                &lt;span className='text-body-spoiler' >
+                                    {props.content}
+                                &lt;/span>
+                            &lt;/>
+                        ) : (
+                            &lt;>  
+                            &lt;Text className='text-body' dangerouslySetInnerHTML={{ __html: props.content}}>&lt;/Text>
+                            &lt;/>
+                        )}
+                            {props.image &amp;&amp; &lt;Image
+                                objectFit='cover'
+                                src={props.image}
+                                alt='Chakra UI'
+                                className='mb-1'
+                            />}
+
+                            
+                        &lt;/CardBody>
+                        
+                    ) }
+                        {/* &lt;Image
+                            objectFit='cover'
+                            src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1770&amp;q=80'
+                            alt='Chakra UI'
+                        /> */}
+
+                        &lt;CardFooter
+                            display='flex'
+                            className='py-0 pb-2'
+                            flexDirection='row'
+                            justifyContent='space-between'
+                            flexWrap='wrap'
+                            sx={{
+                            '&amp; > button': {
+                                minW: '136px',
+                            },
+                            }}
+                        >   
+                            &lt;Box display='flex' justifyContent='start'>
+                                &lt;div className='d-flex me-2 align-items-center votes-control px-2' style={{backgroundColor: (upvoted &amp;&amp; localStorage.getItem("token")) ? "#D93A00" : (downvoted &amp;&amp; localStorage.getItem("token")) ? "#6A5CFF" : ""}}>
+                                    &lt;button data-testid="upvotes" className='me-2 upvotes-footer-button' onClick={() => makePostUpvoted()}>
+                                        {(upvoted &amp;&amp; localStorage.getItem("token") !== null) ? &lt;FilledUpvote /> : (downvoted &amp;&amp; localStorage.getItem("token") !== null) ? &lt;Upvotes whiteOutline={true} /> : &lt;Upvotes />}
+                                    &lt;/button>
+                                    &lt;div className='me-2'>
+                                        &lt;span className='votes-count' style={{color: upvoted || downvoted ? "#ffffff" : ""}}>{votes}&lt;/span>
+                                    &lt;/div>
+                                    &lt;button data-testid="downvotes" className='downvotes-footer-button' onClick={() => makePostDownvoted()}>
+                                        {(downvoted &amp;&amp; localStorage.getItem("token")) ? &lt;FilledDownvote /> : (upvoted &amp;&amp; localStorage.getItem("token")) ? &lt;Downvotes whiteOutline={true} /> : &lt;Downvotes />}
+                                    &lt;/button>
+                                &lt;/div>
+                                &lt;Button flex='1' className='post-footer-button me-2 px-1' variant='ghost' leftIcon={&lt;FaRegCommentAlt />}>
+                                &lt;span className='share-post-text'>{props.comments &amp;&amp; props.comments.length}&lt;/span>                                
+                                &lt;/Button>
+                                &lt;Menu>
+                                &lt;MenuButton as={Button} flex='1' className='post-footer-button me-2 px-3' variant='ghost' leftIcon={&lt;LuShare />}>
+                                    &lt;span data-testid="share" className='share-post-text'>Share&lt;/span>
+                                &lt;/MenuButton>
+                                &lt;MenuList>
+                                &lt;MenuItem onClick={async () => {
+                                    
+                                    
+                                        await navigator.clipboard.writeText(`http://localhost:5173/post/post-details/${postId}`);
+                                        alert('Link copied to clipboard');
+                                   
+                                }}>
+                                &lt;svg rpl="" class="mt-[1px] ml-[4px]" fill="currentColor" height="20" icon-name="link-post-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                    &lt;path d="M14.111 12.5a3.701 3.701 0 0 1-1.09 2.41c-.479.47-.928.922-1.378 1.373-.45.45-.894.9-1.368 1.366a3.852 3.852 0 0 1-2.698 1.099 3.852 3.852 0 0 1-2.698-1.099 3.738 3.738 0 0 1-1.116-2.659c0-.997.402-1.953 1.116-2.658.479-.472.928-.923 1.378-1.375.45-.45.893-.9 1.368-1.365A3.936 3.936 0 0 1 9.638 8.59a3.968 3.968 0 0 1 2.24.258c.27-.269.546-.54.812-.806l.131-.13a5.086 5.086 0 0 0-3.182-.624A5.052 5.052 0 0 0 6.732 8.71c-.48.471-.929.922-1.377 1.373-.449.451-.894.9-1.37 1.366A4.982 4.982 0 0 0 2.5 14.992c0 1.328.534 2.602 1.486 3.543A5.13 5.13 0 0 0 7.58 20a5.13 5.13 0 0 0 3.595-1.465c.478-.471.927-.923 1.377-1.374.451-.451.894-.9 1.368-1.366a4.993 4.993 0 0 0 1.263-2.071c.243-.781.288-1.61.132-2.412L14.11 12.5Z">&lt;/path>
+                                    &lt;path d="M16.017 1.467A5.123 5.123 0 0 0 12.422 0a5.123 5.123 0 0 0-3.595 1.467c-.478.471-.926.923-1.377 1.374-.45.451-.894.9-1.367 1.366a4.966 4.966 0 0 0-1.106 1.624 4.907 4.907 0 0 0-.291 2.86l1.2-1.19a3.699 3.699 0 0 1 1.092-2.41c.478-.472.928-.923 1.377-1.374.45-.45.894-.9 1.368-1.366a3.844 3.844 0 0 1 2.698-1.101c1.012 0 1.982.396 2.698 1.101a3.736 3.736 0 0 1 1.116 2.66c0 .996-.401 1.953-1.116 2.658-.478.471-.927.922-1.377 1.373-.45.451-.893.9-1.368 1.367a3.933 3.933 0 0 1-2.014 1.003 3.966 3.966 0 0 1-2.24-.26c-.273.274-.551.549-.818.818l-.123.12a5.087 5.087 0 0 0 3.183.624 5.053 5.053 0 0 0 2.906-1.423c.477-.472.926-.923 1.376-1.375.45-.452.894-.9 1.368-1.365A4.977 4.977 0 0 0 17.5 5.008a4.977 4.977 0 0 0-1.488-3.543l.005.002Z">&lt;/path>
+                                &lt;/svg>
+                                Copy Link
+                            &lt;/MenuItem>
+                                &lt;/MenuList>
+                                &lt;/Menu>
+                            &lt;/Box>
+
+                            {props.isMod &amp;&amp; &lt;Box display='flex'  justifyContent='end'>
+                               &lt;PostLock isLocked={isLocked} id={props._id} onChangeLock={handleIsLocked} />
+                            &lt;/Box>}
+                            
+                        &lt;/CardFooter>
+                    &lt;/Card>
+                &lt;/div>
+            }
+            {isHidden &amp;&amp; 
+                &lt;div className='d-flex justify-content-between hidden-container'>
+                    &lt;h3 className='d-flex align-items-center post-hidden-content'>Post Hidden&lt;/h3>
+                    &lt;button onClick={handleUnhide} className='undo-button'>Undo&lt;/button>
+                &lt;/div>
+            }
+        &lt;/>
+    )
+}
+export default Post;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

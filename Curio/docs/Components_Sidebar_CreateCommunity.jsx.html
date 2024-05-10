@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Sidebar/CreateCommunity.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Sidebar/CreateCommunity.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import CloseButton from '../../styles/icons/CloseButton';
+import PublicUnactive from '../../styles/icons/PublicUnactive';
+import RestrictedUnactive from '../../styles/icons/RestrictedUnactive';
+import PrivateUnactive from '../../styles/icons/PrivateUnactive';
+import PublicActive from '../../styles/icons/PublicActive';
+import RestrictedActive from '../../styles/icons/RestrictedActive';
+import PrivateActive from '../../styles/icons/PrivateActive';
+import RadioButtonUnactive from '../../styles/icons/RadioButtonUnactive';
+import RadioButtonActive from '../../styles/icons/RadioButtonActive';
+import Mature from '../../styles/icons/Mature';
+import createCommunity from './CreateCommunityEndpoints.js';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
+import ExclamationPoint from '../../styles/icons/ExclamationPoint.jsx';
+
+/**
+ * CreateCommunity component renders a modal for creating a new community.
+ * @param {object} props - The props for the CreateCommunity component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @returns {JSX.Element} CreateCommunity JSX element.
+ * @module CreateCommunity
+ * @example
+ * // Example usage of CreateCommunity component:
+ * &lt;CreateCommunity
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ * />
+ */
+
+function CreateCommunity(props) {
+  const [selectedType, setSelectedType] = useState('public');
+  const [charNum, setCharNum] = useState(0);
+  const [communityName, setCommunityName] = useState('');
+  const [isMature, setIsMature] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(0);
+  const toast = useToast({
+    containerStyle: {
+      maxWidth: "2000px!important",
+      backgroundColor: "#EB001F",
+    },
+  });
+  const navigate = useNavigate();
+
+  const handleTypeChange = (type) => {
+    setSelectedType(type);
+  };
+  
+  const handleChar = (event) => {
+    const inputText = event.target.value;
+    setCharNum(inputText.length);
+    setCommunityName(inputText);
+  };
+
+  const handleMatureChange = () => {
+    setIsMature(!isMature);
+  };
+
+  const handleNameValid = () => {
+    if (communityName.length &lt; 3) {
+      setIsNameValid(1);
+    } else {
+      setIsNameValid(2);
+    }
+  };
+
+  const handleCreateCommunity = async () => {
+    const data = {
+      name: communityName,
+      description: 'testing',
+      over18: isMature,
+      privacyMode: selectedType
+    }
+    try{
+      const response = await createCommunity({data});
+      if (response.status === 200 || response.status === 201) {
+        window.dispatchEvent(new Event('communityCreated'));
+        navigate(`/r/${communityName}`);
+        props.onHide();
+      }
+      if (response.response.status === 400){
+        console.error('error bad request')
+        toast({
+          description: "That subreddit already exists",
+          status: "error",
+          position: "top",
+          isClosable: true,
+          containerStyle: {
+            maxWidth: "2000px!important",
+            width: "1000px",
+            backgroundColor: "#EB001F",
+            fontWeight: "300",
+            borderRadius: "10px",
+            marginTop: "4rem"
+          },
+          icon: &lt;ExclamationPoint />,
+          duration: null
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+
+  const isCreateButtonDisabled = communityName.trim() === '';
+
+  return (
+    &lt;Modal
+      {...props}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      contentClassName='create-community'
+      size='lg'
+    >
+      &lt;Modal.Header className='create-community mb-0 p-0'>
+        &lt;Modal.Title id="contained-modal-title-vcenter" className='w-100'>
+          &lt;div className='d-flex'>
+            &lt;img className='create-community-logo me-3' src='https://www.redditstatic.com/shreddit/assets/snoomojis/care.png' />
+            &lt;h4 className='font-weight-heavy text-dark mt-2'>Create a community&lt;/h4>
+            &lt;button className='create-community-close-button ms-auto d-flex justify-content-center align-items-center' onClick={props.onHide}>&lt;CloseButton />&lt;/button>
+          &lt;/div>
+        &lt;/Modal.Title>
+      &lt;/Modal.Header>
+      &lt;Modal.Body className='create-community mt-0 p-0'>
+        &lt;p className='create-community-muted'>
+          Build and grow a community about something you care about. We'll help you set things up.
+        &lt;/p>
+        &lt;form>
+          &lt;div className="mb-0">
+            &lt;div className='input-group rounded-5'>
+              &lt;div className='d-flex flex-column position-relative w-100'>
+                &lt;input type="text" onChange={handleChar} minLength={3} maxLength={21} style={{border: isNameValid===1 ? "3px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} onBlur={handleNameValid} className="form-control create-community-name-input asterisk w-100 my-input" id="floatingInput" placeholder=" " />
+                &lt;label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Name&lt;span style={{color: '#a50016'}}>*&lt;/span>&lt;/label>
+              &lt;/div>
+              {isNameValid == 2 &amp;&amp; (
+                &lt;span className="tick-icon position-absolute top-50 end-0 translate-middle-y px-3">
+                  &lt;svg rpl="" class="trailing-icon valid" fill="#0e8a00" height="20" icon-name="checkmark-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">&lt;path d="M7.5 15.958a1.102 1.102 0 0 1-.778-.322l-5.429-5.429 1.414-1.414L7.5 13.586 17.793 3.293l1.414 1.414L8.278 15.636a1.101 1.101 0 0 1-.778.322Z">&lt;/path>
+                  &lt;/svg>
+                &lt;/span>
+              )}
+              {isNameValid == 1 &amp;&amp; (
+                &lt;span className="tick-icon position-absolute top-50 end-0 translate-middle-y px-3">
+                  &lt;svg rpl="" class="trailing-icon invalid" fill="#a50016" height="20" icon-name="error-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                    &lt;path d="M10 20a10 10 0 1 1 10-10 10.011 10.011 0 0 1-10 10Zm0-18.75A8.75 8.75 0 1 0 18.75 10 8.76 8.76 0 0 0 10 1.25Zm-.533 13.716a1.077 1.077 0 0 1-.53-.92 1.058 1.058 0 0 1 .53-.919c.16-.096.343-.146.53-.144a1.056 1.056 0 0 1 .926.527 1.045 1.045 0 0 1 0 1.069c-.096.16-.23.293-.39.387a1.03 1.03 0 0 1-.536.143 1.016 1.016 0 0 1-.53-.143Zm-.14-3.329-.192-6.613h1.73l-.192 6.613H9.327Z">
+                    &lt;/path>
+                  &lt;/svg>
+                &lt;/span>
+              )}
+              &lt;/div>
+          &lt;/div>
+          &lt;div className='d-flex px-3 mt-0'>
+            {isNameValid === 1 &amp;&amp; &lt;p className='create-community-muted-secondary' style={{color: isNameValid===1 ? "#a50016" : ""}}>Please lengthen this text to 3 characters or more (you are currently using {charNum} characters).&lt;/p>}
+            {(isNameValid === 0 || isNameValid === 2) &amp;&amp; &lt;p className='create-community-muted-secondary' style={{color: isNameValid===2 ? "#0e8a00" : ""}}>Choose wisely. Once you pick a name, it can't be changed.&lt;/p>}
+            &lt;p className='create-community-muted-secondary ms-auto' style={{color: isNameValid===1 ? "#a50016" : ""}}>{charNum}&lt;/p>
+          &lt;/div>
+        &lt;div>
+            &lt;h6 className='font-weight-heavy mb-4'>Type&lt;/h6>
+            &lt;div>
+              {['public', 'restricted', 'private'].map((type) => (
+                &lt;div
+                  key={type}
+                  className={`d-flex radio-menu-item p-3 px-4 ${selectedType === type ? 'selected' : ''}`}
+                  onClick={() => handleTypeChange(type)}
+                >
+                  {type === 'public' &amp;&amp; (selectedType === type ? &lt;PublicActive /> : &lt;PublicUnactive />)}
+                  {type === 'restricted' &amp;&amp; (selectedType === type ? &lt;RestrictedActive /> : &lt;RestrictedUnactive />)}
+                  {type === 'private' &amp;&amp; (selectedType === type ? &lt;PrivateActive /> : &lt;PrivateUnactive />)}
+                  &lt;div className="mx-3 d-flex flex-column">
+                    &lt;p style={{ color: '#000000', fontSize: '0.875rem', fontWeight: '0!important' }} className='mb-0 mt-0'>{type.charAt(0).toUpperCase() + type.slice(1)}&lt;/p>
+                    &lt;p className='create-community-muted-secondary m-0'>{type === "public" ? "Anyone can view, post, and comment to this community" : type === "restricted" ? "Anyone can view, but only approved users can contribute" : "Only approved users can view and submit to this community"}&lt;/p>
+                  &lt;/div>
+                  &lt;div className='ms-auto'>
+                  {type === 'public' &amp;&amp; (selectedType === type ? &lt;RadioButtonActive /> : &lt;RadioButtonUnactive />)}
+                  {type === 'restricted' &amp;&amp; (selectedType === type ? &lt;RadioButtonActive /> : &lt;RadioButtonUnactive />)}
+                  {type === 'private' &amp;&amp; (selectedType === type ? &lt;RadioButtonActive /> : &lt;RadioButtonUnactive />)}
+                    &lt;/div>
+                &lt;/div>
+              ))}
+            &lt;/div>
+        &lt;/div>
+        &lt;hr className='w-100'>&lt;/hr>
+        &lt;div className="d-flex p-3 px-4 radio-menu-item" onClick={handleMatureChange}>
+            &lt;Mature />
+            &lt;div className="mx-3 d-flex flex-column justify-items-start align-items-start">
+              &lt;h6 style={{ color: '#000000', fontSize: '0.875rem', position: "static" }} className='mt-0 mb-2'>Mature (18+)&lt;/h6>
+              &lt;p className='create-community-muted-secondary m-0'>Must be over 18 to view and contribute&lt;/p>
+            &lt;/div>
+            &lt;div className='form-check form-switch ms-auto d-flex align-items-center'>
+                &lt;input style={{ transform: 'scale(1.5)' }} className='form-check-input ms-auto' checked={isMature} type="checkbox" id="mature" role="switch" name="mature" value="mature" />
+            &lt;/div>
+        &lt;/div>
+        &lt;/form>
+      &lt;/Modal.Body>
+      &lt;Modal.Footer className='create-community mb-0 pb-0'>
+        &lt;button className="btn py-3 px-5 pb-3 create-community-cancel-button d-flex align-items-center justify-content-center" onClick={props.onHide}>Cancel&lt;/button>
+        &lt;button onClick={handleCreateCommunity} style={{width: 'auto', color: communityName!=="" ? "#FFFFFF" : "#000000", backgroundColor: communityName!=="" ? "#0045ac" : ""}} className="btn btn-lg create-community-cancel-button d-flex align-items-center justify-content-center" disabled={isCreateButtonDisabled}>{isCreateButtonDisabled ? 'Create your community' : `Create r/${communityName}`}&lt;/button>
+      &lt;/Modal.Footer>
+    &lt;/Modal>
+  );
+}
+
+export default CreateCommunity;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

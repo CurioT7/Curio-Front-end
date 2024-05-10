@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Sidebar/SidebarComponent.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Sidebar/SidebarComponent.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react'
+import { useEffect } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { Link } from 'react-router-dom';
+import Home from '../../styles/icons/Home.jsx';
+import Popular from '../../styles/icons/Popular.jsx';
+import All from '../../styles/icons/All.jsx';
+import Add from '../../styles/icons/Add.jsx';
+import AboutReddit from '../../styles/icons/AboutReddit.jsx';
+import Advertise from '../../styles/icons/Advertise.jsx';
+import Help from '../../styles/icons/Help.jsx';
+import Blog from '../../styles/icons/Blog.jsx';
+import Careers from '../../styles/icons/Careers.jsx';
+import Press from '../../styles/icons/Press.jsx';
+import Communities from '../../styles/icons/Communities.jsx';
+import BestOfReddit from '../../styles/icons/BestOfReddit.jsx';
+import Topics from '../../styles/icons/Topics.jsx';
+import ContentPolicy from '../../styles/icons/ContentPolicy.jsx';
+import PrivacyPolicy from '../../styles/icons/PrivacyPolicy.jsx';
+import UserAgreement from '../../styles/icons/UserAgreement.jsx';
+import DownArrow from '../../styles/icons/DownArrow.jsx';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import  FavouriteButton  from './FavouriteButton.jsx';
+import CommunityImageSideBar from './CommunityImageSideBar.jsx';
+import CreateCommunity from './CreateCommunity.jsx';
+import { useNavigate } from 'react-router-dom';
+import './Sidebar.css';
+import { textDecoration } from '@chakra-ui/react';
+import axios from 'axios';
+
+
+
+/**
+ * SidebarComponent renders a sidebar navigation menu for the application.
+ * @param {object} props - The props for the SidebarComponent.
+ * @param {boolean} props.sidebarVisibility - Boolean indicating whether the sidebar should be visible.
+ * @returns {JSX.Element} SidebarComponent JSX element.
+ * @module SidebarComponent
+ */
+
+function SidebarComponent(props) {
+  const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(window.innerWidth &lt; 1200);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [joinedCommunities, setJoinedCommunities] = useState([]);
+  const navigate = useNavigate();
+
+  const checkAuthentication = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  };
+
+  const getJoinedCommunities = async () => {
+      try{
+        const hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/user/${localStorage.getItem("username")}/communities`);
+        setJoinedCommunities(response.data.communities);
+      }
+      catch(error){
+        console.error(error);
+        return error;
+      }
+  }
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCollapsed(window.innerWidth &lt; 1200);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    checkAuthentication();
+    window.addEventListener("loginOrSignup", checkAuthentication);
+    return () => {
+      window.removeEventListener("loginOrSignup", checkAuthentication);
+    };
+  }, []);
+
+  useEffect(() => { 
+    window.addEventListener("communityCreated", getJoinedCommunities);   
+    return () => {
+      window.removeEventListener("communityCreated", getJoinedCommunities);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkAuthentication();
+    if(isAuthenticated){
+      getJoinedCommunities();
+    }
+  }, [isAuthenticated]);
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  }
+
+
+  const handleCreateCommunityClick = () => {
+    setCreateCommunityModalOpen(true);
+  };
+
+  if (!props.sidebarVisibility) {
+    return null;
+  }
+
+
+  return (
+    &lt;div>
+      &lt;Sidebar backgroundColor='#FFFFFF' collapsed={collapsed} collapsedWidth='60px' rootStyles={{
+        paddingTop: '60px',
+        color: '#000000',
+        marginLeft: '20px',
+        borderRadius: '0px',
+        border: 'none',
+        fontSize: '0.875rem',
+        height: '100vh',
+        overflowY: 'auto',
+        visibility: props.sidebarVisibility ? 'visible' : 'hidden',
+        borderRight: '1px solid #0000001a',
+        '@media (max-width: 1200px)': {
+          width: '30px',
+        },
+      }}>
+      &lt;Menu renderExpandIcon={({ open }) => &lt;span>{open ? &lt;KeyboardArrowUpIcon /> : &lt;DownArrow />}&lt;/span>}
+      menuItemStyles={{
+        button: {
+          [`&amp;.active`]: {
+            backgroundColor: '#EAEDEF',
+          },
+          [`&amp;:hover`]: {
+            backgroundColor: '#F2F4F5',
+          },
+          [`&amp;:focus`]: {
+            backgroundColor: '#EAEDEF',
+          },
+          borderRadius: '10px',
+          padding: '20px',
+        },
+      }}>
+        &lt;MenuItem component={&lt;Link to="/" />} rootStyles={{paddingTop: '20px'}} icon={&lt;Home />}> Home &lt;/MenuItem>
+        {isAuthenticated &amp;&amp; &lt;MenuItem component={&lt;Link to = "/user/CreatePost" />} icon={&lt;Add />}> Create Post &lt;/MenuItem>}
+        &lt;hr className='mt-3 w-100'>&lt;/hr>
+        {isAuthenticated &amp;&amp;
+          &lt;SubMenu label= {!collapsed ? "YOUR COMMUNITIES" : ""} rootStyles={{
+              color: '#576F76',
+              backgroundColor: '#FFFFFF',
+              fontSize: '0.875rem',
+            }} menuItemStyles={{
+            button: {
+              [`&amp;.active`]: {
+                backgroundColor: '#EAEDEF',
+              },
+              [`&amp;:hover`]: {
+                backgroundColor: '#F2F4F5',
+              },
+              borderRadius: '10px',
+              paddingLeft: '10px',
+            },
+          }}>
+            &lt;MenuItem onClick={handleCreateCommunityClick} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}} icon={&lt;Add />}>Create a community&lt;/MenuItem>
+            {joinedCommunities.map((community, index) => (
+              &lt;MenuItem key={index} onClick={() => handleNavigation(`/r/${community.name}`)} prefix={&lt;CommunityImageSideBar imageUrl={"https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png"} />} suffix={&lt;FavouriteButton />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>r/{community.name}&lt;/MenuItem>
+            ))}
+          &lt;/SubMenu>
+        }
+        {isAuthenticated &amp;&amp; &lt;hr className='mt-3 ps-5 w-100'>&lt;/hr>}
+        &lt;SubMenu label= {!collapsed ? "RESOURCES" : ""} rootStyles={{
+          fontSize: '0.875rem',
+          color: '#576F76',
+          backgroundColor: '#FFFFFF',
+        }} menuItemStyles={{
+        button: {
+          [`&amp;.active`]: {
+            backgroundColor: '#EAEDEF',
+          },
+          [`&amp;:hover`]: {
+            backgroundColor: '#F2F4F5',
+          },
+          borderRadius: '10px',
+        },
+      }}>
+          &lt;MenuItem href="https://www.redditinc.com/" icon={&lt;AboutReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>About Reddit&lt;/MenuItem>
+          &lt;MenuItem href="https://accounts.reddit.com/adsregister?dest=https%3A%2F%2Fads.reddit.com%2F&amp;referrer=https%3A%2F%2Fads.reddit.com%2F&amp;utm_source=web3x_consumer&amp;utm_name=left_nav_cta" icon={&lt;Advertise />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Advertise&lt;/MenuItem>
+          &lt;MenuItem href="https://support.reddithelp.com/hc/en-us" icon={&lt;Help />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Help&lt;/MenuItem>
+          &lt;MenuItem href="https://www.redditinc.com/blog" icon={&lt;Blog />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Blog&lt;/MenuItem>
+          &lt;MenuItem href="https://www.redditinc.com/careers" icon={&lt;Careers />}rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Careers&lt;/MenuItem>
+          &lt;MenuItem href="https://www.redditinc.com/press" icon={&lt;Press />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Press&lt;/MenuItem>
+          &lt;div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
+            &lt;div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}>&lt;/div>
+          &lt;/div>
+          &lt;Link to="/communities/best/1" style={{ textDecoration: 'none' }}>
+          &lt;MenuItem icon={&lt;Communities />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Communities&lt;/MenuItem>
+          &lt;/Link>
+          &lt;MenuItem href="https://www.reddit.com/posts/2023/global/" icon={&lt;BestOfReddit />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Best of Reddit&lt;/MenuItem>
+          &lt;MenuItem href="https://www.reddit.com/topics/a-1/" icon={&lt;Topics />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Topics&lt;/MenuItem>
+          &lt;div style={{height: '20px', backgroundColor: '#FFFFFF', margin: '0', display: 'flex', alignItems: 'center'}}>
+            &lt;div style={{width: '100%', height: '1px', backgroundColor: '#0000001a', padding: '0px'}}>&lt;/div>
+          &lt;/div>
+          &lt;MenuItem href="https://www.redditinc.com/policies/content-policy" icon={&lt;ContentPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Content Policy&lt;/MenuItem>
+          &lt;MenuItem href="https://www.reddit.com/policies/privacy-policy" icon={&lt;PrivacyPolicy />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>Privacy Policy&lt;/MenuItem>
+          &lt;MenuItem href="https://www.redditinc.com/policies/user-agreement" icon={&lt;UserAgreement />} rootStyles={{backgroundColor: '#FFFFFF', color: '#000000', fontSize: '0.875rem'}}>User Agreement&lt;/MenuItem>
+        &lt;/SubMenu>
+      &lt;/Menu>
+      {!collapsed &amp;&amp; 
+        &lt;div className='mt-4 mb-2'>
+          &lt;a className='rights-reserved ms-4'>Reddit, Inc. © 2024. All rights reserved.&lt;/a>
+        &lt;/div>
+      }
+    &lt;/Sidebar>
+    {isCreateCommunityModalOpen &amp;&amp; &lt;CreateCommunity show={isCreateCommunityModalOpen} onHide={() => setCreateCommunityModalOpen(false)} />}
+    &lt;/div>
+
+  )
+}
+
+export default SidebarComponent
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

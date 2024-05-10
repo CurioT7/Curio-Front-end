@@ -79,6 +79,7 @@ function Messages({ userActivity }) {
           size="lg"
           isChecked={allowPrivateMessages}
           onChange={handlePrivateMessagesChange}
+          data-testid="allowPrivateMessages-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -88,6 +89,7 @@ function Messages({ userActivity }) {
           size="lg"
           isChecked={allowChatNotifications}
           onChange={handleChatMessagesChange}
+          data-testid="allowChatNotifications-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -97,6 +99,7 @@ function Messages({ userActivity }) {
           size="lg"
           isChecked={allowChatRequests}
           onChange={handleChatrequestChange}
+          data-testid="allowChatRequests-switch"
         />
       </Flex>
     </>

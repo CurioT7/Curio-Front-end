@@ -12,7 +12,27 @@ import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useToast } from '@chakra-ui/react';
 
-
+/**
+ * SignupInfo component displays a modal for user signup.
+ * @component
+ * @param {object} props - The props for the SignupInfo component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @param {string} props.enteredEmail - Initial value for the entered email.
+ * @param {Function} props.onEnteredEmail - Function to handle the entered email.
+ * @param {Function} props.onContinue - Function to handle the continue button click.
+ * @module SignupInfo
+ * @returns {JSX.Element} SignupInfo JSX element.
+ * @example
+ * // Example usage of SignupInfo component:
+ * <SignupInfo
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ *   enteredEmail=""
+ *   onEnteredEmail={(email) => setEmail(email)}
+ *   onContinue={() => handleContinue()}
+ * />
+ */
 
 function SignupInfo(props) {
 
