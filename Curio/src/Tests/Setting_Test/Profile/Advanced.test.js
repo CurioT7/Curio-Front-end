@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Advanced from '../../../Components/profileSetting/Advanced/Advanced';
+import '@testing-library/jest-dom';
 
 // Add the necessary matchers
 const { toBeInTheDocument, toHaveAttribute } = require('@testing-library/jest-dom/matchers');
