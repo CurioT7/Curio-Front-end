@@ -2,6 +2,10 @@ import React from "react";
 
 import cat_blep from "../../assets/cat_blep.png";
 
+/**
+ * Renders a component to display a clean queue message with an image of a cat.
+ * @module CleanQueue
+ */
 function CleanQueue() {
   return (
     <div className="mx-auto">

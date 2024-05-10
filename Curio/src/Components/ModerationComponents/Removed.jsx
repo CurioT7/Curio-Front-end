@@ -17,6 +17,12 @@ import { Text } from '@chakra-ui/react'
 import RemovedPosts from "./RemovedPosts.jsx";
 import CleanQueue from "./CleanQueue.jsx";
 
+/**
+ * Renders the Removed component.
+ *
+ * @param {Object} props - The component props.
+ * @module ModerationRemovedPage
+ */
 function Removed( props ) {
   const [checked, setChecked] = useState(false);
   const [showOptions, setShowOptions] = useState(false);

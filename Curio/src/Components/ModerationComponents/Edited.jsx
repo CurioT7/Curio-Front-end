@@ -6,7 +6,13 @@ import { fetchEditedPostsfromBackend } from "./UnmoderatedEndpoints.js";
 import EditedPosts from "./RemovedPosts.jsx";
 import CleanQueue from "./CleanQueue.jsx";
 
-function Removed( props ) {
+/**
+ * Renders the Edited component.
+ *
+ * @param {Object} props - The component props.
+ * @module ModerationEditedPage
+ */
+function Edited( props ) {
   const [checked, setChecked] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [editedPosts, setEditedPosts] = useState([]);
@@ -83,4 +89,4 @@ function Removed( props ) {
   );
 }
 
-export default Removed;
+export default Edited;
