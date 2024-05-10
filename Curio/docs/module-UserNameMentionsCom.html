@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: CommunityDetails</title>
+    <title>JSDoc: Module: UserNameMentionsCom</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: CommunityDetails</h1>
+    <h1 class="page-title">Module: UserNameMentionsCom</h1>
 
     
 
@@ -38,7 +38,8 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Component for displaying community details.</p></div>
+            <div class="description"><p>UserNameMentionsCom Component</p>
+<p>A component to display individual username mentions in messages.</p></div>
         
 
         
@@ -95,7 +96,7 @@
 
             
 
-            <td class="description last"><p>The props object containing the component's properties.</p>
+            <td class="description last"><p>The props of the component.</p>
                 <h6>Properties</h6>
                 
 
@@ -121,13 +122,13 @@
 
         <tr>
             
-                <td class="name"><code>subredditData</code></td>
+                <td class="name"><code>title</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
             
@@ -137,20 +138,20 @@
 
             
 
-            <td class="description last"><p>The data of the subreddit to display.</p></td>
+            <td class="description last"><p>The title of the mentioned post.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>community</code></td>
+                <td class="name"><code>noComments</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">number</span>
 
 
             
@@ -160,7 +161,237 @@
 
             
 
-            <td class="description last"><p>The community data.</p></td>
+            <td class="description last"><p>The number of comments on the mentioned post.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sender</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The username of the sender of the message.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timestamp</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The timestamp of the message.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>linkedSubreddit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the linked subreddit, if any.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The message content.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>itemId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ID of the mentioned item.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>downvotedcomments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of downvoted comments.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>upvotedcomments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of upvoted comments.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onBlockConfirmed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to execute when block confirmation is received.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>postId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ID of the mentioned post.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ID of the message.</p></td>
         </tr>
 
     
@@ -208,7 +439,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_Create_Post_Right_Section_CommunityDetails_CommunityDetails.jsx.html">Components/Create_Post/Right_Section/CommunityDetails/CommunityDetails.jsx</a>, <a href="Components_Create_Post_Right_Section_CommunityDetails_CommunityDetails.jsx.html#line1">line 1</a>
+        <a href="Components_Messages_UserName_Mentions_UserName_Mentions_Com.jsx.html">Components/Messages/UserName_Mentions/UserName_Mentions_Com.jsx</a>, <a href="Components_Messages_UserName_Mentions_UserName_Mentions_Com.jsx.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -235,6 +466,11 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import React from 'react';import UserNameMentionsCom from './UserNameMentionsCom';const MyComponent = () => {  return (    &lt;UserNameMentionsCom       title="Sample Title"       noComments={10}       sender="sampleUser"       timestamp={new Date()}       linkedSubreddit="sampleSubreddit"       message="Sample message content"       itemId="123456789"       downvotedcomments={[]}       upvotedcomments={[]}       onBlockConfirmed={() => console.log("Block confirmation received")}       postId="987654321"       id="abcdefghi"     />  );};export default MyComponent;</code></pre>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Pages/Right_Side_Chat/Right_Side_Chat.jsx</title>
+    <title>JSDoc: Source: Pages/InboxMessages/UserName_Mentions/UserName_Mentions.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Pages/Right_Side_Chat/Right_Side_Chat.jsx</h1>
+    <h1 class="page-title">Source: Pages/InboxMessages/UserName_Mentions/UserName_Mentions.jsx</h1>
 
     
 
@@ -27,93 +27,126 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Function component for the right side chat section.
+ * UserNameMentions Component
+ * 
+ * A component to display mentions of the user's username in messages.
+ * 
  * @component
- * @param {Object} props - The component props.
- * @param {Function} props.hideSidebar - Function to hide the sidebar.
- * @param {Function} props.hideNavbar - Function to hide the navbar.
- * @param {Function} props.showSidebar - Function to show the sidebar.
- * @param {Function} props.showNavbar - Function to show the navbar.
- * @module OpenChat
+ * @param {Object} props - The props of the component.
+ * @module UserNameMentions
+ * @example
+ * import React, { useEffect, useState } from 'react';
+ * import UserNameMentions from './UserNameMentions';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     &lt;UserNameMentions />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
  */
-import React, { useEffect, useState } from 'react';
-import OpenChatCom from "../../Components/OpenChat/OpenChatComLeft_Side/OpenChatComLeft_Side";
-import NewChat_Com from "../../Components/OpenChat/OpenChatComRight_Side/NewChat/NewChat";
-import "./Right_Side_Chat.css";
-import Threads from '../../Components/OpenChat/OpenChatComRight_Side/Threads/Threads';
-import LiveChat from '../../Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat';
 
-function Right_Side_Chat(props) {
-    const [newPage, setNewPage] = useState('New Chat');
-    const [newMessage, setNewMessage] = useState(""); 
-    const [newParticipants, setNewParticipants] = useState([]);
-    const [socket, setSocket] = useState(null);
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "./UserName_Mentions.css";
+import MessagesNavbar from '../../../Components/Messages/MessagesNavbar';
+import InboxTabs from '../../../Components/Messages/InboxTabs';
+import UserName_Mentions_Com from '../../../Components/Messages/UserName_Mentions/UserName_Mentions_Com';
+import { fetchMessages, fetchDownvotedMessages, fetchUpvotedMessages } from '../InboxMessagesEndpoints';
+
+function UserName_Mentions(props) {
+    const navigate = useNavigate();
+    const [recievedMessages, setRecievedMessages] = useState([]);
+    const [error, setError] = useState(false);
+    const [downvotedcomments, setDownvotedComments] = useState([]);
+    const [upvotedcomments, setupvotedComments] = useState([]);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         if (!token) {
-            navigate("/login");
+            navigate('/login');
         }
         props.hideSidebar();
-        props.hideNavbar();
+
+        const fetchData = async () => {
+            try {
+                const messages = await fetchMessages('usernameMentions');
+                setRecievedMessages(messages);
+                const downvote = await fetchDownvotedMessages();
+                setDownvotedComments(downvote);
+                const upvote = await fetchUpvotedMessages();
+                setupvotedComments(upvote);
+                if (messages.length === 0) {
+                    setError(true);
+                }
+            } catch (error) {
+                console.error('Error fetching messages:', error.message);
+                setError(true);
+            }
+        };
+
+        fetchData();
+
         return () => {
             props.showSidebar();
-            props.showNavbar();
         };
     }, []);
 
-
-    /**
-     * Function to handle the change of the chat page.
-     * @param {string} PageName - The name of the new chat page.
-     */
-    const handleNewPage = (PageName) => {
-        setNewPage(PageName);
-    };
-
-    /**
-     * Function to handle new messages and participants.
-     * @param {string} message - The new message.
-     * @param {Array} participants - The new participants.
-     */
-    const handleNewMessage = (message, participants) => {
-        setNewMessage(message);
-        setNewParticipants(participants);
-    };
-
-    /**
-     * Function to handle the socket connection.
-     * @param {Object} socket - The socket object.
-     */
-    const handleSocket = (socket) => {
-        setSocket(socket);
+    const removeMessage = (messageId) => {
+        setRecievedMessages(prevMessages => prevMessages.filter(message => message._id !== messageId));
     };
 
     return (
-        &lt;div className='open-chat-container'>
-            &lt;div className='side-bar-chat-page'>
-                &lt;OpenChatCom 
-                socket={socket}
-                newMessage={newMessage}
-                newParticipants={newParticipants}
-                handleNewPage={handleNewPage} />
-            &lt;/div>
-            &lt;div className='right-side-main-chat'>
-                {newPage === "New Chat" ? (
-                    &lt;NewChat_Com />
-                ) : newPage === "Threads" ? (
-                    &lt;Threads />
-                ) : newPage === "Chat" ? (
-                    &lt;>
-                    &lt;LiveChat onSocket={handleSocket} onNewMessage={handleNewMessage}/>
-                    &lt;/>
-                ) : null}
+        &lt;div style={{ marginTop: "60px" }}>
+            &lt;MessagesNavbar />
+            &lt;InboxTabs />
+            &lt;div className='username-mentions-page w-100'>
+                {error ? (
+                    &lt;div className="error-message">
+                        &lt;p style={{
+                            padding: '20px',
+                        }}>there doesn't seem to be anything here
+                        &lt;/p>
+                    &lt;/div>
+                ) : (
+                    &lt;div
+                        style={{
+                            marginTop: '20px',
+                            marginBottom: '70px',
+                            width: '70%',
+                        }}>
+                        {recievedMessages.map((message, index) => (
+                            &lt;div key={message._id}>
+                                &lt;div className='username-mentions-message-table'
+                                    style={{
+                                        background: index % 2 === 0 ? "#f6f7f8" : "white"
+                                    }}>
+                                    &lt;UserName_Mentions_Com
+                                        title={message.postId ? message.postId.title : null}
+                                        noComments={message.commentNumber}
+                                        sender={message.sender.username}
+                                        timestamp={message.timestamp}
+                                        linkedSubreddit={message.linkedSubreddit ? message.linkedSubreddit.name : null}
+                                        message={message.message}
+                                        itemId={message.commentId}
+                                        downvotedcomments={downvotedcomments}
+                                        upvotedcomments={upvotedcomments}
+                                        onBlockConfirmed={() => removeMessage(message._id)}
+                                        postId={message.postId ? message.postId._id : null}
+                                        id={message._id}
+                                    />
+                                &lt;/div>
+                            &lt;/div>
+                        ))}
+                    &lt;/div>
+                )}
             &lt;/div>
         &lt;/div>
     );
 }
 
-export default Right_Side_Chat;
+export default UserName_Mentions;
 </code></pre>
         </article>
     </section>

@@ -1,3 +1,24 @@
+/**
+ * UserNameMentions Component
+ * 
+ * A component to display mentions of the user's username in messages.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @module UserNameMentions
+ * @example
+ * import React, { useEffect, useState } from 'react';
+ * import UserNameMentions from './UserNameMentions';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <UserNameMentions />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./UserName_Mentions.css";

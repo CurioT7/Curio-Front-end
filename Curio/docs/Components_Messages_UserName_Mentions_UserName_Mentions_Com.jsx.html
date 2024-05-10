@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Messages/UserName_Mentions/UserName_Mentions_Com.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Messages/UserName_Mentions/UserName_Mentions_Com.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * UserNameMentionsCom Component
+ * 
+ * A component to display individual username mentions in messages.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @param {string} props.title - The title of the mentioned post.
+ * @param {number} props.noComments - The number of comments on the mentioned post.
+ * @param {string} props.sender - The username of the sender of the message.
+ * @param {Date} props.timestamp - The timestamp of the message.
+ * @param {string} props.linkedSubreddit - The name of the linked subreddit, if any.
+ * @param {string} props.message - The message content.
+ * @param {string} props.itemId - The ID of the mentioned item.
+ * @param {Array} props.downvotedcomments - Array of downvoted comments.
+ * @param {Array} props.upvotedcomments - Array of upvoted comments.
+ * @param {Function} props.onBlockConfirmed - Function to execute when block confirmation is received.
+ * @param {string} props.postId - The ID of the mentioned post.
+ * @param {string} props.id - The ID of the message.
+ * @module UserNameMentionsCom
+ * @example
+ * import React from 'react';
+ * import UserNameMentionsCom from './UserNameMentionsCom';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     &lt;UserNameMentionsCom 
+ *       title="Sample Title" 
+ *       noComments={10} 
+ *       sender="sampleUser" 
+ *       timestamp={new Date()} 
+ *       linkedSubreddit="sampleSubreddit" 
+ *       message="Sample message content" 
+ *       itemId="123456789" 
+ *       downvotedcomments={[]} 
+ *       upvotedcomments={[]} 
+ *       onBlockConfirmed={() => console.log("Block confirmation received")} 
+ *       postId="987654321" 
+ *       id="abcdefghi" 
+ *     />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
+import React, { useState, useEffect } from 'react';
+import "./UserName_Mentions_Com.css";
+import { Box } from "@chakra-ui/react";
+import Upvotes from '../../../styles/icons/Upvotes.jsx';
+import Downvotes from '../../../styles/icons/Downvotes.jsx';
+import FilledDownvote from '../../../styles/icons/FilledDownvote.jsx';
+import FilledUpvote from '../../../styles/icons/FilledUpvote.jsx';
+import { getTimeDifference } from '../../getTimeDifference/getTimeDifference';
+import { handleUPVoteComments, handleDownVoteComments, BlockUserMessages, handleUnread } from '../../../Pages/InboxMessages/InboxMessagesEndpoints.js';
+import { Link, useNavigate } from 'react-router-dom';
+import ReportPopup from "../../ModalPages/ModalPages.jsx";
+
+
+function UserName_Mentions_Com(props) {
+    const [upvoted, setUpvoted] = useState(false);
+    const [downvoted, setDownvoted] = useState(false);
+    const [confirmBlock, setConfirmBlock] = useState(false);
+    const [showReportMenu, setShowReportMenu] = useState(false);
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isDownvoted = props.downvotedcomments.some(comment => comment._id === props.itemId);
+        const isUpvoted = props.upvotedcomments.some(comment => comment._id === props.itemId);
+
+        setDownvoted(isDownvoted);
+        setUpvoted(isUpvoted);
+    }, [props.downvotedcomments, props.upvotedcomments, props.itemId]);
+
+    const handleBlockConfirmation = () => {
+        props.onBlockConfirmed();
+        BlockUserMessages(props.sender)
+    };
+
+    const handleReportPopupClose = () => {
+        setShowReportMenu(false);
+    };
+
+    const handleReportClick = () => {
+        if (!token) {
+         navigate('/login');
+        setShowReportMenu(false);
+        }
+        else
+        setShowReportMenu(true);
+    };
+
+    return (
+        &lt;div style={{ width: "65%" }} className='username-mentions-table'>
+            &lt;h5 className='username-mentions-header-messages'>username mention:
+                &lt;a href="" className='username-mentions-title-messages'>
+                    {props.title}
+                &lt;/a>
+            &lt;/h5>
+            &lt;div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '0.5rem'
+            }}>
+                &lt;div style={{
+                    marginRight: '7px',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    &lt;button className='me-2 upvotes-footer-button' onClick={() => handleUPVoteComments(props.itemId, upvoted, setUpvoted, setDownvoted)}>
+                        {upvoted ? &lt;FilledUpvote colorFill="#D93A00" /> : &lt;Upvotes />}
+                    &lt;/button>
+                    &lt;button className='downvotes-footer-button' onClick={() => handleDownVoteComments(props.itemId, downvoted, setUpvoted, setDownvoted)}>
+                        {downvoted ? &lt;FilledDownvote colorFill="#6A5CFF" /> : &lt;Downvotes />}
+                    &lt;/button>
+                &lt;/div>
+                &lt;div className='username-mention-details'>
+                    &lt;p className='username-mention-from-message'>
+                        &lt;span>
+                            from &lt;Link to={`/user/${props.sender}`} style={{
+                                color: '#0079d3',
+                                marginRight: '0.5rem'
+                            }}>/u/{props.sender}&lt;/Link>
+                            {props.linkedSubreddit &amp;&amp; (
+                                &lt;>
+                                    via &lt;Link to={`/r/${props.linkedSubreddit}`} style={{
+                                        color: '#0079d3',
+                                        marginRight: '0.5rem',
+                                    }}>/r/{props.linkedSubreddit}&lt;/Link>
+                                &lt;/>
+                            )}sent {getTimeDifference(props.timestamp)} ago
+                        &lt;/span>
+                    &lt;/p>
+                    &lt;div className='dwc' style={{
+                        fontSize: '12px'
+                    }}>
+                        &lt;a href="">{props.message}&lt;/a>
+                    &lt;/div>
+                    &lt;Box as="ul" listStyleType="none" display="flex" gap='0.5rem' justifyContent='flex-start' paddingLeft='0' flexWrap='wrap' width='100%'>
+                        &lt;Link to={`/post/post-details/${props.postId}`} className="list-item-username-mentions" as="li" paddingLeft='0' onMouseOver={(e) => e.currentTarget.style.color = 'gray'}>Context&lt;/Link>
+                        &lt;Link to={`/post/post-details/${props.postId}`} className="list-item-username-mentions" as="li" onMouseOver={(e) => e.currentTarget.style.color = 'gray'}>Full Comments({props.noComments})&lt;/Link>
+                        &lt;Box className="list-item-username-mentions" as="li" onClick={handleReportClick}>Report&lt;/Box>
+                        {confirmBlock ? (
+                            &lt;>
+                                &lt;span className="list-item-username-mentions check-block-message" style={{ color: 'red' }}>are you sure?&lt;/span>
+                                &lt;Box className="list-item-username-mentions check-block-message" as="li" onClick={handleBlockConfirmation}>Yes&lt;/Box>
+                                &lt;span className="list-item-username-mentions">/&lt;/span>
+                                &lt;Box className="list-item-username-mentions check-block-message" as="li" onClick={() => setConfirmBlock(false)}>No&lt;/Box>
+                            &lt;/>
+                        ) : (
+                            &lt;Box className="list-item-username-mentions" as="li" onClick={() => setConfirmBlock(true)}>Block User&lt;/Box>
+                        )}
+                        &lt;Box onClick={() => handleUnread(props.id)} className="list-item-username-mentions" as="li">Mark Unread&lt;/Box>
+                    &lt;/Box>
+                    &lt;ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+
+export default UserName_Mentions_Com;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 04:04:37 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
