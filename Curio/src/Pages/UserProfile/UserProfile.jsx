@@ -9,6 +9,12 @@ import axios from 'axios';
 import { showFriendInformation } from '../../Components/FriendInformation/ShowFriendInformationEndpoints.js';
 
 
+/**
+ * Renders the user profile page.
+ *
+ * @param {Object} props - The component props.
+ * @module BlockUserPage
+ */
 function UserPage( props ) {
   const { username } = useParams();
   const [isNextPage, setIsNextPage] = useState(false);

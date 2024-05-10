@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: NotificationSetting</title>
+    <title>JSDoc: Source: Pages/UserProfile/UserProfile.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,138 +17,104 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: NotificationSetting</h1>
+    <h1 class="page-title">Source: Pages/UserProfile/UserProfile.jsx</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>NotificationSetting Component</p>
-<p>A component to manage notification settings for messages and user activity.</p></div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pages_NotificationSetting_NotificationSetting.jsx.html">Pages/NotificationSetting/NotificationSetting.jsx</a>, <a href="Pages_NotificationSetting_NotificationSetting.jsx.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import React from 'react';import NotificationSetting from './NotificationSetting';const MyComponent = () => {  return (    &lt;NotificationSetting />  );};export default MyComponent;</code></pre>
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import FriendInformation from "../../Components/FriendInformation/ShowFriendInformation.jsx"
+import './UserProfile.css'
+import Picture from "../../styles/icons/BlockPic.png"
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { showFriendInformation } from '../../Components/FriendInformation/ShowFriendInformationEndpoints.js';
+
+
+/**
+ * Renders the user profile page.
+ *
+ * @param {Object} props - The component props.
+ * @module BlockUserPage
+ */
+function UserPage( props ) {
+  const { username } = useParams();
+  const [isNextPage, setIsNextPage] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [friendInfo, setFriendInfo] = useState({});
+
+
+  useEffect(() => {
+    handleFriendInformation(username);
+  }, [username]);
+
+  async function handleFriendInformation(username) {
+    const result = await showFriendInformation(username);
+    if(result) {
+      setFriendInfo(result.data);
+    }
+  }
+
+
+  const handleBlockUser = () => {
+    setIsBlocked(true);
+  }
+
+  const handleUnblock = () => {
+    setIsBlocked(false);
+  }
+
+  const handleBlockPage = () => {
+    setIsNextPage(true);
+    props.hideSidebar();
+  }
+  const handleBlock = () => {
+    setIsBlocked(true);
+    setIsNextPage(false);
+    props.showSidebar();
+  }
+
+
+
+  return (
+      &lt;div style={{marginTop: '6rem'}}>
+          {isNextPage ? (
+            &lt;div className= 'h-screen absolute flex items-center top-0 w-100 text-center main-div'>
+            &lt;div className='w-100 h-100 flex items-center justify-content-center text-center'> 
+              &lt;div className='w-1/2 flex flex-col items-center text-center justify-content-center '>
+                &lt;div className='d-flex justify-content-center'>
+                &lt;img src={Picture} alt='reddit figure' className='block-page-fig'/>
+                &lt;/div>
+                &lt;h1 className='header-title'>You've blocked {username} &lt;/h1>
+                &lt;p className='paragraph'>
+                Continue to view their profile or visit your settings to &lt;Link to='/settings/privacy' className='LinkToSettings'>manage who you have blocked.&lt;/Link>
+                &lt;/p>
+                &lt;/div>
+                &lt;div className='button-flex'>
+                  &lt;button onClick={handleBlock} className='continue-btn'>Yes, continue&lt;/button>
+                  &lt;Link to="/home">
+                  &lt;button className='go-back-btn' onClick={props.showSidebar}>No, go back&lt;/button>
+                  &lt;/Link>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          ) : (
+              &lt;FriendInformation isBlocked={isBlocked} handleBlockPage={handleBlockPage} handleUnblock={handleUnblock} isUserBlocked={handleBlockUser} username={username}
+              friendInfo={friendInfo}  />
+          )}
+      &lt;/div>
+  );
+}
+
+export default UserPage;</code></pre>
+        </article>
+    </section>
 
 
 

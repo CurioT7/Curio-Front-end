@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: NotificationSetting</title>
+    <title>JSDoc: Source: Components/ModalPages/ModalPagesEndpoints.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,138 +17,55 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: NotificationSetting</h1>
+    <h1 class="page-title">Source: Components/ModalPages/ModalPagesEndpoints.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>NotificationSetting Component</p>
-<p>A component to manage notification settings for messages and user activity.</p></div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pages_NotificationSetting_NotificationSetting.jsx.html">Pages/NotificationSetting/NotificationSetting.jsx</a>, <a href="Pages_NotificationSetting_NotificationSetting.jsx.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import React from 'react';import NotificationSetting from './NotificationSetting';const MyComponent = () => {  return (    &lt;NotificationSetting />  );};export default MyComponent;</code></pre>
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import axios from 'axios';
+
+
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
+
+const token = localStorage.getItem('token');
+
+
+/**
+ * Reports a user.
+ *
+ * @param {string} reportedUsername - The username of the user being reported.
+ * @param {string} reportType - The type of report.
+ * @param {string} reportReason - The reason for the report.
+ * @param {string} reportDetails - Additional details about the report.
+ * @module UserReport
+ */
+const reportUser = async (reportedUsername, reportType, reportReason ,reportDetails ) => {
+  try {
+      const response = await axios.post(`${hostUrl}/api/report_user`, {
+          reportedUsername: reportedUsername,
+          reportType: reportType,
+          reportReason: reportReason,
+          reportDetails: reportDetails
+      }, {
+          headers: {
+              authorization : `Bearer ${token}`
+          }
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error(error);
+  }
+};
+
+export { reportUser };</code></pre>
+        </article>
+    </section>
 
 
 
