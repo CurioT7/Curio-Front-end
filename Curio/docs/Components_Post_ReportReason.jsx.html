@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Post/ReportReason.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Post/ReportReason.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useState } from "react";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import CloseButton from '../../styles/icons/CloseButton.jsx';
+import ReportIcon from "../../styles/icons/ReportIcon.jsx";
+import axios from "axios";
+import './ReportModals.css';
+import { useToast } from '@chakra-ui/react'
+
+/**
+ * ReportReason component for selecting and submitting report reasons.
+ * @module ReportReason
+ * @param {object} props - Component props.
+ * @param {boolean} props.show - Indicates if the modal is shown.
+ * @param {function} props.onHide - Function to hide the modal.
+ * @param {function} props.showSubmittedReport - Function to show the final submitted report.
+ * @param {string} props.reportType - Type of the report.
+ * @param {string} props.postId - ID of the post being reported.
+ * @param {function} props.setReportReason - Function to set the selected report reason.
+ * @param {function} props.showExtraReasons - Function to show extra reasons for the report.
+ * @returns {JSX.Element} ReportReason component.
+ */
+
+function ReportReason(props) {
+  const toast = useToast();
+  const [reportReason, setReportReason] = useState('');
+  const handleReportReason = (e) => {
+    setReportReason(e.target.textContent);
+  }
+  const handleReportSubmit = async (e) => {
+    if (e.target.textContent === "Submit Report") {
+      try{
+          var hostUrl = import.meta.env.VITE_SERVER_HOST;
+          const response = await axios.post(`${hostUrl}/api/report`, {
+            reportReason: reportReason.toLowerCase(),
+            reportType: props.reportType,
+            itemID: props.postId
+          },
+           {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+          if (response.status === 200 || response.status === 201){
+            toast({
+              description: "Report Submitted",
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+              backgroundColor: '#EB001F',
+            })
+            props.showSubmittedReport();
+            props.onHide();
+          }
+          if (response.status === 400 || response.status === 404){
+            toast({
+              description: "Invalid reason chosen.",
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+              backgroundColor: '#EB001F',
+            })
+          }
+        }
+        catch(err){
+          toast({
+            description: "Server Error. Please try again later.",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+          console.error(err);
+        }
+    }
+    if (e.target.textContent === "Next") {
+      props.setReportReason(reportReason);
+      props.showExtraReasons();
+      props.onHide();
+    }
+  }
+  return (
+    &lt;Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      contentClassName="report-div-modal"
+      centered
+    >
+      &lt;Modal.Header className="border-0 pb-0">
+        &lt;Modal.Title className="d-flex flex-column w-100" id="contained-modal-title-vcenter">
+          &lt;div className="d-flex w-100">
+            &lt;h2 className="submit-a-report-header">Submit a Report&lt;/h2>
+            &lt;button className='signup-close-button ms-auto d-flex justify-content-center align-items-center' onClick={props.onHide}>&lt;CloseButton />&lt;/button>
+          &lt;/div>
+          &lt;div>
+            &lt;p className="report-reason-paragraph">Thanks for looking out for yourself and your fellow redditors by reporting things that break the rules. Let us know what's happening, and we'll look into it. &lt;/p>
+          &lt;/div>
+        &lt;/Modal.Title>
+      &lt;/Modal.Header>
+      &lt;Modal.Body>
+        &lt;div className="d-flex flex-column pt-0">
+          &lt;div className="mb-2">
+            &lt;button onClick={handleReportReason} className="report-reason-buttons p-2">r/germany rules&lt;/button>
+          &lt;/div>
+          &lt;div className="d-flex justify-content-start mb-2">
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Harassment") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Harassment&lt;/button>
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Threatening violence") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Threatening violence&lt;/button>
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Hate") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Hate&lt;/button>
+          &lt;/div>
+          &lt;div className="d-flex justify-content-start mb-2">
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Minor abuse or sexualization") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Minor abuse or sexualization&lt;/button>
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Sharing personal information") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Sharing personal information&lt;/button>
+          &lt;/div>
+          &lt;div className="d-flex justify-content-start mb-2">
+            &lt;button onClick={handleReportReason} className="report-reason-buttons me-2" style={{backgroundColor: (reportReason === "Non-consensual intimate media") ? "#D2DADD" : ""}}>Non-consensual intimate media&lt;/button>
+            &lt;button onClick={handleReportReason} className="report-reason-buttons me-2" style={{backgroundColor: (reportReason === "Prohibited transaction") ? "#D2DADD" : ""}}>Prohibited transaction&lt;/button>
+          &lt;/div>
+          &lt;div className="d-flex justify-content-start mb-2">
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Impersonation") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Impersonation&lt;/button>
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Copyright violation") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Copyright violation&lt;/button>
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Trademark violation") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Trademark violation&lt;/button>
+          &lt;/div>
+          &lt;div className="d-flex justify-content-start mb-2">
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Self-harm or suicide") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Self-harm or suicide&lt;/button>
+            &lt;button onClick={handleReportReason} style={{backgroundColor: (reportReason === "Spam") ? "#D2DADD" : ""}} className="report-reason-buttons me-2">Spam&lt;/button>
+          &lt;/div>
+        &lt;/div>
+      &lt;/Modal.Body>
+      &lt;Modal.Footer className="d-flex flex-column border-0">
+        &lt;div className="d-flex alert-div pb-0">
+          &lt;ReportIcon />
+           &lt;p className="ms-2 report-alert-msg">Not sure if something is breaking the rules? Review Reddit's Content Policy &amp; r/germany rules&lt;/p>
+        &lt;/div>
+        &lt;div className="d-flex w-100">
+          &lt;div className="d-flex flex-column col-md-9">
+            &lt;h2 style={{fontSize: "1rem"}} className="submit-a-report-header">{reportReason}&lt;/h2>
+            {reportReason === "Harassment" &amp;&amp; &lt;p className="report-reason-paragraph">Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.&lt;/p>}
+            {reportReason === "Threatening violence" &amp;&amp; &lt;p className="report-reason-paragraph">Encouraging, glorifying, or inciting violence or physical harm against individuals or groups of people, places, or animals.&lt;/p>}
+            {reportReason === "Hate" &amp;&amp; &lt;p className="report-reason-paragraph">Promoting hate based on identity or vulnerability.&lt;/p>}
+            {reportReason === "Minor abuse or sexualization" &amp;&amp; &lt;p className="report-reason-paragraph">Sharing or soliciting content involving abuse, neglect, or sexualization of minors or any predatory or inappropriate behavior towards minors.&lt;/p>}
+            {reportReason === "Sharing personal information" &amp;&amp; &lt;p className="report-reason-paragraph">Sharing or threatening to share private, personal, or confidential information about someone.&lt;/p>}
+            {reportReason === "Non-consensual intimate media" &amp;&amp; &lt;p className="report-reason-paragraph">Sharing, threatening to share, or soliciting intimate or sexually-explicit content of someone without their consent (including fake or "lookalike" pornography).&lt;/p>}
+            {reportReason === "Prohibited transaction" &amp;&amp; &lt;p className="report-reason-paragraph">Soliciting or facilitating transactions or gifts of illegal or prohibited goods and services.&lt;/p>}
+            {reportReason === "Impersonation" &amp;&amp; &lt;p className="report-reason-paragraph">Impersonating an individual or entity in a misleading or deceptive way. This includes deepfakes, manipulated content, or false attributions.&lt;/p>}
+            {reportReason === "Copyright violation" &amp;&amp; &lt;p className="report-reason-paragraph">Content posted to Reddit that infringes a copyright you own or control. (Note: Only the copyright owner or an authorized representative can submit a report.)&lt;/p>}
+            {reportReason === "Trademark violation" &amp;&amp; &lt;p className="report-reason-paragraph">Content posted to Reddit that infringes a trademark you own or control. (Note: Only the trademark owner or an authorized representative can submit a report.)&lt;/p>}
+            {reportReason === "Self-harm or suicide" &amp;&amp; &lt;p className="report-reason-paragraph">Behavior or comments that make you think someone may be considering suicide or seriously hurting themselves.&lt;/p>}
+            {reportReason === "Spam" &amp;&amp; &lt;p className="report-reason-paragraph">Repeated, unwanted, or unsolicited manual or automated actions that negatively affect redditors, communities, and the Reddit platform.&lt;/p>}
+          &lt;/div>
+          &lt;div className="ms-auto d-flex align-items-end">
+            &lt;button
+             onClick={handleReportSubmit}
+             className={`${(reportReason === "") ? "ms-auto report-reason-next-button" : "report-reason-next-button-enabled"}`}
+            >
+              {((reportReason === "Harassment"
+                 || reportReason === "Threatening violence"
+                 || reportReason === "Minor abuse or sexualization" 
+                 || reportReason === "Sharing personal information"
+                 || reportReason === "Non-consensual intimate media"
+                 || reportReason === "Impersonation"
+                 || reportReason === "Copyright violation"
+                 || reportReason === "Trademark violation"
+                 || reportReason === "Self-harm or suicide"
+                 || reportReason === "Spam")) ? "Next" : ((reportReason !== "") ? "Submit Report" : "Next")}&lt;/button>
+          &lt;/div>
+        &lt;/div>
+      &lt;/Modal.Footer>
+    &lt;/Modal>
+  );
+}
+
+export default ReportReason;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:05:40 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

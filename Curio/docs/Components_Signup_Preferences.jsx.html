@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Signup/Preferences.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Signup/Preferences.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import { Button } from "react-bootstrap";
+import BackButton from '../../styles/icons/BackButton.jsx';
+
+/**
+ * Preferences component displays a modal for the user to select their preferences during signup.
+ * @component
+ * @param {object} props - The props for the Preferences component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @param {Function} props.onBackToGender - Function to navigate back to the gender selection step.
+ * @param {Function} props.onSignup - Function to finalize signup process.
+ * @module Preferences
+ * @returns {JSX.Element} Preferences JSX element.
+ * @example
+ * // Example usage of Preferences component:
+ * &lt;Preferences
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ *   onBackToGender={() => handleBackToGender()}
+ *   onSignup={() => handleSignup()}
+ * />
+ */
+
+function Preferences(props){
+
+   const [buttonsClicked, setButtonsClicked] = useState([]);
+
+   const handleBackButton = () => {
+        props.onBackToGender();
+   }
+
+   const handleButtonClick = (e) => {
+        const name = e.target.innerText;
+        if (buttonsClicked.includes(name)){
+            setButtonsClicked(buttonsClicked.filter((button) => button !== name));
+        }
+        else{
+            setButtonsClicked([...buttonsClicked, name]);
+        }
+   }
+
+    const handlePreferences = async () => {
+      props.onSignup();
+      props.onHide();
+    }
+
+
+
+
+  return (
+    &lt;Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      contentClassName='signup-modal'
+      scrollable={true}
+    >
+      &lt;Modal.Header className='border-0 mb-0 pb-0 border-bottom w-100'>
+        &lt;Modal.Title id="contained-modal-title-vcenter" className='p-3'>
+          &lt;button onClick={handleBackButton} className='signup-back-button me-auto d-flex justify-content-center align-items-center'>&lt;BackButton />&lt;/button>
+        &lt;/Modal.Title>
+      &lt;/Modal.Header>
+      &lt;Modal.Body className='pt-0 d-flex flex-column pt-3'>
+        &lt;div className="pt-0 mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+          &lt;h1 className='signup-header'>Interests&lt;/h1>
+          &lt;p className='username-alert'>
+            Pick things you'd like to see in your home feed.
+          &lt;/p>
+        &lt;/div>
+
+        &lt;div className="d-flex flex-column justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;h2 className="interests"> 📈 Trending&lt;/h2>
+        &lt;/div>
+        &lt;div className="mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NBA') ? 'clicked' : ''}`}>NBA&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Taylor Swift') ? 'clicked' : ''}`}>Taylor Swift&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Fantasy Football') ? 'clicked' : ''}`}>Fantasy Football&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('UFOs') ? 'clicked' : ''}`}>UFOs&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('ChatGPT') ? 'clicked' : ''}`}>ChatGPT&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('College Football') ? 'clicked' : ''}`}>College Football&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NHL') ? 'clicked' : ''}`}>NHL&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('MLB') ? 'clicked' : ''}`}>MLB&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('One Piece') ? 'clicked' : ''}`}>One Piece&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Character.AI') ? 'clicked' : ''}`}>Character.AI&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Gaming releases') ? 'clicked' : ''}`}>Gaming releases&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Midjourney') ? 'clicked' : ''}`}>Midjourney&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Formula 1') ? 'clicked' : ''}`}>Formula 1&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Celebrity gossip') ? 'clicked' : ''}`}>Celebrity gossip&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('World news') ? 'clicked' : ''}`}>World news&lt;/button>
+        &lt;/div>
+
+        &lt;div className="d-flex flex-column justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;h2 className="interests"> 🤣 Humor &amp; Memes&lt;/h2>
+        &lt;/div>
+        &lt;div className="mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Am I the A**hole?') ? 'clicked' : ''}`}>Am I the A**hole?&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Contagious laughter') ? 'clicked' : ''}`}>Contagious laughter&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny videos') ? 'clicked' : ''}`}>Funny videos&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Memes') ? 'clicked' : ''}`}>Memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Shower thoughts') ? 'clicked' : ''}`}>Shower thoughts&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny animals') ? 'clicked' : ''}`}>Funny animals&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Jokes') ? 'clicked' : ''}`}>Jokes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('History memes') ? 'clicked' : ''}`}>History memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Wholesome memes') ? 'clicked' : ''}`}>Wholesome memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny &amp; offbeat news') ? 'clicked' : ''}`}>Funny &amp; offbeat news&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Stand-up comedy') ? 'clicked' : ''}`}>Stand-up comedy&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Roast me') ? 'clicked' : ''}`}>Roast me&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Unexpected') ? 'clicked' : ''}`}>Unexpected&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Technically the truth') ? 'clicked' : ''}`}>Technically the truth&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Fails') ? 'clicked' : ''}`}>Fails&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Weird') ? 'clicked' : ''}`}>Weird&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Oddly specific') ? 'clicked' : ''}`}>Oddly specific&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Photoshop battles') ? 'clicked' : ''}`}>Photoshop battles&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Midly infuriating') ? 'clicked' : ''}`}>Midly infuriating&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Expectation vs reality') ? 'clicked' : ''}`}>Expectation vs reality&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Crappy design') ? 'clicked' : ''}`}>Crappy design&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Star Wars memes') ? 'clicked' : ''}`}>Star Wars memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Lord of the Rings memes') ? 'clicked' : ''}`}>Lord of the Rings memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Marvel memes') ? 'clicked' : ''}`}>Marvel memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Starterpacks') ? 'clicked' : ''}`}>Starterpacks&lt;/button>
+        &lt;/div>
+
+        &lt;div className="d-flex flex-column justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;h2 className="interests"> 🕹 Gaming&lt;/h2>
+        &lt;/div>
+        &lt;div className="mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Am I the A**hole?') ? 'clicked' : ''}`}>Am I the A**hole?&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Contagious laughter') ? 'clicked' : ''}`}>Contagious laughter&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny videos') ? 'clicked' : ''}`}>Funny videos&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Shower thoughts') ? 'clicked' : ''}`}>Shower thoughts&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny animals') ? 'clicked' : ''}`}>Funny animals&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Jokes') ? 'clicked' : ''}`}>Jokes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('History memes') ? 'clicked' : ''}`}>History memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Wholesome memes') ? 'clicked' : ''}`}>Wholesome memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Funny &amp; offbeat news') ? 'clicked' : ''}`}>Funny &amp; offbeat news&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Stand-up comedy') ? 'clicked' : ''}`}>Stand-up comedy&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Roast me') ? 'clicked' : ''}`}>Roast me&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Unexpected') ? 'clicked' : ''}`}>Unexpected&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Technically the truth') ? 'clicked' : ''}`}>Technically the truth&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Fails') ? 'clicked' : ''}`}>Fails&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Weird') ? 'clicked' : ''}`}>Weird&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Oddly specific') ? 'clicked' : ''}`}>Oddly specific&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Photoshop battles') ? 'clicked' : ''}`}>Photoshop battles&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Midly infuriating') ? 'clicked' : ''}`}>Midly infuriating&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Expectation vs reality') ? 'clicked' : ''}`}>Expectation vs reality&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Crappy design') ? 'clicked' : ''}`}>Crappy design&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Star Wars memes') ? 'clicked' : ''}`}>Star Wars memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Lord of the Rings memes') ? 'clicked' : ''}`}>Lord of the Rings memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Marvel memes') ? 'clicked' : ''}`}>Marvel memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Starterpacks') ? 'clicked' : ''}`}>Starterpacks&lt;/button>
+
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Call of Duty') ? 'clicked' : ''}`}>Call of Duty&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Fortnite') ? 'clicked' : ''}`}>Fortnite&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Baldur\'s Gate') ? 'clicked' : ''}`}>Baldur's Gate&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('PC gaming') ? 'clicked' : ''}`}>PC gaming&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Overwatch') ? 'clicked' : ''}`}>Overwatch&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('MrBeast') ? 'clicked' : ''}`}>MrBeast&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Minecraft memes') ? 'clicked' : ''}`}>Minecraft memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Elden Ring') ? 'clicked' : ''}`}>Elden Ring&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Xbox') ? 'clicked' : ''}`}>Xbox&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Playstation 5') ? 'clicked' : ''}`}>Playstation 5&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Nintendo Switch') ? 'clicked' : ''}`}>Nintendo Switch&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Pokemon Go') ? 'clicked' : ''}`}>Pokemon Go&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Pokemon Scarlet &amp; Violet') ? 'clicked' : ''}`}>Pokemon Scarlet &amp; Violet&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Apex Legends') ? 'clicked' : ''}`}>Apex Legends&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('The Witcher') ? 'clicked' : ''}`}>The Witcher&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Genshin Impact') ? 'clicked' : ''}`}>Genshin Impact&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Stardew Valley') ? 'clicked' : ''}`}>Stardew Valley&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('League of Legends') ? 'clicked' : ''}`}>League of Legends&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Raid: Shadow Legends') ? 'clicked' : ''}`}>Raid: Shadow Legends&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Destiny') ? 'clicked' : ''}`}>Destiny&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('GTA') ? 'clicked' : ''}`}>GTA&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Twitch') ? 'clicked' : ''}`}>Twitch&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Live stream fails') ? 'clicked' : ''}`}>Live stream fails&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Roblox') ? 'clicked' : ''}`}>Roblox&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Red Dead Redemption') ? 'clicked' : ''}`}>Red Dead Redemption&lt;/button>
+        &lt;/div>
+
+        &lt;div className="d-flex flex-column justify-content-center mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;h2 className="interests"> 🏈 NFL&lt;/h2>
+        &lt;/div>
+        &lt;div className="mb-3" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NFL memes') ? 'clicked' : ''}`}>NFL memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Fantasy Football') ? 'clicked' : ''}`}>Fantasy Football&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('NFL Draft') ? 'clicked' : ''}`}>NFL Draft&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('College football') ? 'clicked' : ''}`}>College football&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Arizona Cardinals') ? 'clicked' : ''}`}>Arizona Cardinals&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Cincinnati Bengals') ? 'clicked' : ''}`}>Cincinnati Bengals&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Buffalo Bills') ? 'clicked' : ''}`}>Buffalo Bills&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Denver Broncos') ? 'clicked' : ''}`}>Denver Broncos&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Cleveland Browns') ? 'clicked' : ''}`}>Cleveland Browns&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Tampa Bay Buccaneers') ? 'clicked' : ''}`}>Tampa Bay Buccaneers&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Arizona Cardinals memes') ? 'clicked' : ''}`}>Arizona Cardinals memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Cincinnati Bengals memes') ? 'clicked' : ''}`}>Cincinnati Bengals memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Buffalo Bills memes') ? 'clicked' : ''}`}>Buffalo Bills memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Denver Broncos memes') ? 'clicked' : ''}`}>Denver Broncos memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Cleveland Browns memes') ? 'clicked' : ''}`}>Cleveland Browns memes&lt;/button>
+            &lt;button onClick={handleButtonClick} className={`preferences-button p-2 px-3 m-1 ${buttonsClicked.includes('Tampa Bay Buccaneers memes') ? 'clicked' : ''}`}>Tampa Bay Buccaneers memes&lt;/button>
+        &lt;/div>
+
+      &lt;/Modal.Body>
+    &lt;Modal.Footer className='border-0 pb-4 mb-4 d-flex justify-content-center border-top' style={{paddingLeft: '80px', paddingRight: '80px'}}>
+        &lt;Button onClick={handlePreferences} disabled={buttonsClicked.length===0} className={buttonsClicked.length===0 ? "w-100 continue-button-disabled preferences-disabled" : "w-100 continue-button"}>{buttonsClicked.length===0 ? "Select at least 1 to continue" : "Continue"}&lt;/Button>
+    &lt;/Modal.Footer>
+    &lt;/Modal>
+  );
+}
+export default Preferences;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:05:40 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
