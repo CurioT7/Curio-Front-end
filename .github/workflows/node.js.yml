@@ -44,6 +44,11 @@ jobs:
     - name: debugging .env
       run: cat .env 
     - run: npm run test
+    - name: listing files
+      run: ls 
+    - name: Deleting node_modules
+      #This is deleted since we dont want to copy the node_modules into the dcoker container
+      run: rm -r node_modules
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
