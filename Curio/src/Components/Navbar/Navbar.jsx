@@ -1,3 +1,24 @@
+/**
+ * Navbar Component
+ * 
+ * A component representing the navigation bar of the Curio platform.
+ * 
+ * @component
+ * @param {Object} props - Props for controlling the visibility of the navbar.
+ * @module Navbar
+ * @example
+ * import React from 'react';
+ * import NavbarComponent from './NavbarComponent';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <NavbarComponent NavbarVisibility={true} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useState, useEffect,useRef } from 'react';
 import "./Navbar.css"; 
 import logo from "../../assets/Curio_logo.png";
