@@ -1,3 +1,23 @@
+/**
+ * Safety Component
+ * 
+ * A component to manage safety settings, such as blocking and unblocking users.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import Safety from './Safety';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <Safety />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @module Block
+ */
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Button, Flex, useToast } from '@chakra-ui/react';
@@ -6,7 +26,7 @@ import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../../UserSet
 import { Link } from 'react-router-dom';
 
 
-function Safety() {
+function Block() {
   const serverHost = import.meta.env.VITE_SERVER_HOST;
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [blockedUserInput, setBlockedUserInput] = useState('');
@@ -158,4 +178,4 @@ function Safety() {
   );
 }
 
-export default Safety;
+export default Block;

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/SafetyPrivacy/Safety/Mute/Mute.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/SafetyPrivacy/Safety/Mute/Mute.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Mute Component
+ * 
+ * A component to manage muted communities.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import Mute from './Mute';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     &lt;Mute />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @module Mute
+ */
+
+import React, { useState, useEffect } from 'react';
+import { Box, Text, Input, Button, Flex, useToast } from '@chakra-ui/react';
+import axios from 'axios';
+import { sendUserDataToBackend,fetchUserDataFromBackend } from '../../../UserSetting/UserSettingsEndPoints';
+
+
+function Mute() {
+  const serverHost = import.meta.env.VITE_SERVER_HOST;
+  const [mutedCommunities, setMutedCommunities] = useState([]);
+  const [mutedCommunityInput, setMutedCommunityInput] = useState('');
+  const toast = useToast();
+
+  function Toast(message){
+    toast({
+        description: message,
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      })
+  }
+
+  useEffect(() => {
+    async function fetchMuteCommuunities() {
+        try {
+            const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`,
+            {
+              headers: {
+                  authorization: `Bearer ${localStorage.getItem('token')}` 
+              }
+            });
+            // setMutedCommunities(response.data.mute); 
+            setBlockedUsers(response.data.viewMutedCommunities || []);
+        } catch (error) {
+            if (error.response){
+                switch (error.response.status) {
+                    case 404:
+                        Toast('User preferences not found');
+                        break;    
+                    case 500:
+                        Toast('An unexpected error occurred on the server. Please try again later.');
+                        break;
+                    default:
+                        break;
+                    }
+            }
+        }
+    }
+    fetchMuteCommuunities();
+  }, []);
+
+  
+  ////////////////////////////  Mute Communities /////////////////////////////////
+  const patchMuteCommunity = (name) => {
+    axios.patch(`${serverHost}/api/settings/v1/me/prefs`, {
+      viewMutedCommunities: [...mutedCommunities, { username: name}]
+    },{
+      headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}` 
+      }
+    }).then(response => {
+    })
+    .catch(error => {
+    });
+  };
+
+  const postMuteCommunity = (communityname) => {
+    axios.post(`${serverHost}/api/settings/mute`, {
+        communityToMute: communityname
+    },{
+      headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}` 
+      }
+    }).then(response => {
+      if (response.status === 200) {
+        Toast(`Muted ${communityname}`); 
+      }
+    })
+    .catch(error => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 404:
+            Toast(`${communityname} Not found`);
+            break;
+          case 409:
+            Toast(`${communityname} already muted`);
+            break;
+          default:
+            break;
+        }
+      }
+    });
+  };
+
+  const handleAddMutedCommunity = async () => {
+    if (mutedCommunityInput.trim() !== '') {
+        postMuteCommunity(mutedCommunityInput);
+        const newUser = { username: mutedCommunityInput };
+        const newData = {
+          viewMutedCommunities: [...mutedCommunities, newUser]
+        };
+        try {
+          await sendUserDataToBackend(newData);
+          setMutedCommunities(prevMutedCommunities => [...prevMutedCommunities, newUser]);
+          setMutedCommunityInput('');
+      } catch (error) {
+          console.error("Error updating user preferences:", error);
+      }
+    }
+  };
+
+  ////////////////////////////// Unmute Communities ///////////////////////
+
+  const postunMuteCommunity = (communityname) => {
+    axios.post(`${serverHost}/api/settings/mute`, {
+        communityToUnmute: communityname
+    },{
+      headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}` 
+      }
+    }).then(response => {
+      if (response.status === 200) {
+        Toast(`Unmuted ${communityname}`); 
+      }
+    })
+    .catch(error => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 404:
+            Toast(`${communityname} Not found`);
+            break;
+          case 409:
+            Toast(`${communityname} not muted`);
+            break;
+          default:
+            break;
+        }
+      }
+    });
+  };
+  
+
+  const handleRemoveMutedCommunity = index => {
+    const removedCommunity = mutedCommunities[index].username; // Access the username property
+    const updatedMutedCommunities = [...mutedCommunities];
+    updatedMutedCommunities.splice(index, 1);
+    setMutedCommunities(updatedMutedCommunities);
+    postunMuteCommunity(removedCommunity); // Call postunMuteCommunity with the removed community's username
+  };
+  
+
+  return (
+      &lt;Box>
+        &lt;h4 className="headings-settings" fontWeight="500" mb="1">Communities You've Muted&lt;/h4>
+        &lt;Text className="headings-description" fontWeight="normal" color="gray.500">Posts from muted communities won't show up in your feeds or recommendations.&lt;/Text>
+        &lt;Box className="input-group mb-3">
+          &lt;Input id="mutedCommunityInput" type="text" placeholder="Mute new community" className="form-control" value={mutedCommunityInput} onChange={(e) => setMutedCommunityInput(e.target.value)} required />
+          &lt;Button className="btn btn-primary" data-testid="add-mute-community" onClick={handleAddMutedCommunity} disabled={mutedCommunityInput.trim() === ''}>ADD&lt;/Button>
+        &lt;/Box>
+        {mutedCommunities.map((community, index) => (
+          &lt;Flex key={index} alignItems="center" justifyContent="space-between" mb="2">
+            &lt;Text>{community.username}&lt;/Text>
+            &lt;Button data-testid="remove-mute-community" onClick={() => handleRemoveMutedCommunity(index)} bg="transparent" border="none">Remove&lt;/Button>
+          &lt;/Flex>
+        ))}
+      &lt;/Box>
+  );
+}
+
+export default Mute;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 03:40:12 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

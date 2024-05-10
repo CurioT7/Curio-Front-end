@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Create_Post/Right_Section/PostingCards.jsx</title>
+    <title>JSDoc: Source: Pages/SafetyPrivacySetting/SafetyPrivacy.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Create_Post/Right_Section/PostingCards.jsx</h1>
+    <h1 class="page-title">Source: Pages/SafetyPrivacySetting/SafetyPrivacy.jsx</h1>
 
     
 
@@ -27,57 +27,76 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Function component for rendering posting cards.
+ * SafetyPrivacy Component
+ * 
+ * A component to manage safety and privacy settings for user profiles.
+ * 
  * @component
- * @param {Object} community - The community data.
- * @module PostingCards
+ * @example
+ * import React from 'react';
+ * import SafetyPrivacy from './SafetyPrivacy';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     &lt;SafetyPrivacy />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @module SafetyPrivacy
  */
-import React, { useEffect, useState } from 'react';
-import "./PostingCards.css";
-import PostingRules from "./PostingRules/PostingRules";
-import CommunityDetails from "./CommunityDetails/CommunityDetails";
-import CommunityRules from './CommunityRules/CommunityRules';
-import { fetchSubredditData } from './Community_info_Endpoints';
 
-// Function component for rendering posting cards
-function PostingCards(community) {
-  const [subredditData, setSubredditData] = useState(null);
+import React from 'react';
+import { useEffect } from 'react';
+import "./SafetyPrivacy.css";
+import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
+import { useNavigate } from 'react-router-dom';
+import Block from "../../Components/SafetyPrivacy/Safety/Block/Block.jsx";
+import Mute from "../../Components/SafetyPrivacy/Safety/Mute/Mute.jsx";
 
-  useEffect(() => {
-    
-    const fetchData = async () => {
-        if(community.community){
-        const data = await fetchSubredditData(community.community);
-        setSubredditData(data);}
-     
-    };
 
-    fetchData();
-    
-    
-  }, [community.community]);
 
+function SafetyPrivacy(props) {
+  const navigate = useNavigate();
+
+useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+    props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    }
+  }, []);
   return (
-    &lt;div className='postingContainer'>
-      {/* Component for displaying community details */}
-      &lt;CommunityDetails
-        subredditData={subredditData}
-        community={community}
-      />
-      {/* Render community rules if data is available */}
-      {subredditData &amp;&amp; subredditData.subreddit &amp;&amp; subredditData.rules &amp;&amp; subredditData.rules.length > 0 &amp;&amp;
-        &lt;CommunityRules
-          subbreddit={subredditData.subreddit}
-          rules={subredditData.rules}
-        />
-      }
-      {/* Component for displaying posting rules */}
-      &lt;PostingRules />
+    &lt;div>
+      &lt;UserSetting />
+      &lt;div className="container">
+        &lt;div className="customize-privacy">
+          &lt;div className="customize-privacy-section">
+          &lt;h2 className='customize-privacy-heading'>Safety &amp; Privacy&lt;/h2>
+          &lt;p className='customize-privacy-heading-description'>Manage how we use data to personalize your Reddit experience, and control how other
+            redditors interact with you. To learn more, visit our &amp;nbsp;
+            &lt;span>
+                &lt;a href="#">
+                  Privacy &amp; Security 
+                  FAQs
+                &lt;/a>
+            &lt;/span>
+          &lt;/p>
+          &lt;h3 className='headings-titles text-uppercase fw-bold mb-4'>Safety&lt;/h3>
+          &lt;Block/>
+          &lt;Mute/>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div> 
     &lt;/div>
   );
 }
 
-export default PostingCards;
+export default SafetyPrivacy;
 </code></pre>
         </article>
     </section>

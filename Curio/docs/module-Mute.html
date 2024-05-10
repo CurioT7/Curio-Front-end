@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Create_Post/Right_Section/PostingCards.jsx</title>
+    <title>JSDoc: Module: Mute</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,70 +17,138 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Create_Post/Right_Section/PostingCards.jsx</h1>
+    <h1 class="page-title">Module: Mute</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Function component for rendering posting cards.
- * @component
- * @param {Object} community - The community data.
- * @module PostingCards
- */
-import React, { useEffect, useState } from 'react';
-import "./PostingCards.css";
-import PostingRules from "./PostingRules/PostingRules";
-import CommunityDetails from "./CommunityDetails/CommunityDetails";
-import CommunityRules from './CommunityRules/CommunityRules';
-import { fetchSubredditData } from './Community_info_Endpoints';
-
-// Function component for rendering posting cards
-function PostingCards(community) {
-  const [subredditData, setSubredditData] = useState(null);
-
-  useEffect(() => {
+        
+            
+        
     
-    const fetchData = async () => {
-        if(community.community){
-        const data = await fetchSubredditData(community.community);
-        setSubredditData(data);}
-     
-    };
+</header>
 
-    fetchData();
+<article>
+    <div class="container-overview">
     
+        
+            <div class="description"><p>Mute Component</p>
+<p>A component to manage muted communities.</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
     
-  }, [community.community]);
 
-  return (
-    &lt;div className='postingContainer'>
-      {/* Component for displaying community details */}
-      &lt;CommunityDetails
-        subredditData={subredditData}
-        community={community}
-      />
-      {/* Render community rules if data is available */}
-      {subredditData &amp;&amp; subredditData.subreddit &amp;&amp; subredditData.rules &amp;&amp; subredditData.rules.length > 0 &amp;&amp;
-        &lt;CommunityRules
-          subbreddit={subredditData.subreddit}
-          rules={subredditData.rules}
-        />
-      }
-      {/* Component for displaying posting rules */}
-      &lt;PostingRules />
-    &lt;/div>
-  );
-}
+    
 
-export default PostingCards;
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Components_SafetyPrivacy_Safety_Mute_Mute.jsx.html">Components/SafetyPrivacy/Safety/Mute/Mute.jsx</a>, <a href="Components_SafetyPrivacy_Safety_Mute_Mute.jsx.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import React from 'react';import Mute from './Mute';const MyComponent = () => {  return (    &lt;Mute />  );};export default MyComponent;</code></pre>
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
