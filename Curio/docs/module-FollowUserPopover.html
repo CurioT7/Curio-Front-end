@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Messages</title>
+    <title>JSDoc: Module: FollowUserPopover</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Messages</h1>
+    <h1 class="page-title">Module: FollowUserPopover</h1>
 
     
 
@@ -38,8 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Messages Component</p>
-<p>A component to manage user notification settings for private messages, chat messages, and chat requests.</p></div>
+            <div class="description"><p>Renders a user popover component.</p></div>
         
 
         
@@ -80,7 +79,7 @@
 
         <tr>
             
-                <td class="name"><code>userActivity</code></td>
+                <td class="name"><code>props</code></td>
             
 
             <td class="type">
@@ -96,7 +95,194 @@
 
             
 
-            <td class="description last"><p>User activity settings object containing allowPrivateMessages, allowChatNotifications, and allowChatRequests.</p></td>
+            <td class="description last"><p>The component props.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The username of the user.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>friendInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Information about the user's friend.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isFollowing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether the user is being followed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handleFollowToggle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to handle follow/unfollow action.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handleGetFollower</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to handle getting follower information.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>showFriendInformation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to show friend information.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>classname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The CSS class name for the component.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -137,7 +323,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_NotificationsSetting_Messages_Messages.jsx.html">Components/NotificationsSetting/Messages/Messages.jsx</a>, <a href="Components_NotificationsSetting_Messages_Messages.jsx.html#line1">line 1</a>
+        <a href="Components_UserPopover_UserPopover.jsx.html">Components/UserPopover/UserPopover.jsx</a>, <a href="Components_UserPopover_UserPopover.jsx.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -164,11 +350,6 @@
 
 
 
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import React from 'react';import Messages from './Messages';const MyComponent = () => {  const userActivity = {    allowPrivateMessages: true,    allowChatNotifications: true,    allowChatRequests: true  };  return (    &lt;Messages userActivity={userActivity} />  );};export default MyComponent;</code></pre>
 
 
 

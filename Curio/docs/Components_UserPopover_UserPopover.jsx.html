@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Create_Post/Polls_Section/Polls.jsx</title>
+    <title>JSDoc: Source: Components/UserPopover/UserPopover.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Create_Post/Polls_Section/Polls.jsx</h1>
+    <h1 class="page-title">Source: Components/UserPopover/UserPopover.jsx</h1>
 
     
 
@@ -26,112 +26,138 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Component for creating a poll.
+            <pre class="prettyprint source linenums"><code>import { useState, useRef, useEffect } from "react";
+import './UserPopover.css';
+import Popover from "react-bootstrap/Popover";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Minus from "../../styles/icons/Minus.jsx";
+import PlusIcon from "../../styles/icons/PlusIcon.jsx";
+import Chat from "../../styles/icons/Chat.jsx";
+import { userFollow, userUnfollow, getFollower } from '../FriendInformation/ShowFriendInformationEndpoints.js';
+import { Flex,Avatar,Box,Heading,IconButton,Text,Image } from '@chakra-ui/react'
+import Cake from "../../styles/icons/Cake.jsx";
+
+
+/**
+ * Renders a user popover component.
+ *
  * @component
- * @param {Object} props - The props object containing the component's properties.
- * @param {Function} props.handleDayChange - Function to handle the change in voting length.
- * @param {Function} props.handleOptionChange - Function to handle the change in poll options.
- * @param {Function} props.handleAddOption - Function to add a new option to the poll.
- * @param {Function} props.handleRemoveOption - Function to remove an option from the poll.
- * @param {Array} props.options - Array containing poll options.
- * @param {Function} props.onContentChange - Function to handle the change in poll content.
- * @module Polls
+ * @param {Object} props - The component props.
+ * @param {string} props.user - The username of the user.
+ * @param {Object} props.friendInfo - Information about the user's friend.
+ * @param {boolean} props.isFollowing - Indicates whether the user is being followed.
+ * @param {Function} props.handleFollowToggle - Function to handle follow/unfollow action.
+ * @param {Function} props.handleGetFollower - Function to handle getting follower information.
+ * @param {Function} props.showFriendInformation - Function to show friend information.
+ * @param {string} props.classname - The CSS class name for the component.
+ * @module FollowUserPopover
  */
-import React from "react";
-import { useState } from "react";
-import "./Polls.css";
-import Text_Editor from "../../Text_Editor/Text_Editor";
-import InfoIcon from "../../../styles/icons/InfoIcon";
-import SixDots from "../../../styles/icons/SixDots";
-import Remove from "../../../styles/icons/Remove";
+function UserPopover( { user, friendInfo, isFollowing, handleFollowToggle, handleGetFollower, showFriendInformation, classname } ) {
+  const [showPopover, setShowPopover] = useState(false);
+  const [isSelf , setIsSelf] = useState(false);
 
-function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options, onContentChange }) {
-
+  useEffect(() => {
+    if (user === localStorage.getItem('username')) {
+      setIsSelf(true);
+    }
+  }, [user]);
 
   return (
-    &lt;div className="flex-wrap pollPage">
-      &lt;Text_Editor onContentChange={onContentChange} />
-      &lt;div className="container flex-wrap cont-div">
-        &lt;div className="row row-cols-2" style={{height: 'fit-content'}}>
-          &lt;div className="col-8">
-          &lt;div className="d-flex align-items-center mt-2">
-            &lt;SixDots />
-            &lt;input
-              type="text"
-              className="pollOption"
-              placeholder='Option 1'
-              onChange={(event) => handleOptionChange(0,event)}
+    &lt;OverlayTrigger
+      trigger={["hover", "focus"]}
+      placement="bottom"
+      show={showPopover}
+      overlay={
+        &lt;Popover
+          id="overlay2"
+          onMouseEnter={() => setShowPopover(true)}
+          onMouseLeave={() => setShowPopover(false)}
+        >
+          &lt;div className="d-flex align-items-center p-2 popOverHeader">
+            &lt;Avatar
+              size="md"
+              name="Segun Adebayo"
+              src="https://bit.ly/sage-adebayo"
+              className="popoverAvatar"
             />
-          &lt;/div>
-          &lt;div className="d-flex align-items-center mt-2">
-            &lt;SixDots />
-            &lt;input
-              type="text"
-              className="pollOption"
-              placeholder='Option 2'
-              onChange={(event) => handleOptionChange(1, event)}
-            />
-          &lt;/div>
-          {options.map((option, index) => (
-              &lt;div className="d-flex align-items-center mt-2" key={index + 2}>
-                &lt;SixDots />
-                &lt;div className="d-flex w-100 inputText">
-                &lt;input
-                  type="text"
-                  className="pollOption"
-                  placeholder={option} 
-                  onChange={(event) => handleOptionChange(index + 2, event)}
-                />
-                &lt;button onClick={() => handleRemoveOption(index)}>
-                  &lt;Remove className='removeIcon' />
-                &lt;/button>
-                &lt;/div>
-              &lt;/div>
-            ))}
-            &lt;div className="container btn-time-container">
-              &lt;div className="row row-cols-md-2" style={{height: 'fit-content'}}>
-                &lt;div className='col mt-2'>
-              &lt;button className="addOptionBtn" onClick={handleAddOption}>Add Option&lt;/button>
-              &lt;/div>
-              &lt;div className="col">
-              &lt;div className="d-flex align-items-center mt-1 votingLengthContainer">
-                &lt;div className="votingLength">Voting Length:&lt;/div>
-                &lt;div>
-                  &lt;select name="voteLength" id="voteLength" className="daysDropDown" defaultValue="3" onChange={handleDayChange}>
-                    &lt;option value="1">1 Day&lt;/option>
-                    &lt;option value="2">2 Days&lt;/option>
-                    &lt;option value="3">3 Days&lt;/option>
-                    &lt;option value="4">4 Days&lt;/option>
-                    &lt;option value="5">5 Days&lt;/option>
-                    &lt;option value="6">6 Days&lt;/option>
-                    &lt;option value="7">7 Days&lt;/option>
-                  &lt;/select>
-                  &lt;/div>
-                &lt;/div>
-              &lt;/div>
+            &lt;div className="d-flex flex-column ms-2">
+              &lt;a
+                href={`/user/${user}`}
+                className="popOverUsername"
+                taget="_blank"
+              >
+                {user}
+              &lt;/a>
+              &lt;span className="popOverCake">u/{user}&lt;/span>
+              &lt;div className="d-flex">
+                &lt;Cake />
+              &lt;span className="popOverCake ms-2">{friendInfo.cakeDay}&lt;/span>
               &lt;/div>
             &lt;/div>
           &lt;/div>
-          &lt;div className="col-lg-4 tipsDiv">
-            &lt;div className="d-flex mt-3 p-0 mb-0">
-              &lt;InfoIcon />
-              &lt;p className="pollTips ms-1">Tips on Better Polls&lt;/p>
+          &lt;div className="container mt-4">
+            &lt;div className="row row-cols-2 powerOverRow">
+              &lt;div className="col-5 popOverCol text-start">
+                &lt;h6 className="numbersHeader">{friendInfo.postKarma}&lt;/h6>
+                &lt;p className="membersText">Post Karma&lt;/p>
+              &lt;/div>
+              &lt;div className="col-7 popOverCol text-start">
+                &lt;h6 className="numbersHeader">{friendInfo.commentKarma}&lt;/h6>
+                &lt;p className="membersText">Comment Karma&lt;/p>
+              &lt;/div>
             &lt;/div>
-            &lt;ol className="d-flex flex-column orderedTips">
-              &lt;li>Suggest short clear options&lt;/li>
-              &lt;li>The more options, the better&lt;/li>
-              &lt;li>Choose the poll duration&lt;/li>
-              &lt;li className="lastTip">Options can't be edited after post creation&lt;/li>
-            &lt;/ol>
           &lt;/div>
-        &lt;/div>
-      &lt;/div>
-    &lt;/div>
+          &lt;a
+            className="karmaText text-start mt-2 mb-4 ms-2"
+            href="https://support.reddithelp.com/hc/en-us/articles/204511829-What-is-karma"
+          >
+            What is Karma?
+          &lt;/a>
+          {isSelf? null : (
+          &lt;div className="d-flex mt-2 ">
+            &lt;button
+              className={`d-flex align-items-center popoverFollow p-2 ${
+                isFollowing ? "following" : "not-following"
+              }`}
+              onClick={() => {
+                handleFollowToggle(user);
+              }}
+            >
+              &lt;span>{isFollowing ? &lt;Minus /> : &lt;PlusIcon />}&lt;/span>
+              &lt;span className="ms-2 ">
+                {isFollowing ? "Unfollow" : "Follow"}
+              &lt;/span>
+            &lt;/button>
+            &lt;button className="d-flex align-items-center popoverChat p-2 ms-2">
+              &lt;span>
+                &lt;Chat />
+              &lt;/span>
+              &lt;span className="ms-2 ">Chat&lt;/span>
+            &lt;/button>
+          &lt;/div>
+          )
+      }
+        &lt;/Popover>
+      }
+    >
+      &lt;a
+        href={`/user/${user}`}
+        className={`${classname}`}
+        onMouseEnter={() => {
+          setShowPopover(true);
+          handleGetFollower(user);
+          showFriendInformation(user);
+        }}
+        onMouseLeave={() => setShowPopover(false)}
+      >
+        {user}
+      &lt;/a>
+    &lt;/OverlayTrigger>
   );
 }
 
-export default Polls;</code></pre>
+export default UserPopover;
+</code></pre>
         </article>
     </section>
 
