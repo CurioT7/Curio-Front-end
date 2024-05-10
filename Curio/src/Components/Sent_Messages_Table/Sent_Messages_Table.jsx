@@ -82,8 +82,8 @@ function Sent_Messages(props) {
     )
 
     return (
-        <div className='sent_message_table_content'>
-            <h5 className='subject_sent_messages'>{props.subject}:</h5>
+        <div className='sent_message_table_content' data-testid="sent-message-content">
+            <h5 className='subject_sent_messages' data-testid="subject">{props.subject}:</h5>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 <span className='sent_message_details'>to
                     <OverlayTrigger
@@ -98,7 +98,8 @@ function Sent_Messages(props) {
                             color: "#80bce9",
                             cursor: 'pointer',
                             position: 'relative'
-                        }} onMouseLeave={() => setShowPopover(false)}>
+                        }} onMouseLeave={() => setShowPopover(false)}
+                            data-testid="recipient">
                             {isRecipientNull === true ?
                                 <Link to={`/r/${props.recipient}`}>/r/{props.recipient}</Link> :
                                 <Link to={`/user/${props.recipient}`}>/u/{props.recipient}</Link>
@@ -108,7 +109,7 @@ function Sent_Messages(props) {
                     {props.sender !== username &&
                         <>
                             <span> via </span>
-                            <Link to={`/r/${props.sender}`} style={{ color: '#228822' }}>
+                            <Link to={`/r/${props.sender}`} style={{ color: '#228822' }} data-testid="sender">
                                 /r/{props.sender}
                             </Link>
                             <span style={{ marginLeft: '5px' }}>[
