@@ -13,7 +13,19 @@ import {useToast} from '@chakra-ui/react';
 import FilledHide from "../../styles/icons/FilledHide";
 import Delete from "../../styles/icons/Delete.jsx";
 
-
+/**
+ * PostControl component for managing post actions and controls.
+ * @param {object} props - Component props.
+ * @param {string} props.username - Username of the post owner.
+ * @param {string} props._id - ID of the post.
+ * @param {array} props.savedPosts - Array of saved posts.
+ * @param {array} props.hiddenPosts - Array of hidden posts.
+ * @param {boolean} props.isSpoiler - Indicates if the post is a spoiler.
+ * @param {function} props.hidePost - Function to hide the post.
+ * @param {boolean} props.postDetails - Indicates if the post details are visible.
+ * @module PostControl
+ * @returns {JSX.Element} PostControl component.
+ */
 
 function PostControl(props) {
   const toast = useToast();

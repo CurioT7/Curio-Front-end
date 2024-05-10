@@ -1,3 +1,8 @@
+/**
+ * PostContentDetails component module.
+ * @module PostContentDetails
+ */
+
 import React from 'react';
 import { useState, useEffect } from 'react';
 import BackButton from '../../styles/icons/BackButton';
@@ -24,6 +29,28 @@ import { set } from 'mongoose';
 import UserPopover from '../UserPopover/UserPopover.jsx';
 import { userFollow, userUnfollow, getFollower, showFriendInformation } from '../FriendInformation/ShowFriendInformationEndpoints.js';
 import { FetchSubredditName } from './PostEndPoints';
+
+/**
+ * Represents a post content details component.
+ * @typedef {Object} PostContentDetailsProps
+ * @property {string} _id - Post ID.
+ * @property {string} title - Post title.
+ * @property {string} content - Post content.
+ * @property {string} user - Post user.
+ * @property {string} subreddit - Subreddit name.
+ * @property {number} upvotes - Number of upvotes.
+ * @property {number} downvotes - Number of downvotes.
+ * @property {string} voteStatus - Vote status of the post.
+ * @property {boolean} isSpoiler - Indicates if the post is a spoiler.
+ * @property {boolean} isLocked - Indicates if the post is locked.
+ * @property {boolean} isMod - Indicates if the user is a moderator.
+ */
+
+/**
+ * PostContentDetails component.
+ * @param {PostContentDetailsProps} post - Post content details.
+ * @returns {JSX.Element} PostContentDetails component JSX.
+ */
 
 
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
