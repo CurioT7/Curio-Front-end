@@ -50,7 +50,7 @@ jobs:
       with:
         image: isslolo/curio
         tags: curio-frontend
-        dockerfile: ./Curio
+        dockerfile: ./Curio/Dockerfile
         directory: ./Curio
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
