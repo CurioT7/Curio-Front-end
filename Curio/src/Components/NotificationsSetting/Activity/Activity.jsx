@@ -116,6 +116,7 @@ function Activity({ userActivity }) {
           size="lg"
           isChecked={mentions}
           onChange={handleMentionChange}
+          data-testid="mentions-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -125,6 +126,7 @@ function Activity({ userActivity }) {
           size="lg"
           isChecked={comments}
           onChange={handleCommentsChange}
+          data-testid="comments-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -134,6 +136,7 @@ function Activity({ userActivity }) {
           size="lg"
           isChecked={upvotesPosts}
           onChange={handleUpvotesPostsChange}
+          data-testid="upvotesPosts-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -143,6 +146,7 @@ function Activity({ userActivity }) {
           size="lg"
           isChecked={upvotesComments}
           onChange={handleUpvotesCommentsChange}
+          data-testid="upvotesComments-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -152,6 +156,7 @@ function Activity({ userActivity }) {
           size="lg"
           isChecked={replies}
           onChange={handleRepliesChange}
+          data-testid="replies-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -161,6 +166,7 @@ function Activity({ userActivity }) {
           size="lg"
           isChecked={newFollowers}
           onChange={handleNewFollowersChange}
+          data-testid="newFollowers-switch"
         />
       </Flex>
       <Flex mb={5} alignItems="center">
@@ -170,6 +176,7 @@ function Activity({ userActivity }) {
           size="lg"
           isChecked={postsYouFollow}
           onChange={handlePostsFollowChange}
+          data-testid="postsYouFollow-switch"
         />
       </Flex>
     </>
