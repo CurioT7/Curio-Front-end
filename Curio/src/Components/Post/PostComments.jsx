@@ -1,3 +1,9 @@
+/**
+ * PostComments component module.
+ * @module PostComments
+ */
+
+
 import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import { Avatar, IconButton, Box, Button } from '@chakra-ui/react';
@@ -19,6 +25,23 @@ import axios from "axios";
 import FilledSave from "../../styles/icons/FilledSave";
 import Delete from "../../styles/icons/Delete";
 import { useNavigate } from "react-router-dom";
+
+
+/**
+ * Represents a post comment component.
+ * @typedef {Object} CommentProps
+ * @property {string} id - Comment ID.
+ * @property {string} username - Comment author's username.
+ * @property {string} comment - Comment content.
+ * @property {number} commentUpvotes - Number of upvotes on the comment.
+ * @property {Array} savedComments - List of saved comments.
+ */
+
+/**
+ * PostComments component.
+ * @param {CommentProps} props - Component props.
+ * @returns {JSX.Element} PostComments component JSX.
+ */
 
 function PostComments(props) {
     const [upvoted, setUpvoted] = useState(false);

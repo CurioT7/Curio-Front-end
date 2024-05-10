@@ -9,6 +9,21 @@ import './ReportModals.css';
 import BackButton from "../../styles/icons/BackButton.jsx";
 import { useToast } from '@chakra-ui/react'
 
+
+/**
+ * ReportExtraReason component for submitting additional reasons for a report.
+ * @param {object} props - Component props.
+ * @param {boolean} props.show - Indicates if the modal is shown.
+ * @param {function} props.onHide - Function to hide the modal.
+ * @param {function} props.showSubmittedFinalReport - Function to show the final submitted report.
+ * @param {function} props.backToReasonModal - Function to navigate back to the reason modal.
+ * @param {string} props.reportReason - Reason for the report.
+ * @param {string} props.reportType - Type of the report.
+ * @param {string} props.postId - ID of the post being reported.
+ * @module ReportExtraReason
+ * @returns {JSX.Element} ReportExtraReason component.
+ */
+
 function ReportExtraReason(props){
     const toast = useToast();
     const [reportExtraReason, setReportExtraReason] = useState('');

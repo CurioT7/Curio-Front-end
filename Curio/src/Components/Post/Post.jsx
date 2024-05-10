@@ -36,7 +36,33 @@ import axios from 'axios';
 const hostUrl = import.meta.env.VITE_SERVER_HOST;
 const token = localStorage.getItem('token');
 
+/**
+ * Post component.
+ * @param {Object} props - Component props.
+ * @param {string} props._id - Post ID.
+ * @param {string} props.user - User who posted.
+ * @param {string} props.title - Post title.
+ * @param {string} props.linkedSubreddit - Linked subreddit.
+ * @param {string} props.content - Post content.
+ * @param {string} props.image - Post image URL.
+ * @param {number} props.upvotes - Number of upvotes.
+ * @param {number} props.downvotes - Number of downvotes.
+ * @param {Array} props.comments - List of comments.
+ * @param {Array} props.savedPosts - List of saved posts.
+ * @param {Array} props.savedComments - List of saved comments.
+ * @param {string} props.voteStatus - Vote status.
+ * @param {Array} props.hiddenPosts - List of hidden posts.
+ * @param {boolean} props.isSpoiler - Whether the post is a spoiler.
+ * @param {boolean} props.isMod - Whether the user is a moderator.
+ * @module PostComponent
+ * @returns {JSX.Element} Post component JSX.
+ */
 
+/**
+ * Post component.
+ * @param {PostProps} props - Component props.
+ * @returns {JSX.Element} Post component JSX.
+ */
 
 function Post(props) {
     const [subredditName, setSubredditName] = useState("");

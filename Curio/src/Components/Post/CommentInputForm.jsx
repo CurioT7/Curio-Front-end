@@ -1,3 +1,8 @@
+/**
+ * CommentInputForm component module.
+ * @module CommentInputForm
+ */
+
 import React from "react";
 import { useState, useRef, useEffect } from "react";
 import SwitchToRichFormat from "../../styles/icons/SwitchToRichFormat.jsx";
@@ -7,6 +12,18 @@ import "./InputForm.css";
 import Text_Editor from "../Text_Editor/Text_Editor.jsx";
 import { CreateComment } from "./CommentsEndPoints.js";
 import axios from "axios";
+
+/**
+ * Represents a comment input form component.
+ * @typedef {Object} CommentInputProps
+ * @property {string} ID - Post ID.
+ */
+
+/**
+ * CommentInputForm component.
+ * @param {CommentInputProps} props - Component props.
+ * @returns {JSX.Element} CommentInputForm component JSX.
+ */
 
 function CommentInputForm(props) {
     const [inputState, setInputState] = useState(0);
