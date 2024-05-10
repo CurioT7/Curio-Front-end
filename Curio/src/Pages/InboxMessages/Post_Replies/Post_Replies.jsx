@@ -1,3 +1,24 @@
+/**
+ * PostReplies Component
+ * 
+ * A component to display received post replies in the user's inbox.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @module PostReplies
+ * @example
+ * import React from 'react';
+ * import PostReplies from './PostReplies';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <PostReplies />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MessagesNavbar from '../../../Components/Messages/MessagesNavbar';

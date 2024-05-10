@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Messages/UserName_Mentions/UserName_Mentions_Com.jsx</title>
+    <title>JSDoc: Source: Components/Messages/Post_Replies/Post_Replies_Com.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Messages/UserName_Mentions/UserName_Mentions_Com.jsx</h1>
+    <h1 class="page-title">Source: Components/Messages/Post_Replies/Post_Replies_Com.jsx</h1>
 
     
 
@@ -27,44 +27,42 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * UserNameMentionsCom Component
+ * PostRepliesCom Component
  * 
- * A component to display individual username mentions in messages.
+ * A component to display a single post reply in the user's inbox.
  * 
  * @component
  * @param {Object} props - The props of the component.
- * @param {string} props.title - The title of the mentioned post.
- * @param {number} props.noComments - The number of comments on the mentioned post.
- * @param {string} props.sender - The username of the sender of the message.
- * @param {Date} props.timestamp - The timestamp of the message.
+ * @param {string} props.title - The title of the post.
+ * @param {number} props.noComments - The number of comments on the post.
+ * @param {string} props.sender - The username of the sender.
+ * @param {string} props.timestamp - The timestamp when the reply was sent.
  * @param {string} props.linkedSubreddit - The name of the linked subreddit, if any.
- * @param {string} props.message - The message content.
- * @param {string} props.itemId - The ID of the mentioned item.
+ * @param {string} props.message - The content of the reply message.
+ * @param {string} props.itemId - The ID of the reply message.
  * @param {Array} props.downvotedcomments - Array of downvoted comments.
  * @param {Array} props.upvotedcomments - Array of upvoted comments.
- * @param {Function} props.onBlockConfirmed - Function to execute when block confirmation is received.
- * @param {string} props.postId - The ID of the mentioned post.
- * @param {string} props.id - The ID of the message.
- * @module UserNameMentionsCom
+ * @param {function} props.onBlockConfirmed - Function to be called when block confirmation is confirmed.
+ * @param {string} props.id - The ID of the reply message.
+ * @module PostRepliesCom
  * @example
  * import React from 'react';
- * import UserNameMentionsCom from './UserNameMentionsCom';
+ * import PostRepliesCom from './Post_Replies_Com';
  * 
  * const MyComponent = () => {
  *   return (
- *     &lt;UserNameMentionsCom 
- *       title="Sample Title" 
- *       noComments={10} 
- *       sender="sampleUser" 
- *       timestamp={new Date()} 
- *       linkedSubreddit="sampleSubreddit" 
- *       message="Sample message content" 
- *       itemId="123456789" 
- *       downvotedcomments={[]} 
- *       upvotedcomments={[]} 
- *       onBlockConfirmed={() => console.log("Block confirmation received")} 
- *       postId="987654321" 
- *       id="abcdefghi" 
+ *     &lt;PostRepliesCom
+ *       title="Post Title"
+ *       noComments={10}
+ *       sender="example_user"
+ *       timestamp="2 hours ago"
+ *       linkedSubreddit="example_subreddit"
+ *       message="This is a sample post reply message."
+ *       itemId="123456789"
+ *       downvotedcomments={[{ _id: 'comment1' }, { _id: 'comment2' }]}
+ *       upvotedcomments={[{ _id: 'comment3' }, { _id: 'comment4' }]}
+ *       onBlockConfirmed={() => console.log('Block confirmed')}
+ *       id="987654321"
  *     />
  *   );
  * };
@@ -73,7 +71,6 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import "./UserName_Mentions_Com.css";
 import { Box } from "@chakra-ui/react";
 import Upvotes from '../../../styles/icons/Upvotes.jsx';
 import Downvotes from '../../../styles/icons/Downvotes.jsx';
@@ -84,8 +81,7 @@ import { handleUPVoteComments, handleDownVoteComments, BlockUserMessages, handle
 import { Link, useNavigate } from 'react-router-dom';
 import ReportPopup from "../../ModalPages/ModalPages.jsx";
 
-
-function UserName_Mentions_Com(props) {
+function Post_Replies_Com(props) {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [confirmBlock, setConfirmBlock] = useState(false);
@@ -100,6 +96,7 @@ function UserName_Mentions_Com(props) {
         setDownvoted(isDownvoted);
         setUpvoted(isUpvoted);
     }, [props.downvotedcomments, props.upvotedcomments, props.itemId]);
+
 
     const handleBlockConfirmation = () => {
         props.onBlockConfirmed();
@@ -120,8 +117,8 @@ function UserName_Mentions_Com(props) {
     };
 
     return (
-        &lt;div style={{ width: "65%" }} className='username-mentions-table'>
-            &lt;h5 className='username-mentions-header-messages'>username mention:
+        &lt;div style={{ width: "65%" }} className='username-mentions-table d-flex justify-content-center'>
+            &lt;h5 className='username-mentions-header-messages'>post reply:
                 &lt;a href="" className='username-mentions-title-messages'>
                     {props.title}
                 &lt;/a>
@@ -166,8 +163,8 @@ function UserName_Mentions_Com(props) {
                         &lt;a href="">{props.message}&lt;/a>
                     &lt;/div>
                     &lt;Box as="ul" listStyleType="none" display="flex" gap='0.5rem' justifyContent='flex-start' paddingLeft='0' flexWrap='wrap' width='100%'>
-                        &lt;Link to={`/post/post-details/${props.postId}`} className="list-item-username-mentions" as="li" paddingLeft='0' onMouseOver={(e) => e.currentTarget.style.color = 'gray'}>Context&lt;/Link>
-                        &lt;Link to={`/post/post-details/${props.postId}`} className="list-item-username-mentions" as="li" onMouseOver={(e) => e.currentTarget.style.color = 'gray'}>Full Comments({props.noComments})&lt;/Link>
+                        &lt;Box className="list-item-username-mentions" as="li" paddingLeft='0'>Context&lt;/Box>
+                        &lt;Box className="list-item-username-mentions" as="li" >Full Comments({props.noComments})&lt;/Box>
                         &lt;Box className="list-item-username-mentions" as="li" onClick={handleReportClick}>Report&lt;/Box>
                         {confirmBlock ? (
                             &lt;>
@@ -188,8 +185,7 @@ function UserName_Mentions_Com(props) {
     );
 }
 
-export default UserName_Mentions_Com;
-</code></pre>
+export default Post_Replies_Com;</code></pre>
         </article>
     </section>
 
