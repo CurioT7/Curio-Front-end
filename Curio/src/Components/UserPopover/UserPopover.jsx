@@ -10,6 +10,20 @@ import { Flex,Avatar,Box,Heading,IconButton,Text,Image } from '@chakra-ui/react'
 import Cake from "../../styles/icons/Cake.jsx";
 
 
+/**
+ * Renders a user popover component.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.user - The username of the user.
+ * @param {Object} props.friendInfo - Information about the user's friend.
+ * @param {boolean} props.isFollowing - Indicates whether the user is being followed.
+ * @param {Function} props.handleFollowToggle - Function to handle follow/unfollow action.
+ * @param {Function} props.handleGetFollower - Function to handle getting follower information.
+ * @param {Function} props.showFriendInformation - Function to show friend information.
+ * @param {string} props.classname - The CSS class name for the component.
+ * @module FollowUserPopover
+ */
 function UserPopover( { user, friendInfo, isFollowing, handleFollowToggle, handleGetFollower, showFriendInformation, classname } ) {
   const [showPopover, setShowPopover] = useState(false);
   const [isSelf , setIsSelf] = useState(false);
