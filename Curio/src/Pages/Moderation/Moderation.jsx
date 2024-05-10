@@ -13,6 +13,12 @@ import Header from "./header";
 import ModSidebar from "./ModerationSidebar/ModSidebar";
 import './Moderation.css';
 
+/**
+ * Renders the Moderation page.
+ *
+ * @param {Object} props - The component props.
+ * @module ModQueuePage
+ */
 function Moderation(props) {
   const { Community } = useParams();
   const [type, setType] = useState("removed");

@@ -14,6 +14,14 @@ import ContentControls from '../../../styles/icons/ContentControls';
 import SidebarSetting from '../../../styles/icons/SidbarSettings';
 
 
+/**
+ * Renders the moderation sidebar component.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.communityName - The name of the community.
+ * @module ModerationSidebar
+ */
 function ModSidebar({ communityName }) {
   return (
     <Sidebar backgroundColor='#FFFFFF' rootStyles={{
