@@ -1,3 +1,34 @@
+/**
+ * Activity Component
+ * 
+ * A component to manage user activity notification settings.
+ * 
+ * @component
+ * @param {Object} userActivity - User activity settings object containing mentions, comments, upvotesPosts, upvotesComments, replies, newFollowers, and postsYouFollow.
+ * @module Activity
+ * @example
+ * import React from 'react';
+ * import Activity from './Activity';
+ * 
+ * const MyComponent = () => {
+ *   const userActivity = {
+ *     mentions: true,
+ *     comments: true,
+ *     upvotesPosts: true,
+ *     upvotesComments: true,
+ *     replies: true,
+ *     newFollowers: true,
+ *     postsYouFollow: true
+ *   };
+ * 
+ *   return (
+ *     <Activity userActivity={userActivity} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useState, useEffect } from "react";
 import { Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import Titles from "../../feedSettings/childs/Titles";

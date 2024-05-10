@@ -1,3 +1,30 @@
+/**
+ * Messages Component
+ * 
+ * A component to manage user notification settings for private messages, chat messages, and chat requests.
+ * 
+ * @component
+ * @param {Object} userActivity - User activity settings object containing allowPrivateMessages, allowChatNotifications, and allowChatRequests.
+ * @module Messages
+ * @example
+ * import React from 'react';
+ * import Messages from './Messages';
+ * 
+ * const MyComponent = () => {
+ *   const userActivity = {
+ *     allowPrivateMessages: true,
+ *     allowChatNotifications: true,
+ *     allowChatRequests: true
+ *   };
+ * 
+ *   return (
+ *     <Messages userActivity={userActivity} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useState, useEffect } from "react";
 import { Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import Titles from "../../feedSettings/childs/Titles";
