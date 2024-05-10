@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/profileSetting/ProfileInformation/ProfileInformation.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/profileSetting/ProfileInformation/ProfileInformation.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Component for displaying and updating profile information.
+ * @param {Object} profileData - The profile data containing displayName and about.
+ * @param {Object} event - The event object.
+ * @module ProfileInformation
+ */
+import React, { useState, useEffect } from 'react';
+import { Box, Text, Input, Textarea, useToast } from '@chakra-ui/react';
+import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
+
+function ProfileInformation({ profileData }) {
+  const toast = useToast();
+  const [displayName, setDisplayName] = useState('');
+  const [about, setAbout] = useState('');
+
+  useEffect(() => {
+    setDisplayName(profileData.displayName);
+    setAbout(profileData.about);
+  }, [profileData]);
+
+  /**
+   * Displays a toast notification.
+   */
+  function Toast() {
+    toast({
+      description: "Changes Saved",
+      status: 'info',
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+
+  /**
+   * Handles display name change event.
+   */
+  const handleDisplayNameChange = (event) => {
+    setDisplayName(event.target.value);
+  };
+
+  /**
+   * Handles about change event.
+   */
+  const handleAboutChange = (event) => {
+    setAbout(event.target.value);
+  };
+
+  /**
+   * Handles enter key press event.
+   */
+  const handleEnterKeyPress = async (event) => {
+    if (event.key === 'Enter') {
+      try {
+        await sendUserDataToBackend({ displayName, about }); 
+        Toast();
+      } catch (error) {
+        console.error('Error sending data to backend:', error);
+      }
+    }
+  };
+
+  const remainingDisplayNameCharacters = 30 - (displayName ? displayName.length : 0); 
+  const remainingAboutCharacters = 200 - (about ? about.length : 0); 
+
+  const displayNameClass = remainingDisplayNameCharacters &lt;= 0 ? 'text-danger' : '';
+  const aboutClass = remainingAboutCharacters &lt;= 0 ? 'text-danger' : '';
+
+  return (
+    &lt;Box className="profile-information">
+      &lt;Box className="display-name">
+        &lt;h3 className={`headings-settings d-flex fw-500 mb-1`}>Display name (optional)&lt;/h3>
+        &lt;Text className="headings-description fw-normal text-muted">Set a display name. This does not change your username.&lt;/Text>
+      &lt;/Box>
+      &lt;Box className="display-name-input-container">
+        &lt;Input
+          type="text"
+          className="form-control mr-sm-2"
+          placeholder="Display name (optional)"
+          maxLength="30"
+          name="display-name-input"
+          id="display-name-input"
+          value={displayName}
+          onChange={handleDisplayNameChange}
+          onKeyDown={handleEnterKeyPress}
+        />
+        &lt;Box className={`word-remaining p-1 b-80 mb-4 ${displayNameClass}`}>{remainingDisplayNameCharacters} Characters remaining&lt;/Box>
+      &lt;/Box>
+      &lt;Box className="about-section">
+        &lt;Box className="about">
+          &lt;h3 className={`headings-settings d-flex fw-500 mb-1`}>About (optional)&lt;/h3>
+          &lt;Text className="headings-description fw-normal text-muted">A brief description of yourself shown on your profile.&lt;/Text>
+        &lt;/Box>
+        &lt;Box className="about-textarea-container">
+          &lt;Textarea
+            name="about-textarea"
+            className='form-control mr-sm-2'
+            id="about-textarea"
+            cols="30"
+            rows="4"
+            maxLength="200"
+            placeholder="About (optional)"
+            value={about}
+            onChange={handleAboutChange}
+            onKeyDown={handleEnterKeyPress}
+          />
+          &lt;Box className={`word-remaining p-1 b-80 mb-4 ${aboutClass}`}>{remainingAboutCharacters} Characters remaining&lt;/Box>
+        &lt;/Box>
+      &lt;/Box>
+    &lt;/Box>
+  );
+}
+
+export default ProfileInformation;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 03:31:13 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

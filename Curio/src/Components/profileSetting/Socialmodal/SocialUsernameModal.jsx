@@ -1,3 +1,38 @@
+/**
+ * SocialUsernameModal Component
+ * 
+ * A component to allow users to input social media usernames with specific formatting.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import SocialUsernameModal from './SocialUsernameModal';
+ * 
+ * const MyComponent = () => {
+ *   const handleSocialLinkClick = (url, displayName, icon) => {
+ *     // Handle the social link click
+ *   };
+ * 
+ *   return (
+ *     <SocialUsernameModal
+ *       name="Instagram"
+ *       icon="fa fa-instagram"
+ *       urlPrefix="https://www.instagram.com/"
+ *       handleSocialLinkClick={handleSocialLinkClick}
+ *     />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @param {Object} props - Component props
+ * @param {string} props.name - The name of the social media platform
+ * @param {string} props.icon - The class name for the Font Awesome icon representing the platform
+ * @param {string} props.urlPrefix - The prefix URL for the social media platform's profiles
+ * @param {Function} props.handleSocialLinkClick - Function to handle the click event on social media link save
+ * @module SocialUsernameModal
+ */
+
 import React, { useState } from "react";
 import { Button, useDisclosure } from '@chakra-ui/react';
 import {

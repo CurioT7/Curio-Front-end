@@ -1,3 +1,8 @@
+/**
+ * Component for managing profile category settings.
+ * @param {Object} userCategory - User category data.
+ * @module ProfileCategory
+ */
 import { useState, useEffect } from 'react'; 
 import { useToast, Flex, Switch, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 import "./ProfileCategory.css"

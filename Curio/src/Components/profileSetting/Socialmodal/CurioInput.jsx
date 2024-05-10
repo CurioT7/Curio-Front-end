@@ -1,3 +1,36 @@
+/**
+ * CurioInput Component
+ * 
+ * A component to allow users to input social links.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import CurioInput from './CurioInput';
+ * 
+ * const MyComponent = () => {
+ *   const handleSocialLinkClick = (link, avatar) => {
+ *     // Handle the social link click
+ *   };
+ * 
+ *   return (
+ *     <CurioInput
+ *       name="John Doe"
+ *       avatar="path_to_avatar"
+ *       handleSocialLinkClick={handleSocialLinkClick}
+ *     />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @param {Object} props - Component props
+ * @param {string} props.name - The name of the user
+ * @param {string} props.avatar - The URL or path to the user's avatar
+ * @param {Function} props.handleSocialLinkClick - Function to handle the click event on social link save
+ * @module CurioInput
+ */
+
 import React, { useState } from "react";
 import { Button, useDisclosure, Avatar } from '@chakra-ui/react';
 import {

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/profileSetting/Socialmodal/SocialMediaModal.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/profileSetting/Socialmodal/SocialMediaModal.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * SocialMediaModal Component
+ * 
+ * A component to allow users to input social media links.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import SocialMediaModal from './SocialMediaModal';
+ * 
+ * const MyComponent = () => {
+ *   const handleSocialLinkClick = (url, displayText, icon) => {
+ *     // Handle the social link click
+ *   };
+ * 
+ *   return (
+ *     &lt;SocialMediaModal
+ *       name="Twitter"
+ *       icon="fa fa-twitter" // Font Awesome icon class
+ *       handleSocialLinkClick={handleSocialLinkClick}
+ *     />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @param {Object} props - Component props
+ * @param {string} props.name - The name of the social media platform
+ * @param {string} props.icon - The class name for the Font Awesome icon representing the platform
+ * @param {Function} props.handleSocialLinkClick - Function to handle the click event on social media link save
+ * @module SocialMediaModal
+ */
+
+import React, { useState } from "react";
+import { Button, useDisclosure } from '@chakra-ui/react';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+} from '@chakra-ui/react';
+import "./SocialinputModal.css";
+
+function SocialMediaModal(props) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [displayText, setDisplayText] = useState("");
+    const [url, setUrl] = useState("");
+    const [isSaveEnabled, setIsSaveEnabled] = useState(false);
+    const [domainMessage, setdomainMessage] = useState(""); 
+    const [urlMessage, seturlMessage] = useState("");
+
+    const handleSave = () => {
+        if (displayText &amp;&amp; url) {
+            const enteredDomain = (new URL(url)).hostname;
+
+            // Split the domain by dots and extract the second part
+            const domainParts = enteredDomain.split('.');
+            const extractedDomain = domainParts.length >= 2 ? domainParts[1] : null;
+
+            const wwwPrefix = enteredDomain.startsWith("www.") ? "www." : "";
+            
+            // Check if entered domain matches platform's domain
+            if ((extractedDomain === props.name.toLowerCase()) || props.name.toLowerCase() === "custom url") {
+                props.handleSocialLinkClick(url, displayText, props.icon);
+                setDisplayText("");
+                setUrl("");
+                setIsSaveEnabled(false);
+                onClose();
+            } else {
+                setdomainMessage("Domain is not allowed");
+            }
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name === "display_text") {
+            setDisplayText(value);
+        } else if (name === "url") {
+            setUrl(value);
+        }
+        setIsSaveEnabled(value !== "" &amp;&amp; url !== "");
+    };
+
+    const handleClose = () => {
+        if (!(displayText &amp;&amp; url)) {
+            return;
+        }
+        onClose();
+    };
+
+    const handleGoBack = () => {
+        onClose();
+    };    
+
+    return (
+        &lt;>
+            &lt;div className="custom-url-link-container">
+                &lt;li onClick={onOpen} variant='outline' className="custom-url-button list-inline-item">
+                    &lt;i className={props.icon}/> {props.name}
+                &lt;/li>
+            &lt;/div>
+            &lt;Modal isOpen={isOpen} onClose={handleClose}>
+                &lt;ModalOverlay />
+                &lt;ModalContent>
+                    &lt;ModalHeader className="text-center">
+                        &lt;div className="container-custom-title">
+                            &lt;div className="flex justify-start items-center">
+                                &lt;button className="arrow-button" onClick={handleGoBack}>&lt;i className="fa-solid fa-arrow-left">&lt;/i>&lt;/button>
+                            &lt;/div>
+                            &lt;div className="flex justify-center items-center">
+                                Add Social Link
+                            &lt;/div>
+                            &lt;div className="flex justify-end items-center">
+                                &lt;Button onClick={handleSave} disabled={!isSaveEnabled} bg={isSaveEnabled ? "blue.500" : "gray.400"}>Save&lt;/Button>
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/ModalHeader>
+                    &lt;ModalBody>
+                        &lt;div className="custom-container">
+                            &lt;li className="custom-url-li list-inline-item mb-2 mx-1">&lt;i className={props.icon}/> {props.name} &lt;/li>
+                            &lt;input type="text" name="display_text" id="display_text" placeholder="Display text" className="display_text" value={displayText} onChange={handleInputChange} required/>
+                            &lt;input type="url" name="url" placeholder="https://www.webite.com/" className="url_website" value={url} onChange={handleInputChange} required/>
+                            {domainMessage &amp;&amp; &lt;p style={{ color: 'red', fontSize: '12px' }}>{domainMessage}&lt;/p>}
+                        &lt;/div>
+                    &lt;/ModalBody>
+                &lt;/ModalContent>
+            &lt;/Modal>
+        &lt;/>
+    );
+};
+
+export default SocialMediaModal;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 03:31:13 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

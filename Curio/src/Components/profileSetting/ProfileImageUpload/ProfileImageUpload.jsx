@@ -1,3 +1,12 @@
+/**
+ * Component for uploading profile and banner images.
+ * @param {string} message - The message to be displayed in the toast.
+ * @param {string} info - The status color of the toast.
+ * @param {Object} event - The event object.
+ * @param {Object} event - The event object.
+ * @param {Function} setImage - The function to set the image.
+ * @module ProfileImageUpload
+ */
 import { Box, Text, useToast } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -12,19 +21,25 @@ function ProfileImageUpload() {
   const [checkImageProfile, setCheckImageProfile] = useState(false);
   const toast = useToast();
 
-  function Toast(message, info){
+  /**
+   * Displays a toast notification.
+   */
+  function Toast(message, info) {
     toast({
-        description: message,
-        status: info,
-        duration: 3000,
-        isClosable: true,
-      })
+      description: message,
+      status: info,
+      duration: 3000,
+      isClosable: true,
+    })
   }
 
   useEffect(() => {
     fetchImages();
   }, []);
 
+  /**
+   * Fetches profile and banner images from the backend.
+   */
   const fetchImages = async () => {
     try {
       const response = await axios.get(`${serverHost}/api/settings/v1/me/prefs`, {
@@ -51,6 +66,9 @@ function ProfileImageUpload() {
     }
   };
 
+  /**
+   * Handles profile image change event.
+   */
   const handleProfileImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -61,6 +79,9 @@ function ProfileImageUpload() {
     }
   };
 
+  /**
+   * Handles banner image change event.
+   */
   const handleBannerImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -71,10 +92,16 @@ function ProfileImageUpload() {
     }
   };
 
+  /**
+   * Handles drag over event.
+   */
   const handleDragOver = (event) => {
     event.preventDefault();
   };
 
+  /**
+   * Handles drop event.
+   */
   const handleDrop = (event, setImage) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
@@ -94,6 +121,9 @@ function ProfileImageUpload() {
   }, [checkImageProfile, checkImageBanner]);
 
 
+  /**
+   * Uploads profile and banner images to the backend.
+   */
   const uploadImages = async () => {
     const formData = new FormData();
     if (checkImageProfile) {
@@ -120,13 +150,13 @@ function ProfileImageUpload() {
 
       switch (response.status) {
         case 200:
-          Toast('Changes Saved','success');
+          Toast('Changes Saved', 'success');
           if (checkImageBanner) {
             localStorage.setItem('bannerImage', response.data.banner);
             const file = bannerImage;
             const reader = new FileReader();
             reader.onloadend = () => {
-              setBannerImage(reader.result); 
+              setBannerImage(reader.result);
               setCheckImageBanner(false);
             };
             reader.readAsDataURL(file);
@@ -144,7 +174,7 @@ function ProfileImageUpload() {
           }
           break;
         case 404:
-          Toast('User preferences not found','error');
+          Toast('User preferences not found', 'error');
           break;
         default:
           console.error('Unexpected response status:', response.status);
@@ -155,7 +185,7 @@ function ProfileImageUpload() {
         const status = error.response.status;
         if (status === 500) {
           Toast(
-            '500 Internal Server Error: An unexpected error occurred on the server. Please try again later.','error'
+            '500 Internal Server Error: An unexpected error occurred on the server. Please try again later.', 'error'
           );
         } else {
           console.error('Error sending data to backend:', error.response.data);
