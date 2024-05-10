@@ -22,6 +22,25 @@ import OC from "../../assets/icons8-oc-50.png";
 import { SendLockedPost, SendUnlockedPost } from "../Post/PostEndPoints.js";
 import { markasNSFW, unmarkasNSFW, approveRemovedPosts, removePost } from "./UnmoderatedEndpoints.js";
 
+/**
+ * Represents a component for displaying removed posts.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props._id - The ID of the post.
+ * @param {string} props.authorName - The name of the post author.
+ * @param {string} props.createdAt - The creation date of the post.
+ * @param {string} props.title - The title of the post.
+ * @param {string} props.content - The content of the post.
+ * @param {number} props.upvotes - The number of upvotes for the post.
+ * @param {number} props.downvotes - The number of downvotes for the post.
+ * @param {Array} props.comments - The comments on the post.
+ * @param {string} props.myusername - The username of the current user.
+ * @param {boolean} props.isLocked - Indicates if the post is locked.
+ * @param {boolean} props.isNSFW - Indicates if the post is marked as NSFW (Not Safe for Work).
+ * @module ModerationRemovedPosts
+ */
+
 
 
 function RemovedPosts( props ) {
