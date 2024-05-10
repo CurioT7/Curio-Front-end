@@ -5,6 +5,12 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 const token = localStorage.getItem('token');
 
 
+/**
+ * Casts a vote for a poll.
+ * @param {string} _id - The ID of the poll.
+ * @param {string} votepick - The option chosen for the vote.
+ * @module Pollvotes
+ */
 async function pollVote(_id, votepick){
   try{
   const response = await axios.post(`${hostUrl}/api/pollVote`, {
@@ -23,6 +29,11 @@ async function pollVote(_id, votepick){
 }
 
 
+/**
+ * Retrieves poll information from the server.
+ * @param {string} postID - The ID of the post.
+ * @module PollInfo
+ */
 async function getPollInfo(postID){
     try{
         const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&objectType=post`,{

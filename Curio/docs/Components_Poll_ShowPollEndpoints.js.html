@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/OpenChat/OpenChatComRight_Side/NewChat/userFunctions.js</title>
+    <title>JSDoc: Source: Components/Poll/ShowPollEndpoints.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/OpenChat/OpenChatComRight_Side/NewChat/userFunctions.js</h1>
+    <h1 class="page-title">Source: Components/Poll/ShowPollEndpoints.js</h1>
 
     
 
@@ -26,34 +26,57 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Handles toggling users.
- * @param {Array} selectedUsers - The currently selected users.
- * @param {Function} setSelectedUsers - Function to set the selected users.
- * @param {Function} setInputValue - Function to set the input value.
- * @param {string} username - The username of the user to toggle.
- * @param {string} image - The image of the user to toggle.
- * @module UserFunctions
+            <pre class="prettyprint source linenums"><code>import axios from "axios";
+
+
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
+const token = localStorage.getItem('token');
+
+
+/**
+ * Casts a vote for a poll.
+ * @param {string} _id - The ID of the poll.
+ * @param {string} votepick - The option chosen for the vote.
+ * @module Pollvotes
  */
-export const handleToggleUser = (selectedUsers, setSelectedUsers, setInputValue, username, image) => {
-    const isUserSelected = selectedUsers.some(user => user.username === username);
-    if (isUserSelected) {
-        // User is already selected, remove them
-        const updatedUsers = selectedUsers.filter(user => user.username !== username);
-        setSelectedUsers(updatedUsers);
-        setInputValue(prevInputValue => {
-            // Filter out the username from the input value
-            const usernames = prevInputValue.split(',').map(name => name.trim());
-            const updatedUsernames = usernames.filter(name => name !== username);
-            return updatedUsernames.join(', ');
+async function pollVote(_id, votepick){
+  try{
+  const response = await axios.post(`${hostUrl}/api/pollVote`, {
+    postId: _id,
+    option: votepick
+  },{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+  return response.data;
+}
+  catch(error){
+    console.error(error);
+  }
+}
+
+
+/**
+ * Retrieves poll information from the server.
+ * @param {string} postID - The ID of the post.
+ * @module PollInfo
+ */
+async function getPollInfo(postID){
+    try{
+        const response = await axios.get(`${hostUrl}/api/info?objectID=${postID}&amp;objectType=post`,{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
-    } else {
-        // User is not selected, add them
-        setSelectedUsers([...selectedUsers, { image, username }]);
-        setInputValue(prevInputValue => prevInputValue ? `${prevInputValue}, ${username}` : username);
+       return response.data;
     }
-};
-</code></pre>
+    catch(error){
+        console.error(error);
+    }
+  }
+
+export { pollVote, getPollInfo };</code></pre>
         </article>
     </section>
 

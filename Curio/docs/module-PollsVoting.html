@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/OpenChat/OpenChatComRight_Side/NewChat/userFunctions.js</title>
+    <title>JSDoc: Module: PollsVoting</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,45 +17,181 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/OpenChat/OpenChatComRight_Side/NewChat/userFunctions.js</h1>
+    <h1 class="page-title">Module: PollsVoting</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Handles toggling users.
- * @param {Array} selectedUsers - The currently selected users.
- * @param {Function} setSelectedUsers - Function to set the selected users.
- * @param {Function} setInputValue - Function to set the input value.
- * @param {string} username - The username of the user to toggle.
- * @param {string} image - The image of the user to toggle.
- * @module UserFunctions
- */
-export const handleToggleUser = (selectedUsers, setSelectedUsers, setInputValue, username, image) => {
-    const isUserSelected = selectedUsers.some(user => user.username === username);
-    if (isUserSelected) {
-        // User is already selected, remove them
-        const updatedUsers = selectedUsers.filter(user => user.username !== username);
-        setSelectedUsers(updatedUsers);
-        setInputValue(prevInputValue => {
-            // Filter out the username from the input value
-            const usernames = prevInputValue.split(',').map(name => name.trim());
-            const updatedUsernames = usernames.filter(name => name !== username);
-            return updatedUsernames.join(', ');
-        });
-    } else {
-        // User is not selected, add them
-        setSelectedUsers([...selectedUsers, { image, username }]);
-        setInputValue(prevInputValue => prevInputValue ? `${prevInputValue}, ${username}` : username);
-    }
-};
-</code></pre>
-        </article>
-    </section>
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Renders a poll component.</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The props object containing the poll data.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Components_Poll_ShowPoll.jsx.html">Components/Poll/ShowPoll.jsx</a>, <a href="Components_Poll_ShowPoll.jsx.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
