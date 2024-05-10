@@ -15,6 +15,21 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import ExclamationPoint from '../../styles/icons/ExclamationPoint.jsx';
 
+/**
+ * CreateCommunity component renders a modal for creating a new community.
+ * @param {object} props - The props for the CreateCommunity component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @returns {JSX.Element} CreateCommunity JSX element.
+ * @module CreateCommunity
+ * @example
+ * // Example usage of CreateCommunity component:
+ * <CreateCommunity
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ * />
+ */
+
 function CreateCommunity(props) {
   const [selectedType, setSelectedType] = useState('public');
   const [charNum, setCharNum] = useState(0);

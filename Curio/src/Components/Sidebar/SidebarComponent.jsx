@@ -31,6 +31,14 @@ import axios from 'axios';
 
 
 
+/**
+ * SidebarComponent renders a sidebar navigation menu for the application.
+ * @param {object} props - The props for the SidebarComponent.
+ * @param {boolean} props.sidebarVisibility - Boolean indicating whether the sidebar should be visible.
+ * @returns {JSX.Element} SidebarComponent JSX element.
+ * @module SidebarComponent
+ */
+
 function SidebarComponent(props) {
   const [isCreateCommunityModalOpen, setCreateCommunityModalOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1200);
