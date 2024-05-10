@@ -70,12 +70,12 @@ function UserName_Mentions(props) {
     };
 
     return (
-        <div style={{ marginTop: "60px" }}>
+        <div data-testid="user-name-mentions-component" style={{ marginTop: "60px" }}>
             <MessagesNavbar />
             <InboxTabs />
             <div className='username-mentions-page w-100'>
                 {error ? (
-                    <div className="error-message">
+                    <div className="error-message" data-testid="error-message">
                         <p style={{
                             padding: '20px',
                         }}>there doesn't seem to be anything here
