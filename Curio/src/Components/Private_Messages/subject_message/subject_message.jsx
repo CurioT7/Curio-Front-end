@@ -1,3 +1,27 @@
+/**
+ * SubjectMessage Component
+ * 
+ * A component for entering the subject of a private message.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @param {Function} props.setSubject - A function to set the subject of the message.
+ * @module SubjectMessage
+ * @example
+ * import React, { useState } from 'react';
+ * import SubjectMessage from './SubjectMessage';
+ * 
+ * const MyComponent = () => {
+ *   const [subject, setSubject] = useState('');
+ * 
+ *   return (
+ *     <SubjectMessage setSubject={setSubject} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React from 'react';
 import "./subject_message.css"
 import { Input } from '@chakra-ui/react';

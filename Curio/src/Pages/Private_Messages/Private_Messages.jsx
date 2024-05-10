@@ -1,3 +1,23 @@
+/**
+ * Private Messages Component
+ * 
+ * A component for sending private messages to users or subreddits.
+ * 
+ * @component
+ * @module PrivateMessages
+ * @example
+ * import React from 'react';
+ * import Private_Messages from './Private_Messages';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <Private_Messages />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useEffect, useState } from 'react';
 import "./Private_Messages.css";
 import axios from "axios";

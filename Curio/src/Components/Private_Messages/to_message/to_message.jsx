@@ -1,3 +1,27 @@
+/**
+ * ToMessage Component
+ * 
+ * A component for entering the recipient of a private message.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @param {Function} props.setRecipient - A function to set the recipient of the message.
+ * @module ToMessage
+ * @example
+ * import React, { useState } from 'react';
+ * import ToMessage from './ToMessage';
+ * 
+ * const MyComponent = () => {
+ *   const [recipient, setRecipient] = useState('');
+ * 
+ *   return (
+ *     <ToMessage setRecipient={setRecipient} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React from 'react';
 import "./to_message.css"
 import { Input  } from '@chakra-ui/react';
