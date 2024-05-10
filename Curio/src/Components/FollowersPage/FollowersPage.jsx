@@ -17,6 +17,12 @@ import "../ProfilePage/ProfileSideBar.jsx";
 import ProfileSideBar from "../ProfilePage/ProfileSideBar.jsx";
 import axios from "axios";
 
+/**
+ * Renders the FollowersPage component.
+ *
+ * @param {Object} props - The component props.
+ * @module FollowersPage
+ */
 function FollowersPage(props) {
   const navigate = useNavigate();
   const { username } = useParams();

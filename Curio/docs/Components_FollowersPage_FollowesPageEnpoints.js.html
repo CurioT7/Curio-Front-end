@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Mute</title>
+    <title>JSDoc: Source: Components/FollowersPage/FollowesPageEnpoints.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,138 +17,47 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Mute</h1>
+    <h1 class="page-title">Source: Components/FollowersPage/FollowesPageEnpoints.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>Mute Component</p>
-<p>A component to manage muted communities.</p></div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_SafetyPrivacy_Safety_Mute_Mute.jsx.html">Components/SafetyPrivacy/Safety/Mute/Mute.jsx</a>, <a href="Components_SafetyPrivacy_Safety_Mute_Mute.jsx.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import React from 'react';import Mute from './Mute';const MyComponent = () => {  return (    &lt;Mute />  );};export default MyComponent;</code></pre>
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import axios from "axios";
+
+
+const token = localStorage.getItem("token");
+
+/**
+ * Retrieves followers based on the provided friends list.
+ *
+ * @param {Array} friends - The list of friends to retrieve followers for.
+ * @module GetFollowers
+ */
+async function getFollowers(friends) {
+  const hostUrl = import.meta.env.VITE_SERVER_HOST;
+  try {
+    const response = await axios.get(`${hostUrl}/api/getfriends/followings`, {
+      friends: friends,
+    },{
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return response;
+  }
+    catch(error) {
+      console.error('Error:', error);
+    }
+}
+
+export { getFollowers };</code></pre>
+        </article>
+    </section>
 
 
 

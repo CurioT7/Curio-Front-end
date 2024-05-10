@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Private_Messages/from_message/from_message.jsx</title>
+    <title>JSDoc: Source: Components/FollowersPage/FollowersPage.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Private_Messages/from_message/from_message.jsx</h1>
+    <h1 class="page-title">Source: Components/FollowersPage/FollowersPage.jsx</h1>
 
     
 
@@ -26,64 +26,158 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * FromMessage Component
- * 
- * A component for selecting the sender of a private message.
- * 
- * @component
- * @param {Object} props - The props of the component.
- * @param {Array} props.userCommunities - The communities the user is a member of.
- * @param {Function} props.setSubreddit - A function to set the selected subreddit.
- * @module FromMessage
- * @example
- * import React from 'react';
- * import FromMessage from './FromMessage';
- * 
- * const MyComponent = () => {
- *   const userCommunities = ['community1', 'community2'];
- *   const setSubreddit = (subreddit) => {
- *     // Logic to set the selected subreddit
- *   };
- * 
- *   return (
- *     &lt;FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit} />
- *   );
- * };
- * 
- * export default MyComponent;
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import "./FollowersPage.css";
+import SearchIcon from "../../styles/icons/SearchIcon.jsx";
+import avatar2 from "../../assets/avatar_default_6.png";
+
+import {
+  useToast
+} from "@chakra-ui/react";
+import {
+  getUserAbout,
+} from "../ProfilePage/ProfilePageEndpoints.js";
+import { userFollow, userUnfollow } from "../FriendInformation/ShowFriendInformationEndpoints.js";
+import { getFollowers } from "./FollowesPageEnpoints.js";
+import "../ProfilePage/ProfileSideBar.jsx";
+import ProfileSideBar from "../ProfilePage/ProfileSideBar.jsx";
+import axios from "axios";
+
+/**
+ * Renders the FollowersPage component.
+ *
+ * @param {Object} props - The component props.
+ * @module FollowersPage
  */
+function FollowersPage(props) {
+  const navigate = useNavigate();
+  const { username } = useParams();
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [userAbout, setUserAbout] = useState({});
+  const [friendAbout, setFriendAbout] = useState({});
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
-import React, { useState } from 'react';
-import "./from_message.css"
-import { Select } from '@chakra-ui/react';
 
-function FromMessage({ userCommunities, setSubreddit }) {
-  const username = localStorage.getItem('username');
-  const [selectedOption, setSelectedOption] = useState(`u/${username}`);
+  const token = localStorage.getItem("token");
+  const toastsuccess = useToast()
+  function ToastSuccess(description) {
+      toastsuccess({
+          description: description ,
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+          position: 'bottom',
+      });
+  }
 
-  const handleOptionChange = (e) => {
-    const value = e.target.value.startsWith('r/') ? e.target.value.substring(2) : e.target.value.substring(2); 
-    setSelectedOption(e.target.value);
-    setSubreddit(value); 
-  };
+  async function handleGetFollowers() {
+    const response = await getFollowers('asfasfasfafaf');
+    if (response) {
+      setFollowers(response.data.friendsArray);
+    }
+  }
+
+  useEffect(() => {
+    handleGetFollowers();
+
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+    props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    };
+  }, []);
+
+  useEffect(() => {
+    const StoredUsername = localStorage.getItem("username");
+    if (!token) {
+      navigate("/login");
+    }
+
+    if (StoredUsername) {
+      getUserAbout(StoredUsername).then((data) => setUserAbout(data));
+    }
+  }, []);
+
+
+  function handleFollowToggle(friendUsername) {
+    if (!token) {
+     navigate('/login');
+    }
+    else{
+    if (isFollowing) {
+        userUnfollow(friendUsername);
+        ToastSuccess('User unfollowed successfully!');
+    } else {
+        userFollow(friendUsername);
+        ToastSuccess('User followed successfully!');
+    }
+    setIsFollowing(!isFollowing);
+}
+}
+
+function handleFriendInformation(username) {
+   getUserAbout(username).then((data) => setFriendAbout(data));
+}
 
   return (
-    &lt;div className='from_message_container'>
-      &lt;label htmlFor="selectOption" style={{ fontSize: 'large' }}>from&lt;/label>
-      &lt;Select id="selectOption" value={selectedOption} onChange={handleOptionChange} size='sm' maxWidth='492px'>
-        {userCommunities.map((community, index) => (
-          &lt;option key={index} value={`r/${community}`} >
-            r/{community}
-          &lt;/option>
-        ))}
-        &lt;option value={`u/${username}`} >u/{username}&lt;/option>
-      &lt;/Select>
+    &lt;div className="d-flex followersPageCont">
+      &lt;div className="d-flex p-3 mx-auto flex-column followersPageDiv">
+        &lt;div className="d-flex flex-column followersSearchDiv p-2">
+          &lt;span className="Followers">Followers&lt;/span>
+          &lt;div className="d-flex flex-row">
+            &lt;p className="Followersparag">
+              This list is only visible to you. The most recent follows are
+              shown first.
+            &lt;/p>
+            &lt;input
+              type="text"
+              placeholder="Search for a user"
+              className="followersSearchBox"
+              style={{
+                border: "1px solid rgb(135, 138, 140)",
+                borderTopRightRadius: "0px",
+                borderBottomRightRadius: "0px",
+                width: "400px",
+              }}
+            >&lt;/input>
+            &lt;button className="searchBtn me-2">
+              &lt;SearchIcon />
+            &lt;/button>
+          &lt;/div>
+        &lt;/div>
+        &lt;div className="d-flex flex-row p-2 align-items-center">
+          &lt;img src={avatar2} alt="avatar" className="FollowersAvatar" />
+          &lt;span className="ms-2 FollowerUsername">Ok_software&lt;/span>
+          &lt;button className="FollowBtn ms-auto">Following&lt;/button>
+        &lt;/div>
+        &lt;div className="d-flex flex-row p-2 align-items-center">
+          &lt;img src={avatar2} alt="avatar" className="FollowersAvatar" />
+          &lt;span className="ms-2 FollowerUsername">Ok_software&lt;/span>
+          &lt;button
+            className={`FollowBtn ms-auto ${
+              isFollowing ? "FollwersFollow" : "FollowersUnfollow"
+            }`}
+            onClick={() => handleFollowToggle(username)}
+          >
+            {isFollowing ? "Following" : "Follow"}
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+      &lt;ProfileSideBar userAbout={userAbout} username={username} />
     &lt;/div>
   );
 }
 
-export default FromMessage;
+export default FollowersPage;
 </code></pre>
         </article>
     </section>
