@@ -23,3 +23,58 @@ import { BrowserRouter as Router } from 'react-router-dom';
     expect(chatItem1).toBeInTheDocument();
     expect(chatItem2).toBeInTheDocument();
   });
+
+
+  test('handles empty chatsData', () => {
+    const { queryByTestId } = render(
+      <Router>
+        <OpenChatComLeftSide chatsData={{ chats: [] }} />
+      </Router>
+    );
+  
+    const chatItems = queryByTestId(/^chat-item-/);
+    expect(chatItems).toBeNull();
+  });
+  
+  test('handles null chatsData', () => {
+    const { queryByTestId } = render(
+      <Router>
+        <OpenChatComLeftSide chatsData={null} />
+      </Router>
+    );
+  
+    const chatItems = queryByTestId(/^chat-item-/);
+    expect(chatItems).toBeNull();
+  });
+  
+  test('handles undefined chatsData', () => {
+    const { queryByTestId } = render(
+      <Router>
+        <OpenChatComLeftSide />
+      </Router>
+    );
+  
+    const chatItems = queryByTestId(/^chat-item-/);
+    expect(chatItems).toBeNull();
+  });
+  
+
+  test('handles missing profile picture', () => {
+    const chatsData = {
+      chats: [
+        { _id: 'chat1', participants: 'User1', messages: [{ timestamp: '2024-05-10T12:00:00Z', message: 'Hello' }] },
+      ]
+    };
+  
+    const { getByTestId } = render(
+      <Router>
+        <OpenChatComLeftSide chatsData={chatsData} />
+      </Router>
+    );
+  
+    const chatItem1 = getByTestId('chat-item-chat1');
+  
+    expect(chatItem1).toBeInTheDocument();
+    expect(chatItem1).not.toHaveAttribute('src'); // Check if profile picture is not present
+  });
+  

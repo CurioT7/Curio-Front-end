@@ -12,7 +12,7 @@ const mockProps = {
 describe('AboutDrawer component', () => {
   it('renders properly', () => {
     const { getByText, getByPlaceholderText } = render(<AboutDrawer {...mockProps} />);
-    
+
     // Ensure the drawer header is rendered
     expect(getByText('Chat information')).toBeInTheDocument();
 
@@ -47,5 +47,43 @@ describe('AboutDrawer component', () => {
     expect(saveButton).toBeEnabled();
   });
 
-  // Add more tests as needed
+
+  it('changes input background color on hover', () => {
+    const { getByPlaceholderText } = render(<AboutDrawer {...mockProps} />);
+    const groupNameInput = getByPlaceholderText('Group Name');
+
+    fireEvent.mouseEnter(groupNameInput);
+    expect(groupNameInput).toHaveStyle('background: #ccc');
+
+    fireEvent.mouseLeave(groupNameInput);
+    expect(groupNameInput).toHaveStyle('background: transparent');
+  });
+
+  it('renders "Host" label for admin member', () => {
+    const { getByText } = render(<AboutDrawer {...mockProps} />);
+    const hostLabel = getByText('Host');
+    expect(hostLabel).toBeInTheDocument();
+  });
+
+
+  it('renders correct drawer header content', () => {
+    const { getByText } = render(<AboutDrawer {...mockProps} />);
+    expect(getByText('Chat information')).toBeInTheDocument();
+  });
+
+  it('renders correct image source URLs for member and invited users', () => {
+    const { getAllByRole } = render(<AboutDrawer {...mockProps} />);
+    const images = getAllByRole('img');
+    images.forEach(image => {
+      expect(image.src).toMatch(/https:\/\/bit\.ly\/dan-abramov/);
+    });
+  });
+
+  it('calls onClose when close button is clicked', () => {
+    const { getByLabelText } = render(<AboutDrawer {...mockProps} />);
+    const closeButton = getByLabelText('Close');
+    fireEvent.click(closeButton);
+    expect(mockProps.onClose).toHaveBeenCalled();
+  });
+
 });
