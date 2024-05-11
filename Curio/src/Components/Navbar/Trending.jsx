@@ -6,6 +6,15 @@ import { Avatar } from '@chakra-ui/react';
 import cover from "../../assets/cover.png";
 
 
+/**
+ * Renders a trending card component.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.title - The title of the trending post.
+ * @param {string} props.description - The description of the trending post.
+ * @returns {JSX.Element} The rendered Trending component.
+ */
 function Trending(props) {
     const handleNavigate = () => {
     
@@ -21,7 +30,7 @@ function Trending(props) {
                 <div>
                     <h5>  {props.title} </h5>
                     <p className='trending-post-description'>{props.description}</p>
-                    <p className='trending-post-subreddit'> <Avatar size='2xs'/> <span>subreddits</span></p>
+                    <p className='trending-post-subreddit'> <Avatar data-testid="avatar"  size='2xs'/> <span>subreddits</span></p>
                 </div>
                 <div><img className="trending-img" src={cover} alt="logo"/></div>
             </CardBody>
