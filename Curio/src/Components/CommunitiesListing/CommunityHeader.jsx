@@ -98,8 +98,8 @@ function CommunityHeader( props ) {
   }
   return (
     <div className="community-header mb-3 container-lg ">
-        {banner?(<div className="mt-4 d-block"> 
-          <Image src={banner}  className=" subreddit-background" />
+        {banner?(<div data-testid="comm-banner" className="mt-4 d-block"> 
+          <Image  src={banner}  className=" subreddit-background" />
         </div>):(<div className="mt-4 d-block comm-background"> 
 
         </div> )}
