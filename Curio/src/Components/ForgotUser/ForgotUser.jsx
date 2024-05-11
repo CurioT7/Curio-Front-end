@@ -3,6 +3,14 @@ import '../Login/Login.css';
 import { verifyUsername } from '../Login/LoginEndpoints.js'; 
 import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
 
+/**
+ * Component for recovering a user's username.
+ *
+ * @param {Object} props - The component props.
+ * @param {function} props.setForgotUser - Function to set the state of ForgotUser.
+ * @param {boolean} props.ForgotUser - State indicating whether ForgotUser is active.
+ * @module The ForgotUser component.
+ */
 function ForgotUser({ setForgotUser, ForgotUser }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(''); 

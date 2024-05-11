@@ -58,6 +58,12 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 const token = localStorage.getItem('token');
 
+/**
+ * Renders the content details of a post.
+ *
+ * @param {Object} post - The post object.
+ * @module The rendered content details of the post.
+ */
 function PostContentDetails(post) {
     const { postID } = useParams();
     const [savedPosts, setSavedPosts] = useState([]);

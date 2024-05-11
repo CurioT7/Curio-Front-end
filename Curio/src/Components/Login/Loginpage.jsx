@@ -9,6 +9,13 @@ import Login from "./Login.jsx";
 
 Modal.setAppElement('#root');
 
+/**
+ * Renders the login page component.
+ *
+ * @param {Object} props - The component props.
+ *@module The rendered LoginPage component.
+ */
+
 function LoginPage(props) {
   const [forgotUser, setForgotUser] = useState(false);
   const [forgotPass, setForgotPass] = useState(false);
