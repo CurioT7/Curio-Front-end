@@ -59,7 +59,7 @@ export async function handleNotificationClick(notificationID, notifications, unr
         } else if (notification.type === "post") {
             navigate(`/post/post-details/${notification.postId}`);
         } else if (notification.type === "Comment") {
-
+            navigate(`/post/post-details/${notification.postId}`);
         } else if (notification.type === "Friend Request") {
             navigate(`/profile/${username}`);
         }
