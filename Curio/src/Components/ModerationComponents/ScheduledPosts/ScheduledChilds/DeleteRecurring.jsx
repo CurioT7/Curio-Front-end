@@ -11,6 +11,16 @@ import {
   } from '@chakra-ui/react'
   import { Button } from "@chakra-ui/react";
   import { FaTrashAlt } from "react-icons/fa";
+/**
+ * Renders a component that allows deleting a recurring scheduled post.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.isOpen - Indicates whether the delete modal is open.
+ * @param {function} props.onOpen - Callback function to open the delete modal.
+ * @param {function} props.onClose - Callback function to close the delete modal.
+ * @returns {JSX.Element} The rendered DeleteRec component.
+ */
 function DeleteRec(props){
     const { isOpen, onOpen, onClose } = useDisclosure()
 

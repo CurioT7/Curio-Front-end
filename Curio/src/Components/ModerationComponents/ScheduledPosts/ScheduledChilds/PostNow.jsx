@@ -11,6 +11,15 @@ import {
   } from '@chakra-ui/react'
   import { Button } from "@chakra-ui/react";
   import { PiPencilSimpleLineFill } from "react-icons/pi";
+/**
+ * Renders a component that allows the user to submit a scheduled post immediately.
+ *
+ * @component
+ * @example
+ * return (
+ *   <PostNow />
+ * )
+ */
 function PostNow(props){
     const { isOpen, onOpen, onClose } = useDisclosure()
     return(

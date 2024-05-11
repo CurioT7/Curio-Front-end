@@ -11,6 +11,15 @@ import {
   } from '@chakra-ui/react'
   import { Button } from "@chakra-ui/react";
   import { HiTrash } from "react-icons/hi2";
+/**
+ * Renders a component that allows the user to delete a post.
+ *
+ * @component
+ * @example
+ * return (
+ *   <Delete />
+ * )
+ */
 function Delete(props){
     const { isOpen, onOpen, onClose } = useDisclosure()
     return(

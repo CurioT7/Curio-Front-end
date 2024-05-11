@@ -13,6 +13,15 @@ import {
   import { FaPencil } from "react-icons/fa6";
   import { TiDocumentText } from "react-icons/ti";
   import DeleteRec from "./DeleteRecurring";
+/**
+ * EditRecurring component allows users to edit recurring scheduled posts.
+ *
+ * @component
+ * @example
+ * return (
+ *   <EditRecurring />
+ * )
+ */
 function EditRecurring(props){
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [timeZone,setTimeZone] = React.useState("(GMT+3:00) Africa-Cairo")
