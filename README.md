@@ -90,7 +90,7 @@ Feel free to explore and interact with CURIO's features to make the most out of 
 
 ## Acknowledgements
 
-Submitted to: Eng. Mohamed Sayed
+Submitted to: Dr. Youssef Ghatas & Eng. Mohamed Sayed
 
 All rights reserved © 2024 to Team 7, Cairo University (Class 2025)
 
