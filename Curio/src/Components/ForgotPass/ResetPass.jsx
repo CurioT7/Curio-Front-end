@@ -12,6 +12,10 @@ import { useToast, } from '@chakra-ui/react';
  *
  * @component
  * @param {Object} props - The props object containing component properties.
+ * @param {string} props.password - The user's password.
+ * @param {string} props.newPassword - The user's new password.
+ * @param {boolean} props.checked - The boolean value of the checkbox.
+ * @param {boolean} props.match - The boolean value of the password match.
  * @module The ResetPass component.
  */
 function ResetPass(props) {

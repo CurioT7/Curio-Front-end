@@ -21,6 +21,8 @@ import { useToast } from '@chakra-ui/react';
  * @param {function} props.setForgotPass - Function to update the forgotPass flag.
  * @param {boolean} props.isOpen - Flag indicating if the login form is open.
  * @param {function} props.setIsOpen - Function to update the isOpen flag.
+ * @param {string} props.username - The username of the user.
+ * @param {string} props.password -The password of the user
  *@module The rendered Login component.
  */
 

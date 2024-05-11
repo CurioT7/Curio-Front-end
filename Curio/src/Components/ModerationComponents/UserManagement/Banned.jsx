@@ -9,6 +9,13 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
  * 
  * @param {Object} props - The component props.
  * @param {string} props.communityName - The name of the community.
+ * @param {string} props.bannedUsers - The list of banned users.
+ * @param {string} props.subredditName - The name of the subreddit.
+ * @param {string} props.userToBan - The user to ban.
+ * @param {string} props.violation - The violation.
+ * @param {string} props.modNote - The mod note.
+ * @param {string} props.userMessage - The user message.
+ * @param {boolean} props.isOpen - The boolean value of the modal.
  * @module The Banned component.
  */
 function Banned({ communityName }) {

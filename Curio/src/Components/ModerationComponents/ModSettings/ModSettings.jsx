@@ -6,6 +6,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
 
+/**
+ * Renders the ModSettings component.
+ * @param {Object} props - The component props.
+ * @param {string} props.communityName - The name of the community.
+ * @param {boolean} props.ageChecked - The boolean value of the age check.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <ModSettings />
+ * )
+ * 
+ * @module ModSettings
+ */
 function ModSettings( props ) {
   const { Community } = useParams();
   const [ageCheck, setAgeCheck] = useState(false);
