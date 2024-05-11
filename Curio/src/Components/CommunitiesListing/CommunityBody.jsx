@@ -7,6 +7,12 @@ import { Button } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom'
 import { fetchDataFromBackend } from "./CommunityEndPoints";
 import { fetchNewFromBackend, fetchRisingFromBackend,fetchTopFromBackend,fetchTopTimeFromBackend,fetchSubCurioInfo} from "./CommunityEndPoints";
+/**
+ * Renders the body of the community page.
+ *
+ * @param {Object} props - The component props.
+ * @returns {JSX.Element} The rendered component.
+ */
 function CommunityBody(props) {
   const navigate = useNavigate();
 
