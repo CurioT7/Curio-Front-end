@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/accountSettings/AccountPreferences.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/accountSettings/AccountPreferences.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import "./AccountSettings.css"
+import { Flex, Spacer,Box } from '@chakra-ui/react'
+import { Select } from '@chakra-ui/react'
+import React from "react"
+import Titles from "../feedSettings/childs/Titles"
+import ChangePass from "./buttons/ChangePass"
+import EmailButton from "./buttons/EmailButton"
+import GeneratePass from "./buttons/GeneratePass"
+import { useToast, } from '@chakra-ui/react';
+import { sendUserDataToBackend,fetchUserDataFromBackend } from "../UserSetting/UserSettingsEndPoints"
+
+
+/**
+ * AccountPreferences component.
+ * 
+ * This component displays the account preferences settings, including email address, password change, gender, and location customization.
+ * It allows users to update their preferences and saves the changes to the backend.
+ * 
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.findPass - Indicates whether the user is in the password recovery flow.
+ * @param {string} props.email - The user's email address.
+ * @param {string} props.username - The user's username.
+ * @param {Function} props.onChangeEmail - The function to handle email change.
+ * @returns {JSX.Element} AccountPreferences component.
+ */
+const AccountPreferences = (props) => {   
+    const [gender, setGender] = React.useState("MAN")
+    const [locationCustomization, setIP] = React.useState("Use approximate location (based on IP)")
+    const LocationArr=["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "The Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin",  "Bosnia and Herzegovina", "Brazil","Cameroon","Canada","Chile","China","Colombia","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Egypt","Estonia","Finland","France","Georgia","Germany","Ghana","Greece","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Japan","Jordan","Kazakhstan","Kenya","Kuwait","Lebanon","Liberia","Libya","Lithuania","Luxembourg","Madagascar","Malaysia","Maldives","Mali","Malta","Mexico","Moldova","Monaco","Mongolia","Morocco","Nepal","Netherlands","New Zealand","Nigeria","Norway","Oman","Pakistan","Panama","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Saudi Arabia","Senegal","Serbia","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","Sudan","Sweden","Switzerland","Syria","Taiwan","Tanzania","Thailand","Tunisia","Turkey","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia"]
+
+    const toast = useToast()
+    function Toast(){
+        toast({
+            
+            description: "Changes Saved",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+        })
+}
+    const buttonStyle ={
+        borderRadius: "30px", padding: "10px 20px", 
+    }
+    
+    const handleGender = (event) => {
+        setGender(event.target.value);
+        sendUserDataToBackend({gender: event.target.value})
+        Toast()
+      };
+    
+    const handleIP = (event) => {
+        setIP(event.target.value);
+        sendUserDataToBackend({locationCustomization: event.target.value})
+        Toast()
+    };    
+    React.useEffect(() => {
+        async function fetchAndSetData() {
+            const data = await fetchUserDataFromBackend();
+            if (data) {
+                
+                setGender(data.gender.toUpperCase());
+                setIP(data.locationCustomization);
+            }
+           
+        }
+
+        fetchAndSetData();
+    }, []);
+
+    // Update data when gender or ip changes
+    
+    
+      return(
+        &lt;Box mb={10}>
+            {props.findPass==false &amp;&amp;  &lt;Flex mb={5} wrap='wrap'>
+                    &lt;Titles title='Email Address' description={props.email}/>
+                
+                    &lt;Spacer />
+                    &lt;Box className='account-button'>
+                    &lt;GeneratePass  isDelete={false} isGoogle={false} isEmail={true} title="Change your email address" context="To change your email address" email={props.email} username={props.username} buttonStyle={buttonStyle}/>
+                    &lt;/Box>
+                &lt;/Flex>}
+           
+           {props.findPass===true&amp;&amp; &lt;Box>
+                &lt;Flex mb={5} justifyContent='space-between'  wrap='wrap'>
+                    &lt;Titles title='Email Address' description={props.email}/>
+                
+                    &lt;Spacer />
+                    &lt;Box className='account-button'>
+                    &lt;EmailButton onChangeEmail={props.onChangeEmail}  buttonStyle={buttonStyle}/>
+                    &lt;/Box>
+                &lt;/Flex>
+
+                &lt;Flex mb={5} wrap='wrap'>
+                    &lt;Titles title='Change password' description='Password must be at least 8 characters long'/>
+                    {/* &lt;div>
+                        &lt;h3 className="headings-settings d-flex fw-500 mb-1">Change password&lt;/h3> 
+                        &lt;p className="headings-description fw-normal text-muted">Password must be at least 8 characters long&lt;/p>
+                    &lt;/div> */}
+                    &lt;Spacer />
+                    &lt;Box className='account-button'>
+                    &lt;ChangePass  buttonStyle={buttonStyle}/>
+                    &lt;/Box>
+                &lt;/Flex>
+            &lt;/Box>}
+            &lt;Flex mb={5} wrap='wrap'>
+                &lt;Titles title='Gender' description='This information may be used to improve your recommendations and ads.'/>
+                
+                &lt;Spacer />
+                &lt;Select  textAlign={[ 'left', 'center' ]} className="fw-bold account-button"  variant='unstyled' onChange={handleGender} value={gender} size='xs' width="fit-content" justifyItems='center'                       
+                >
+                    &lt;option value='MAN' >MAN&lt;/option>
+                    &lt;option value='WOMAN'  >WOMAN&lt;/option>
+                &lt;/Select>
+            &lt;/Flex>
+            &lt;Flex flexDirection='column' mb={5} wrap='wrap'>
+                &lt;Titles title='Location customization' description='Specify a location to customize your recommendations and feed. Reddit does not track your precise geolocation data.'/>
+                
+                &lt;Box display='flex' ms={10}>
+                    &lt;Select  textAlign='left' fontSize='md' fontWeight='500' style={{borderRadius: "30px"}} value={locationCustomization} onChange={handleIP}  placeholder='Use approximate location (based on IP)'  bg='Background'  variant='filled' width='fit-content'   size='sm'  >
+                        {LocationArr.map((location, index) => (
+                            &lt;option key={index} value={location}>{location}&lt;/option>
+                        ))}
+                    &lt;/Select>
+                &lt;/Box>
+
+            &lt;/Flex>
+
+        &lt;/Box>
+        
+      )
+}
+
+export default AccountPreferences;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-DisplayFriendInformation.html">DisplayFriendInformation</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetBlockedUsers.html">GetBlockedUsers</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-GetFollowersofUser.html">GetFollowersofUser</a></li><li><a href="module-HandleBlockUser.html">HandleBlockUser</a></li><li><a href="module-HandleUnblockUser.html">HandleUnblockUser</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-The%2520Banned%2520component..html">The Banned component.</a></li><li><a href="module-The%2520ForgotPass%2520component..html">The ForgotPass component.</a></li><li><a href="module-The%2520ForgotUser%2520component..html">The ForgotUser component.</a></li><li><a href="module-The%2520ResetPass%2520component..html">The ResetPass component.</a></li><li><a href="module-The%2520profile%2520page%2520component..html">The profile page component.</a></li><li><a href="module-The%2520profile%2520sidebar%2520component..html">The profile sidebar component.</a></li><li><a href="module-The%2520rendered%2520Login%2520component..html">The rendered Login component.</a></li><li><a href="module-The%2520rendered%2520LoginPage%2520component..html">The rendered LoginPage component.</a></li><li><a href="module-The%2520rendered%2520Post%2520component..html">The rendered Post component.</a></li><li><a href="module-The%2520rendered%2520Rules%2520component..html">The rendered Rules component.</a></li><li><a href="module-The%2520rendered%2520UserMessage%2520component..html">The rendered UserMessage component.</a></li><li><a href="module-The%2520rendered%2520content%2520details%2520of%2520the%2520post..html">The rendered content details of the post.</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnfollowUser.html">UnfollowUser</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li><li><a href="module-UsersProfilePage.html">UsersProfilePage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountPreferences">AccountPreferences</a></li><li><a href="global.html#ChangePass">ChangePass</a></li><li><a href="global.html#CommunityBody">CommunityBody</a></li><li><a href="global.html#CommunityHeader">CommunityHeader</a></li><li><a href="global.html#DeleteButton">DeleteButton</a></li><li><a href="global.html#Disconnect">Disconnect</a></li><li><a href="global.html#DropDown">DropDown</a></li><li><a href="global.html#Email">Email</a></li><li><a href="global.html#EmailButton">EmailButton</a></li><li><a href="global.html#GeneratePass">GeneratePass</a></li><li><a href="global.html#Google">Google</a></li><li><a href="global.html#Listing">Listing</a></li><li><a href="global.html#Titles">Titles</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat May 11 2024 19:53:28 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

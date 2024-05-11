@@ -8,6 +8,11 @@ const token = localStorage.getItem('token');
 
 
 
+/**
+ * Retrieves friend information for a given username.
+ * @param {string} username - The username of the friend.
+ * @module DisplayFriendInformation
+ */
 async function showFriendInformation(username) {
     try {
         const response = await axios.get(`${hostUrl}/api/user/${username}/about`);
@@ -17,6 +22,11 @@ async function showFriendInformation(username) {
     }
 }
 
+/**
+ * Follows a user.
+ * @param {string} friendUsername - The username of the friend to follow.
+ * @FollowUser
+ */
 async function userFollow(friendUsername) {
 
     try {
@@ -48,6 +58,11 @@ async function userFollow(friendUsername) {
     }   
 
 
+    /**
+     * Unfollows a user.
+     * @param {string} friendUsername - The username of the friend to unfollow.
+     * @module UnfollowUser
+     */
     async function userUnfollow(friendUsername) {
     try {
         await axios.patch(`${hostUrl}/api/me/friends`, {
@@ -75,6 +90,11 @@ async function userFollow(friendUsername) {
         }
     };
 
+/**
+ * Retrieves follower information for a given username.
+ * @param {string} username - The username of the follower to retrieve information for.
+ * @module GetFollowersofUser
+ */
 async function getFollower(username) {
     try {
         if (!token) {
@@ -95,6 +115,11 @@ async function getFollower(username) {
     }
 }
 
+/**
+ * Blocks a user by sending a POST request to the server.
+ * @param {string} usernameToBlock - The username of the user to block.
+ * @module HandleBlockUser
+ */
 async function userBlock(usernameToBlock) {
     try {
         const response = await axios.post(`${hostUrl}/api/User/block`, {
@@ -128,6 +153,11 @@ async function userBlock(usernameToBlock) {
     }
 
 
+/**
+ * Unblock a user by sending a request to the server.
+ * @param {string} usernameToUnblock - The username of the user to unblock.
+ * @module HandleUnblockUser
+ */
 async function userUnblock(usernameToUnblock) {
     try {
         const response = await axios.post(`${hostUrl}/api/User/unblock`, {
@@ -143,6 +173,10 @@ async function userUnblock(usernameToUnblock) {
     }
 }
 
+/**
+ * Retrieves the blocked preferences for the current user.
+ * @module GetBlockedUsers
+ */
 async function getBlocked() {
     try {
         const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {

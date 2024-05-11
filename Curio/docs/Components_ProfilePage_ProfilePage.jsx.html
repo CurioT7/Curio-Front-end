@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/ProfilePage/ProfilePage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/ProfilePage/ProfilePage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import './ProfilePage.css';
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom';
+import React, { useRef, useEffect, useState } from 'react';
+import { getUserAbout, getUserComments, getUserOverview, getUserSubmitted, getUserDownvoted, getUserUpvoted } from './ProfilePageEndpoints.js';
+import BackToTheTopButton from "../../Pages/Home/BackToTopButton.jsx";
+import axios from 'axios';
+import Post from '../Post/Post.jsx';
+import profile from "../../assets/avatar_default_6.png";
+import PostComments from '../Post/PostComments.jsx';
+import { Link } from 'react-router-dom';
+import SocialLink from '../profileSetting/Socialmodal/Socialmodal.jsx';
+import { fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints.js';
+const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
+
+
+/**
+ * Represents the profile page component.
+ * 
+ * @component
+ * @param {Object} props - The component props.
+ * @module The profile page component.
+ */
+function ProfilePage(props) {
+
+  const navigate = useNavigate();
+  const tabListRef = useRef();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [userAbout, setUserAbout] = useState({});
+  const [userComments, setUserComments] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const [upvotedPosts, setUpvotedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [savedComments, setSavedComments] = useState([]);
+  const [hiddenPosts, setHiddenPosts] = useState([]);
+  const [downvotedPosts, setDownvotedPosts] = useState([]);
+  const [upvotedComments, setUpvotedComments] = useState([]);
+  const [downvotedComments, setDownvotedComments] = useState([]);
+  const [userBio, setUserBio] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+  const [SocialLinks, setSocialLinks] = useState([]);
+  const [profileImage, setProfileImage] = useState('');
+  const [bannerImage, setBannerImage] = useState('');
+
+  const getSaved = async () => {
+    try {
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200 || response.status === 201) {
+        setSavedPosts(response.data.savedPosts);
+        setSavedComments(response.data.savedComments);
+      }
+    }
+    catch (err) {
+      toast({
+        description: "Server Error Occured.",
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }
+
+  const buttonStyle = {
+    borderRadius: "30px",
+    padding: "10px 15px",
+  };
+  const getHidden = async () => {
+    try {
+      var hostUrl = import.meta.env.VITE_SERVER_HOST;
+      const response = await axios.get(`${hostUrl}/api/hidden`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200 || response.status === 201) {
+        setHiddenPosts(response.data.hiddenPosts);
+      }
+    }
+    catch (err) {
+      toast({
+        description: "Server Error Occured.",
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }
+
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
+
+  useEffect(() => {
+    window.addEventListener('hideOrSave', () => {
+      if (localStorage.getItem('token')) {
+        getHidden();
+        getSaved();
+      }
+    });
+    if (localStorage.getItem('token')) {
+      getHidden();
+      getSaved();
+    }
+  }, [isLoggedIn]);
+
+
+
+  useEffect(() => {
+    getUserOverview(username)
+      .then(data => setUserPosts(data.userPosts))
+      .catch(error => console.error(error));
+    getPrefs();
+  }, [username]);
+
+  useEffect(() => {
+    getUserUpvoted()
+      .then(data => setUpvotedPosts(data.votedPosts))
+      .catch(error => console.error(error));
+  }, [username]);
+
+  useEffect(() => {
+    getUserDownvoted()
+      .then(data => setDownvotedPosts(data.votedPosts))
+      .catch(error => console.error(error));
+  }, [username]);
+
+  useEffect(() => {
+    getUserUpvoted()
+      .then(data => setUpvotedComments(data.votedComments))
+      .catch(error => console.error(error));
+  }, [username]);
+
+  useEffect(() => {
+    getUserDownvoted()
+      .then(data => setDownvotedComments(data.votedComments))
+      .catch(error => console.error(error));
+  }, [username]);
+
+
+  useEffect(() => {
+    getUserComments(username)
+      .then(data => setUserComments(data))
+      .catch(error => console.error(error));
+  }, [username]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const StoredUsername = localStorage.getItem('username');
+    if (!token) {
+      navigate('/login');
+    }
+    setIsLoggedIn(true);
+    setUsername(StoredUsername);
+
+    if (StoredUsername) {
+      getUserAbout(StoredUsername).then(data => setUserAbout(data));
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchUserBio = async () => {
+      const url = `${VITE_SERVER_HOST}/api/user/${username}/about`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data &amp;&amp; data.about) {
+        setUserBio(data.about);
+      }
+    };
+    fetchUserBio();
+  }, [username]);
+
+  useEffect(() => {
+    if (userAbout &amp;&amp; userAbout.profilePicture) {
+      setProfilePicture(userAbout.profilePicture);
+      setBannerImage(userAbout.banner);
+    }
+  }, [userAbout]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchUserDataFromBackend();
+        if (data) {
+          setSocialLinks(data.socialLinks ?
+            data.socialLinks.map(link => ({
+              url: link.url,
+              displayName: link.displayName,
+              platform: `fa-brands fa-${link.platform.toLowerCase()}`,
+            })) : []);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const scrollLeft = () => {
+    tabListRef.current.scrollLeft -= 100;
+  };
+
+  const scrollRight = () => {
+    tabListRef.current.scrollLeft += 100;
+  };
+
+  return (
+
+    &lt;>
+      &lt;div className="profileContainer">
+        &lt;div className="mainComponent">
+          &lt;div className="userInfo">
+            &lt;div className='profilepicture'>
+              &lt;img src={profilePicture ? profilePicture : profile} alt="profile picture" className="profileAvatar" />
+              &lt;faceplate-tracker source="profile" action="click" noun="edit_snoovatar">
+                &lt;a rpl="" aria-label="Edit profile avatar" class="
+      button-small px-[var(--rem6)]
+      button-secondary
+      icon
+      items-center justify-center
+      button inline-flex " href="http://localhost:5173/settings/profile">&lt;span class="flex items-center justify-center">
+                    &lt;span class="flex">&lt;svg rpl="" aria-hidden="true" fill="currentColor" height="16" icon-name="add-media-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                      &lt;path d="M17.376 3.032h-2.355L13.8 1.446A1.155 1.155 0 0 0 12.892 1h-5.74a1.17 1.17 0 0 0-.923.454L5.014 3.031H2.625A2.629 2.629 0 0 0 0 5.656v9.719A2.63 2.63 0 0 0 2.625 18h14.75A2.63 2.63 0 0 0 20 15.375V5.657a2.627 2.627 0 0 0-2.624-2.625Zm1.374 12.343a1.377 1.377 0 0 1-1.375 1.375H2.625a1.377 1.377 0 0 1-1.375-1.375V5.656a1.377 1.377 0 0 1 1.375-1.375h3L7.152 2.25l5.657-.041 1.6 2.072h2.971a1.375 1.375 0 0 1 1.37 1.376v9.718Zm-8.125-6H14v1.25h-3.375V14h-1.25v-3.375H6v-1.25h3.375V6h1.25v3.375Z">&lt;/path>
+                    &lt;/svg>&lt;/span>
+
+                  &lt;/span>
+                &lt;/a>
+              &lt;/faceplate-tracker>
+            &lt;/div>
+            &lt;b className='profilename'> {userAbout.displayName}&lt;/b>
+            &lt;h5 className="userName"> u/{username} &lt;/h5>
+            {/* &lt;span className='userBio'>{userBio}&lt;/span>           */}
+          &lt;/div>
+
+          &lt;div className="tableList">
+            &lt;Tabs variant='soft-rounded' colorScheme='yellow'>
+              &lt;button onClick={scrollRight}>
+                &lt;svg rpl="" fill="currentColor" height="16" icon-name="caret-right-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                  &lt;path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z">&lt;/path>
+                &lt;/svg>
+              &lt;/button>
+
+              &lt;TabList className="scrollableTabList" ref={tabListRef}>
+                &lt;Tab>Overview&lt;/Tab>
+                &lt;Tab>Posts&lt;/Tab>
+                &lt;Tab>Comments&lt;/Tab>
+                &lt;Tab>Saved&lt;/Tab>
+                &lt;Tab>Hidden&lt;/Tab>
+                &lt;Tab>Upvoted&lt;/Tab>
+                &lt;Tab>Downvoted&lt;/Tab>
+              &lt;/TabList>
+              &lt;div className='postCreate'>
+                &lt;button onClick={() => {
+                  props.setSubreddit(username)
+                  navigate('/user/CreatePost')
+                }} >+ Create a post&lt;/button>
+              &lt;/div>
+              &lt;hr style={{ width: "90%" }} />
+              &lt;TabPanels className="profilePannels">
+                &lt;TabPanel>
+                  {/* overview */}
+                  {userPosts.length === 0 &amp;&amp; userComments.length === 0 ? (
+                    &lt;p>u/{username} hasn't posted or commented yet&lt;/p>
+                  ) : (
+                    &lt;>
+                      {userPosts.map(post => {
+                        return (
+                          &lt;div className='post-card' key={post.id}>
+                            &lt;Post
+                              _id={post.id}
+                              title={post.title}
+                              body={post.body}
+                              user={post.authorName}
+                              upvotes={post.upvotes}
+                              downvotes={post.downvotes}
+                              comments={post.comments}
+                              content={post.content}
+                              media={post.media}
+                              linkedSubreddit={post.linkedSubreddit}
+                              isSpoiler={post.isSpoiler}
+                              savedPosts={savedPosts}
+                              savedComments={savedComments}
+                              hiddenPosts={hiddenPosts}
+                            />
+                          &lt;/div>
+                        );
+                      })}
+                      {userComments.map(comment => (
+                        &lt;div className='comment-card' key={comment.id}>
+                          &lt;h6>u/author    •   title&lt;/h6>
+                          &lt;div className='author'>
+                            &lt;img className="profileAvatar" src={profilePicture ? profilePicture : profile} alt="profile picture" />
+                            &lt;b>u/{comment.authorName}&lt;/b>
+                          &lt;/div>
+                          &lt;p>{comment.content}&lt;/p>
+                        &lt;/div>
+                      ))}
+                    &lt;/>
+                  )}
+                &lt;/TabPanel>
+
+                &lt;TabPanel>
+                  {userPosts.length === 0 ? (
+                    &lt;p>u/{username} hasn't posted yet&lt;/p>
+                  ) : (
+                    userPosts.map(post => (
+                      &lt;div className='post-card' key={post.id}>
+                        &lt;Post
+                          _id={post._id}
+                          title={post.title}
+                          body={post.body}
+                          user={post.authorName}
+                          upvotes={post.upvotes}
+                          downvotes={post.downvotes}
+                          comments={post.comments}
+                          content={post.content}
+                          isSpoiler={post.isSpoiler}
+                          linkedSubreddit={post.linkedSubreddit}
+                          savedPosts={savedPosts}
+                          savedComments={savedComments}
+                          hiddenPosts={hiddenPosts}
+                          media={post.media}
+                        />
+                      &lt;/div>
+                    ))
+                  )}
+                &lt;/TabPanel>
+
+                &lt;TabPanel>
+                  {userComments.length === 0 ? (
+                    &lt;p>u/{username} hasn't commented yet&lt;/p>
+                  ) : (
+                    userComments.map(comment => (
+                      &lt;div className='comment-card' key={comment.id}>
+                        &lt;h6>u/author    •   title&lt;/h6>
+                        &lt;div className='author'>
+                          &lt;img className="profileAvatar" src={profile} alt="profile picture" />
+                          &lt;b>u/{comment.authorName}&lt;/b>
+                        &lt;/div>
+                        &lt;p>{comment.content}&lt;/p>
+                      &lt;/div>
+                    ))
+
+                  )}
+                &lt;/TabPanel>
+
+                &lt;TabPanel>
+                  {(savedPosts &amp;&amp; savedPosts.length > 0 &amp;&amp; savedPosts.map((post) => (
+                    &lt;>&lt;div className='d-flex flex-column col-md-11'>&lt;Post
+                      _id={post._id}
+                      title={post.title}
+                      body={post.body}
+                      user={post.authorName}
+                      upvotes={post.upvotes}
+                      downvotes={post.downvotes}
+                      comments={post.comments}
+                      content={post.content}
+                      subReddit={post.linkedSubreddit}
+                      savedPosts={savedPosts}
+                      savedComments={savedComments}
+                      hiddenPosts={hiddenPosts}
+                      media={post.media}
+                    />
+                      &lt;hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}>&lt;/hr>
+                    &lt;/div>
+                    &lt;/>
+                  )))}
+
+                  {(savedComments &amp;&amp; savedComments.length > 0 &amp;&amp; savedComments.map((comment) => (
+                    &lt;>&lt;div className='d-flex flex-column col-md-11'>&lt;PostComments
+                      id={comment._id}
+                      key={comment._id}
+                      username={comment.authorName}
+                      commentUpvotes={comment.upvotes - comment.downvotes}
+                      comment={comment.content}
+                      savedComments={savedComments}
+                    />
+                      &lt;hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}>&lt;/hr>
+                    &lt;/div>
+                    &lt;/>
+                  )))}
+                  {(savedPosts.length === 0 &amp;&amp; savedComments.length === 0) ? &lt;p>Looks like you haven't saved anything yet&lt;/p> : null}
+                &lt;/TabPanel>
+
+                &lt;TabPanel >
+                  {(hiddenPosts &amp;&amp; hiddenPosts.length > 0 &amp;&amp; hiddenPosts.map((post) => (
+                    &lt;>&lt;div className='d-flex flex-column col-md-11'>&lt;Post
+                      _id={post._id}
+                      title={post.title}
+                      body={post.body}
+                      user={post.authorName}
+                      upvotes={post.upvotes}
+                      downvotes={post.downvotes}
+                      comments={post.comments}
+                      content={post.content}
+                      subReddit={post.linkedSubreddit}
+                      isSpoiler={post.isSpoiler}
+                      savedPosts={savedPosts}
+                      savedComments={savedComments}
+                      hiddenPosts={hiddenPosts}
+                      isInProfile={true}
+                      media={post.media}
+                      style={{ backgroundColor: "#00000000" }}
+                    />
+                      &lt;hr className='col-md-12 mb-3' style={{ backgroundColor: "#0000003F" }}>&lt;/hr>
+                    &lt;/div>
+                    &lt;/>
+                  )))}
+                  {hiddenPosts.length === 0 ? &lt;p>Looks like you haven't saved anything yet&lt;/p> : null}
+                &lt;/TabPanel>
+
+                &lt;TabPanel>
+                  {upvotedPosts.length === 0 ? (
+                    &lt;p>Looks like you haven't upvoted anything yet&lt;/p>
+                  ) : (
+                    &lt;>
+                      {upvotedPosts.map(post => (
+                        &lt;div className='post-card' key={post.id}>
+                          &lt;Post
+                            _id={post.id}
+                            title={post.title}
+                            body={post.body}
+                            user={post.authorName}
+                            upvotes={post.upvotes}
+                            downvotes={post.downvotes}
+                            comments={post.comments}
+                            content={post.content}
+                            linkedSubreddit={post.linkedSubreddit}
+                            isSpoiler={post.isSpoiler}
+                            savedPosts={savedPosts}
+                            savedComments={savedComments}
+                            hiddenPosts={hiddenPosts}
+                            media={post.media}
+                          />
+                        &lt;/div>
+                      ))}
+                      {upvotedComments.map(comment => (
+                        &lt;div className='comment-card' key={comment.id}>
+                          &lt;h6>u/{comment.authorName} • {comment.title}&lt;/h6>
+                          &lt;div className='author'>
+                            &lt;img className="profileAvatar" src={profilePicture ? profilePicture : profile} alt="profile picture" />
+                            &lt;b>u/{comment.authorName}&lt;/b>
+                          &lt;/div>
+                          &lt;p>{comment.content}&lt;/p>
+                        &lt;/div>
+                      ))}
+                    &lt;/>
+                  )}
+                &lt;/TabPanel>
+
+                &lt;TabPanel>
+                  {downvotedPosts.length === 0 ? (
+                    &lt;p>Looks like you haven't downvoted anything yet&lt;/p>
+                  ) : (
+                    &lt;>
+                      {downvotedPosts.map(post => (
+                        &lt;div className='post-card' key={post.id}>
+                          &lt;Post
+                            _id={post.id}
+                            title={post.title}
+                            body={post.body}
+                            user={post.authorName}
+                            upvotes={post.upvotes}
+                            downvotes={post.downvotes}
+                            comments={post.comments}
+                            content={post.content}
+                            linkedSubreddit={post.linkedSubreddit}
+                            isSpoiler={post.isSpoiler}
+                            savedPosts={savedPosts}
+                            savedComments={savedComments}
+                            hiddenPosts={hiddenPosts}
+                            media={post.media}
+                          />
+                        &lt;/div>
+                      ))}
+                      {downvotedComments.map(comment => (
+                        &lt;div className='comment-card' key={comment.id}>
+                          &lt;h6>u/{comment.authorName} • {comment.title}&lt;/h6>
+                          &lt;div className='author'>
+                            &lt;img className="profileAvatar" src={profilePicture ? profilePicture : profile} alt="profile picture" />
+                            &lt;b>u/{comment.authorName}&lt;/b>
+                          &lt;/div>
+                          &lt;p>{comment.content}&lt;/p>
+                        &lt;/div>
+                      ))}
+                    &lt;/>
+                  )}
+                &lt;/TabPanel>
+
+              &lt;/TabPanels>
+            &lt;/Tabs>
+          &lt;/div>
+          &lt;BackToTheTopButton style={{ left: "90%", position: 'static' }} />
+        &lt;/div>
+
+        &lt;div className="rightSideBar">
+          &lt;div className="gradient"
+            style={{
+              background: `url(${bannerImage ? bannerImage : '#33a8ff'})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}>
+            &lt;button onClick={() => navigate('/settings/profile')}>
+              &lt;svg rpl="" aria-hidden="true" fill="currentColor" height="16" icon-name="add-media-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                &lt;path d="M17.376 3.032h-2.355L13.8 1.446A1.155 1.155 0 0 0 12.892 1h-5.74a1.17 1.17 0 0 0-.923.454L5.014 3.031H2.625A2.629 2.629 0 0 0 0 5.656v9.719A2.63 2.63 0 0 0 2.625 18h14.75A2.63 2.63 0 0 0 20 15.375V5.657a2.627 2.627 0 0 0-2.624-2.625Zm1.374 12.343a1.377 1.377 0 0 1-1.375 1.375H2.625a1.377 1.377 0 0 1-1.375-1.375V5.656a1.377 1.377 0 0 1 1.375-1.375h3L7.152 2.25l5.657-.041 1.6 2.072h2.971a1.375 1.375 0 0 1 1.37 1.376v9.718Zm-8.125-6H14v1.25h-3.375V14h-1.25v-3.375H6v-1.25h3.375V6h1.25v3.375Z">&lt;/path>
+              &lt;/svg>
+            &lt;/button>
+          &lt;/div>
+          &lt;br />
+          &lt;div className='sidebarName' >
+            &lt;span className='profileName'>{userAbout.displayName}&lt;/span>
+            &lt;b className='UserBio'>{userBio}&lt;/b>
+            &lt;button className="shareButton">
+              &lt;svg rpl="" fill="currentColor" height="16" icon-name="share-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                &lt;path d="M18.942 7.058 12.8.912l-.883.883 5.079 5.08h-2.871A13.189 13.189 0 0 0 1.067 18h1.267a11.94 11.94 0 0 1 11.791-9.875h2.866l-5.079 5.08.883.883 6.147-6.146a.624.624 0 0 0 0-.884Z">&lt;/path>
+              &lt;/svg>
+              Share
+            &lt;/button>
+          &lt;/div>
+          &lt;Divider orientation='horizontal' />
+
+
+          &lt;div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', rowGap: '0.3rem', columnGap: '1rem' }}>
+            &lt;div className="profilevalue">{userAbout.postKarma || '0 '}&lt;/div>
+            &lt;div className="profilevalue">{userAbout.commentKarma || '0'}&lt;/div>
+            &lt;div className="profileItem">Post Karma&lt;/div>
+            &lt;div className="profileItem">Comment Karma&lt;/div>
+          &lt;/div>
+          &lt;br />
+          {userAbout.followersCount > 0 ? (
+            &lt;div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateRows: "repeat(2, 0.5fr)",
+                rowGap: "0.3rem",
+                columnGap: "1rem",
+              }}
+            >
+              &lt;div className="profilevalue">{userAbout.followersCount}&lt;/div>
+              &lt;div className="profilevalue">
+                {userAbout.cakeDay || "Mar 3, 2023"}{" "}
+              &lt;/div>
+              &lt;Link to={`/user/${username}/followers`} >
+                &lt;div className="profileItem">Followers&lt;/div>
+              &lt;/Link>
+              &lt;div className="profileItem">Cake day&lt;/div>
+              &lt;div className="profilevalue mt-3">
+                {userAbout.goldRecieved || "0"}
+              &lt;/div>
+              &lt;div className="profilevalue mt-3">&lt;/div>
+              &lt;div className="profileItem">Gold Received&lt;/div>
+            &lt;/div>
+          ) : (
+            &lt;div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateRows: "repeat(2, 0.5fr)",
+                rowGap: "0.3rem",
+                columnGap: "1rem",
+              }}
+            >
+              &lt;div className="profilevalue">
+                {userAbout.cakeDay || "Mar 3, 2023"}{" "}
+              &lt;/div>
+              &lt;div className="profilevalue">
+                {userAbout.goldRecieved || "0"}
+              &lt;/div>
+              &lt;div className="profileItem">Cake day&lt;/div>
+              &lt;div className="profileItem">Gold Received&lt;/div>
+            &lt;/div>
+          )}
+          &lt;Divider orientation='horizontal' />
+
+          &lt;p>Settings&lt;/p>
+          &lt;div className="profileSettings">
+            &lt;img src={profilePicture ? profilePicture : profile} alt="profile" />
+            &lt;div className="textContainer">
+              &lt;h5>Profile&lt;/h5>
+              &lt;h6>Customise your profile&lt;/h6>
+            &lt;/div>
+            &lt;button onClick={() => navigate('/settings/profile')} > Edit Profile&lt;/button>&lt;/div>
+
+          &lt;div className="profileSettings">
+            &lt;svg rpl="" fill="currentColor" height="20" icon-name="avatar-style-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+              &lt;path d="m19.683 5.252-3.87-3.92a1.128 1.128 0 0 0-.8-.332h-1.55a1.093 1.093 0 0 0-1.1.91 1.9 1.9 0 0 1-3.744 0A1.094 1.094 0 0 0 7.533 1h-1.55c-.3 0-.588.12-.8.332L1.317 5.253a1.1 1.1 0 0 0 .014 1.557l1.87 1.829a1.121 1.121 0 0 0 1.48.076l.32-.24v1.936c.344-.31.786-.49 1.25-.511V5.977L3.993 7.668l-1.68-1.646L6.036 2.25H7.42a3.156 3.156 0 0 0 6.16 0h1.383l3.723 3.772-1.7 1.668-2.236-1.749v8.138c.501.337.927.774 1.25 1.284V8.509l.338.264a1.117 1.117 0 0 0 1.436-.109l1.894-1.853a1.101 1.101 0 0 0 .015-1.559ZM13.691 20H1.31A1.325 1.325 0 0 1 0 18.663v-4.916a1.03 1.03 0 0 1 .5-.884.988.988 0 0 1 .98-.014 3 3 0 0 0 3.3-.266c.334-.342.649-.702.944-1.078a.624.624 0 0 1 .775-.163l6.75 3.5A2.945 2.945 0 0 1 15 17.584v1.079A1.325 1.325 0 0 1 13.691 20Zm-12.44-5.873v4.536c0 .054.033.087.058.087h12.382c.025 0 .06-.033.06-.087v-1.079a1.72 1.72 0 0 0-1.035-1.609l-6.349-3.29a9.24 9.24 0 0 1-.76.831 4.235 4.235 0 0 1-4.357.611Zm4.022 4.042-.9-.862 3.138-3.3.9.862-3.138 3.3Zm3.04 0-.913-.857 2.09-2.219.91.857-2.088 2.219Z">&lt;/path>
+            &lt;/svg>
+            &lt;div className="textContainer">
+              &lt;h5>Avatar&lt;/h5>
+              &lt;h6>Customise and style&lt;/h6>
+            &lt;/div>
+            &lt;button onClick={() => window.location.href = 'https://www.reddit.com/avatar'}> Style Avatar&lt;/button>&lt;/div>
+
+          &lt;div className="profileSettings">
+            &lt;svg rpl="" fill="currentColor" height="20" icon-name="mod-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+              &lt;path d="M10 20c-.101 0-.202-.014-.3-.04C8.249 19.554 1 17.277 1 12V3.187A1.122 1.122 0 0 1 1.846 2.1L9.73.108c.177-.044.363-.044.54 0L18.154 2.1A1.122 1.122 0 0 1 19 3.187V12c0 5.277-7.249 7.554-8.7 7.957A1.162 1.162 0 0 1 10 20ZM2.25 3.283V12c0 4.465 6.989 6.531 7.786 6.751.725-.22 7.714-2.286 7.714-6.751V3.283L10 1.33 2.25 3.283Z">&lt;/path>
+            &lt;/svg>
+            &lt;div className="textContainer">
+              &lt;h5>Moderation&lt;/h5>
+              &lt;h6>Moderation tools&lt;/h6>
+            &lt;/div>
+            &lt;button> Mod Settings&lt;/button>
+          &lt;/div>
+
+
+          &lt;Divider orientation='horizontal' />
+          &lt;p>Social Links&lt;/p>
+
+          &lt;div className='profileSettings'>
+            &lt;div style={{ display: 'flex', flexWrap: 'wrap', gap: "0.5em" }}>
+              &lt;SocialLink buttonStyle={buttonStyle} SocialLinks={SocialLinks} />
+            &lt;/div>
+
+          &lt;/div>
+
+        &lt;/div>
+      &lt;/div>
+    &lt;/>
+  )
+
+}
+
+export default ProfilePage;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-DisplayFriendInformation.html">DisplayFriendInformation</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetBlockedUsers.html">GetBlockedUsers</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-GetFollowersofUser.html">GetFollowersofUser</a></li><li><a href="module-HandleBlockUser.html">HandleBlockUser</a></li><li><a href="module-HandleUnblockUser.html">HandleUnblockUser</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-The%2520Banned%2520component..html">The Banned component.</a></li><li><a href="module-The%2520ForgotPass%2520component..html">The ForgotPass component.</a></li><li><a href="module-The%2520ForgotUser%2520component..html">The ForgotUser component.</a></li><li><a href="module-The%2520ResetPass%2520component..html">The ResetPass component.</a></li><li><a href="module-The%2520profile%2520page%2520component..html">The profile page component.</a></li><li><a href="module-The%2520profile%2520sidebar%2520component..html">The profile sidebar component.</a></li><li><a href="module-The%2520rendered%2520Login%2520component..html">The rendered Login component.</a></li><li><a href="module-The%2520rendered%2520LoginPage%2520component..html">The rendered LoginPage component.</a></li><li><a href="module-The%2520rendered%2520Post%2520component..html">The rendered Post component.</a></li><li><a href="module-The%2520rendered%2520Rules%2520component..html">The rendered Rules component.</a></li><li><a href="module-The%2520rendered%2520UserMessage%2520component..html">The rendered UserMessage component.</a></li><li><a href="module-The%2520rendered%2520content%2520details%2520of%2520the%2520post..html">The rendered content details of the post.</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnfollowUser.html">UnfollowUser</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li><li><a href="module-UsersProfilePage.html">UsersProfilePage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountPreferences">AccountPreferences</a></li><li><a href="global.html#ChangePass">ChangePass</a></li><li><a href="global.html#CommunityBody">CommunityBody</a></li><li><a href="global.html#CommunityHeader">CommunityHeader</a></li><li><a href="global.html#DeleteButton">DeleteButton</a></li><li><a href="global.html#Disconnect">Disconnect</a></li><li><a href="global.html#DropDown">DropDown</a></li><li><a href="global.html#Email">Email</a></li><li><a href="global.html#EmailButton">EmailButton</a></li><li><a href="global.html#GeneratePass">GeneratePass</a></li><li><a href="global.html#Google">Google</a></li><li><a href="global.html#Listing">Listing</a></li><li><a href="global.html#Titles">Titles</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat May 11 2024 19:53:28 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

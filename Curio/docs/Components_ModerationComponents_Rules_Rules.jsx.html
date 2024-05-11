@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/ModerationComponents/Rules/Rules.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/ModerationComponents/Rules/Rules.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import Header from "../../../Pages/Moderation/header";
+import ModSidebar from "../../../Pages/Moderation/ModerationSidebar/ModSidebar";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Tabs, TabList, TabPanels, Tab, TabPanel, Divider } from '@chakra-ui/react'
+import'./Rules.css'
+const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
+
+
+/**
+ * Renders the Rules component.
+ *
+ * @param {Object} props - The component props.
+ *@module The rendered Rules component.
+ */
+function Rules( props ) {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [subredditName, setSubredditName] = useState(props.subredditName);
+  const [rule, setRule] = useState('');
+  const [rules, setRules] = useState([]);
+  const [appliesTo, setAppliesTo] = useState('');
+  const [reportReason, setReportReason] = useState('');
+  const [description, setDescription] = useState('');
+  const { Community } = useParams();
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+  useEffect(() => {
+    setSubredditName(props.subredditName);
+  }, [props.subredditName]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+    props.hideSidebar();
+    return () => {
+      props.showSidebar();
+    };
+  }, []);
+
+
+
+const addRule = async (subredditName,type,title,reasonMessage) => {
+    const url = `${VITE_SERVER_HOST}/api/moderator/rules`;
+    const token = localStorage.getItem('token');
+
+    const body = {
+  subredditName, 
+  type, 
+  info: { 
+    title, 
+    reasonMessage, 
+  }
+};
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+};
+const getRule = async (subredditName, type) => {
+    const url = `${VITE_SERVER_HOST}/api/moderator/info/${subredditName}/${type}`;
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+};
+
+// useEffect(() => {
+//   // Call getRule inside the useEffect hook
+//   const fetchRules = async () => {
+//     const rulesResponse = await getRule(subredditName, 'rule'); // replace 'rule' with the actual type
+//     setRules(rulesResponse.rules);
+//   };
+
+//   fetchRules();
+// }, [subredditName]);
+
+
+  return (
+    &lt;div style={{marginTop:"4rem"}}>
+    &lt;Header />
+    &lt;ModSidebar communityName={Community}/>
+    &lt;div style={{marginLeft: "17rem" }}>
+      &lt;h6>Rules and Removal Reasons&lt;/h6>
+      &lt;br />
+      &lt;div className="RuleTabs">
+        &lt;Tabs variant='soft-rounded'colorScheme='gray'>
+            &lt;TabList>
+            &lt;Tab>
+    Rules
+    {isOpen &amp;&amp; (
+        &lt;Modal isOpen={isOpen} onClose={closeModal}>
+            &lt;ModalOverlay />
+            &lt;ModalContent>
+                &lt;ModalHeader>Add Rule&lt;/ModalHeader>
+                &lt;ModalCloseButton />
+                &lt;ModalBody>
+                    &lt;p className="inputTitle">Rule&lt;/p>
+                    &lt;input 
+                      type="text" 
+                      placeholder="Rule displayed (e.g. No photos)"  
+                      className="ruleinput"
+                      value={rule}
+                      onChange={(e) => setRule(e.target.value)}
+                    />
+                    &lt;div className="radiobtn">
+                  &lt;p className="inputTitle">Applies to&lt;/p>
+                   &lt;label>
+                  &lt;input type="radio" name="choice" value="post_only" />
+                  Posts Only
+              &lt;/label>
+              &lt;br />
+              &lt;label>
+                  &lt;input type="radio" name="choice" value="comment_only" />
+                  Comments Only
+              &lt;/label>
+              &lt;br />
+              &lt;label>
+                  &lt;input type="radio" name="choice" value="post_and_comment" />
+                  Posts &amp; Comments
+              &lt;/label>
+              &lt;/div>
+              &lt;div>
+              &lt;p className="inputTitle">Report Reason&lt;/p>
+              &lt;b className="ruletitle">Defaults to rules name if left blank&lt;/b>
+              &lt;br />
+              &lt;/div>
+              &lt;input 
+                type="text"
+                className="ruleinput"
+                placeholder="Reason rule is broken (e.g. This is a photo)"
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+              />
+
+               &lt;p className="inputTitle">Full Description&lt;/p>
+               &lt;input 
+                  type="text" 
+                  className="describetext"
+                  placeholder="Enter the full decription of the rule."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+                &lt;/ModalBody>
+                &lt;ModalFooter>
+                    &lt;button onClick={closeModal} className="buttonrule">Close&lt;/button>
+                    &lt;button className="BanUserBtn" onClick={() => addRule(Community, rule, reportReason, description)}>Add New Rule&lt;/button>
+                &lt;/ModalFooter>
+            &lt;/ModalContent>
+        &lt;/Modal>
+    )}
+&lt;/Tab>
+                &lt;Tab>
+                    Removal reasons
+                &lt;/Tab>
+            &lt;/TabList>
+            &lt;TabPanels>
+               &lt;TabPanel>
+               &lt;div className="d-flex justify-content-end me-5 ">
+               &lt;button className="BanUserBtn" onClick={openModal} >Add Rule&lt;/button>
+
+            &lt;button className="buttonrule">
+                Reorder Rules
+            &lt;/button>
+            &lt;/div>
+            &lt;div className="rulesnote"> These are rules that visitors must follow to participate. They can be used as reasons to report or ban posts, comments, and users. Communities can have a maximum of 15 rules.&lt;/div>
+{/* 
+           &lt;Rules rules={rulesResponse.rules} /> */}
+            
+               &lt;/TabPanel>
+               &lt;TabPanel>
+                hii
+               &lt;/TabPanel>
+            &lt;/TabPanels>
+        &lt;/Tabs>
+      &lt;/div>
+        
+      &lt;/div>
+      &lt;/div>
+  );
+}
+
+export default Rules;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-DisplayFriendInformation.html">DisplayFriendInformation</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetBlockedUsers.html">GetBlockedUsers</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-GetFollowersofUser.html">GetFollowersofUser</a></li><li><a href="module-HandleBlockUser.html">HandleBlockUser</a></li><li><a href="module-HandleUnblockUser.html">HandleUnblockUser</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-The%2520Banned%2520component..html">The Banned component.</a></li><li><a href="module-The%2520ForgotPass%2520component..html">The ForgotPass component.</a></li><li><a href="module-The%2520ForgotUser%2520component..html">The ForgotUser component.</a></li><li><a href="module-The%2520ResetPass%2520component..html">The ResetPass component.</a></li><li><a href="module-The%2520profile%2520page%2520component..html">The profile page component.</a></li><li><a href="module-The%2520profile%2520sidebar%2520component..html">The profile sidebar component.</a></li><li><a href="module-The%2520rendered%2520Login%2520component..html">The rendered Login component.</a></li><li><a href="module-The%2520rendered%2520LoginPage%2520component..html">The rendered LoginPage component.</a></li><li><a href="module-The%2520rendered%2520Post%2520component..html">The rendered Post component.</a></li><li><a href="module-The%2520rendered%2520Rules%2520component..html">The rendered Rules component.</a></li><li><a href="module-The%2520rendered%2520UserMessage%2520component..html">The rendered UserMessage component.</a></li><li><a href="module-The%2520rendered%2520content%2520details%2520of%2520the%2520post..html">The rendered content details of the post.</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnfollowUser.html">UnfollowUser</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li><li><a href="module-UsersProfilePage.html">UsersProfilePage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountPreferences">AccountPreferences</a></li><li><a href="global.html#ChangePass">ChangePass</a></li><li><a href="global.html#CommunityBody">CommunityBody</a></li><li><a href="global.html#CommunityHeader">CommunityHeader</a></li><li><a href="global.html#DeleteButton">DeleteButton</a></li><li><a href="global.html#Disconnect">Disconnect</a></li><li><a href="global.html#DropDown">DropDown</a></li><li><a href="global.html#Email">Email</a></li><li><a href="global.html#EmailButton">EmailButton</a></li><li><a href="global.html#GeneratePass">GeneratePass</a></li><li><a href="global.html#Google">Google</a></li><li><a href="global.html#Listing">Listing</a></li><li><a href="global.html#Titles">Titles</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat May 11 2024 19:53:28 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

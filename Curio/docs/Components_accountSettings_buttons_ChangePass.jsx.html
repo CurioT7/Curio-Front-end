@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/accountSettings/buttons/ChangePass.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/accountSettings/buttons/ChangePass.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Button,Switch, Box, Container, Flex} from '@chakra-ui/react'
+import React from "react"
+import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
+import { Input,Avatar } from "@chakra-ui/react";
+import Titles from '../../feedSettings/childs/Titles';
+import './formstyle.css'
+import PasswordErrorMessage from './PasswordErrorMessage';
+import { useToast, } from '@chakra-ui/react';
+import axios from 'axios';
+import logo from '../../../assets/Curio_logo.png'
+/**
+ * Renders a component for changing the user's password.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.buttonStyle - The style object for the button.
+ * @returns {JSX.Element} The ChangePass component.
+ */
+function ChangePass(props){
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const toast = useToast()
+    function Toast(){
+        toast({
+            
+            description: "Password Changed Successfully, you will be redirected",
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          })
+    }
+    
+    //   use states
+
+    const [oldPassword,setOldPass]=React.useState({
+        value: "",
+        isTouched: false,
+        isCorrect: true,
+      })
+    const [password,setNewPass]=React.useState({
+        value: "",
+        isTouched: false,
+        isCorrect: true,
+      })
+    const [confirmPass,setConfirmPass]=React.useState({
+        value: "",
+        isTouched: false,
+      })
+    const [logOut,setLogOut]=React.useState(false)
+
+    const [errorMessage, setErrorMessage] = React.useState("");
+    
+    function handleOldPass(e){
+        setOldPass({...oldPassword,value: e.target.value})
+    }
+    function handleNewPass(e){
+        setNewPass({...password,value: e.target.value})
+    }
+    function handleConfirmPass(e){
+        setConfirmPass({...confirmPass,value: e.target.value})
+    }
+    function handleOldPassBlur(){
+        setOldPass({...oldPassword,isTouched:true})
+        if(oldPassword.value.length&lt;1){
+            setOldPass({...oldPassword,isCorrect: false})
+        }
+    }
+    function handleNewPassBlur(){
+        setNewPass({...password,isTouched:true})
+        if(password.value.length&lt;8){
+            setNewPass({...password,isCorrect: false})
+        }
+    }
+    function handleConfirmPassBlur(){
+        setConfirmPass({...confirmPass,isTouched: true})
+    }
+    function handleLogOut(){
+        setLogOut(!logOut)
+    }
+    async function sendNewPasswordToBackend() {
+        const serverHost = import.meta.env.VITE_SERVER_HOST;
+        try {
+            const response = await axios.patch(`${serverHost}/api/auth/change_password`, {
+                oldPassword: oldPassword.value,
+                password: password.value
+            }, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            
+            // If the response is successful, set isCorrect for both to be true
+            setOldPass({...oldPassword, isCorrect: true});
+            setNewPass({...password, isCorrect: true});
+            Toast();
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+            clearForm();
+            return response;
+        } catch (error) {
+            console.error('Error sending new password to backend:', error);
+            // Use a switch statement to handle different error responses
+            switch (error.response.status) {
+                case 400:
+                    if (error.response.data.message === "Old password is incorrect") {
+                        setOldPass({...oldPassword, isCorrect: false});
+                        setNewPass({...password, isCorrect: true});
+                        setErrorMessage(" incorrect password");
+                        
+                    } else if (error.response.data.message === "Password doesn't meet the requirements") {
+                        setNewPass({...password, isCorrect: false});
+                        setOldPass({...oldPassword, isCorrect: true});
+                        setErrorMessage("Enter Valid Password");
+                       
+                    }
+                    break;
+                case 404:
+                    // Handle 404 error here
+                    break;
+                default:
+                    // Handle other errors here
+                    break;
+            }
+        }
+    }
+    
+    //API call--------------------------------//
+    async function handleSubmit(e){
+        e.preventDefault();
+        await sendNewPasswordToBackend()
+        
+    }
+
+    function clearForm(){
+        setOldPass({
+            value:"",
+            isTouched: false,
+        })
+        setNewPass({
+            value:"",
+            isTouched: false,
+        })
+        setConfirmPass({
+            value:"",
+            isTouched: false,
+        })
+        setLogOut(false)
+    }
+    
+    return(
+        &lt;Box>
+                &lt;Button onClick={onOpen} style={props.buttonStyle} colorScheme='blue' variant='outline'>Change&lt;/Button>
+
+                &lt;Modal  size='3xl' isOpen={isOpen} onClose={onClose}>
+                    &lt;ModalOverlay />
+                        &lt;ModalContent>
+                            
+                            &lt;ModalCloseButton />
+                            
+                            &lt;ModalBody padding={0} className='row' >
+                                &lt;div className='col-2 bg-secondary left-img-changepass'>
+
+                                &lt;/div>
+                                &lt;Container mt={10} mb={10} ms={10}>
+                                    &lt;form onSubmit={handleSubmit}>
+                                        &lt;Box display='flex' paddingBottom={10} className='col-8' flexDirection='column'>
+                                        &lt;Avatar size='lg' src={logo} mb={2}/>
+
+                                        &lt;h3 className="headings-settings fs-5 d-flex fw-500 mb-3">Update your password&lt;/h3> 
+
+                                        &lt;Input isInvalid={!oldPassword.isCorrect} type='password' onBlur={handleOldPassBlur} value={oldPassword.value} onChange={handleOldPass} placeholder='OLD PASSWORD' mb={5} />
+                                        {oldPassword.isTouched&amp;&amp;oldPassword.value&lt;1 ?(&lt;PasswordErrorMessage text="This field is required"/>): null }
+                                        {oldPassword.isCorrect==false &amp;&amp; errorMessage &amp;&amp;&lt;PasswordErrorMessage text={errorMessage} />}
+
+                                        &lt;Input isInvalid={!password.isCorrect} type='password' onBlur={handleNewPassBlur} value={password.value} onChange={handleNewPass} placeholder='NEW PASSWORD' mb={5} />
+                                        {password.isTouched&amp;&amp;password.value.length&lt;8 ?(&lt;PasswordErrorMessage text="Password should have at least 8 characters"/>): null }
+                                        {password.isCorrect==false &amp;&amp; errorMessage &amp;&amp; &lt;PasswordErrorMessage text={errorMessage} />}
+                                        
+                                        &lt;Input isInvalid={password.value != confirmPass.value} type='password' onBlur={handleConfirmPassBlur}  value={confirmPass.value} onChange={handleConfirmPass} placeholder='CONFRIM NEW PASSWORD' mb={5} />
+                                        {confirmPass.isTouched&amp;&amp;password.value!=confirmPass.value ?(&lt;PasswordErrorMessage text="Password must match"/>): null }
+
+                                        
+                                        &lt;Button width='10vw' colorScheme='blue' style={props.buttonStyle} type='submit'>Save&lt;/Button>
+                                        &lt;/Box>
+                                    &lt;/form>
+                                &lt;/Container>
+                            &lt;/ModalBody>
+
+                    
+                    &lt;/ModalContent>
+                &lt;/Modal>
+                &lt;/Box>
+    )
+}
+
+export default ChangePass;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-DisplayFriendInformation.html">DisplayFriendInformation</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetBlockedUsers.html">GetBlockedUsers</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-GetFollowersofUser.html">GetFollowersofUser</a></li><li><a href="module-HandleBlockUser.html">HandleBlockUser</a></li><li><a href="module-HandleUnblockUser.html">HandleUnblockUser</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-The%2520Banned%2520component..html">The Banned component.</a></li><li><a href="module-The%2520ForgotPass%2520component..html">The ForgotPass component.</a></li><li><a href="module-The%2520ForgotUser%2520component..html">The ForgotUser component.</a></li><li><a href="module-The%2520ResetPass%2520component..html">The ResetPass component.</a></li><li><a href="module-The%2520profile%2520page%2520component..html">The profile page component.</a></li><li><a href="module-The%2520profile%2520sidebar%2520component..html">The profile sidebar component.</a></li><li><a href="module-The%2520rendered%2520Login%2520component..html">The rendered Login component.</a></li><li><a href="module-The%2520rendered%2520LoginPage%2520component..html">The rendered LoginPage component.</a></li><li><a href="module-The%2520rendered%2520Post%2520component..html">The rendered Post component.</a></li><li><a href="module-The%2520rendered%2520Rules%2520component..html">The rendered Rules component.</a></li><li><a href="module-The%2520rendered%2520UserMessage%2520component..html">The rendered UserMessage component.</a></li><li><a href="module-The%2520rendered%2520content%2520details%2520of%2520the%2520post..html">The rendered content details of the post.</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnfollowUser.html">UnfollowUser</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li><li><a href="module-UsersProfilePage.html">UsersProfilePage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountPreferences">AccountPreferences</a></li><li><a href="global.html#ChangePass">ChangePass</a></li><li><a href="global.html#CommunityBody">CommunityBody</a></li><li><a href="global.html#CommunityHeader">CommunityHeader</a></li><li><a href="global.html#DeleteButton">DeleteButton</a></li><li><a href="global.html#Disconnect">Disconnect</a></li><li><a href="global.html#DropDown">DropDown</a></li><li><a href="global.html#Email">Email</a></li><li><a href="global.html#EmailButton">EmailButton</a></li><li><a href="global.html#GeneratePass">GeneratePass</a></li><li><a href="global.html#Google">Google</a></li><li><a href="global.html#Listing">Listing</a></li><li><a href="global.html#Titles">Titles</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat May 11 2024 19:53:28 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

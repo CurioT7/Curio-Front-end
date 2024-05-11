@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/FriendInformation/ShowFriendInformation.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/FriendInformation/ShowFriendInformation.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useState, useEffect, useRef } from "react";
+import './ShowFriendInformation.css';
+import Minus from "../../styles/icons/Minus";
+import PlusIcon from "../../styles/icons/PlusIcon";
+import Chat from "../../styles/icons/Chat";
+import Ellipsis from "../../styles/icons/Elippsis";
+import { Dropdown, Toast } from "react-bootstrap";
+import ShareIcon from "../../styles/icons/Share";
+import ReportIcon from "../../styles/icons/Report";
+import MessageIcon from "../../styles/icons/SendMessage";
+import BlockIcon from "../../styles/icons/Block";
+import ReportPopup from "../ModalPages/ModalPages";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import {userBlock , userUnblock, userFollow, userUnfollow, getFollower, getBlocked} from "./ShowFriendInformationEndpoints.js";
+import Block from "../../styles/icons/Block";
+import DownArrow from "../../styles/icons/DownArrow";
+import Post from "../Post/Post";
+import { useNavigate } from "react-router-dom";
+import { useToast } from '@chakra-ui/react';
+import redditPic from "../../styles/icons/hmm-snoo.png";
+import PostComments from "../Post/PostComments.jsx";
+
+const hostUrl = import.meta.env.VITE_SERVER_HOST;
+
+
+
+/**
+ * Component for displaying friend information.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @module UsersProfilePage
+ */
+function ShowFriendInformation(props) {
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+    const [isFollowing, setIsFollowing] = useState(false);
+    // const [blockedUsers, setBlockedUsers] = useState([]);
+    const [showReportMenu, setShowReportMenu] = useState(false);
+    const [showSortings, setShowSortings] = useState(false);
+    const [sortingState, setSortingState] = useState(1);
+    const [userPosts, setUserPosts] = useState([]);
+    const [userComments, setUserComments] = useState([]);
+    const [overviewState, setOverviewState] = useState(0);
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [hiddenPosts, setHiddenPosts] = useState([]);
+    const [savedComments, setSavedComments] = useState([]);
+    const [didVote, setDidVote] = useState(false);
+
+
+    const token = localStorage.getItem('token');
+    const toastError = useToast();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current &amp;&amp; !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // const navigate = useNavigate();
+
+    function ToastError() {
+        toastError({
+            description: "You can't block somebody again within 24 hours of blocking them",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
+    useEffect(() => {
+        const myUsername = localStorage.getItem('username');
+        if(props.username === myUsername){
+            setIsFollowing(true);
+            navigate(`/profile/${myUsername}`);
+        }
+    }, []);
+
+    const toastsuccess = useToast()
+    function ToastSuccess(description) {
+        toastsuccess({
+            description: description,
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+        });
+    }
+
+    const getUserOverview = async () => {
+        try{
+            const hostUrl = import.meta.env.VITE_SERVER_HOST;
+            const response = await axios.get(`${hostUrl}/api/user/${props.username}/overview`);
+            if (response.status === 200 || response.status === 201) {
+                setUserPosts(response.data.userPosts);
+                setUserComments(response.data.userComments);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }   
+
+
+    const handleEllipsisClick = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const handleSortingsClick = () => {
+        setShowSortings(!showSortings);
+    };
+
+    const handleReportClick = () => {
+        if (!token) {
+         navigate('/login');
+        setShowReportMenu(false);
+        }
+        else
+        setShowReportMenu(true);
+    };
+
+    const getSaved = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setSavedPosts(response.data.savedPosts);
+            setSavedComments(response.data.savedComments);  
+        }
+      }
+      catch(err){
+        console.error(err);
+      }
+    }
+
+    const getHidden = async () => {
+      try{
+        var hostUrl = import.meta.env.VITE_SERVER_HOST;
+        const response = await axios.get(`${hostUrl}/api/hidden`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.status === 200 || response.status === 201){
+          setHiddenPosts(response.data.hiddenPosts);
+        }
+      }
+      catch(err){
+          console.error(err);
+      }
+    }
+
+    const handleReportPopupClose = () => {
+        setShowReportMenu(false);
+    };
+
+    useEffect(() => {
+        handleGetFollower(props.username);
+        handleGetBlocked(props.username);
+        getBlocked(props.username);
+        getUserOverview();
+        if (localStorage.getItem('token')) {
+            getSaved();
+            getHidden();
+        }
+    }, [props.username]);
+
+
+    async function handleGetFollower(username) {
+        const result = await getFollower(username);
+        if (result) {
+            setIsFollowing(true);
+        } else {
+            console.error('Error occurred in getFollower');
+        }
+    }
+    
+    
+
+    const handleFollowToggle = async () => {
+        if (!token) {
+            navigate('/login');
+        }
+        else {
+            if (!isFollowing) {
+                const result = await userFollow(props.username);
+                if(result === 200){
+                    setIsFollowing(true);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+                else{
+                    ToastError("Something is wrong, please try again later.");
+                }
+            } else {
+                const result = await userUnfollow(props.username);
+                if(result){
+                    setIsFollowing(false);
+                }
+                else if(result === 500){
+                    ToastError("An unexpected error occurred on the server. Please try again later.");
+                }
+                else if(result === 404){
+                    ToastError("User is not found");
+                }
+                else if(result === 401){
+                    ToastError("You are not authorized to perform this action");
+                }
+            }
+        }
+    }
+    
+
+    async function handleGetBlocked(username) {
+        try {
+            if (!token) {
+                console.error('Token not found');
+                return;
+            }
+    
+            const response = await getBlocked();
+            if (response.data.viewBlockedPeople.some((blockedUser) => blockedUser.blockedUsername === username)) {
+                props.isUserBlocked();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+      const handleUserBlock = async (username) => {
+        if (!token) {
+            navigate('/login');
+        } else {
+            const result = await userBlock(username);
+            if(result === 200){
+                props.handleBlockPage();
+                ToastSuccess('User Blocked Successfully');
+            }
+            if (result === 403) {
+                ToastError("You can't block somebody again within 24 hours of unblocking them");
+            }
+            else if(result === 500){
+                ToastError("An unexpected error occurred on the server. Please try again later.");
+            }
+            else if(result === 404){
+                ToastError("User is not found");
+            }
+            else if(result === 401){
+                ToastError("You are not authorized to perform this action");
+            }
+        }
+    }
+
+    const handleUserUnblock = async (username) => {
+        try {
+            const result = await userUnblock(username);
+            if(result){
+                props.handleUnblock();
+                ToastSuccess('User unblocked successfully');
+            }
+            else if(result === 500){
+                ToastError('An unexpected error occurred on the server. Please try again later.');
+            }
+            
+            }catch (error) {
+                console.error('Error:', error);
+                ToastError('Request has failed, please try again later.')
+            }
+        }
+
+    const handleJoinCommunity = async (communityName) => {
+        try{
+            const response = await axios.post(`${hostUrl}/api/friend`, {
+                    subreddit: communityName
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.status === 200 || response.status === 201){
+                    toastError({
+                        description: "You have successfully joined the subreddit",
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position: 'bottom',
+                    });
+                }
+        }
+        catch(err){
+            if (err.response.status === 400){
+                toastError({
+                    description: "You are already a member of this subreddit",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+          if (userPosts) {
+            const votes = [];
+            userPosts.forEach(post => {
+              votes[post._id] = post.details?.pollVote !== null;
+            });
+            setDidVote(votes);
+          }
+        }
+      }, [userPosts]);
+    
+
+    return (
+        &lt;>
+            &lt;div className="d-flex flex-column justify-content-center mt-5 center-div">
+                &lt;div className="d-flex justify-content-start ms-0 ms-lg-5 position-relative">
+                    &lt;div className="d-flex flex-column flex-sm-row">
+                        &lt;div className="light-border me-4 mb-3">
+                            &lt;img src="https://styles.redditmedia.com/t5_2s887/styles/communityIcon_px0xl1vnj0ka1.png" alt="avatar" className="user-profile-image"/>
+                        &lt;/div>
+                        &lt;div className="d-flex flex-column align-items-md-center align-items-sm-start">
+                            &lt;h1 className="show-friend-header d-flex align-items-center mb-0">{props.friendInfo.displayName}&lt;/h1>
+                            &lt;p className="show-friend-username d-flex align-items-center me-auto">u/{props.username}&lt;/p>
+                        &lt;/div>
+                    &lt;/div>
+                    &lt;div className="d-flex friend-info position-card flex-column ms-auto position-fixed">
+                        &lt;div className="w-100 p-4 ps-3 pe-0">
+                            &lt;div className="d-flex align-items-center items-container w-100">
+                                &lt;h1 style={{fontSize: "1rem"}} className="show-friend-header">{props.friendInfo.displayName || props.username}&lt;/h1>
+                                &lt;div className="d-flex flex-row left-section w-100">
+                                    {props.isBlocked ? (
+                                        null
+                                    ) : (&lt;>
+                                        &lt;button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick}>
+                                        &lt;Ellipsis className="ellipsis-img" />
+                                    &lt;/button>
+                                    &lt;div ref={dropdownRef} className="dropdown-menu1" 
+                                        style={{ 
+                                        display: showDropdown ? 'flex' : 'none',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-start',
+                                        position: 'absolute',
+                                        top: '0',
+                                        right: '0',
+                                        backgroundColor: '#FFFFFF',
+                                        borderRadius: '10px',
+                                        boxShadow: '2px 6px 10px rgba(0, 0, 0, 0.4)',
+                                        marginTop: '4rem',
+                                        marginRight: '1rem',
+                                        padding: '10px',
+                                        width: '188px',
+                                        zIndex: '1'
+                                    }}>
+                                        &lt;ul className='drop-down-list'>
+                                            &lt;li className="drop-down-item">
+                                                    &lt;div>&lt;ShareIcon alt="share" className="interaction-icons" />&lt;/div>
+                                                    &lt;div>&lt;p className='text-text'>Share&lt;/p>&lt;/div>
+                                            &lt;/li>
+                                            &lt;li className="drop-down-item">
+                                                    &lt;div>&lt;MessageIcon alt="message" className="interaction-icons" />&lt;/div>
+                                                    &lt;div onClick={() => navigate("/message/compose")}>&lt;p className='text-text'>Send a message&lt;/p>&lt;/div>
+                                            &lt;/li>
+                                            &lt;li className="drop-down-item" onClick={() => {handleUserBlock(props.username);}}>
+                                                    &lt;div>&lt;BlockIcon alt="block" className="interaction-icons" />&lt;/div>
+                                                    &lt;div>&lt;p className='text-text'>Block account&lt;/p>&lt;/div>
+                                            &lt;/li>
+                                            &lt;li className="last-item" onClick={handleReportClick}>
+                                                &lt;div>&lt;ReportIcon alt="report" className="interaction-icons" />&lt;/div> 
+                                                    &lt;div>&lt;p className='text-text'>Report&lt;/p>&lt;/div>
+                                            &lt;/li>
+                                        &lt;/ul>   
+                                    &lt;/div>
+                                    &lt;/>
+                                    )}
+                                &lt;/div>
+                            &lt;/div>
+                        &lt;/div>
+                        &lt;ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
+                        &lt;div className="d-flex">
+                            {props.isBlocked ? (
+                                 &lt;button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {handleUserUnblock(props.username);}}>
+                                    &lt;span className="d-flex align-items-center me-1 mt-3 minus">&lt;BlockIcon />&lt;/span>
+                                    &lt;span className="d-flex align-items-center">Blocked&lt;/span>
+                                 &lt;/button> 
+                            ): (
+                                &lt;>
+                                &lt;button className={`d-flex justify-content-center align-items-center follow-button mb-3 ms-3 me-3 ${isFollowing ? 'following' : 'not-following'}`} onClick={handleFollowToggle}>
+                                    &lt;span className="d-flex align-items-center me-1 mt-3 minus">{isFollowing ? &lt;Minus /> : &lt;PlusIcon />}&lt;/span>
+                                    &lt;span className="d-flex align-items-center">{isFollowing ? 'Unfollow' : 'Follow'}&lt;/span>
+                                &lt;/button>
+                                &lt;button className="chat d-flex justify-content-center align-items-center flex-row mb-3">
+                                    &lt;span className="d-flex align-items-center me-1 mt-3 minus">&lt;Chat />&lt;/span>&lt;span className="d-flex align-items-center">Chat&lt;/span>
+                                &lt;/button>
+                                &lt;/>
+                            )}
+
+                        &lt;/div>
+                            &lt;div className="d-flex justify-content-between p-4 pb-0 pt-2 mt-0 mb-0">
+                                &lt;div className="d-flex flex-column">
+                                    &lt;p className="mb-0 stats">{props.friendInfo.postKarma}&lt;/p>
+                                    &lt;p className="secondary-subheader">Post Karma&lt;/p>
+                                &lt;/div>
+                                &lt;div className="d-flex flex-column">
+                                    &lt;p className="mb-0 stats">{props.friendInfo.commentKarma}&lt;/p>
+                                    &lt;p className="secondary-subheader">Comment Karma&lt;/p>
+                                &lt;/div>
+                                &lt;div className="d-flex flex-column">
+                                    &lt;p className="mb-0 stats">{props.friendInfo.cakeDay}&lt;/p>
+                                    &lt;p className="secondary-subheader">Cake day&lt;/p>
+                                &lt;/div>
+                            &lt;/div>
+                            &lt;div className="pe-4 ps-4 me-4 ms-4 mt-0 mb-4" style={{border: '1px solid #0000001a'}}>&lt;/div>
+                            &lt;h3 className="muted-header p-4 pt-0 mb-1">MODERATOR OF THESE COMMUNITIES&lt;/h3>
+                            &lt;div className="d-flex flex-column">
+                                {props.friendInfo.moderatedSubreddits &amp;&amp; props.friendInfo.moderatedSubreddits.map((community, index) => (
+                                    community.privacyMode !== "private" &amp;&amp;
+                                    &lt;div key={index} className="d-flex justify-content-between p-4 pt-0 pb-0">
+                                    &lt;img src={community.icon} alt="community icon" className="mod-community-image d-flex align-items-center justify-content-center mt-2 me-3" />
+                                    &lt;div className="d-flex flex-column me-auto">
+                                        &lt;p className="mod-community-name mb-0">{community.name}&lt;/p>
+                                        &lt;p className="mod-community-subscribers secondary-subheader">{community.members.length} members&lt;/p>
+                                    &lt;/div>
+                                    &lt;button onClick={() => handleJoinCommunity(community.name)} className="join-button">Join&lt;/button>
+                                    &lt;/div>           
+                                ))}
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>
+                    &lt;div className="mt-4 ms-lg-5 d-flex flex-column flex-lg-row ms-0 mb-2 align-items-start">
+                        &lt;button onClick={() => setOverviewState(0)} style={{backgroundColor: overviewState === 0 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Overview&lt;/button>
+                        &lt;button onClick={() => setOverviewState(1)} style={{backgroundColor: overviewState === 1 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Posts&lt;/button>
+                        &lt;button onClick={() => setOverviewState(2)} style={{backgroundColor: overviewState === 2 ? "#C9D7DE" : ""}} className="btn control-button me-2 p-1 p-sm-3">Comments&lt;/button>
+                    &lt;/div>
+                &lt;hr style={{backgroundColor: "#0000008F"}} className="d-flex justify-content-center col-12 col-md-7 ms-0 ms-lg-5">&lt;/hr>
+                {props.isBlocked ? (
+                &lt;div className="ms-0 ms-lg-5 mt-4 col-md-7 d-flex flex-column align-items-center">
+                    &lt;img src= {redditPic} className="blockprofileImage text-center">&lt;/img>
+                    &lt;p className="blockText">u/{props.username} hasn't posted yet&lt;/p>
+                &lt;/div>
+                ) :(
+                &lt;div className="ms-0 ms-lg-5 mt-4 col-md-7">
+                {overviewState === 0 &amp;&amp; userPosts.map((post, index) => (
+                post.type === 'poll' ? (
+                    &lt;Post
+                        pollTitle={post.title}
+                        body={post.body}
+                        pollText={post.content}
+                        user={post.authorName}
+                        _id={post._id}
+                        type={post.type}
+                        optionNames={post.options.map((option) => option.name)}
+                        votes={post.options.map((option) => option.votes)}
+                        upvotes={post.upvotes}
+                        downvotes={post.downvotes}
+                        comments={post.comments}
+                        isLocked={post.isLocked}
+                        voteLength={post.voteLength}
+                        linkedSubreddit={post.details?.subredditName}
+                        didVote={didVote[post._id]}
+                        optionSelected={post.details?.pollVote}
+                        pollEnded={post.details?.pollEnded}
+                        createdAt={post.createdAt}
+                    />
+                ) : (
+                    &lt;Post
+                        _id={post._id}
+                        title={post.title}
+                        body={post.content}
+                        user={post.authorName}
+                        upvotes={post.upvotes}
+                        downvotes={post.downvotes}
+                        comments={post.comments}
+                        content={post.content}
+                        //isMod={isMod}
+                        savedPosts={savedPosts}
+                        hiddenPosts={hiddenPosts}
+                    />
+                )
+                ))}
+                    {overviewState === 0 &amp;&amp; userComments.map((comment, index) => (
+                        &lt;PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
+                    ))}
+                        {overviewState === 0 &amp;&amp; userPosts.map((post, index) => (
+                        post.type === 'poll' ? (
+                            &lt;Post
+                                pollTitle={post.title}
+                                body={post.body}
+                                pollText={post.content}
+                                user={post.authorName}
+                                _id={post._id}
+                                type={post.type}
+                                optionNames={post.options.map((option) => option.name)}
+                                votes={post.options.map((option) => option.votes)}
+                                upvotes={post.upvotes}
+                                downvotes={post.downvotes}
+                                comments={post.comments}
+                                isLocked={post.isLocked}
+                                voteLength={post.voteLength}
+                                linkedSubreddit={post.details?.subredditName}
+                                didVote={didVote[post._id]}
+                                optionSelected={post.details?.pollVote}
+                                pollEnded={post.details?.pollEnded}
+                                createdAt={post.createdAt}
+                            />
+                        ) : (
+                            &lt;Post
+                                _id={post._id}
+                                title={post.title}
+                                body={post.content}
+                                user={post.authorName}
+                                upvotes={post.upvotes}
+                                downvotes={post.downvotes}
+                                comments={post.comments}
+                                content={post.content}
+                                //isMod={isMod}
+                                savedPosts={savedPosts}
+                                hiddenPosts={hiddenPosts}
+                            />
+                        )
+                        ))}
+                            {overviewState === 2 &amp;&amp; userComments.map((comment, index) => (
+                                &lt;PostComments key={comment._id} commentUpvotes={comment.upvotes-comment.downvotes} id={comment._id} savedComments={savedComments} username={comment.authorName} comment={comment.content} />
+                            ))}
+                &lt;/div>)}
+                &lt;/div>
+            &lt;/>
+        );
+    }
+    
+    export default ShowFriendInformation;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-DisplayFriendInformation.html">DisplayFriendInformation</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetBlockedUsers.html">GetBlockedUsers</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-GetFollowersofUser.html">GetFollowersofUser</a></li><li><a href="module-HandleBlockUser.html">HandleBlockUser</a></li><li><a href="module-HandleUnblockUser.html">HandleUnblockUser</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-The%2520Banned%2520component..html">The Banned component.</a></li><li><a href="module-The%2520ForgotPass%2520component..html">The ForgotPass component.</a></li><li><a href="module-The%2520ForgotUser%2520component..html">The ForgotUser component.</a></li><li><a href="module-The%2520ResetPass%2520component..html">The ResetPass component.</a></li><li><a href="module-The%2520profile%2520page%2520component..html">The profile page component.</a></li><li><a href="module-The%2520profile%2520sidebar%2520component..html">The profile sidebar component.</a></li><li><a href="module-The%2520rendered%2520Login%2520component..html">The rendered Login component.</a></li><li><a href="module-The%2520rendered%2520LoginPage%2520component..html">The rendered LoginPage component.</a></li><li><a href="module-The%2520rendered%2520Post%2520component..html">The rendered Post component.</a></li><li><a href="module-The%2520rendered%2520Rules%2520component..html">The rendered Rules component.</a></li><li><a href="module-The%2520rendered%2520UserMessage%2520component..html">The rendered UserMessage component.</a></li><li><a href="module-The%2520rendered%2520content%2520details%2520of%2520the%2520post..html">The rendered content details of the post.</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnfollowUser.html">UnfollowUser</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li><li><a href="module-UsersProfilePage.html">UsersProfilePage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountPreferences">AccountPreferences</a></li><li><a href="global.html#ChangePass">ChangePass</a></li><li><a href="global.html#CommunityBody">CommunityBody</a></li><li><a href="global.html#CommunityHeader">CommunityHeader</a></li><li><a href="global.html#DeleteButton">DeleteButton</a></li><li><a href="global.html#Disconnect">Disconnect</a></li><li><a href="global.html#DropDown">DropDown</a></li><li><a href="global.html#Email">Email</a></li><li><a href="global.html#EmailButton">EmailButton</a></li><li><a href="global.html#GeneratePass">GeneratePass</a></li><li><a href="global.html#Google">Google</a></li><li><a href="global.html#Listing">Listing</a></li><li><a href="global.html#Titles">Titles</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat May 11 2024 19:53:28 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

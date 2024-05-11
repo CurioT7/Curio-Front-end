@@ -26,6 +26,13 @@ const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 
 
+/**
+ * Component for displaying friend information.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @module UsersProfilePage
+ */
 function ShowFriendInformation(props) {
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
