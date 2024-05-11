@@ -3,8 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import ShowFriendInformation from '../../Components/FriendInformation/ShowFriendInformation';
 import React from 'react';
 import '@testing-library/jest-dom';
-import Post from '../../Components/Post/Post';
-import { getBlocked, getFollower, getUserOverview, userFollow, userUnfollow } from '../../Components/FriendInformation/ShowFriendInformationEndpoints';
 
 const mockData = {
   displayName: "Test User",
@@ -63,6 +61,65 @@ describe('ShowFriendInformation', () => {
     expect(unfollowButton).toBeInTheDocument();
   });
 
+  it('displays "Blocked" when the user is blocked', async () => {
+    const { getByText } = render(
+      <Router>
+        <ShowFriendInformation username="testuser" friendInfo={mockData} isBlocked={true} />
+      </Router>
+    );
+
+    const blockedText = getByText('Blocked');
+    expect(blockedText).toBeInTheDocument();
+  });
+
+  
+  it('renders moderator communities correctly', async () => {
+    const { findByText } = render(
+      <Router>
+        <ShowFriendInformation username="testuser" friendInfo={mockData} isBlocked={false} />
+      </Router>
+    );
+
+    const communityName = await findByText('Example Subreddit');
+    expect(communityName).toBeInTheDocument();
+  });
+
+  it('renders user stats correctly', async () => {
+    const { getByText } = render(
+      <Router>
+        <ShowFriendInformation username="testuser" friendInfo={mockData} isBlocked={false} />
+      </Router>
+    );
+
+    const postKarma = getByText('1234');
+    const commentKarma = getByText('5678');
+    expect(postKarma).toBeInTheDocument();
+    expect(commentKarma).toBeInTheDocument();
+  });
+
+  it('shows follow button for non-self profiles', async () => {
+    const { getByText } = render(
+      <Router>
+        <ShowFriendInformation username="testuser" friendInfo={mockData} isBlocked={false} />
+      </Router>
+    );
+
+    const followButton = getByText('Follow');
+    expect(followButton).toBeInTheDocument();
+  });
+
+  it('renders correct karma values', async () => {
+    const { getByText } = render(
+      <Router>
+        <ShowFriendInformation username="testuser" friendInfo={mockData} isBlocked={false} />
+      </Router>
+    );
+
+    const postKarma = getByText('1234');
+    const commentKarma = getByText('5678');
+    expect(postKarma).toBeInTheDocument();
+    expect(commentKarma).toBeInTheDocument();
+  });
   
 });
 
