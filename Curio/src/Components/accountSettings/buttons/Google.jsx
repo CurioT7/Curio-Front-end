@@ -7,6 +7,13 @@ import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { MdMarkEmailUnread } from "react-icons/md";
 import { useToast } from '@chakra-ui/react';
+/**
+ * Renders a button component that allows users to connect their Google account.
+ *
+ * @component
+ * @param {Object} props - The style object for the button.
+ * @returns {JSX.Element} - The rendered Google component.
+ */
 const Google = (props) =>{
     const toast = useToast()
     const { isOpen, onOpen, onClose } = useDisclosure()

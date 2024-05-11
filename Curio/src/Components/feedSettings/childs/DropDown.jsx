@@ -2,6 +2,19 @@ import './child.css'
 import Titles from './Titles';
 import { Select, Switch, Flex, Spacer, Box } from '@chakra-ui/react'
 
+/**
+ * Renders a dropdown component with sorting options and a switch for remembering settings.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isSort - Determines if the dropdown is for sorting community content.
+ * @param {boolean} props.isGlobal - Determines if the dropdown is for global content view.
+ * @param {string} props.value - The currently selected value in the dropdown.
+ * @param {Function} props.onChangeSort - The function to handle the change event of the sorting dropdown.
+ * @param {boolean} props.isChecked - Determines if the switch is checked.
+ * @param {Function} props.onChangeRemember - The function to handle the change event of the remember switch.
+ * @returns {JSX.Element} The rendered dropdown component.
+ */
 function DropDown (props){
 
     

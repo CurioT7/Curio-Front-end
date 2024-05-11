@@ -6,7 +6,14 @@ import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 
 const serverHost = import.meta.env.VITE_SERVER_HOST;
+/**
+ * Represents the Email component.
+ * This component handles email settings and preferences.
+ *
+ * @returns {JSX.Element} The Email component.
+ */
 function Email (){
+
     const toast = useToast()
     const [newFollowerEmail,setNewFollowerEmail]=React.useState(true)
     const [chatRequestEmail,setChatRequestEmail]=React.useState(true)
