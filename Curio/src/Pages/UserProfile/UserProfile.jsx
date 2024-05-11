@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FriendInformation from "../../Components/FriendInformation/ShowFriendInformation.jsx"
 import './UserProfile.css'
-import Picture from "../../styles/icons/BlockPic.png"
+// import Picture from "../../styles/icons/BlockPic.png"
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -57,7 +57,7 @@ function UserPage( props ) {
                 <div className='d-flex justify-content-center'>
                 <img src={Picture} alt='reddit figure' className='block-page-fig'/>
                 </div>
-                <h1 className='header-title'>You've blocked {username} </h1>
+                <h1 className='header-title' dataTest>You've blocked {username} </h1>
                 <p className='paragraph'>
                 Continue to view their profile or visit your settings to <Link to='/settings/privacy' className='LinkToSettings'>manage who you have blocked.</Link>
                 </p>

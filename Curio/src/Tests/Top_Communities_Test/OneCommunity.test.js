@@ -25,14 +25,6 @@ describe('Community', () => {
     picture: 'testPicture.png',
   };
 
-  test('renders without crashing', () => {
-    render(
-      <Router>
-        <Community {...mockCommunity} />
-      </Router>
-    );
-  });
-
   test('displays the community name, category, and members count', () => {
     render(
       <Router>

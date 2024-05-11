@@ -13,7 +13,8 @@ import BlockIcon from "../../styles/icons/Block";
 import ReportPopup from "../ModalPages/ModalPages";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {userBlock , userUnblock, userFollow, userUnfollow, getFollower, getBlocked} from "./ShowFriendInformationEndpoints.js";
+import {userBlock , userUnblock, userFollow, userUnfollow, getFollower, getBlocked,
+getHidden, getSaved, getUserOverview, joinCommunity} from "./ShowFriendInformationEndpoints.js";
 import Block from "../../styles/icons/Block";
 import DownArrow from "../../styles/icons/DownArrow";
 import Post from "../Post/Post";
@@ -22,7 +23,6 @@ import { useToast } from '@chakra-ui/react';
 import redditPic from "../../styles/icons/hmm-snoo.png";
 import PostComments from "../Post/PostComments.jsx";
 
-const hostUrl = import.meta.env.VITE_SERVER_HOST;
 
 
 
@@ -62,9 +62,9 @@ function ShowFriendInformation(props) {
 
     // const navigate = useNavigate();
 
-    function ToastError() {
+    function ToastError(description) {
         toastError({
-            description: "You can't block somebody again within 24 hours of blocking them",
+            description: description,
             status: 'error',
             duration: 3000,
             isClosable: true,
@@ -91,18 +91,14 @@ function ShowFriendInformation(props) {
         });
     }
 
-    const getUserOverview = async () => {
-        try{
-            const hostUrl = import.meta.env.VITE_SERVER_HOST;
-            const response = await axios.get(`${hostUrl}/api/user/${props.username}/overview`);
-            if (response.status === 200 || response.status === 201) {
-                setUserPosts(response.data.userPosts);
-                setUserComments(response.data.userComments);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+
+    const handleGetUserOverview = async(username) => {
+        const response = await getUserOverview(username);
+        if (response.status === 200 || response.status === 201) {
+            setUserPosts(response.data.userPosts);
+            setUserComments(response.data.userComments);
         }
-    }   
+    }
 
 
     const handleEllipsisClick = () => {
@@ -122,39 +118,22 @@ function ShowFriendInformation(props) {
         setShowReportMenu(true);
     };
 
-    const getSaved = async () => {
-      try{
-        var hostUrl = import.meta.env.VITE_SERVER_HOST;
-        const response = await axios.get(`${hostUrl}/api/saved_categories`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
+
+    const handleGetSaved = async() => {
+        const response = await getSaved();
         if (response.status === 200 || response.status === 201){
-          setSavedPosts(response.data.savedPosts);
+            setSavedPosts(response.data.savedPosts);
             setSavedComments(response.data.savedComments);  
         }
-      }
-      catch(err){
-        console.error(err);
-      }
     }
 
-    const getHidden = async () => {
-      try{
-        var hostUrl = import.meta.env.VITE_SERVER_HOST;
-        const response = await axios.get(`${hostUrl}/api/hidden`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
+
+
+    const handleGetHidden = async() => {
+        const response = await getHidden();
         if (response.status === 200 || response.status === 201){
-          setHiddenPosts(response.data.hiddenPosts);
+            setHiddenPosts(response.data.hiddenPosts);
         }
-      }
-      catch(err){
-          console.error(err);
-      }
     }
 
     const handleReportPopupClose = () => {
@@ -165,10 +144,10 @@ function ShowFriendInformation(props) {
         handleGetFollower(props.username);
         handleGetBlocked(props.username);
         getBlocked(props.username);
-        getUserOverview();
+        handleGetUserOverview(props.username);
         if (localStorage.getItem('token')) {
-            getSaved();
-            getHidden();
+            handleGetSaved();
+            handleGetHidden();
         }
     }, [props.username]);
 
@@ -208,7 +187,7 @@ function ShowFriendInformation(props) {
                 }
             } else {
                 const result = await userUnfollow(props.username);
-                if(result){
+                if(result === 200){
                     setIsFollowing(false);
                 }
                 else if(result === 500){
@@ -282,27 +261,20 @@ function ShowFriendInformation(props) {
             }
         }
 
+
+
     const handleJoinCommunity = async (communityName) => {
-        try{
-            const response = await axios.post(`${hostUrl}/api/friend`, {
-                    subreddit: communityName
-                },
-                {
-                    headers: {
-                        authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                if (response.status === 200 || response.status === 201){
-                    toastError({
-                        description: "You have successfully joined the subreddit",
-                        status: 'success',
-                        duration: 3000,
-                        isClosable: true,
-                        position: 'bottom',
-                    });
-                }
+        const response = await joinCommunity(communityName);
+        if(response){
+            toastError({
+                description: "You have successfully joined the subreddit",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+                position: 'bottom',
+            });
         }
-        catch(err){
+        else{
             if (err.response.status === 400){
                 toastError({
                     description: "You are already a member of this subreddit",
@@ -349,7 +321,7 @@ function ShowFriendInformation(props) {
                                     {props.isBlocked ? (
                                         null
                                     ) : (<>
-                                        <button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick}>
+                                        <button className="ellipsis-btn ms-auto" onClick={handleEllipsisClick} data-testid="ellipsis-btn">
                                         <Ellipsis className="ellipsis-img" />
                                     </button>
                                     <div ref={dropdownRef} className="dropdown-menu1" 
@@ -393,7 +365,7 @@ function ShowFriendInformation(props) {
                                 </div>
                             </div>
                         </div>
-                        <ReportPopup show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
+                        <ReportPopup data-testid="report-modal" show={showReportMenu} onHide={handleReportPopupClose} username={props.username} />
                         <div className="d-flex">
                             {props.isBlocked ? (
                                  <button className="d-flex justify-content-center align-items-center block-button mb-3 ms-3 me-3" onClick={() => {handleUserUnblock(props.username);}}>

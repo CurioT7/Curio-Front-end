@@ -1,12 +1,11 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./ShowPoll.css";
 import profilephoto from "../../assets/profilephoto.webp";
 import Card from "react-bootstrap/Card";
 import Check from "../../styles/icons/Check";
 import { Text } from '@chakra-ui/react'
 import { pollVote, getPollInfo } from "./ShowPollEndpoints";
-import { get } from "mongoose";
 import { useNavigate } from "react-router-dom";
 import { getPollTimeDifference, getDaysCountdown } from "../getTimeDifference/getTimeDifference";
 
@@ -97,7 +96,7 @@ function ShowPoll( props ) {
           <Card.Body>
           {hasVoted || props.didVote || props.pollEnded ? (
   <>
-    {props.optionNames.map((option, index) => {
+    {props.optionNames && props.optionNames.map((option, index) => {
       const voteCount = votepick === option ? props.votes[index] + 1 : props.votes[index];
       const backgroundColor = voteCount >= maxVoteNumber ? 'rgb(255, 190, 166)' : 'rgb(226, 231, 233)';
       return (
@@ -122,7 +121,7 @@ function ShowPoll( props ) {
   </>
 ) : (
               <>
-            {props.optionNames.map((option, index) => (
+            {props.optionNames && props.optionNames.map((option, index) => (
               <div style={{backgroundColor: 'transparent'}} className="ms-3" key={index}>
                 <input
                   className="voteRadio"
@@ -130,6 +129,7 @@ function ShowPoll( props ) {
                   name="vote"
                   value={option}
                   onClick={handleVote}
+                  data-testid="VotingOption"
                 />
                 <span style={{backgroundColor: 'transparent'}} className="voteText">{option}</span>
               </div>

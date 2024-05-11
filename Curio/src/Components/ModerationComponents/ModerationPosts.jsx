@@ -133,6 +133,7 @@ const handleRemovePost =  async (id, post, commName, reason) => {
               {props.upvotes-props.downvotes}
             </div>
             <div className="d-flex justify-content-center">
+              <Downvotes />
             </div>
         </div>
         <div className="col-11">

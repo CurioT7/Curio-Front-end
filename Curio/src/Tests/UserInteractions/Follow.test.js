@@ -4,7 +4,7 @@ import ShowFriendInformation from '../../Components/FriendInformation/ShowFriend
 import React from 'react';
 import '@testing-library/jest-dom';
 import Post from '../../Components/Post/Post';
-import { getFollower, userFollow, userUnfollow } from '../../Components/FriendInformation/ShowFriendInformationEndpoints';
+import { getBlocked, getFollower, getUserOverview, userFollow, userUnfollow } from '../../Components/FriendInformation/ShowFriendInformationEndpoints';
 
 const mockData = {
   displayName: "Test User",
@@ -16,15 +16,15 @@ const mockData = {
           privacyMode: "public",
           icon: "https://example.com/icon.png",
           name: "Example Subreddit",
-          members: [1, 2, 3, 4, 5] // Dummy array for members
+          members: [1, 2, 3, 4, 5]
       }
   ]
 };
 
-// jest.mock('../../Components/FriendInformation/ShowFriendInformationEndpoints.js', () => ({
-//   __esModule: true,
-//   default: jest.fn()
-// }));
+jest.mock('../../Components/Post/PostComments.jsx', () => ({
+  getFriendInfo: jest.fn().mockResolvedValue(mockData),
+}));
+
 
 jest.mock('../../Components/ModalPages/ModalPagesEndpoints.js', () => ({
   __esModule: true,
@@ -40,12 +40,15 @@ jest.mock('../../Components/FriendInformation/ShowFriendInformationEndpoints.js'
   __esModule: true,
   userFollow: jest.fn().mockResolvedValue(200),
   userUnfollow: jest.fn().mockResolvedValue(200),
-  getFollower: jest.fn().mockResolvedValue(200),
+  getFollower: jest.fn().mockResolvedValue(404),
+  getBlocked: jest.fn().mockResolvedValue(401),
+  getUserOverview: jest.fn().mockResolvedValue(200),
 }));
 
 describe('ShowFriendInformation', () => {
   it('changes follow button text to "Unfollow" when clicked', async () => {
-    userFollow.mockResolvedValue(200); // mock the API call to always resolve with 200
+    // userFollow.mockResolvedValue(200);
+    // getBlocked.mockResolvedValue(200);
 
     const { getByText, findByText } = render(
       <Router>
@@ -59,4 +62,7 @@ describe('ShowFriendInformation', () => {
     const unfollowButton = await findByText('Unfollow');
     expect(unfollowButton).toBeInTheDocument();
   });
+
+  
 });
+

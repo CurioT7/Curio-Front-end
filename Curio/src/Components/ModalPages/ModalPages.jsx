@@ -224,6 +224,7 @@ const MultiPageFormModal = (props) => {
                                         value="username"
                                         className={classes.input}
                                         onChange={handleRadioChange}
+                                        data-testid="chooseReport"
                                     />
                                     Username
                                 </div>
@@ -234,6 +235,7 @@ const MultiPageFormModal = (props) => {
                                         value="banner image"
                                         className={classes.input}
                                         onChange={handleRadioChange}
+                                        data-testid="chooseReport"
                                     />
                                     Banner image
                                 </div>
@@ -244,6 +246,7 @@ const MultiPageFormModal = (props) => {
                                         value="profile image"
                                         className={classes.input}
                                         onChange={handleRadioChange}
+                                        data-testid="chooseReport"
                                     />
                                     Avatar/profile image
                                 </div>

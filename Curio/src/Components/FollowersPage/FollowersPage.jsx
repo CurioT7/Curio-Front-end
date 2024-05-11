@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./FollowersPage.css";
 import SearchIcon from "../../styles/icons/SearchIcon.jsx";
-
+import avatar2 from "../../assets/avatar_default_6.png";
 import {
   useToast
 } from "@chakra-ui/react";
@@ -38,15 +38,15 @@ function FollowersPage(props) {
       });
   }
 
-  async function handleGetFollowers() {
-    const response = await getFollowers('asfasfasfafaf');
+  async function handleGetFollowers(follow) {
+    const response = await getFollowers(follow);
     if (response) {
       setFollowers(response.data.friendsArray);
     }
   }
 
   useEffect(() => {
-    handleGetFollowers();
+    handleGetFollowers('followers');
 
   }, []);
 
