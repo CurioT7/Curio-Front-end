@@ -89,36 +89,21 @@ function LiveChat(props) {
     setMessage(e.target.value);
   };
 
-  const handleSend = async () => {
-    if (message.trim() !== "") {
-      try {
-        if (props.chatId) {
-          let participants = chatData.chat
-            .map((chat) =>
-              chat.participants.map((participant) => participant.username)
-            )
-            .flat();
-
-          //set participants
-            // const [participants, setParticipants] = useState([]);
-          setParticipants(participants);
-          console.log("RECIEVER", participants);
-
-          await sendMessageRequest(props.chatId, message, null);
-
-          const response = await getChatwholeChat(props.chatId);
-          setChatData(response.data);
-        } else {
-          await createChatRequest(props.recipient, message);
+    const handleSend = async () => {
+        if (message.trim() !== '') {
+            try {
+                if (props.chatId) {
+                    await sendMessageRequest(props.chatId, message, null);
+                } else {
+                    await createChatRequest(props.recipient, message);
+                }
+                setMessage('');
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
         }
-        console.log("message sent", message, participants);
-        setNewMessage(message);
-        setMessage("");
-      } catch (error) {
-        console.error("Error sending message:", error);
-      }
-    }
-  };
+    };
+
 
   const handleEmojiSelect = (emoji) => {
     setMessage(message + emoji.native);
