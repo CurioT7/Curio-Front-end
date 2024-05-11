@@ -13,8 +13,27 @@ import {
   } from '@chakra-ui/react'
 
 import './Post.css'
-import { set } from "mongoose";
 
+
+/**
+ * Renders a component that allows locking and unlocking comments for a post.
+ *
+ * @component
+ * @example
+ * return (
+ *   <PostLock
+ *     id={postId}
+ *     isLocked={isPostLocked}
+ *     onChangeLock={handleLockChange}
+ *   />
+ * )
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.id - The ID of the post.
+ * @param {boolean} props.isLocked - Indicates whether the comments for the post are locked.
+ * @param {Function} props.onChangeLock - A callback function to handle changes in the lock status.
+ * @returns {JSX.Element} The rendered component.
+ */
 function PostLock(props){
 
     const [isLocked, setIsLocked] =  useState(false);
@@ -68,7 +87,7 @@ function PostLock(props){
                     variant='ghost'
                     colorScheme='gray'
                     className='moderator-icon'
-                    
+                    data-testid='lock-button'
                 ><BsShield /></Button>
             </PopoverTrigger>
             <PopoverContent margin={0} padding={0}>

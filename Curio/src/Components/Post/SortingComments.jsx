@@ -4,6 +4,15 @@ import { IoIosArrowDown } from "react-icons/io";
 import { BsRocket } from "react-icons/bs";
 import { TbArrowBigUpLines } from "react-icons/tb";
 import { LuBadge } from "react-icons/lu";
+/**
+ * Component for sorting comments.
+ *
+ * @component
+ * @example
+ * return (
+ *   <SortingComments onChangeSort={handleSortChange} />
+ * )
+ */
 function SortingComments(props){
     function Sort() {
         document.getElementById("sortComments").classList.toggle("show");
