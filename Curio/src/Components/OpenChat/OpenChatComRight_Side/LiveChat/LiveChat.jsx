@@ -1,3 +1,12 @@
+/**
+ * Function component for the live chat section.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.chatId - The ID of the chat.
+ * @param {Function} props.socket - The socket function.
+ * @param {Function} props.onNewMessage - Function to handle new messages.
+ * @module LiveChat
+ */
 import React, { useState, useRef, useEffect } from "react";
 import "./LiveChat.css";
 import profile from "../../../../assets/avatar_default_6.png";

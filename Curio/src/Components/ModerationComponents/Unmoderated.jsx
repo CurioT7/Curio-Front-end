@@ -19,6 +19,13 @@ import { Text } from '@chakra-ui/react'
 import ModerationPosts from "./ModerationPosts.jsx";
 import CleanQueue from "./CleanQueue.jsx";
 
+/**
+ * Renders the Unmoderated component.
+ * 
+ * @param {Object} props - The component props.
+ * @module ModerationUnmoderatedPage
+ */
+
 
 function Unmoderated( props ) {
   const [checked, setChecked] = useState(false);

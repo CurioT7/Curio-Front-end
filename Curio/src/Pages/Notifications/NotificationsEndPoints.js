@@ -1,3 +1,6 @@
+/**
+ * @module NotificationsEndPoints
+ */
 import axios from "axios";
 const serverHost = import.meta.env.VITE_SERVER_HOST;
 
@@ -31,7 +34,10 @@ export async function fetchNotificationsFromBackend() {
     }
 }
 
-
+/**
+ * Hides a notification.
+ * @param {object} notificationID - The ID of the notification to hide.
+ */
 export async function hideNotification(notificationID) {
     try {
         const response = await axios.post(`${serverHost}/api/notifications/hide`, notificationID, {
@@ -46,6 +52,10 @@ export async function hideNotification(notificationID) {
     }
 }
 
+/**
+ * Disables a notification.
+ * @param {object} data - Data containing information about the notification to disable.
+ */
 export async function disableNotification(data) {
     try {
         const response = await axios.post(`${serverHost}/api/notifications/settings/disable`, data, {
@@ -60,6 +70,10 @@ export async function disableNotification(data) {
     }
 }
 
+/**
+ * Enables a notification.
+ * @param {object} data - Data containing information about the notification to enable.
+ */
 export async function enableNotification(data) {
     try {
         const response = await axios.post(`${serverHost}/api/notifications/settings/enable`, data, {
@@ -74,6 +88,10 @@ export async function enableNotification(data) {
     }
 }
 
+/**
+ * Sends a request to mark a notification as read.
+ * @param {string} notificationID - The ID of the notification to mark as read.
+ */
 export async function sendReadNotifications(notificationID) {
     try {
         const response = await axios.post(

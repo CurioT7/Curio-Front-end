@@ -1,3 +1,7 @@
+/**
+ * Component representing the Notifications page.
+ * @module Notifications
+ */
 import React, { useState, useEffect } from 'react';
 import "./Notifications.css";
 import NotificationsPage from '../../Components/NotificationsPage/NotificationsPage';
@@ -20,6 +24,9 @@ function Notifications() {
     fetchAndSetData();
   }, []);
 
+  /**
+   * Fetch notifications data from the backend and set state.
+   */
   async function fetchAndSetData() {
     const data = await fetchNotificationsFromBackend();
     if (data) {

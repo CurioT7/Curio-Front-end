@@ -1,3 +1,8 @@
+/**
+ * Component for rendering advanced user settings.
+ * @param {Object} userData - User data object containing advanced settings.
+ * @module Advanced
+ */
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Button, Flex, Switch, Spacer, useToast } from "@chakra-ui/react";
 import "./Advanced.css";

@@ -4,6 +4,12 @@ import "./CommunityPage.css";
 import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 
+/**
+ * Renders a dropdown component for sorting and filtering listings.
+ *
+ * @param {Object} props - The component props.
+ * @returns {JSX.Element} The rendered component.
+ */
 function Listing(props) {
  
   
@@ -136,29 +142,29 @@ function Listing(props) {
   return (
     <div className="dropdown">
       <div>
-        <button onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
-        <div id="myDropdown" className="dropdown-content">
+        <button data-testid="list-button" onClick={List} className="dropbtn"> {listValue} <IoIosArrowDown className="arrow-icon"/></button>
+        <div data-testid="dropdown-content" id="myDropdown" className="dropdown-content">
           <p className="Sort-title">Sort By</p>
          
           {props.isCommunity &&<>{commSortArr.map((Sort)=>(
-            <Link to={`/r/${community}/${Sort}`} onClick={() => changeListValue(Sort)} className="link-sort">{Sort}</Link>
+            <Link to={`/r/${community}/${Sort}`} onClick={() => changeListValue(Sort) } data-testid={`link-sort-${Sort}`} className="link-sort">{Sort}</Link>
           ))}</> }
 
-           {props.isHome &&<>{homeSortArr.map((Sort)=>(
-            <Link to={`/${Sort}`} onClick={() => changeListValue(Sort)} className="link-sort">{Sort}</Link>
+           {true &&<>{homeSortArr.map((Sort)=>(
+            <Link to={`/${Sort}`} onClick={() => changeListValue(Sort)} data-testid={`link-sort-${Sort}`} className="link-sort">{Sort}</Link>
           ))}</> }
         </div>
       </div>
       <div>
         {listValue === "Top" && <div> 
-        <button onClick={TopBy} className="dropbtn"> {sortTop} <IoIosArrowDown className="arrow-icon"/></button>
+        <button data-testid="time-interval-button" onClick={TopBy} className="dropbtn"> {sortTop} <IoIosArrowDown className="arrow-icon"/></button>
         <div id="SortTop" className="dropdown-content ">
           <p className="Sort-title">Sort By</p>
           {props.isCommunity &&<>{topSortArr.map((Sort)=>(
-            <Link to={`/r/${community}/Top`} onClick={() => changeSortTop(Sort)} className="link-sort">{Sort}</Link>
+            <Link to={`/r/${community}/Top`} onClick={() => changeSortTop(Sort)} data-testid={`link-time-interval-${Sort}`} className="link-sort">{Sort}</Link>
           ))} </>  }
           {props.isHome &&<>{topSortArr.map((Sort)=>(
-            <Link to={`/Top`} onClick={() => changeSortTop(Sort)} className="link-sort">{Sort}</Link>
+            <Link to={`/Top`} onClick={() => changeSortTop(Sort)} data-testid={`link-time-interval-${Sort}`} className="link-sort">{Sort}</Link>
           ))} </>  }
           
           

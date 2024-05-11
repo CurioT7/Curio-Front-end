@@ -1,3 +1,14 @@
+/**
+ * Function component for scheduling a post.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setDateTime - Function to set the selected date and time.
+ * @param {Function} props.setRepeat - Function to set the repeat option.
+ * @param {Function} props.setTimeZone - Function to set the selected time zone.
+ * @param {Object} props.subreddit - Subreddit data.
+ * @module Schedule
+ */
+
 import React from "react";
 import {
     Modal,
@@ -20,6 +31,11 @@ function Schedule(props){
     const repeatArr = ["Does not repeat","Hourly","Daily","Weekly","Monthly"]
     const [repeat,setRepeat] = React.useState("Hourly")
     const [dateTime, setDateTime] = React.useState('');
+
+    /**
+     * Function to handle the change in date and time input.
+     * @param {Event} event - The input change event.
+     */
 
     const handleDateTimeChange = (event) => {
         const localDateTime = new Date(event.target.value);

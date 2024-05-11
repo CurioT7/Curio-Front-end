@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Signup/UsernameInfo.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Signup/UsernameInfo.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import BackButton from '../../styles/icons/BackButton';
+import generateRandomUsername from './GenerateUsername';
+import Shuffle from '../../styles/icons/Shuffle';
+import {checkUsernameAvailability} from './SignupEndpoints.js';
+
+/**
+ * UsernameInfo component displays a modal for user to enter username and password during signup.
+ * @component
+ * @param {object} props - The props for the UsernameInfo component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @param {string} props.enteredUsername - Initial value for the entered username.
+ * @param {string} props.enteredPassword - Initial value for the entered password.
+ * @param {Function} props.onEnteredUsername - Function to handle the entered username.
+ * @param {Function} props.onEnteredPassword - Function to handle the entered password.
+ * @param {Function} props.onContinueToGender - Function to handle the continue button click.
+ * @param {Function} props.onBack - Function to handle the back button click.
+ * @module UsernameInfo
+ * @returns {JSX.Element} UsernameInfo JSX element.
+ * @example
+ * // Example usage of UsernameInfo component:
+ * &lt;UsernameInfo
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ *   enteredUsername=""
+ *   enteredPassword=""
+ *   onEnteredUsername={(username) => setUsername(username)}
+ *   onEnteredPassword={(password) => setPassword(password)}
+ *   onContinueToGender={() => handleContinue()}
+ *   onBack={() => handleBack()}
+ * />
+ */
+
+function UsernameInfo(props) {
+
+
+  const [username, setUsername] = useState(props.enteredUsername || generateRandomUsername());
+  const [password, setPassword] = useState(props.enteredPassword || '');
+  const [isUsernameValid, setIsUsernameValid] = useState(0);
+  const [isPasswordValid, setIsPasswordValid] = useState(0);
+  const [usernameErrorMsg, setUsernameErrorMsg] = useState('');
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
+
+  const handleBackButton = () => {
+    props.onEnteredUsername(username);
+    props.onEnteredPassword(password);
+    props.onBack();
+  }
+
+  const handlePassword = (e) => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const password = e.target.value;
+    if (password === ""){
+      setPasswordErrorMsg("Please fill out this field.");
+      setIsPasswordValid(1);
+      return;
+    }
+    if (password.length &lt; 8){
+      setPasswordErrorMsg(`Please lengthen this text to 8 characters or more (you are currently using ${password.length} characters).`);
+      setIsPasswordValid(1);
+      return;
+    }
+    if (!passwordRegex.test(password)){
+      setPasswordErrorMsg("Password must contain at least one letter and one number.");
+      setIsPasswordValid(1);
+      return;
+    }
+    setPassword(password);
+    setPasswordErrorMsg("");
+    setIsPasswordValid(2);
+  }
+
+  const handleUsername = async (e) => {
+    const username = e.target.value;
+    if (username === ""){
+      setUsernameErrorMsg("Please fill out this field.");
+      setIsUsernameValid(1);
+      return;
+    }
+    if (username.length &lt; 3){
+      setUsernameErrorMsg(`Please lengthen this text to 3 characters or more (you are currently using ${username.length} characters).`);
+      setIsUsernameValid(1);
+      return;
+    }
+    const usernameAvailability = await checkUsernameAvailability(username);
+    if (usernameAvailability.status === 409){
+      setUsernameErrorMsg("That username is already taken");
+      setIsUsernameValid(1);
+      return;
+    }
+    setUsername(username);
+    setUsernameErrorMsg("Nice! Username Available");
+    setIsUsernameValid(2);
+  }
+
+  const handleShuffle = () => {
+    setUsername(generateRandomUsername());
+  }
+
+  const handleContinue = async () => {
+    if (username === ''){
+      setUsernameErrorMsg("Please fill out this field.");
+      setIsUsernameValid(1);
+    }
+    if (password === ''){
+      setPasswordErrorMsg("Please fill out this field.");
+      setIsPasswordValid(1);
+    }
+    if(username === '' || password === '' || username.length &lt; 3 || password.length &lt; 8){
+      return;
+    }
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(password)){
+      setPasswordErrorMsg("Password must contain at least one letter and one number.");
+      setIsPasswordValid(1);
+      return;
+    }
+    const usernameAvailability = await checkUsernameAvailability(username);
+    if (usernameAvailability.status === 409){
+      setUsernameErrorMsg("That username is already taken");
+      setIsUsernameValid(1);
+      return;
+    }
+    props.onEnteredUsername(username);
+    props.onEnteredPassword(password);
+    props.onContinueToGender();
+  }
+
+
+
+
+  return (
+    &lt;Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      contentClassName='signup-modal'
+    >
+      &lt;Modal.Header className='border-0 pt-3'>
+        &lt;Modal.Title id="contained-modal-title-vcenter" className='p-3'>
+          &lt;button onClick={handleBackButton} className='signup-back-button me-auto d-flex justify-content-center align-items-center'>&lt;BackButton />&lt;/button>
+        &lt;/Modal.Title>
+      &lt;/Modal.Header>
+      &lt;Modal.Body className='pt-0 d-flex flex-column'>
+        &lt;div className="pt-0" style={{paddingLeft: '80px', paddingRight: '80px'}}>
+          &lt;h1 className='signup-header'>Create your username and password&lt;/h1>
+          &lt;p className='username-alert'>
+            Reddit is anonymous, so your username is what you’ll go by here. Choose wisely—because once you get a name, you can’t change it.
+          &lt;/p>
+        &lt;/div>
+        &lt;div style={{paddingLeft: '80px', paddingRight: '80px', position: 'relative'}}>
+          &lt;div className='d-flex flex-column align-items-start mt-4' style={{position: 'relative'}}>
+            &lt;div className='d-flex flex-column position-relative w-100'>
+              &lt;input data-testid="username" value={username} onChange={(e) => setUsername(e.target.value)} onBlur={handleUsername} id="floatingInput" className='form-control signup-email-input w-100' type='text' placeholder=' ' />
+              &lt;label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Username&lt;span style={{color: '#a50016'}}>*&lt;/span>&lt;/label>
+            &lt;/div>
+              {isUsernameValid == 2 &amp;&amp; (
+                &lt;span className="tick-icon position-absolute top-50 end-0 custom-translate-username-field">
+                  &lt;svg rpl="" className="trailing-icon valid" fill="#0e8a00" height="20" icon-name="checkmark-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">&lt;path d="M7.5 15.958a1.102 1.102 0 0 1-.778-.322l-5.429-5.429 1.414-1.414L7.5 13.586 17.793 3.293l1.414 1.414L8.278 15.636a1.101 1.101 0 0 1-.778.322Z">&lt;/path>
+                  &lt;/svg>
+                &lt;/span>
+              )}
+              {isUsernameValid == 1 &amp;&amp; (
+                &lt;span className="tick-icon position-absolute top-50 end-0 py-1 custom-translate-username-field-error">
+                  &lt;svg rpl="" className="trailing-icon invalid" fill="#a50016" height="20" icon-name="error-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                    &lt;path d="M10 20a10 10 0 1 1 10-10 10.011 10.011 0 0 1-10 10Zm0-18.75A8.75 8.75 0 1 0 18.75 10 8.76 8.76 0 0 0 10 1.25Zm-.533 13.716a1.077 1.077 0 0 1-.53-.92 1.058 1.058 0 0 1 .53-.919c.16-.096.343-.146.53-.144a1.056 1.056 0 0 1 .926.527 1.045 1.045 0 0 1 0 1.069c-.096.16-.23.293-.39.387a1.03 1.03 0 0 1-.536.143 1.016 1.016 0 0 1-.53-.143Zm-.14-3.329-.192-6.613h1.73l-.192 6.613H9.327Z">
+                    &lt;/path>
+                  &lt;/svg>
+                &lt;/span>
+              )}
+              &lt;span className="tick-icon position-absolute top-50 end-0 shuffle-button" onClick={handleShuffle}>
+                &lt;svg rpl="" fill="currentColor" height="20" icon-name="rotate-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                  &lt;path d="M14.2 15.376a1 1 0 0 1 0 1.25l-2.4 2.999a1 1 0 0 1-1.112.318 1 1 0 0 1-.673-.943v-2H7.8A5.8 5.8 0 0 1 2 11.206V9.001h2v2.205a3.8 3.8 0 0 0 3.8 3.795h2.22v-2a1 1 0 0 1 1.781-.625l2.399 3ZM12.205 3.002h-2.22v-2A1 1 0 0 0 8.2.38l-2.4 3a1 1 0 0 0 0 1.25l2.4 3a1 1 0 0 0 1.116.315 1 1 0 0 0 .669-.943v-2h2.22A3.8 3.8 0 0 1 16 8.802v2.2h2v-2.2a5.8 5.8 0 0 0-5.795-5.8Z">&lt;/path>
+                &lt;/svg>
+              &lt;/span>
+          &lt;/div>
+          &lt;div className='mb-3'>
+            &lt;span className='p-2 py-2' style={{color: isUsernameValid===1 ? "#a50016" : "#0e8a00", fontSize: "0.875rem"}}>{usernameErrorMsg}&lt;/span>
+          &lt;/div>
+          &lt;div className='d-flex flex-column align-items-start mt-4' style={{position: 'relative'}}>
+            &lt;div className='d-flex flex-column position-relative w-100'>
+              &lt;input data-testid="password" className='form-control signup-email-input w-100 my-input' value={password} onChange={(e) => setPassword(e.target.value)} onBlur={handlePassword} type='password' placeholder=' ' style={{border: isPasswordValid===1 ? "2px solid #a50016" : "", paddingLeft: '20px', borderRadius: '30px'}} />
+              &lt;label htmlFor="floatingInput" className="position-absolute h-100 d-flex align-items-center ms-4 my-floating">Password&lt;span style={{color: '#a50016'}}>*&lt;/span>&lt;/label>
+            &lt;/div>
+              {isPasswordValid == 2 &amp;&amp; (
+                &lt;span className="tick-icon position-absolute top-50 end-0 custom-translate-username-modal">
+                  &lt;svg rpl="" className="trailing-icon valid" fill="#0e8a00" height="20" icon-name="checkmark-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">&lt;path d="M7.5 15.958a1.102 1.102 0 0 1-.778-.322l-5.429-5.429 1.414-1.414L7.5 13.586 17.793 3.293l1.414 1.414L8.278 15.636a1.101 1.101 0 0 1-.778.322Z">&lt;/path>
+                  &lt;/svg>
+                &lt;/span>
+              )}
+              {isPasswordValid == 1 &amp;&amp; (
+                &lt;span className="tick-icon position-absolute top-50 end-0 py-1 custom-translate-username-modal-error">
+                  &lt;svg rpl="" className="trailing-icon invalid" fill="#a50016" height="20" icon-name="error-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                    &lt;path d="M10 20a10 10 0 1 1 10-10 10.011 10.011 0 0 1-10 10Zm0-18.75A8.75 8.75 0 1 0 18.75 10 8.76 8.76 0 0 0 10 1.25Zm-.533 13.716a1.077 1.077 0 0 1-.53-.92 1.058 1.058 0 0 1 .53-.919c.16-.096.343-.146.53-.144a1.056 1.056 0 0 1 .926.527 1.045 1.045 0 0 1 0 1.069c-.096.16-.23.293-.39.387a1.03 1.03 0 0 1-.536.143 1.016 1.016 0 0 1-.53-.143Zm-.14-3.329-.192-6.613h1.73l-.192 6.613H9.327Z">
+                    &lt;/path>
+                  &lt;/svg>
+                &lt;/span>
+              )}
+          &lt;/div>
+        &lt;/div>
+          &lt;div className='mb-3' style={{paddingLeft: '80px', paddingRight: '80px'}}>
+            &lt;span className='p-2 py-2' style={{color: isPasswordValid===1 ? "#a50016" : "#0e8a00", fontSize: "0.875rem"}}>{passwordErrorMsg}&lt;/span>
+          &lt;/div>
+      &lt;/Modal.Body>
+      &lt;Modal.Footer className='border-0 pb-4 mb-4' style={{paddingLeft: '80px', paddingRight: '80px'}}>
+        &lt;Button disabled={isUsernameValid === 1 || isPasswordValid === 1} className = {(isUsernameValid===1 || isPasswordValid===1) ? "continue-button-disabled w-100" : "w-100 continue-button"} onClick={handleContinue}>Continue&lt;/Button>
+      &lt;/Modal.Footer>
+    &lt;/Modal>
+  );
+}
+
+
+
+export default UsernameInfo;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

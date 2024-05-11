@@ -4,6 +4,26 @@ import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 import BackButton from '../../styles/icons/BackButton.jsx';
 
+/**
+ * Preferences component displays a modal for the user to select their preferences during signup.
+ * @component
+ * @param {object} props - The props for the Preferences component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @param {Function} props.onBackToGender - Function to navigate back to the gender selection step.
+ * @param {Function} props.onSignup - Function to finalize signup process.
+ * @module Preferences
+ * @returns {JSX.Element} Preferences JSX element.
+ * @example
+ * // Example usage of Preferences component:
+ * <Preferences
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ *   onBackToGender={() => handleBackToGender()}
+ *   onSignup={() => handleSignup()}
+ * />
+ */
+
 function Preferences(props){
 
    const [buttonsClicked, setButtonsClicked] = useState([]);

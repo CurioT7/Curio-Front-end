@@ -4,6 +4,13 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, Modal
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
+/**
+ * Renders the Banned component.
+ * 
+ * @param {Object} props - The component props.
+ * @param {string} props.communityName - The name of the community.
+ * @module The Banned component.
+ */
 function Banned({ communityName }) {
   const [isOpen, setIsOpen] = useState(false);
   const [bannedUsers, setBannedUsers] = useState([]);
@@ -15,6 +22,7 @@ function Banned({ communityName }) {
 
 
   const openModal = () => {
+    console.log('Opening modal...');
     setIsOpen(true);
   };
 
@@ -59,7 +67,7 @@ function Banned({ communityName }) {
             karma: bannedUser.userDetails.karma,
             cakeDay: bannedUser.userDetails.cakeDay,
             socialLinks: bannedUser.userDetails.socialLinks,
-        }
+      }
     }));
 
 
@@ -70,10 +78,12 @@ useEffect(() => {
   const fetchBannedUserDetails = async () => {
       const users = await getBannedUserDetails();
       setBannedUsers(users);
+      console.log(users);
   };
 
   fetchBannedUserDetails();
 
+//   console.log(bannedUsers);
 }, [bannedUsers]);
 
 useEffect(() => {
@@ -106,7 +116,6 @@ const banUser = async (subredditName, userToBan, violation, modNote, userMessage
     }
     else 
     {
-      // close nmodal 
       closeModal();
     }
 

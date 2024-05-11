@@ -1,3 +1,9 @@
+/**
+ * Component for displaying and updating profile information.
+ * @param {Object} profileData - The profile data containing displayName and about.
+ * @param {Object} event - The event object.
+ * @module ProfileInformation
+ */
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Textarea, useToast } from '@chakra-ui/react';
 import { sendUserDataToBackend } from '../../UserSetting/UserSettingsEndPoints';
@@ -12,6 +18,9 @@ function ProfileInformation({ profileData }) {
     setAbout(profileData.about);
   }, [profileData]);
 
+  /**
+   * Displays a toast notification.
+   */
   function Toast() {
     toast({
       description: "Changes Saved",
@@ -21,14 +30,23 @@ function ProfileInformation({ profileData }) {
     })
   }
 
+  /**
+   * Handles display name change event.
+   */
   const handleDisplayNameChange = (event) => {
     setDisplayName(event.target.value);
   };
 
+  /**
+   * Handles about change event.
+   */
   const handleAboutChange = (event) => {
     setAbout(event.target.value);
   };
 
+  /**
+   * Handles enter key press event.
+   */
   const handleEnterKeyPress = async (event) => {
     if (event.key === 'Enter') {
       try {

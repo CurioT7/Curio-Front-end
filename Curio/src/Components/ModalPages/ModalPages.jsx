@@ -11,6 +11,16 @@ import { reportUser } from './ModalPagesEndpoints.js';
 
 
 
+/**
+ * MultiPageFormModal component represents a modal for submitting a multi-page form.
+ *
+ * @component
+ * @param {Object} props - The props for the MultiPageFormModal component.
+ * @param {boolean} props.show - Determines whether the modal is visible or not.
+ * @param {string} props.username - The username of the user being reported or blocked.
+ * @param {Function} props.onHide - The function to handle modal close event.
+ * @module ReportUserPopup
+ */
 const MultiPageFormModal = (props) => {
     const [step, setStep] = useState(1);
     const [selectedOption, setSelectedOption] = useState(' ');

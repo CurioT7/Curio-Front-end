@@ -1,3 +1,34 @@
+/**
+ * Socialmodal Component
+ * 
+ * A component to manage social links for user profiles.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import Socialmodal from './Socialmodal';
+ * 
+ * const MyComponent = () => {
+ *   const SocialLinks = [
+ *     { displayName: 'Twitter', url: 'https://twitter.com/', platform: 'Twitter' },
+ *     { displayName: 'Instagram', url: 'https://www.instagram.com/', platform: 'Instagram' },
+ *     // Additional social links
+ *   ];
+ * 
+ *   return (
+ *     <Socialmodal SocialLinks={SocialLinks} validate="withCancel" buttonStyle={{ color: 'red' }} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @param {Object} props - Component props
+ * @param {Array} props.SocialLinks - An array of objects representing social links with properties displayName, url, and platform
+ * @param {string} [props.validate] - Validation type for social links (optional). Possible values: 'withCancel'
+ * @param {Object} [props.buttonStyle] - CSS styles for the add social link button (optional)
+ * @module Socialmodal
+ */
+
 import React, { useState, useEffect } from "react";
 import { Button, useDisclosure } from '@chakra-ui/react';
 import "./Socialmodal.css";

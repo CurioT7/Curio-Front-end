@@ -8,6 +8,14 @@ import PasswordErrorMessage from './PasswordErrorMessage';
 import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
 import logo from '../../../assets/Curio_logo.png'
+/**
+ * Renders a component for changing the user's password.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.buttonStyle - The style object for the button.
+ * @returns {JSX.Element} The ChangePass component.
+ */
 function ChangePass(props){
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast()

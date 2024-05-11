@@ -1,3 +1,10 @@
+/**
+ * CreatePostArea component for creating posts.
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {Object} props.community - The community object containing information about the post's community.
+ * @module CreatePostArea
+ */
+
 import React, { useState, useRef } from 'react';
 import PostMethods from "./PostMethods";
 import EditCreateArea from "./EditCreatearea";

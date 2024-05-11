@@ -3,6 +3,27 @@ import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 
+
+/**
+ * Gender component displays a modal for the user to select their gender during signup.
+ * @component
+ * @param {object} props - The props for the Gender component.
+ * @param {boolean} props.show - Boolean indicating whether the modal should be shown.
+ * @param {Function} props.onHide - Function to handle modal close event.
+ * @param {Function} props.handleEnteredGender - Function to handle the selected gender.
+ * @param {Function} props.onContinueToPreferences - Function to continue to the next step after selecting gender.
+ * @module Gender
+ * @returns {JSX.Element} Gender JSX element.
+ * @example
+ * // Example usage of Gender component:
+ * <Gender
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ *   handleEnteredGender={(gender) => setGender(gender)}
+ *   onContinueToPreferences={() => handleContinueToPreferences()}
+ * />
+ */
+
 function Gender(props){
   
   const [gender, setGender] = useState("");

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Create_Post/EditCreatearea.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Create_Post/EditCreatearea.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * EditCreateArea component for editing and creating posts.
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {string} props.title - The title of the post.
+ * @param {string} props.content - The content of the post.
+ * @param {Object} props.community - The community object containing information about the post's community.
+ * @param {number} props.days - The number of days for the post's vote length.
+ * @param {Array} props.options - The options array for the post (for polls).
+ * @param {FormData} props.imageFormData - The FormData object containing image data for the post.
+ * @param {string} props.selectedMethod - The selected method for the post (e.g., "poll").
+ * @module EditCreatearea
+ */
+
+import React, { useState } from "react";
+import "./NewPostForm.css";
+import { Button, Flex, Spacer, Checkbox, useToast } from "@chakra-ui/react";
+import { AddIcon, CheckIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import "./EditCreatearea.css";
+import { useNavigate } from 'react-router-dom';
+import Schedule from "./Schedule";
+import { CreateScheduledPosts } from "../ModerationComponents/ScheduledPosts/ScheduleEndPoints";
+const serverHost = import.meta.env.VITE_SERVER_HOST;
+
+// Function component for editing and creating posts
+function EditCreateArea({ title, content, community, days, options, imageFormData, selectedMethod }) {
+  const username = localStorage.getItem('username');
+  const [ocClicked, setOcClicked] = useState(false);
+  const [spoilerClicked, setSpoilerClicked] = useState(false);
+  const [nsfwClicked, setNsfwClicked] = useState(false);
+  const [timeZone,setTimeZone] = useState("")
+  const [repeat,setRepeat] = useState("")
+  const [dateTime, setDateTime] = useState('');
+  
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  // Function to display a toast message
+  function Toast(message, state) {
+    toast({
+      description: message,
+      status: state,
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+
+  // Function to handle OC click
+  const handleOcClick = () => {
+    setOcClicked(!ocClicked);
+  };
+
+  // Function to handle Spoiler click
+  const handleSpoilerClick = () => {
+    if (community &amp;&amp; community.community) {
+      setSpoilerClicked(!spoilerClicked);
+    }
+  };
+
+  // Function to handle NSFW click
+  const handleNsfwClick = () => {
+    setNsfwClicked(!nsfwClicked);
+  };
+
+   
+
+  // Function to convert options array to string
+  const handleTurnToSting = (options) => {
+    let string = "";
+    for (let i = 0; i &lt; options.length; i++) {
+      string += options[i];
+      if (i &lt; options.length - 1) {
+        string += ",";
+      }
+    }
+    return string;
+  }
+  
+  // Function to handle form submission
+  const handleSubmit = async () => {
+    try {
+      let optionsString; // Initialize optionsString
+      if (selectedMethod === 'poll') {
+        // If selectedMethod is 'poll', generate optionsString
+        optionsString = handleTurnToSting(options);
+      }
+
+      // Initialize subreddit to null
+      let subreddit = null;
+
+      if (community.community !== username) {
+        subreddit = community.community;
+      }
+      const postData = {
+        title: title,
+        content: content,
+        subreddit: subreddit,
+        isOC: ocClicked,
+        isSpoiler: spoilerClicked,
+        isNSFW: nsfwClicked,
+        voteLength: days,
+        options: optionsString,
+        type: selectedMethod
+      };
+
+      if (imageFormData) {
+        // Create a new FormData object
+        const formData = new FormData();
+        formData.append('media', imageFormData.get('media'));
+
+        // Merge formData with postData
+        for (let [key, value] of formData.entries()) {
+          postData[key] = value;
+      }
+      }
+
+      let response ;
+      
+      if(dateTime.length===0){
+      const normalresponse = await axios.post(
+        `${serverHost}/api/submit`,
+        postData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      response = normalresponse
+      }else{
+        const responseSchedule=await axios.post(`${serverHost}/api/scheduledPost`,{
+          title: title,
+          content: content,
+          subreddit: subreddit,
+          isOC: ocClicked,
+          isSpoiler: spoilerClicked,
+          isNSFW: nsfwClicked,
+          voteLength: days,
+          Options: optionsString,
+          type: selectedMethod,
+          repeatOption:repeat,
+          contestMode:false,
+          postAsAutoModerator:false,
+          isScheduled:true,
+          scheduledPublishDate:dateTime,
+      }, {
+          headers: {
+              authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      });
+      response = responseSchedule
+      }
+      
+      switch (response.status) {
+        case 201:
+          Toast('Post created successfully', 'success');
+          const postId = response.data.postId;
+          navigate(`/post/post-details/${postId}`);
+          break;
+        default:
+          console.error("Unexpected response status:", response.status);
+          break;
+      }
+    } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+        switch (status) {
+          case 401:
+            Toast('Unauthorized: Authentication token is missing or invalid', 'error');
+            break;
+          case 404:
+            Toast('User not found', 'error');
+            break;
+          case 400:
+            Toast('Invalid destination', 'error');
+            break;
+          case 500:
+            Toast('Internal server error', 'error');
+            break;
+          default:
+            console.error("Unexpected response status:", response.status);
+            break;
+        }
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+    
+  }; 
+
+  return (
+    &lt;div className="EditCreatearea">
+      &lt;div>
+        &lt;div className='button-group-edit'>
+          {/* Button for OC */}
+          &lt;Button
+            className='rest-button'
+            variant='ghost'
+            leftIcon={ocClicked ? &lt;CheckIcon /> : &lt;AddIcon />}
+            onClick={handleOcClick}
+            style={{
+              color: ocClicked ? 'rgb(255, 255, 255)' : '',
+              fill: ocClicked ? 'rgb(255, 255, 255)' : '',
+              backgroundColor: ocClicked ? 'rgb(255, 69, 0)' : '',
+              borderColor: ocClicked ? 'transparent' : ''
+            }}
+          >
+            OC
+          &lt;/Button>
+          {/* Button for Spoiler */}
+          &lt;Button 
+            className='rest-button' 
+            leftIcon={spoilerClicked ? &lt;CheckIcon /> : &lt;AddIcon />}
+            onClick={handleSpoilerClick}
+            disabled={!community || !community.community}
+            style={{
+              color: spoilerClicked ? 'rgb(255, 255, 255)' : '',
+              fill: spoilerClicked ? 'rgb(255, 255, 255)' : '',
+              backgroundColor: spoilerClicked ? 'rgb(0, 0, 0)' : '',
+              borderColor: spoilerClicked ? 'transparent' : '',
+              cursor: !community || !community.community ? 'not-allowed' : 'pointer',
+              background: !community || !community.community ? '#cccccc' : '',
+            }}
+          >
+            Spoiler
+          &lt;/Button>
+          {/* Button for NSFW */}
+          &lt;Button
+            className='rest-button'
+            variant='ghost'
+            leftIcon={nsfwClicked ? &lt;CheckIcon /> : &lt;AddIcon />}
+            onClick={handleNsfwClick}
+            style={{
+              color: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+              fill: nsfwClicked ? 'rgb(255, 255, 255)' : '',
+              backgroundColor: nsfwClicked ? 'rgb(255, 88, 91)' : '',
+              borderColor: nsfwClicked ? 'transparent' : ''
+            }}
+          >
+            NSFW
+          &lt;/Button>
+        &lt;/div>
+        {/* Save and post buttons */}
+        &lt;hr className='hr-edit-post' />
+        &lt;Flex className='save-buttons' minWidth='max-content' alignItems='center' gap='2'>
+          
+          &lt;Spacer />
+          &lt;div>
+            &lt;div className="d-flex justify-content-end gap-0 me-1">
+              
+              &lt;Button className="rounded-start " variant='outline' borderRadius={0} colorScheme='blue' onClick={handleSubmit}>Post&lt;/Button>
+              &lt;Schedule subreddit={community} setDateTime={setDateTime} setRepeat={setRepeat} setTimeZone={setTimeZone} />
+            &lt;/div>
+            {dateTime &amp;&amp;&lt;p className="me-1"> Post scheduled for {dateTime}&lt;/p>}
+          &lt;/div>
+        &lt;/Flex>
+        
+      &lt;/div>
+      {/* Checkbox for reply notifications */}
+      &lt;div className='reply_notifications'>
+        &lt;Checkbox value='reply_notifications' size='md'>Send me post reply notifications&lt;/Checkbox>
+        {/* Container for connecting accounts */}
+        &lt;div className='container-share-account'>
+          &lt;a className='share-account' href="#">
+            Connect accounts to share your post
+          &lt;/a>
+          &lt;i class="fa fa-info-circle" aria-hidden="true" />
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+
+export default EditCreateArea;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

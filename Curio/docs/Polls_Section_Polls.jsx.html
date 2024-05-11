@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Polls_Section/Polls.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Polls_Section/Polls.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Component for creating a poll.
+ * @component
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {Function} props.handleDayChange - Function to handle the change in voting length.
+ * @param {Function} props.handleOptionChange - Function to handle the change in poll options.
+ * @param {Function} props.handleAddOption - Function to add a new option to the poll.
+ * @param {Function} props.handleRemoveOption - Function to remove an option from the poll.
+ * @param {Array} props.options - Array containing poll options.
+ * @param {Function} props.onContentChange - Function to handle the change in poll content.
+ * @module Polls
+ */
+import React from "react";
+import { useState } from "react";
+import "./Polls.css";
+import Text_Editor from "../../Text_Editor/Text_Editor";
+import InfoIcon from "../../../styles/icons/InfoIcon";
+import SixDots from "../../../styles/icons/SixDots";
+import Remove from "../../../styles/icons/Remove";
+
+function Polls( {handleDayChange, handleOptionChange, handleAddOption, handleRemoveOption, options, onContentChange }) {
+
+
+  return (
+    &lt;div className="flex-wrap pollPage">
+      &lt;Text_Editor onContentChange={onContentChange} />
+      &lt;div className="container flex-wrap cont-div">
+        &lt;div className="row row-cols-2" style={{height: 'fit-content'}}>
+          &lt;div className="col-8">
+          &lt;div className="d-flex align-items-center mt-2">
+            &lt;SixDots />
+            &lt;input
+              type="text"
+              className="pollOption"
+              placeholder='Option 1'
+              onChange={(event) => handleOptionChange(0,event)}
+            />
+          &lt;/div>
+          &lt;div className="d-flex align-items-center mt-2">
+            &lt;SixDots />
+            &lt;input
+              type="text"
+              className="pollOption"
+              placeholder='Option 2'
+              onChange={(event) => handleOptionChange(1, event)}
+            />
+          &lt;/div>
+          {options.map((option, index) => (
+              &lt;div className="d-flex align-items-center mt-2" key={index + 2}>
+                &lt;SixDots />
+                &lt;div className="d-flex w-100 inputText">
+                &lt;input
+                  type="text"
+                  className="pollOption"
+                  placeholder={option} 
+                  onChange={(event) => handleOptionChange(index + 2, event)}
+                />
+                &lt;button onClick={() => handleRemoveOption(index)}>
+                  &lt;Remove className='removeIcon' />
+                &lt;/button>
+                &lt;/div>
+              &lt;/div>
+            ))}
+            &lt;div className="container btn-time-container">
+              &lt;div className="row row-cols-md-2" style={{height: 'fit-content'}}>
+                &lt;div className='col mt-2'>
+              &lt;button className="addOptionBtn" onClick={handleAddOption}>Add Option&lt;/button>
+              &lt;/div>
+              &lt;div className="col">
+              &lt;div className="d-flex align-items-center mt-1 votingLengthContainer">
+                &lt;div className="votingLength">Voting Length:&lt;/div>
+                &lt;div>
+                  &lt;select name="voteLength" id="voteLength" className="daysDropDown" defaultValue="3" onChange={handleDayChange}>
+                    &lt;option value="1">1 Day&lt;/option>
+                    &lt;option value="2">2 Days&lt;/option>
+                    &lt;option value="3">3 Days&lt;/option>
+                    &lt;option value="4">4 Days&lt;/option>
+                    &lt;option value="5">5 Days&lt;/option>
+                    &lt;option value="6">6 Days&lt;/option>
+                    &lt;option value="7">7 Days&lt;/option>
+                  &lt;/select>
+                  &lt;/div>
+                &lt;/div>
+              &lt;/div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="col-lg-4 tipsDiv">
+            &lt;div className="d-flex mt-3 p-0 mb-0">
+              &lt;InfoIcon />
+              &lt;p className="pollTips ms-1">Tips on Better Polls&lt;/p>
+            &lt;/div>
+            &lt;ol className="d-flex flex-column orderedTips">
+              &lt;li>Suggest short clear options&lt;/li>
+              &lt;li>The more options, the better&lt;/li>
+              &lt;li>Choose the poll duration&lt;/li>
+              &lt;li className="lastTip">Options can't be edited after post creation&lt;/li>
+            &lt;/ol>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+
+export default Polls;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Schedule.html">Schedule</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 01:08:04 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

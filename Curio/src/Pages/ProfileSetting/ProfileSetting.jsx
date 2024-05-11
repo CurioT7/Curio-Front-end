@@ -1,3 +1,7 @@
+/**
+ * Component for rendering the profile settings page.
+ * @module ProfileSettingPage
+ */
 import React, { useEffect, useState } from 'react';
 import "./ProfileSetting.css";
 import UserSetting from "../../Components/UserSetting/UserSetting.jsx";
@@ -30,6 +34,9 @@ function ProfileSetting(props) {
     }
   }, []);
 
+   /**
+   * Function to fetch and set user data from the backend.
+   */
   async function fetchAndSetData() {
     const data = await fetchUserDataFromBackend();
     if (data) {

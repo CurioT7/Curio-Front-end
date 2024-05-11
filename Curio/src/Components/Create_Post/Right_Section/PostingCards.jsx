@@ -1,3 +1,9 @@
+/**
+ * Function component for rendering posting cards.
+ * @component
+ * @param {Object} community - The community data.
+ * @module PostingCards
+ */
 import React, { useEffect, useState } from 'react';
 import "./PostingCards.css";
 import PostingRules from "./PostingRules/PostingRules";
@@ -10,17 +16,18 @@ function PostingCards(community) {
   const [subredditData, setSubredditData] = useState(null);
 
   useEffect(() => {
+    
     const fetchData = async () => {
-      try {
+        if(community.community){
         const data = await fetchSubredditData(community.community);
-        setSubredditData(data);
-      } catch (error) {
-        console.error("Error fetching subreddit data:", error);
-      }
+        setSubredditData(data);}
+     
     };
 
     fetchData();
-  }, [community]);
+    
+    
+  }, [community.community]);
 
   return (
     <div className='postingContainer'>

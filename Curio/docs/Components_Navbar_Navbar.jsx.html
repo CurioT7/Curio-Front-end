@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Navbar/Navbar.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Navbar/Navbar.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Navbar Component
+ * 
+ * A component representing the navigation bar of the Curio platform.
+ * 
+ * @component
+ * @param {Object} props - Props for controlling the visibility of the navbar.
+ * @module Navbar
+ * @example
+ * import React from 'react';
+ * import NavbarComponent from './NavbarComponent';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     &lt;NavbarComponent NavbarVisibility={true} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
+import React, { useState, useEffect,useRef } from 'react';
+import "./Navbar.css"; 
+import logo from "../../assets/Curio_logo.png";
+import openchat from "../../assets/Chat_navbar.png";
+import plus from "../../assets/Plus_navbar.png";
+import inbox from "../../assets/Inbox_navbar.png";
+import profile from "../../assets/avatar_default_6.png";
+import Settings from '../../styles/icons/Settings';
+import { Link } from 'react-router-dom';
+import SignupHandler from './SignupHandler';
+import LoggedOutHandler from './LoggedOutHandler';
+import { useNavigate,useLocation } from 'react-router-dom';
+import Notifications_Dropdown from "../Notifications_Dropdown/Notifications_Dropdown";
+import { BsArrowUpRightCircle } from "react-icons/bs";
+import { Menu, MenuButton, MenuList, Tooltip } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+} from '@chakra-ui/react'
+import { CiSearch } from "react-icons/ci";
+import { getTrending,getSearchSuggestion } from './SearchingEndPoints';
+// import { getTrending,getSearchPeople,getSearchSubreddits } from './SearchingEndPoints';
+import { fetchNotificationsFromBackend, markasViewed } from '../../Pages/Notifications/NotificationsEndPoints';
+
+import Trending from './Trending';
+import SearchBy from './SearchBy';
+import { set } from 'mongoose';
+import axios from 'axios';
+
+
+
+function NavbarComponent(props) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [trending, setTrending] = React.useState([]);
+  const [searchCommunities, setSearchCommunities] = React.useState([]);
+  const [searchPeople, setSearchPeople] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('');
+  const [notifications, setNotifications] = useState([]);
+  const [unreadNotificationsNum, setUnreadNotificationsNum] = useState(0);
+  const [isRead, setIsRead] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const checkAuthentication = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  };
+
+
+  async function handleMarkAsRead(){
+    const response = await markasViewed();
+    if(response.success) {
+        console.log("Marked as read");
+    }
+}
+
+
+  function handleOpenNotifications(){
+    if(!isNotificationsOpen){
+    setUnreadNotificationsNum(0);
+    handleMarkAsRead();
+    setIsNotificationsOpen(true);
+    }
+    else
+    {
+      setIsNotificationsOpen(false);
+    }
+  }
+
+
+  const handleSearchChange = async (e) => {
+    setSearchValue(e.target.value);
+    const searchSuggestionsData = await getSearchSuggestion(searchValue);
+    if(searchSuggestionsData){
+      setSearchCommunities(searchSuggestionsData.subreddits);
+      setSearchPeople(searchSuggestionsData.users);
+    }
+    
+  }
+  const navigateToLogin = () => {
+    navigate('/login');
+  }
+
+  const inputRef = useRef();
+  const popoverRef = useRef();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search/${searchValue}`);
+    setSearchValue('');
+  }
+  const handleSearchFor = () => {
+    window.location.href = `/search/${searchValue}`;
+    setSearchValue('');
+  }
+  
+  useEffect(() => {
+    if (inputRef.current &amp;&amp; popoverRef.current) {
+      popoverRef.current.style.width = `${inputRef.current.offsetWidth}px`;
+    }
+  }, []);
+
+  const getPrefs = async () => {
+    const hostUrl = import.meta.env.VITE_SERVER_HOST;
+    const response = await axios.get(`${hostUrl}/api/settings/v1/me/prefs`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.status === 200 || response.status === 201) {
+      setProfileImage(response.data.profilePicture);
+    }
+  }
+
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    window.addEventListener("loginOrSignup", checkAuthentication);
+    setIsAuthenticated(!!token);
+    if (token) {
+      getPrefs();
+    }
+    window.addEventListener("prefsChanged", getPrefs);
+    return () => {
+      window.removeEventListener("loginOrSignup", checkAuthentication);
+      window.removeEventListener("prefsChanged", getPrefs);
+    };
+  }, []);
+
+  const username = localStorage.getItem('username');
+  
+  function toggleMenu(){
+    let subMenu = document.getElementById("subMenu");
+    subMenu.classList.toggle("open-menu");
+    event.stopPropagation();
+  }
+  
+  let subMenu = document.getElementById('subMenu');
+  
+  document.addEventListener('click', function(event) {
+    if(subMenu){
+    if (!subMenu.contains(event.target)) {
+      subMenu.classList.remove("open-menu");
+    }
+  }
+  });
+    
+  
+  React.useEffect(() => {
+      async function fetchData() {
+          const trendingData = await getTrending();
+          
+          setTrending(trendingData.posts);
+         
+
+      }
+      fetchData();
+  }, []);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        inputRef.current !== event.target &amp;&amp; 
+        !popoverRef.current?.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+ useEffect(() => {
+  if (isOpen) {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 0);
+  }
+}, [isOpen]);
+
+if (!props.NavbarVisibility) {
+  return null;
+}
+
+  return (
+    &lt;nav className='navbar-component'
+    style={{
+      visibility: props.NavbarVisibility ? 'visible' : 'hidden',
+    }}>
+      &lt;input type="checkbox" name="" id="chk1"/>
+      &lt;div className="logo">
+        &lt;Link to={'/'} style={{ display: "flex" }}>
+          &lt;img src={logo} alt="logo" className="curio-logo"/>
+          &lt;h1 className='title-platform'>Curio&lt;/h1>
+        &lt;/Link>
+      &lt;/div>
+      &lt;div className="search-box">
+        &lt;form action="" onSubmit={handleSearch}>
+            &lt;Popover isOpen={isOpen} onClose={() => {}} closeOnBlur={false}>
+              &lt;PopoverTrigger>
+                &lt;input className='inputTextnav' onChange={handleSearchChange} value={searchValue} onFocus={() => setIsOpen(true)}   ref={inputRef} type="text" name="search" id="srch" placeholder="Search Curio"/>
+              &lt;/PopoverTrigger>
+              &lt;PopoverContent borderRadius='20px' ref={popoverRef}>
+                &lt;PopoverBody margin={0} padding={0} className="search-list">
+
+                  { !searchValue&amp;&amp;
+                  &lt;div>
+                   &lt;div className='trending-header'>&lt;BsArrowUpRightCircle/> &lt;span>TRENDING TODAY&lt;/span>&lt;/div>
+                  { trending.map((trend) => (
+                    &lt;Trending
+                      key={trend._id}
+                      title={trend.authorName}
+                      description={trend.title}
+                      subreddit={trend.subreddit}
+                    />
+                    ))
+                  }
+                  &lt;/div>}
+                  { searchValue &amp;&amp; &lt;div>
+
+                    {searchCommunities.length>0 &amp;&amp; &lt;div>
+                    &lt;div className='searchBy-header'> Communities&lt;/div>
+                    {/* &lt;SearchBy type="comm" avatar="" name="Search by title" description="Search for posts by title"/> */}
+                    { searchCommunities.map((comm) => (
+                      &lt;SearchBy
+                        key={comm._id}
+                        type="comm"
+                        avatar={comm.icon}
+                        name={comm.name}
+                        description={comm.members}
+                      />
+                      ))
+                    }
+                    &lt;/div>
+                    }
+                    {searchPeople.length>0 &amp;&amp; &lt;div>
+                    &lt;div onClick={handleSearch} className='searchBy-header'>People&lt;/div>
+                    {/* &lt;SearchBy type="user" avatar="" name="Search by title" description="Search for posts by title"/> */}
+                    { searchPeople.map((user) => (
+                      &lt;SearchBy
+                        key={user._id}
+                        type="user"
+                        avatar={user.profilePicture}
+                        name={user.username}
+                        description={user.karma}
+                      />
+                      ))
+                    }
+                     
+                    
+                    &lt;/div>
+                    }
+                    &lt;div onClick={handleSearchFor} className='search-footer'> &lt;CiSearch className='search-icon'/> &lt;span> Search by  "{searchValue}"&lt;/span>
+                    &lt;/div>
+                  &lt;/div>}
+                  
+                &lt;/PopoverBody>
+              &lt;/PopoverContent>
+            &lt;/Popover>
+          &lt;button type="submit">&lt;i className="search-icon fa fa-search" aria-hidden="true">&lt;/i>&lt;/button>
+        &lt;/form>
+      &lt;/div>
+      &lt;div className='right-section-navbar'>
+        {isAuthenticated &amp;&amp; 
+        &lt;>
+          &lt;Tooltip hasArrow label="Open chat">
+            &lt;Link to={'/room/create'} className='sub-right-navbar'>
+              &lt;li className='right-item-option' style={{ display: "flex" }}>
+                    &lt;img className='navImg' src={openchat} alt="logo"/>
+              &lt;/li>
+            &lt;/Link>
+          &lt;/Tooltip>
+          &lt;Tooltip hasArrow label="Create post">
+            &lt;Link to={'/user/CreatePost'} className='sub-right-navbar'>
+              &lt;li className='create-icon' style={{ display: "flex" }}>
+                &lt;img className='navImg' src={plus} alt="profile" style={{ marginRight: "5px" }} />
+                Create
+              &lt;/li>
+            &lt;/Link>
+          &lt;/Tooltip>
+          &lt;Tooltip hasArrow label="Open inbox">
+            &lt;a className='sub-right-navbar notif' style={{position: 'relative'}} >
+              &lt;li className='right-item-option' style={{ display: "flex" }} onClick={handleOpenNotifications}>
+                  &lt;Menu>
+                    &lt;MenuButton>
+                      &lt;img className='navImg' src={inbox} alt="logo" />
+                      {unreadNotificationsNum === 0 ? null : &lt;span className='unread-notifs'>{unreadNotificationsNum}&lt;/span>}
+                    &lt;/MenuButton>
+                    &lt;MenuList 
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      boxShadow: 'none', 
+                    }}>
+                      &lt;Notifications_Dropdown notifications={notifications} setUnreadNotificationsNum={setUnreadNotificationsNum}/>
+                    &lt;/MenuList>
+                  &lt;/Menu>
+              &lt;/li>
+            &lt;/a>
+          &lt;/Tooltip>
+          &lt;li className='sub-right-navbar' onClick={(e) => {toggleMenu()}}>
+            &lt;Tooltip hasArrow label="Open profile menu">
+              &lt;a href="#" className='right-item-option' style={{ display: "flex" , flexDirection: "column"}} onClick={(e) => e.preventDefault()}>
+                &lt;img className='profileImg' src={profileImage || profile} alt="logo"/>
+              &lt;/a>
+            &lt;/Tooltip>
+          &lt;/li>
+          &lt;/>
+        }
+        {!isAuthenticated &amp;&amp;
+          &lt;div className='d-flex ms-auto'>
+            &lt;Tooltip label="Log in to Reddit">
+              &lt;div onClick={navigateToLogin} className='d-flex align-items-center me-2 mt-0'>
+                &lt;button className='logged-out-login-button p-2 px-3'>Log in&lt;/button>
+              &lt;/div>
+            &lt;/Tooltip>
+            &lt;Tooltip>
+              &lt;div>
+                &lt;LoggedOutHandler />
+              &lt;/div>
+            &lt;/Tooltip>
+          &lt;/div>
+        }
+      &lt;/div>
+      &lt;div className="sub-menu-wrap" id='subMenu'>
+        &lt;div className="sub-menu">
+          &lt;Link to={`profile/${username}`} className="d-flex align-items-center pt-3 viewProfile" onClick={toggleMenu}>
+            &lt;img className='profileImg' src={profileImage || profile} alt="logo"/>
+            &lt;div className="d-flex flex-column">
+              &lt;span className="drop-down-profile-description">View Profile&lt;/span>
+                &lt;div className='d-flex flex-start align-items-center ArrowandNumber'>
+                &lt;span className='usernameText'>u/{username}&lt;/span>
+                &lt;/div>
+            &lt;/div>
+          &lt;/Link>
+          &lt;div className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}>
+            &lt;SignupHandler />
+          &lt;/div>
+          &lt;hr />
+          &lt;Link to={'settings/account'} className="d-flex align-items-center sub-menu-link" onClick={toggleMenu}> 
+            &lt;Settings />
+            &lt;span className="drop-down-description">Settings&lt;/span>
+          &lt;/Link>
+        &lt;/div>
+      &lt;/div>
+      {/* &lt;div className="menu">
+        &lt;label htmlFor="chk1">
+          &lt;i className="fa fa-bars" aria-hidden="true">&lt;/i>
+        &lt;/label>
+      &lt;/div> */}
+    &lt;/nav>
+  );
+}
+
+export default NavbarComponent;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

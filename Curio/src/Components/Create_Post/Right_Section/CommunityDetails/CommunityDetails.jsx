@@ -1,3 +1,11 @@
+/**
+ * Component for displaying community details.
+ * @component
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {Object} props.subredditData - The data of the subreddit to display.
+ * @param {Object} props.community - The community data.
+ * @module CommunityDetails
+ */
 import React, { useState, useEffect, useRef } from "react";
 import "./CommunityDetails.css";
 import logo from "../../../../assets/Curio_logo.png";

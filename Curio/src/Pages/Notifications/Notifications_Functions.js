@@ -1,3 +1,6 @@
+/**
+ * @module NotificationsFunctions
+ */
 import {
     hideNotification,
     sendReadNotifications,
@@ -5,6 +8,12 @@ import {
     enableNotification
 } from '../Notifications/NotificationsEndPoints';
 
+/**
+ * Handles hiding a notification.
+ * @param {string} notificationID - The ID of the notification to hide.
+ * @param {Array} notifications - The array of notifications.
+ * @param {function} setNotifications - Function to set the notifications state.
+ */
 export async function handleHideNotification(notificationID, notifications, setNotifications) {
     try {
         await hideNotification({ notificationID: notificationID });
@@ -14,6 +23,12 @@ export async function handleHideNotification(notificationID, notifications, setN
     }
 }
 
+/**
+ * Handles enabling or disabling a notification.
+ * @param {string} notificationID - The ID of the notification to enable or disable.
+ * @param {Array} notifications - The array of notifications.
+ * @param {function} setNotifications - Function to set the notifications state.
+ */
 export async function handleEnableNotification(notificationID, notifications, setNotifications) {
     try {
         const notificationIndex = notifications.findIndex(notification => notification._id === notificationID);
@@ -45,6 +60,14 @@ export async function handleEnableNotification(notificationID, notifications, se
     }
 }
 
+/**
+ * Handles clicking on a notification.
+ * @param {string} notificationID - The ID of the notification clicked.
+ * @param {Array} notifications - The array of notifications.
+ * @param {Array} unreadNotifications - The array of unread notifications.
+ * @param {function} setUnreadNotifications - Function to set the unread notifications state.
+ * @param {function} navigate - Function for navigation.
+ */
 export async function handleNotificationClick(notificationID, notifications, unreadNotifications, setUnreadNotifications, navigate) {
     try {
         const notification = notifications.find(notification => notification._id === notificationID);
@@ -67,6 +90,12 @@ export async function handleNotificationClick(notificationID, notifications, unr
     }
 }
 
+/**
+ * Marks all notifications as read.
+ * @param {Array} notifications - The array of notifications.
+ * @param {Array} unreadNotifications - The array of unread notifications.
+ * @param {function} setUnreadNotifications - Function to set the unread notifications state.
+ */
 export async function markAllAsRead(notifications, unreadNotifications, setUnreadNotifications) {
     try {
         // Filter out only unread notifications

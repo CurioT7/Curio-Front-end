@@ -1,3 +1,16 @@
+/**
+ * EditCreateArea component for editing and creating posts.
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {string} props.title - The title of the post.
+ * @param {string} props.content - The content of the post.
+ * @param {Object} props.community - The community object containing information about the post's community.
+ * @param {number} props.days - The number of days for the post's vote length.
+ * @param {Array} props.options - The options array for the post (for polls).
+ * @param {FormData} props.imageFormData - The FormData object containing image data for the post.
+ * @param {string} props.selectedMethod - The selected method for the post (e.g., "poll").
+ * @module EditCreatearea
+ */
+
 import React, { useState } from "react";
 import "./NewPostForm.css";
 import { Button, Flex, Spacer, Checkbox, useToast } from "@chakra-ui/react";

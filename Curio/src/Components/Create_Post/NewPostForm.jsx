@@ -1,3 +1,9 @@
+/**
+ * Function component for rendering posts.
+ * @component
+ * @param {Object} community - The community data.
+ * @module NewPostForm
+ */
 import React from 'react';
 import "./NewPostForm.css";
 import { Flex } from '@chakra-ui/react';

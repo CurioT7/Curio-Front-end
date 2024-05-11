@@ -1,3 +1,8 @@
+/**
+ * Component for displaying social links section.
+ * @param {Object[]} SocialLinks - The array of social links.
+ * @module SocialLinksSection
+ */
 import { Box, Text, Spacer } from '@chakra-ui/react';
 import Socialmodal from '../Socialmodal/Socialmodal';
 

@@ -9,6 +9,12 @@ import { Link } from 'react-router-dom';
 
 
 
+/**
+ * Renders the header component for a community.
+ *
+ * @param {Object} props - The component props.
+ * @returns {JSX.Element} The rendered component.
+ */
 function CommunityHeader( props ) {
   const toast = useToast();
   const navigate = useNavigate();
@@ -92,8 +98,8 @@ function CommunityHeader( props ) {
   }
   return (
     <div className="community-header mb-3 container-lg ">
-        {banner?(<div className="mt-4 d-block"> 
-          <Image src={banner}  className=" subreddit-background" />
+        {banner?(<div data-testid="comm-banner" className="mt-4 d-block"> 
+          <Image  src={banner}  className=" subreddit-background" />
         </div>):(<div className="mt-4 d-block comm-background"> 
 
         </div> )}

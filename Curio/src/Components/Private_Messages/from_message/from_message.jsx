@@ -1,3 +1,31 @@
+/**
+ * FromMessage Component
+ * 
+ * A component for selecting the sender of a private message.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @param {Array} props.userCommunities - The communities the user is a member of.
+ * @param {Function} props.setSubreddit - A function to set the selected subreddit.
+ * @module FromMessage
+ * @example
+ * import React from 'react';
+ * import FromMessage from './FromMessage';
+ * 
+ * const MyComponent = () => {
+ *   const userCommunities = ['community1', 'community2'];
+ *   const setSubreddit = (subreddit) => {
+ *     // Logic to set the selected subreddit
+ *   };
+ * 
+ *   return (
+ *     <FromMessage userCommunities={userCommunities} setSubreddit={setSubreddit} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useState } from 'react';
 import "./from_message.css"
 import { Select } from '@chakra-ui/react';

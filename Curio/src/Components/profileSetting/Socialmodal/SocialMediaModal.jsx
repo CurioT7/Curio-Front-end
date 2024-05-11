@@ -1,3 +1,36 @@
+/**
+ * SocialMediaModal Component
+ * 
+ * A component to allow users to input social media links.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import SocialMediaModal from './SocialMediaModal';
+ * 
+ * const MyComponent = () => {
+ *   const handleSocialLinkClick = (url, displayText, icon) => {
+ *     // Handle the social link click
+ *   };
+ * 
+ *   return (
+ *     <SocialMediaModal
+ *       name="Twitter"
+ *       icon="fa fa-twitter" // Font Awesome icon class
+ *       handleSocialLinkClick={handleSocialLinkClick}
+ *     />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @param {Object} props - Component props
+ * @param {string} props.name - The name of the social media platform
+ * @param {string} props.icon - The class name for the Font Awesome icon representing the platform
+ * @param {Function} props.handleSocialLinkClick - Function to handle the click event on social media link save
+ * @module SocialMediaModal
+ */
+
 import React, { useState } from "react";
 import { Button, useDisclosure } from '@chakra-ui/react';
 import {

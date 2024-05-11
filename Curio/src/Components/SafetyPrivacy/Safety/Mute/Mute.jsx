@@ -1,3 +1,23 @@
+/**
+ * Mute Component
+ * 
+ * A component to manage muted communities.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import Mute from './Mute';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <Mute />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @module Mute
+ */
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Input, Button, Flex, useToast } from '@chakra-ui/react';

@@ -1,4 +1,13 @@
 
+/**
+ * DeleteButton component for deleting user account.
+ *
+ * @component
+ * @example
+ * return (
+ *   <DeleteButton />
+ * )
+ */
 import { Button, ButtonGroup, Box, Text, Textarea, Input, Checkbox } from '@chakra-ui/react'
 import React from "react"
 import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react"
@@ -7,6 +16,12 @@ import './formstyle.css'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
 import { useToast, } from '@chakra-ui/react';
+/**
+ * DeleteButton component.
+ * Renders a button that triggers a modal for deleting the user's account.
+ *
+ * @returns {JSX.Element} The DeleteButton component.
+ */
 function DeleteButton(){
     const serverHost = import.meta.env.VITE_SERVER_HOST;
     const toast = useToast()

@@ -16,6 +16,13 @@ import { showCommunityInformation } from "./TopCommunitiesEnpoints.js";
 
 
 
+/**
+ * Renders the TopCommunities component.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @module TopComms
+ */
 function TopCommunities(props) {
   const pagesIndex = useParams();
 

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Create_Post/Schedule.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Create_Post/Schedule.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Function component for scheduling a post.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setDateTime - Function to set the selected date and time.
+ * @param {Function} props.setRepeat - Function to set the repeat option.
+ * @param {Function} props.setTimeZone - Function to set the selected time zone.
+ * @param {Object} props.subreddit - Subreddit data.
+ * @module Schedule
+ */
+
+import React from "react";
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+  } from '@chakra-ui/react'
+  import { Button,Input,Select } from "@chakra-ui/react";
+  import { AiFillSchedule } from "react-icons/ai";
+  
+  
+function Schedule(props){
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [timeZone,setTimeZone] = React.useState("(GMT+3:00) Africa-Cairo")
+    const timeZoneArr =["(GMT+3:00) Africa-Cairo","((GMT+2:00) Europe-Paris","(GMT+2:00) Europe-Vienna"]
+    const repeatArr = ["Does not repeat","Hourly","Daily","Weekly","Monthly"]
+    const [repeat,setRepeat] = React.useState("Hourly")
+    const [dateTime, setDateTime] = React.useState('');
+
+    /**
+     * Function to handle the change in date and time input.
+     * @param {Event} event - The input change event.
+     */
+
+    const handleDateTimeChange = (event) => {
+        const localDateTime = new Date(event.target.value);
+        const utcDateTime = localDateTime.toISOString().slice(0, -8);
+        setDateTime(utcDateTime);        
+    };
+    const submitSchedule = () => {
+        props.setDateTime(dateTime);
+        props.setRepeat(repeat);
+        props.setTimeZone(timeZone);
+        onClose();
+    }
+
+    return(
+        &lt;div>
+            &lt;Button className="text-white rounded-end" isDisabled={props.subreddit.community === localStorage.getItem("username") || !props.subreddit.community}  borderRadius={0} onClick={onOpen} display="flex" colorScheme="blue"  gap={1} fontSize="0.75rem"    >&lt;AiFillSchedule size={25}/>&lt;/Button>
+            &lt;Modal isCentered size='4xl' isOpen={isOpen} onClose={onClose}>
+            &lt;ModalOverlay />
+            &lt;ModalContent>
+                &lt;ModalHeader className="border-bottom mb-1 fw-normal">Schedule this post&lt;/ModalHeader>
+                &lt;ModalCloseButton />
+                &lt;ModalBody mb={10}>
+                    
+                    &lt;div>
+                        &lt;p>Submit time&lt;/p>
+                        &lt;div className="row gap-3">
+                            &lt;div className="col">
+                            &lt;Input placeholder='Select Date and Time' size='md' type='datetime-local' value={dateTime} onChange={handleDateTimeChange} />
+                            &lt;/div>
+                            &lt;div className="col">
+                                &lt;span className="d-flex  "> &lt;p  className="m-0">Time Zone: &lt;/p>
+                                    &lt;Select value={timeZone} onChange={(e)=>{setTimeZone(e.target.value)}} >
+                                    {timeZoneArr.map((time,index)=>
+                                        (
+                                            &lt;option key={index} value={time}>{time}&lt;/option>
+                                        )
+                                    )}
+                                    &lt;/Select> 
+                                &lt;/span>
+                            &lt;/div>
+                            &lt;div >
+                                &lt;label htmlFor=" repeat"> Repeat Options&lt;/label>
+                                &lt;Select id="repeat" width='fit-content' value={repeat} onChange={(e)=>{setRepeat(e.target.value)}}  size='md' mt={3}>
+                                    {repeatArr.map((rep,index)=>
+                                        (
+                                            &lt;option key={index} value={rep}>{rep}&lt;/option>
+                                        )
+                                    )}
+                                &lt;/Select>
+                            &lt;/div>
+                        &lt;/div>
+                        
+                    &lt;/div>
+                &lt;/ModalBody>
+
+                &lt;ModalFooter display='flex' justifyContent='end' borderBottomRadius={5} bg='rgb(237, 239, 241)'>
+                    
+                    &lt;div>
+                        &lt;Button size='sm' borderRadius={20} variant='outline' colorScheme='blue' mr={3} onClick={onClose}>
+                            cancel
+                        &lt;/Button>
+                        &lt;Button size='sm' onClick={submitSchedule} colorScheme="blue" borderRadius={20}  >Apply&lt;/Button>
+                    &lt;/div>
+                    
+                &lt;/ModalFooter>
+            &lt;/ModalContent>
+            &lt;/Modal>
+        &lt;/div>
+    )
+}
+
+
+export default Schedule;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

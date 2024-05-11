@@ -1,3 +1,11 @@
+/**
+ * Function component for the header of the right side chat.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.header - The header content.
+ * @param {string} props.check - Check if the header is present.
+ * @module HeaderChatRightSide
+ */
 import React, {useState} from 'react';
 import "./HeaderChatRight_Side.css";
 import {
@@ -5,9 +13,6 @@ import {
     Popover,
     PopoverTrigger,
     PopoverContent,
-    PopoverHeader,
-    PopoverArrow,
-    PopoverCloseButton,
     PopoverBody
 } from "@chakra-ui/react";
 import { RiNotificationFill, RiNotificationOffLine } from "react-icons/ri";
@@ -17,14 +22,20 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import AboutDrawer from "./AboutDrawer/AboutDrawer";
 import InviteDrawer from './InviteDrawer/InviteDrawer';
 
-function HeaderChatRight_Side(props) {
+function HeaderChatRightSide(props) {
     const [isAboutDrawerOpen, setIsAboutDrawerOpen] = useState(false);
     const [isInviteDrawerOpen, setIsInviteDrawerOpen] = useState(false);
 
+    /**
+     * Function to toggle the about drawer.
+     */
     const toggleAboutDrawer = () => {
         setIsAboutDrawerOpen(!isAboutDrawerOpen);
     };
 
+    /**
+     * Function to toggle the invite drawer.
+     */
     const toggleInviteDrawer = () => {
         setIsInviteDrawerOpen(!isInviteDrawerOpen);
     };
@@ -92,4 +103,4 @@ function HeaderChatRight_Side(props) {
     );
 }
 
-export default HeaderChatRight_Side;
+export default HeaderChatRightSide;

@@ -1,3 +1,15 @@
+/**
+ * Component for rendering the notifications page.
+ * @param {object} notifications - Array of notifications.
+ * @param {object} unreadNotifications - Array of unread notifications.
+ * @param {function} onHideNotification - Function to hide a notification.
+ * @param {function} onNotificationClick - Function to handle notification click.
+ * @param {function} onEnableNotification - Function to enable a notification.
+ * @param {function} setNotifications - Function to set notifications state.
+ * @param {function} setUnreadNotifications - Function to set unread notifications state.
+ * @param {function} markAllAsRead - Function to mark all notifications as read.
+ * @module NotificationsPage
+ */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from "@chakra-ui/react";

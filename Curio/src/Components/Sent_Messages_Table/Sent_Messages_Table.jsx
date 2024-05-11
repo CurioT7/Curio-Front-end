@@ -1,3 +1,22 @@
+/**
+ * Component for rendering sent messages.
+ * 
+ * @param {Object} props - Component props.
+ * @param {string} props.subject - The subject of the message.
+ * @param {string} props.recipient - The recipient of the message.
+ * @param {string} props.sender - The sender of the message.
+ * @param {string} props.timestamp - The timestamp of the message.
+ * @param {string} props.message - The content of the message.
+ * @param {string} props.cakeDay - The date the user joined.
+ * @param {string} props.displayName - The display name of the user.
+ * @param {number} props.postkarma - The post karma of the user.
+ * @param {number} props.commentkarma - The comment karma of the user.
+ * @param {string} props.about - The about section of the user.
+ * @param {boolean} props.isRecipientNull - Boolean indicating if the recipient is null.
+ * 
+ * @module SentMessagesTable
+ */
+
 import React, { useState } from 'react';
 import "./Sent_Messages_Table.css";
 import { getTimeDifference } from '../getTimeDifference/getTimeDifference';
@@ -82,8 +101,8 @@ function Sent_Messages(props) {
     )
 
     return (
-        <div className='sent_message_table_content'>
-            <h5 className='subject_sent_messages'>{props.subject}:</h5>
+        <div className='sent_message_table_content' data-testid="sent-message-content">
+            <h5 className='subject_sent_messages' data-testid="subject">{props.subject}:</h5>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 <span className='sent_message_details'>to
                     <OverlayTrigger
@@ -98,7 +117,8 @@ function Sent_Messages(props) {
                             color: "#80bce9",
                             cursor: 'pointer',
                             position: 'relative'
-                        }} onMouseLeave={() => setShowPopover(false)}>
+                        }} onMouseLeave={() => setShowPopover(false)}
+                            data-testid="recipient">
                             {isRecipientNull === true ?
                                 <Link to={`/r/${props.recipient}`}>/r/{props.recipient}</Link> :
                                 <Link to={`/user/${props.recipient}`}>/u/{props.recipient}</Link>
@@ -108,7 +128,7 @@ function Sent_Messages(props) {
                     {props.sender !== username &&
                         <>
                             <span> via </span>
-                            <Link to={`/r/${props.sender}`} style={{ color: '#228822' }}>
+                            <Link to={`/r/${props.sender}`} style={{ color: '#228822' }} data-testid="sender">
                                 /r/{props.sender}
                             </Link>
                             <span style={{ marginLeft: '5px' }}>[

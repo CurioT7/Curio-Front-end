@@ -5,6 +5,10 @@ import PasswordErrorMessage from './PasswordErrorMessage'
 import { MdMarkEmailUnread } from "react-icons/md";
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
+/**
+ * Renders a button component that allows the user to disconnect their Google Account.
+ * @returns {JSX.Element} The Disconnect component.
+ */
 function Disconnect(){
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [yourPass,setYourPass] = React.useState("")

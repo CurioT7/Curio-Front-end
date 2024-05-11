@@ -1,3 +1,8 @@
+/**
+ * Dropdown component for displaying notifications.
+ * @param {object} setUnreadNotificationsNum - Function to set the number of unread notifications.
+ * @module NotificationsDropdown
+ */
 import React, { useState, useEffect } from 'react';
 import "./Notifications_Dropdown.css";
 import logo from "../../assets/avatar_default_6.png";
@@ -37,6 +42,9 @@ function Notifications_Dropdown({ setUnreadNotificationsNum }) {
         fetchAndSetData();
     }, []);
 
+    /**
+     * Fetches notification data from the backend and sets state.
+     */
     async function fetchAndSetData() {
         const data = await fetchNotificationsFromBackend();
         if (data) {

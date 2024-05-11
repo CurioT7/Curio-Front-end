@@ -6,6 +6,18 @@ import PasswordErrorMessage from './PasswordErrorMessage';
 import validateEmail from '../checker/EmailChecker';
 import { useToast, } from '@chakra-ui/react';
 import axios from 'axios';
+/**
+ * Renders a button component that allows the user to change their email address.
+ *
+ * @component
+ * @example
+ * return (
+ *   <EmailButton
+ *     buttonStyle={{ color: 'red' }}
+ *     onChangeEmail={newEmail}
+ *   />
+ * )
+ */
 const EmailButton = (props) =>{
     const serverHost = import.meta.env.VITE_SERVER_HOST;
     const { isOpen, onOpen, onClose } = useDisclosure()

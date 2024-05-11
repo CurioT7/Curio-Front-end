@@ -1,3 +1,12 @@
+/**
+ * Handles toggling users.
+ * @param {Array} selectedUsers - The currently selected users.
+ * @param {Function} setSelectedUsers - Function to set the selected users.
+ * @param {Function} setInputValue - Function to set the input value.
+ * @param {string} username - The username of the user to toggle.
+ * @param {string} image - The image of the user to toggle.
+ * @module UserFunctions
+ */
 export const handleToggleUser = (selectedUsers, setSelectedUsers, setInputValue, username, image) => {
     const isUserSelected = selectedUsers.some(user => user.username === username);
     if (isUserSelected) {

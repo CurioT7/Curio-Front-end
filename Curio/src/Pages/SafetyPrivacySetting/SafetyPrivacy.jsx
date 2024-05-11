@@ -1,3 +1,24 @@
+/**
+ * SafetyPrivacy Component
+ * 
+ * A component to manage safety and privacy settings for user profiles.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import SafetyPrivacy from './SafetyPrivacy';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <SafetyPrivacy />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @module SafetyPrivacy
+ */
+
 import React from 'react';
 import { useEffect } from 'react';
 import "./SafetyPrivacy.css";

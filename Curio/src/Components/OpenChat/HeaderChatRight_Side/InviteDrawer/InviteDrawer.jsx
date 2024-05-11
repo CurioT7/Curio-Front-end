@@ -1,3 +1,11 @@
+/**
+ * Function component for the invite drawer.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isOpen - Whether the drawer is open.
+ * @param {Function} props.onClose - Function to close the drawer.
+ * @module InviteDrawer
+ */
 import React, { useState } from 'react';
 import {
     Drawer,
@@ -19,10 +27,19 @@ function InviteDrawer({ isOpen, onClose }) {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [inputValue, setInputValue] = useState('');
 
+    /**
+     * Function to handle toggling users.
+     * @param {string} image - The image of the user.
+     * @param {string} username - The username of the user.
+     */
     const handleUserToggle = (image, username) => {
         handleToggleUser(selectedUsers, setSelectedUsers, setInputValue, username, image);
     };
 
+    /**
+     * Function to handle input change.
+     * @param {Object} e - The input change event.
+     */
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };

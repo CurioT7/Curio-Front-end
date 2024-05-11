@@ -1,3 +1,49 @@
+/**
+ * UserNameMentionsCom Component
+ * 
+ * A component to display individual username mentions in messages.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @param {string} props.title - The title of the mentioned post.
+ * @param {number} props.noComments - The number of comments on the mentioned post.
+ * @param {string} props.sender - The username of the sender of the message.
+ * @param {Date} props.timestamp - The timestamp of the message.
+ * @param {string} props.linkedSubreddit - The name of the linked subreddit, if any.
+ * @param {string} props.message - The message content.
+ * @param {string} props.itemId - The ID of the mentioned item.
+ * @param {Array} props.downvotedcomments - Array of downvoted comments.
+ * @param {Array} props.upvotedcomments - Array of upvoted comments.
+ * @param {Function} props.onBlockConfirmed - Function to execute when block confirmation is received.
+ * @param {string} props.postId - The ID of the mentioned post.
+ * @param {string} props.id - The ID of the message.
+ * @module UserNameMentionsCom
+ * @example
+ * import React from 'react';
+ * import UserNameMentionsCom from './UserNameMentionsCom';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <UserNameMentionsCom 
+ *       title="Sample Title" 
+ *       noComments={10} 
+ *       sender="sampleUser" 
+ *       timestamp={new Date()} 
+ *       linkedSubreddit="sampleSubreddit" 
+ *       message="Sample message content" 
+ *       itemId="123456789" 
+ *       downvotedcomments={[]} 
+ *       upvotedcomments={[]} 
+ *       onBlockConfirmed={() => console.log("Block confirmation received")} 
+ *       postId="987654321" 
+ *       id="abcdefghi" 
+ *     />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useState, useEffect } from 'react';
 import "./UserName_Mentions_Com.css";
 import { Box } from "@chakra-ui/react";

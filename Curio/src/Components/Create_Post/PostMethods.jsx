@@ -1,13 +1,23 @@
+/**
+ * Function component for selecting different post methods.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.onMethodSelect - Function to handle method selection.
+ * @module PostMethods
+ */
 import React, { useState } from 'react';
 import { Button, Flex } from '@chakra-ui/react';
 import "./PostMethods.css"
 
 // Function component for selecting different post methods
-function Post_Methods({ onMethodSelect }) {
+function PostMethods({ onMethodSelect }) {
   // State to keep track of the selected tab
   const [selectedTab, setSelectedTab] = useState("post");
-
-  // Function to handle button clicks
+  
+  /**
+   * Function to handle button clicks.
+   * @param {string} buttonName - The name of the button clicked.
+   */
   const handleButtonClick = (buttonName) => {
     setSelectedTab(buttonName);
     onMethodSelect(buttonName);
@@ -98,4 +108,4 @@ function Post_Methods({ onMethodSelect }) {
   );
 }
 
-export default Post_Methods;
+export default PostMethods;

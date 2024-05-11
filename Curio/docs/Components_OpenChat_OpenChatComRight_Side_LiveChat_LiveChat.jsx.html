@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/OpenChat/OpenChatComRight_Side/LiveChat/LiveChat.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Function component for the live chat section.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.chatId - The ID of the chat.
+ * @param {Function} props.socket - The socket function.
+ * @param {Function} props.onNewMessage - Function to handle new messages.
+ * @module LiveChat
+ */
+import React, { useState, useRef, useEffect } from "react";
+import "./LiveChat.css";
+import profile from "../../../../assets/avatar_default_6.png";
+import HeaderChatRight_Side from "../../HeaderChatRight_Side/HeaderChatRight_Side";
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Tooltip,
+} from "@chakra-ui/react";
+import { IoMdCamera, IoMdSend } from "react-icons/io";
+import { BsFillEmojiSmileFill } from "react-icons/bs";
+import EmojiPicker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
+import {
+  createChatRequest,
+  getChatwholeChat,
+  sendMessageRequest,
+  AboutParticipant,
+} from "../../../../Pages/Open_Chat_Page/Open_Chat_Page";
+import {
+  formatTimestamp,
+  formatDate,
+  getDaysDifferenceFromToday,
+  getTimeDifference
+} from "../../../getTimeDifference/getTimeDifference";
+
+function LiveChat(props) {
+  const [isPickerVisible, setPickerVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [newMessage, setNewMessage] = useState("");
+  const [participantName, setParticipantName] = useState('');
+  const [chatData, setChatData] = useState(null);
+  const user = localStorage.getItem("username");
+  const [prevMessageDate, setPrevMessageDate] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  const [aboutParticipant, setAboutParticipant] = useState([]);
+  const username = localStorage.getItem("username");
+
+  const pickerRef = useRef(null);
+
+  useEffect(() => {
+    async function fetchChatData() {
+      try {
+        const response = await getChatwholeChat(props.chatId);
+        const aboutParticipantinfo = await AboutParticipant(username);
+        setChatData(response.data);
+        setAboutParticipant(aboutParticipantinfo);
+        // console.log(aboutParticipantinfo)
+        const participant = response.data.chat[0].participants.find(participant => participant.username !== username);
+        if (participant) {
+          setParticipantName(participant.username);
+        }
+      } catch (error) {
+        console.error("Error fetching chat data:", error);
+      }
+    }
+
+    fetchChatData();
+  }, [props.chatId]);
+
+  useEffect(() => {
+    try {
+      //send message
+      if (!props.socket || newMessage == "") return;
+      // console.log(newMessage);
+      props.socket.emit("newMessage", newMessage, participants);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  }, [newMessage]);
+
+  //recieve message
+  useEffect(() => {
+    if (!props.socket) {
+      // console.log("socket not connected");
+      return;
+    }
+    // Attach the event listener for incoming messages
+    props.socket.on("getMessage", (message, username) => {
+      if (message == null) return;
+      if (username !== user) return;
+      //update chat data
+      async function fetchChatData() {
+        try {
+          const response = await getChatwholeChat(props.chatId);
+          setChatData(response.data);
+        } catch (error) {
+          console.error("Error fetching chat data:", error);
+        }
+      }
+      fetchChatData();
+    });
+    return () => {
+      props.socket.off("getMessage");
+    };
+  }, [props.socket, chatData]);
+
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+  };
+
+  const handleSend = async () => {
+    if (message.trim() !== "") {
+      try {
+        if (props.chatId) {
+          let participants = chatData.chat
+            .map((chat) =>
+              chat.participants.map((participant) => participant.username)
+            )
+            .flat();
+          setParticipants(participants);
+          // console.log("RECIEVER", participants);
+
+          await sendMessageRequest(props.chatId, message, null);
+
+          const response = await getChatwholeChat(props.chatId);
+          setChatData(response.data);
+        } else {
+          await createChatRequest(props.recipient, message);
+        }
+        // console.log("message sent", message, participants);
+        props.onNewMessage(message, participants);
+        setNewMessage(message);
+        setMessage("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
+    setNewMessage('');
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    setMessage(message + emoji.native);
+  };
+
+  return (
+    &lt;div className="chat-div">
+      &lt;HeaderChatRight_Side header={participantName} check="true" />
+      &lt;div style={{display:'flex', flexDirection: 'column', overflow: 'auto', width:'100%', height:'100%'}}>
+        &lt;div className="Live-chat-form">
+          &lt;div className="Live-chat-profile-data">
+            &lt;a
+              style={{
+                textDecorationLine: "none",
+                color: "#2a3c42",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              &lt;div className="Live-chat-profile-picture">
+                &lt;img src={profile} className="picture-live-chat" alt="" />
+              &lt;/div>
+              &lt;div className="Live-chat-profile-username">{participantName}&lt;/div>
+              &lt;div className="Live-chat-profile-username-details">
+                Redditor for {getDaysDifferenceFromToday(aboutParticipant.createdAt)} · {aboutParticipant.karma} karma
+              &lt;/div>
+            &lt;/a>
+          &lt;/div>
+        &lt;/div>
+        {chatData &amp;&amp;
+          Array.isArray(chatData.chat) &amp;&amp;
+          chatData.chat.map((chat) => (
+            &lt;div key={chat._id} style={{ width: "100%" }}>
+              {Array.isArray(chat.messages) &amp;&amp;
+                chat.messages
+                  .slice()
+                  .reverse()
+                  .map((message, index, array) => {
+                    const participant = chat.participants.find(
+                      (participant) => participant.id === message.sender
+                    );
+                    const profilePicture = participant
+                      ? participant.profilePicture || profile
+                      : profile;
+                    // Check if it's a new day or the first message
+                    const currentDate = formatDate(message.timestamp);
+                    const isFirstMessage =
+                      index === 0 ||
+                      formatDate(array[index - 1].timestamp) !== currentDate;
+
+                    // Update previous date if it's a new day
+                    if (isFirstMessage &amp;&amp; currentDate !== prevMessageDate) {
+                      setPrevMessageDate(currentDate);
+                    }
+
+                    // Render date only if it's a new day or the first message
+                    const renderDate =
+                      isFirstMessage || currentDate !== prevMessageDate;
+                    return (
+                      &lt;div key={message._id}>
+                        {renderDate &amp;&amp; (
+                          &lt;div className="message-date-live-chat">
+                            &lt;div className="date-line-beside" />
+                            {prevMessageDate}
+                            &lt;div className="date-line-beside" />
+                          &lt;/div>
+                        )}
+                        &lt;div className="message-content-live-chat-container">
+                          &lt;span className="image-chat-message">
+                            &lt;img
+                              src={profilePicture}
+                              alt=""
+                              style={{ borderRadius: "20px" }}
+                            />
+                          &lt;/span>
+                          &lt;div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "0.5em",
+                            }}
+                          >
+                            &lt;div
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: ".25rem",
+                                alignItems: "center",
+                              }}
+                            >
+                              &lt;span className="sender-name-live-chat">
+                                {
+                                  chat.senders.find(
+                                    (sender) => sender.id === message.sender
+                                  )?.username
+                                }
+                              &lt;/span>
+                              &lt;span className="sender-time-live-chat">
+                                {formatTimestamp(message.timestamp)}
+                              &lt;/span>
+                            &lt;/div>
+                            &lt;span>{message.message}&lt;/span>
+                          &lt;/div>
+                        &lt;/div>
+                      &lt;/div>
+                    );
+                  })}
+            &lt;/div>
+          ))}
+      &lt;/div>
+      &lt;div className="chat-live-input">
+        &lt;form action="" className="form-input-live-chat">
+          &lt;Button
+            colorScheme="gray"
+            variant="ghost"
+            style={{
+              paddingRight: "8px",
+              paddingLeft: "8px",
+              height: "40px",
+              width: "40px",
+              borderRadius: "100%",
+            }}
+          >
+            &lt;IoMdCamera
+              style={{
+                height: "40px",
+                width: "40px",
+              }}
+            />
+          &lt;/Button>
+          &lt;div className="live-chat-input-area">
+            &lt;InputGroup size="md">
+              &lt;Input
+                placeholder="Message"
+                size="md"
+                style={{
+                  background: "#eaedef",
+                  border: "0px",
+                  borderRadius: "20px",
+                  fontSize: "1rem",
+                  width: "100%",
+                }}
+                value={message}
+                onChange={handleMessageChange}
+              />
+              &lt;InputRightElement width="4.5rem">
+                &lt;Tooltip hasArrow label="Select sticker" placement="top">
+                  &lt;Button
+                    h="1.75rem"
+                    size="sm"
+                    colorScheme="teal"
+                    variant="ghost"
+                    style={{
+                      paddingRight: "8px",
+                      paddingLeft: "8px",
+                      height: "40px",
+                      width: "40px",
+                      borderRadius: "100%",
+                    }}
+                    onClick={() => setPickerVisible(!isPickerVisible)}
+                  >
+                    &lt;BsFillEmojiSmileFill
+                      style={{
+                        height: "40px",
+                        width: "40px",
+                      }}
+                    />
+                  &lt;/Button>
+                &lt;/Tooltip>
+              &lt;/InputRightElement>
+            &lt;/InputGroup>
+          &lt;/div>
+          &lt;Button
+            colorScheme={message ? "blue" : "gray"}
+            variant={message ? "ghost" : "none"}
+            style={{
+              paddingRight: "8px",
+              paddingLeft: "8px",
+              height: "40px",
+              width: "40px",
+              borderRadius: "100%",
+              cursor: message ? "pointer" : "default",
+            }}
+            onClick={handleSend}
+          >
+            &lt;IoMdSend
+              style={{
+                height: "40px",
+                width: "40px",
+              }}
+            />
+          &lt;/Button>
+          {isPickerVisible &amp;&amp; (
+            &lt;div ref={pickerRef} className="emoji-picker-container">
+              &lt;EmojiPicker
+                data={data}
+                previewPosition="bottom"
+                onEmojiSelect={handleEmojiSelect}
+              />
+            &lt;/div>
+          )}
+        &lt;/form>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+
+export default LiveChat;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

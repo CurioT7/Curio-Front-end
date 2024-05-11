@@ -14,6 +14,13 @@ import { fetchUserDataFromBackend } from '../UserSetting/UserSettingsEndPoints.j
 const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
 
 
+/**
+ * Represents the profile page component.
+ * 
+ * @component
+ * @param {Object} props - The component props.
+ * @module The profile page component.
+ */
 function ProfilePage(props) {
 
   const navigate = useNavigate();

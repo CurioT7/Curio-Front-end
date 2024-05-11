@@ -11,6 +11,12 @@ import { getPollTimeDifference, getDaysCountdown } from "../getTimeDifference/ge
 
 
 
+/**
+ * Renders a poll component.
+ *
+ * @param {Object} props - The props object containing the poll data.
+ * @module PollsVoting
+ */
 function ShowPoll( props ) {
   const [votepick, setVotepick] = useState("");
   const [hasVoted, setVoted] = useState(false);

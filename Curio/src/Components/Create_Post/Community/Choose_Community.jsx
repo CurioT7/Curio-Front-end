@@ -1,3 +1,10 @@
+/**
+ * Choose_Community component for selecting a community.
+ * @param {Object} props - The props object containing the component's properties.
+ * @param {function} props.onSelect - The function to be called when a community is selected.
+ * @param {string} props.subreddit - The currently selected subreddit.
+ * @module ChooseCommunity
+ */
 import React, { useState, useEffect, useRef } from 'react';
 import { Input, Icon } from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';

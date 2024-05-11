@@ -1,3 +1,13 @@
+/**
+ * Component for typing usernames.
+ * @param {Object} props - Component props.
+ * @param {Function} props.setInputValue - Function to set the input value.
+ * @param {string} props.inputValue - The current input value.
+ * @param {Function} props.handleInputChange - Function to handle input change.
+ * @param {Function} props.handleToggleUser - Function to toggle user selection.
+ * @param {Array} props.selectedUsers - The currently selected users.
+ * @module TypeUsername
+ */
 import React, { useState, useEffect } from 'react';
 import { Image } from '@chakra-ui/react';
 import { FaRegSquare } from "react-icons/fa";

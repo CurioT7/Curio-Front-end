@@ -4,6 +4,21 @@ import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalClo
 import { MdMarkEmailUnread } from "react-icons/md";
 import axios from 'axios';
 import { FaTrashAlt } from "react-icons/fa";
+/**
+ * GeneratePass component.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.username - The username.
+ * @param {string} props.email - The email.
+ * @param {boolean} props.isEmail - Indicates if the component is for email settings.
+ * @param {boolean} props.isDelete - Indicates if the component is for account deletion.
+ * @param {boolean} props.isGoogle - Indicates if the component is for Google account settings.
+ * @param {Object} props.buttonStyle - The style object for the button.
+ * @param {string} props.title - The title of the modal.
+ * @param {string} props.context - The context of the modal.
+ * @returns {JSX.Element} The GeneratePass component.
+ */
 function GeneratePass(props){
 
     const serverHost = import.meta.env.VITE_SERVER_HOST;

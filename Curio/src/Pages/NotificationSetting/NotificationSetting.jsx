@@ -1,3 +1,24 @@
+/**
+ * NotificationSetting Component
+ * 
+ * A component to manage notification settings for messages and user activity.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import NotificationSetting from './NotificationSetting';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <NotificationSetting />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @module NotificationSetting
+ */
+
 import React from 'react';
 import { useEffect, useState } from 'react';
 import "./NotificationSetting.css";

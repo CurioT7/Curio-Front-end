@@ -1,3 +1,24 @@
+/**
+ * UserNameMentions Component
+ * 
+ * A component to display mentions of the user's username in messages.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @module UserNameMentions
+ * @example
+ * import React, { useEffect, useState } from 'react';
+ * import UserNameMentions from './UserNameMentions';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <UserNameMentions />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./UserName_Mentions.css";
@@ -49,12 +70,12 @@ function UserName_Mentions(props) {
     };
 
     return (
-        <div style={{ marginTop: "60px" }}>
+        <div data-testid="user-name-mentions-component" style={{ marginTop: "60px" }}>
             <MessagesNavbar />
             <InboxTabs />
             <div className='username-mentions-page w-100'>
                 {error ? (
-                    <div className="error-message">
+                    <div className="error-message" data-testid="error-message">
                         <p style={{
                             padding: '20px',
                         }}>there doesn't seem to be anything here

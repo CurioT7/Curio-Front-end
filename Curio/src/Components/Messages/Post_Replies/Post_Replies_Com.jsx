@@ -1,3 +1,47 @@
+/**
+ * PostRepliesCom Component
+ * 
+ * A component to display a single post reply in the user's inbox.
+ * 
+ * @component
+ * @param {Object} props - The props of the component.
+ * @param {string} props.title - The title of the post.
+ * @param {number} props.noComments - The number of comments on the post.
+ * @param {string} props.sender - The username of the sender.
+ * @param {string} props.timestamp - The timestamp when the reply was sent.
+ * @param {string} props.linkedSubreddit - The name of the linked subreddit, if any.
+ * @param {string} props.message - The content of the reply message.
+ * @param {string} props.itemId - The ID of the reply message.
+ * @param {Array} props.downvotedcomments - Array of downvoted comments.
+ * @param {Array} props.upvotedcomments - Array of upvoted comments.
+ * @param {function} props.onBlockConfirmed - Function to be called when block confirmation is confirmed.
+ * @param {string} props.id - The ID of the reply message.
+ * @module PostRepliesCom
+ * @example
+ * import React from 'react';
+ * import PostRepliesCom from './Post_Replies_Com';
+ * 
+ * const MyComponent = () => {
+ *   return (
+ *     <PostRepliesCom
+ *       title="Post Title"
+ *       noComments={10}
+ *       sender="example_user"
+ *       timestamp="2 hours ago"
+ *       linkedSubreddit="example_subreddit"
+ *       message="This is a sample post reply message."
+ *       itemId="123456789"
+ *       downvotedcomments={[{ _id: 'comment1' }, { _id: 'comment2' }]}
+ *       upvotedcomments={[{ _id: 'comment3' }, { _id: 'comment4' }]}
+ *       onBlockConfirmed={() => console.log('Block confirmed')}
+ *       id="987654321"
+ *     />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Box } from "@chakra-ui/react";
 import Upvotes from '../../../styles/icons/Upvotes.jsx';

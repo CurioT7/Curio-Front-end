@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/profileSetting/Socialmodal/Socialmodal.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/profileSetting/Socialmodal/Socialmodal.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Socialmodal Component
+ * 
+ * A component to manage social links for user profiles.
+ * 
+ * @component
+ * @example
+ * import React from 'react';
+ * import Socialmodal from './Socialmodal';
+ * 
+ * const MyComponent = () => {
+ *   const SocialLinks = [
+ *     { displayName: 'Twitter', url: 'https://twitter.com/', platform: 'Twitter' },
+ *     { displayName: 'Instagram', url: 'https://www.instagram.com/', platform: 'Instagram' },
+ *     // Additional social links
+ *   ];
+ * 
+ *   return (
+ *     &lt;Socialmodal SocialLinks={SocialLinks} validate="withCancel" buttonStyle={{ color: 'red' }} />
+ *   );
+ * };
+ * 
+ * export default MyComponent;
+ * 
+ * @param {Object} props - Component props
+ * @param {Array} props.SocialLinks - An array of objects representing social links with properties displayName, url, and platform
+ * @param {string} [props.validate] - Validation type for social links (optional). Possible values: 'withCancel'
+ * @param {Object} [props.buttonStyle] - CSS styles for the add social link button (optional)
+ * @module Socialmodal
+ */
+
+import React, { useState, useEffect } from "react";
+import { Button, useDisclosure } from '@chakra-ui/react';
+import "./Socialmodal.css";
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalCloseButton,
+} from '@chakra-ui/react';
+import logo from "../../../assets/Curio_logo.png";
+import SocialMediaModal from "./SocialMediaModal";
+import SocialUsernameModal from "./SocialUsernameModal";
+import CurioInput from "./CurioInput";
+import { sendUserDataToBackend } from '../../../Components/UserSetting/UserSettingsEndPoints.js';
+
+function Socialmodal(props) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selectedSocialLinks, setSelectedSocialLinks] = useState([]);
+
+    useEffect(() => {
+        setSelectedSocialLinks(props.SocialLinks || []);
+    }, [props.SocialLinks]);
+
+    const handleSocialLinkClick = (url, name, iconClass) => {
+        if (selectedSocialLinks.length &lt; 5) {
+            const platform = getPlatformFromIconClass(iconClass);
+            const newLink = { displayName: name, url: url, platform: platform };
+            setSelectedSocialLinks([...selectedSocialLinks, newLink]);
+            sendUserDataToBackend({ socialLinks: [...selectedSocialLinks, newLink] });
+        }
+    };
+
+    const handleRemoveSocialLink = (index) => {
+        const updatedLinks = [...selectedSocialLinks];
+        updatedLinks.splice(index, 1);
+        setSelectedSocialLinks(updatedLinks);
+        sendUserDataToBackend({ socialLinks: updatedLinks });
+    };
+
+    const RedirectToSocialLink = (index) => {
+        const linkToRedirect = selectedSocialLinks[index];
+        window.open(linkToRedirect.url, "_blank");
+    }
+
+    const getPlatformFromIconClass = (iconClass) => {
+        const iconToPlatform = {
+            "fa-solid fa-link": "Custom URL",
+            "fa-brands fa-instagram": "Instagram",
+            "fa-brands fa-twitter": "Twitter",
+            "fa-brands fa-tiktok": "TikTok",
+            "fa-brands fa-twitch": "Twitch",
+            "fa-brands fa-facebook": "Facebook",
+            "fa-brands fa-youtube": "Youtube",
+            "fa-brands fa-tumblr": "Tumblr",
+            "fa-brands fa-spotify": "Spotify",
+            "fa-brands fa-soundcloud": "SoundCloud",
+            "fa-brands fa-paypal": "PayPal",
+        };
+        return iconToPlatform[iconClass] || "Unknown";
+    };
+
+    return (
+        &lt;>
+            {Array.isArray(selectedSocialLinks) &amp;&amp; selectedSocialLinks.slice(0, 5).map((link, index) => (
+                &lt;div key={link.displayName} className="selected-social-link" onClick={() => RedirectToSocialLink(index)}>
+                    &lt;i className={link.platform} /> {link.displayName}
+                    {props.validate === 'withCancel' ? (
+                        &lt;i className="fa-solid fa-x" onClick={(event) => { event.stopPropagation(); handleRemoveSocialLink(index); }}>&lt;/i>
+                    ) : null}
+                &lt;/div>
+
+            ))}
+            &lt;div className="social-link-container">
+                &lt;Button onClick={onOpen} style={props.buttonStyle} variant='outline' className="add-social-button">
+                    &lt;i className="fa-solid fa-plus">&lt;/i>Add social link
+                &lt;/Button>
+            &lt;/div>
+            &lt;Modal isOpen={isOpen} onClose={onClose}>
+                &lt;ModalOverlay />
+                &lt;ModalContent>
+                    &lt;ModalHeader className="text-center">Add Social Link&lt;/ModalHeader>
+                    &lt;ModalCloseButton />
+                    &lt;ModalBody>
+                        &lt;div className="container-social container mb-6 mx-2">
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialMediaModal name="Custom URL" icon="fa-solid fa-link" handleSocialLinkClick={handleSocialLinkClick} />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;CurioInput name="Curio" avatar={logo} handleSocialLinkClick={handleSocialLinkClick} />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="Instagram" icon="fa-brands fa-instagram" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.instagram.com/" />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="Twitter" icon="fa-brands fa-twitter" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://twitter.com/" />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="TikTok" icon="fa-brands fa-tiktok" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.tiktok.com/" />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="Twitch" icon="fa-brands fa-twitch" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.twitch.tv/" />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialMediaModal name="Facebook" icon="fa-brands fa-facebook" handleSocialLinkClick={handleSocialLinkClick} />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialMediaModal name="Youtube" icon="fa-brands fa-youtube" handleSocialLinkClick={handleSocialLinkClick} />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="Tumblr" icon="fa-brands fa-tumblr" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.tumblr.com/" />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="Spotify" icon="fa-brands fa-spotify" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://open.spotify.com/" />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="SoundCloud" icon="fa-brands fa-soundcloud" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://soundcloud.com/" />
+                            &lt;/li>
+                            &lt;li className="social-icon-modal list-inline-item mb-2 mx-1">
+                                &lt;SocialUsernameModal name="PayPal" icon="fa-brands fa-paypal" handleSocialLinkClick={handleSocialLinkClick} urlPrefix="https://www.paypal.com/" />
+                            &lt;/li>
+                        &lt;/div>
+                    &lt;/ModalBody>
+                &lt;/ModalContent>
+            &lt;/Modal>
+        &lt;/>
+    );
+}
+
+export default Socialmodal;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutDrawer.html">AboutDrawer</a></li><li><a href="module-Activity.html">Activity</a></li><li><a href="module-Advanced.html">Advanced</a></li><li><a href="module-ApproveRemovedPosts.html">ApproveRemovedPosts</a></li><li><a href="module-Block.html">Block</a></li><li><a href="module-BlockUserPage.html">BlockUserPage</a></li><li><a href="module-ChooseCommunity.html">ChooseCommunity</a></li><li><a href="module-CleanQueue.html">CleanQueue</a></li><li><a href="module-CommentInputForm.html">CommentInputForm</a></li><li><a href="module-Community.html">Community</a></li><li><a href="module-CommunityDetails.html">CommunityDetails</a></li><li><a href="module-CommunityRules.html">CommunityRules</a></li><li><a href="module-CreateCommunity.html">CreateCommunity</a></li><li><a href="module-CreatePost.html">CreatePost</a></li><li><a href="module-CreatePostArea.html">CreatePostArea</a></li><li><a href="module-CurioInput.html">CurioInput</a></li><li><a href="module-EditCreatearea.html">EditCreatearea</a></li><li><a href="module-FetchUnmoderatedPosts.html">FetchUnmoderatedPosts</a></li><li><a href="module-FollowUserPopover.html">FollowUserPopover</a></li><li><a href="module-FollowersPage.html">FollowersPage</a></li><li><a href="module-FromMessage.html">FromMessage</a></li><li><a href="module-Gender.html">Gender</a></li><li><a href="module-GetFollowers.html">GetFollowers</a></li><li><a href="module-HeaderChatRightSide.html">HeaderChatRightSide</a></li><li><a href="module-ImageVideo.html">ImageVideo</a></li><li><a href="module-InboxTabs.html">InboxTabs</a></li><li><a href="module-InviteDrawer.html">InviteDrawer</a></li><li><a href="module-Link.html">Link</a></li><li><a href="module-LiveChat.html">LiveChat</a></li><li><a href="module-MarkAsNSFW.html">MarkAsNSFW</a></li><li><a href="module-MessageContent.html">MessageContent</a></li><li><a href="module-Messages.html">Messages</a></li><li><a href="module-MessagesNavbar.html">MessagesNavbar</a></li><li><a href="module-ModQueuePage.html">ModQueuePage</a></li><li><a href="module-ModerationApprovePost.html">ModerationApprovePost</a></li><li><a href="module-ModerationEditedPage.html">ModerationEditedPage</a></li><li><a href="module-ModerationFetchEditedPosts.html">ModerationFetchEditedPosts</a></li><li><a href="module-ModerationFetchRemovedPosts.html">ModerationFetchRemovedPosts</a></li><li><a href="module-ModerationHeader.html">ModerationHeader</a></li><li><a href="module-ModerationRemovePost.html">ModerationRemovePost</a></li><li><a href="module-ModerationRemovedPage.html">ModerationRemovedPage</a></li><li><a href="module-ModerationRemovedPosts.html">ModerationRemovedPosts</a></li><li><a href="module-ModerationSidebar.html">ModerationSidebar</a></li><li><a href="module-ModerationUnmoderatedPage.html">ModerationUnmoderatedPage</a></li><li><a href="module-Mute.html">Mute</a></li><li><a href="module-Navbar.html">Navbar</a></li><li><a href="module-NewChat.html">NewChat</a></li><li><a href="module-NewPostForm.html">NewPostForm</a></li><li><a href="module-NotificationSetting.html">NotificationSetting</a></li><li><a href="module-Notifications.html">Notifications</a></li><li><a href="module-NotificationsDropdown.html">NotificationsDropdown</a></li><li><a href="module-NotificationsEndPoints.html">NotificationsEndPoints</a></li><li><a href="module-NotificationsFunctions.html">NotificationsFunctions</a></li><li><a href="module-NotificationsPage.html">NotificationsPage</a></li><li><a href="module-OpenChat.html">OpenChat</a></li><li><a href="module-OpenChatComLeftSide.html">OpenChatComLeftSide</a></li><li><a href="module-PollInfo.html">PollInfo</a></li><li><a href="module-Polls.html">Polls</a></li><li><a href="module-PollsVoting.html">PollsVoting</a></li><li><a href="module-Pollvotes.html">Pollvotes</a></li><li><a href="module-Post.html">Post</a></li><li><a href="module-PostComments.html">PostComments</a></li><li><a href="module-PostComponent.html">PostComponent</a></li><li><a href="module-PostContentDetails.html">PostContentDetails</a></li><li><a href="module-PostControl.html">PostControl</a></li><li><a href="module-PostMethods.html">PostMethods</a></li><li><a href="module-PostReplies.html">PostReplies</a></li><li><a href="module-PostRepliesCom.html">PostRepliesCom</a></li><li><a href="module-PostingCards.html">PostingCards</a></li><li><a href="module-PostingRules.html">PostingRules</a></li><li><a href="module-Preferences.html">Preferences</a></li><li><a href="module-PrivateMessages.html">PrivateMessages</a></li><li><a href="module-ProfileCategory.html">ProfileCategory</a></li><li><a href="module-ProfileImageUpload.html">ProfileImageUpload</a></li><li><a href="module-ProfileInformation.html">ProfileInformation</a></li><li><a href="module-ProfileSettingPage.html">ProfileSettingPage</a></li><li><a href="module-RecentPosts.html">RecentPosts</a></li><li><a href="module-ReportExtraReason.html">ReportExtraReason</a></li><li><a href="module-ReportReason.html">ReportReason</a></li><li><a href="module-ReportSpecificUser.html">ReportSpecificUser</a></li><li><a href="module-ReportSubmitted.html">ReportSubmitted</a></li><li><a href="module-ReportUserPopup.html">ReportUserPopup</a></li><li><a href="module-SafetyPrivacy.html">SafetyPrivacy</a></li><li><a href="module-Schedule.html">Schedule</a></li><li><a href="module-SentMessagesTable.html">SentMessagesTable</a></li><li><a href="module-SidebarComponent.html">SidebarComponent</a></li><li><a href="module-SignupInfo.html">SignupInfo</a></li><li><a href="module-SocialLinksSection.html">SocialLinksSection</a></li><li><a href="module-SocialMediaModal.html">SocialMediaModal</a></li><li><a href="module-SocialUsernameModal.html">SocialUsernameModal</a></li><li><a href="module-Socialmodal.html">Socialmodal</a></li><li><a href="module-SubjectMessage.html">SubjectMessage</a></li><li><a href="module-Threads.html">Threads</a></li><li><a href="module-ToMessage.html">ToMessage</a></li><li><a href="module-TopComms.html">TopComms</a></li><li><a href="module-TopCommunities.html">TopCommunities</a></li><li><a href="module-TypeUsername.html">TypeUsername</a></li><li><a href="module-UnmarkAsNSFW.html">UnmarkAsNSFW</a></li><li><a href="module-UnmodderatedPosts.html">UnmodderatedPosts</a></li><li><a href="module-UserFunctions.html">UserFunctions</a></li><li><a href="module-UserNameMentions.html">UserNameMentions</a></li><li><a href="module-UserNameMentionsCom.html">UserNameMentionsCom</a></li><li><a href="module-UsernameInfo.html">UsernameInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 10 2024 19:35:51 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
