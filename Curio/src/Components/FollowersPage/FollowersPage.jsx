@@ -45,15 +45,15 @@ function FollowersPage(props) {
       });
   }
 
-  async function handleGetFollowers() {
-    const response = await getFollowers('asfasfasfafaf');
+  async function handleGetFollowers(follow) {
+    const response = await getFollowers(follow);
     if (response) {
       setFollowers(response.data.friendsArray);
     }
   }
 
   useEffect(() => {
-    handleGetFollowers();
+    handleGetFollowers('followers');
 
   }, []);
 

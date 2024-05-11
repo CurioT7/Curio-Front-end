@@ -157,9 +157,67 @@ async function getBlocked() {
     }
 }
 
+const getUserOverview = async (username) => {
+    try{
+        const response = await axios.get(`${hostUrl}/api/user/${username}/overview`);
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}   
+
+
+const getSaved = async () => {
+    try{
+      const response = await axios.get(`${hostUrl}/api/saved_categories`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      return response;
+    }
+    catch(err){
+      console.error(err);
+    }
+  }
+
+
+  const getHidden = async () => {
+    try{
+      const response = await axios.get(`${hostUrl}/api/hidden`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      return response;
+    }
+    catch(err){
+        console.error(err);
+    }
+  }
+
+
+  const joinCommunity = async (communityName) => {
+    try{
+        const response = await axios.post(`${hostUrl}/api/friend`, {
+                subreddit: communityName
+            },
+            {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.status === 200 || response.status === 201){
+                return true;
+            }
+    }
+    catch(err){
+        console.error(err);
+        return false;
+    }
+}
 
 
 
 
-
-export {userBlock, userUnblock, showFriendInformation, userFollow, userUnfollow, getFollower, getBlocked};
+export {userBlock, userUnblock, showFriendInformation, userFollow, userUnfollow, getFollower, getBlocked, getUserOverview, getHidden, getSaved, joinCommunity};

@@ -13,8 +13,9 @@ async function getFollowers(friends) {
   const hostUrl = import.meta.env.VITE_SERVER_HOST;
   try {
     const response = await axios.get(`${hostUrl}/api/getfriends/followings`, {
-      friends: friends,
-    },{
+      params: {
+        friends: friends,
+      },
       headers: {
         'Content-Type': 'application/json',
         'authorization': `Bearer ${localStorage.getItem('token')}`
@@ -22,9 +23,9 @@ async function getFollowers(friends) {
     });
     return response;
   }
-    catch(error) {
-      console.error('Error:', error);
-    }
+  catch(error) {
+    console.error('Error:', error);
+  }
 }
 
 export { getFollowers };
