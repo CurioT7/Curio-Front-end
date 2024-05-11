@@ -9,6 +9,12 @@ import { Link } from 'react-router-dom';
 
 
 
+/**
+ * Renders the header component for a community.
+ *
+ * @param {Object} props - The component props.
+ * @returns {JSX.Element} The rendered component.
+ */
 function CommunityHeader( props ) {
   const toast = useToast();
   const navigate = useNavigate();
