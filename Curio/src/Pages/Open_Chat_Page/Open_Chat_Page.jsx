@@ -45,6 +45,7 @@ function Right_Side_Chat(props) {
   useEffect(() => {
     if (!user) return;
     const serverHost = import.meta.env.VITE_SERVER_HOST;
+    console.log(serverHost);
     const newsocket = io(serverHost);
     setSocket(newsocket);
     return () => {
