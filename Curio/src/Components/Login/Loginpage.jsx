@@ -13,6 +13,8 @@ Modal.setAppElement('#root');
  * Renders the login page component.
  *
  * @param {Object} props - The component props.
+ * @param {Function} props.hideSidebar - Function to hide the sidebar.
+ * 
  *@module The rendered LoginPage component.
  */
 

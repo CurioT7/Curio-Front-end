@@ -2,6 +2,13 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { background } from "@chakra-ui/react";
 
+/**
+ * Represents a button component that allows users to scroll back to the top of the page.
+ * @component
+ * @returns {JSX.Element} A button component for scrolling back to the top.
+ * @module The BackToTopButton component.
+ */
+
 function BackToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
 

@@ -10,6 +10,8 @@ import SignupHandlerForLogin from '../Login/SignupHandlerForLogin.jsx';
  * @param {Function} props.setForgotPass - Function to set the state of forgotPass.
  * @param {boolean} props.forgotPass - State indicating whether the password is forgotten.
  * @param {Function} props.setChangePass - Function to set the state of changePass.
+ * @param {string} props.username - The username of the user.
+ * @param {string} props.email - The email of the user.
  *@module The ForgotPass component.
  */
 function ForgotPass({ setForgotPass, forgotPass, setChangePass }) {

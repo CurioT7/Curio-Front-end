@@ -12,6 +12,10 @@ const VITE_SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
  * Renders the Rules component.
  *
  * @param {Object} props - The component props.
+ * @param {string} props.subredditName - The subreddit name.
+ * @param {string} props.type - The type of rule.
+ * @param {string} props.title - The title of the rule.
+ * @param {string} props.reasonMessage - The reason message for the rule.
  *@module The rendered Rules component.
  */
 function Rules( props ) {
