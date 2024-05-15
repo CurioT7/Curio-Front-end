@@ -501,7 +501,6 @@ function ProfilePage(props) {
           </div>
           <BackToTheTopButton style={{ left: "90%", position: 'static' }} />
         </div>
-
         <div className="rightSideBar">
           <div className="gradient"
             style={{
