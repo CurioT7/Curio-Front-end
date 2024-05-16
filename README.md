@@ -76,6 +76,7 @@ Once CURIO is running locally, you can:
 Feel free to explore and interact with CURIO's features to make the most out of your social media experience!
 
 ## Demo
+![main widow](./media/Curioshowcase.mp4)
 
 ## Screenshots
 
