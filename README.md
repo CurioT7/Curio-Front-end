@@ -3,12 +3,13 @@
 Welcome to CURIO. CURIO is built with React JSX, Chakra UI, and Bootstrap, aiming to provide users with an engaging and interactive online community experience similar to Reddit.
 
 ## Table of Contents
-
+testing commit
 - [Tools Used](#tools-used)
 - [Features](#features)
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [Usage](#usage)
+- [Demo](#demo)
 - [Screenshots](#screenshots)
 - [Authors](#authors)
 - [Acknowledgements](#acknowledgements)
@@ -73,6 +74,8 @@ Once CURIO is running locally, you can:
 - **Responsive Design**: CURIO is designed to work seamlessly across various devices, ensuring a consistent experience for users on desktop and mobile platforms.
 
 Feel free to explore and interact with CURIO's features to make the most out of your social media experience!
+
+## Demo
 
 ## Screenshots
 
